@@ -1,11 +1,13 @@
 CPPFLAGS=g++ -std=c++11 -g
-INCLUDE=-Ilibraries -I.
+SOURCES=`find -name *.cpp | grep -Pv test.*?\.cpp`
+TEST_SOURCES=`find -name *.cpp | grep -Pv main.*?\.cpp`
+INCLUDE=-I.
 
 all:
 	mkdir -p binaries
-	$(CPPFLAGS) code/main.cpp -o binaries/tulc.exe $(INCLUDE)
+	$(CPPFLAGS) $(SOURCES) -o binaries/tulc.exe $(INCLUDE)
 
 test:
 	./tests/test_runner.sh
-	$(CPPFLAGS) code/test.cpp -o binaries/tulc_test.exe $(INCLUDE)
+	$(CPPFLAGS) $(TEST_SOURCES) -o binaries/tulc_test.exe $(INCLUDE)
 	./binaries/tulc_test.exe
