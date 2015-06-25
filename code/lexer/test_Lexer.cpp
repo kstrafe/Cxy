@@ -72,4 +72,24 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
     REQUIRE(token_stack.size() == 1);
     REQUIRE(token_stack.at(0).string == "Example test input to see if alphanumeric, especially with numbers like 123 work for the lexer.");
   }
+  SECTION("Confirm the different alphanumeric identifies")
+  {
+    tul::lexer::Lexer lexer;
+    for (char character : std::string("You _cant_ just give upYouGo!"))
+      lexer.insertCharacter(/*character :*/ character);
+
+    std::vector<tul::protocols::Token> &token_stack = lexer.getTokenStack();
+
+    REQUIRE(token_stack.size() == 5);
+    SECTION("Check if the types are correct")
+    {
+      using namespace tul::protocols;
+      unsigned iterator = 0;
+      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_CLASS);
+      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_VARIABLE);
+      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_PACKAGE);
+      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_PACKAGE);
+      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_SUBROUTINE);
+    }
+  }
 }
