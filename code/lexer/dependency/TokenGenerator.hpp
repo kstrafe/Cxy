@@ -1,7 +1,7 @@
 #include <vector>
 #include <string>
-#include "protocols/Token.hpp"
 #include "protocols/Action.hpp"
+#include "protocols/Token.hpp"
 
 namespace tul
 {
