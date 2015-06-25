@@ -75,20 +75,22 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
   SECTION("Confirm the different alphanumeric identifies")
   {
     tul::lexer::Lexer lexer;
-    for (char character : std::string("You _cant_ just give upYouGo!"))
+    for (char character : std::string("You 1s _cant_ just give 4u upYouGo!"))
       lexer.insertCharacter(/*character :*/ character);
 
     std::vector<tul::protocols::Token> &token_stack = lexer.getTokenStack();
 
-    REQUIRE(token_stack.size() == 5);
+    REQUIRE(token_stack.size() == 7);
     SECTION("Check if the types are correct")
     {
       using namespace tul::protocols;
       unsigned iterator = 0;
       REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_CLASS);
+      REQUIRE(token_stack.at(iterator++).token_type == TokenType::PRIMITIVE_SIGNED);
       REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_VARIABLE);
       REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_PACKAGE);
       REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_PACKAGE);
+      REQUIRE(token_stack.at(iterator++).token_type == TokenType::PRIMITIVE_UNSIGNED);
       REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_SUBROUTINE);
     }
   }
