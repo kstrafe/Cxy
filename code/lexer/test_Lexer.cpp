@@ -20,45 +20,49 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
     SECTION("Check if the lexemes are correct")
     {
       unsigned iterator = 0;
-      REQUIRE(token_stack.at(iterator++).string == "Example");
-      REQUIRE(token_stack.at(iterator++).string == "test");
-      REQUIRE(token_stack.at(iterator++).string == "input");
-      REQUIRE(token_stack.at(iterator++).string == "to");
-      REQUIRE(token_stack.at(iterator++).string == "see");
-      REQUIRE(token_stack.at(iterator++).string == "if");
-      REQUIRE(token_stack.at(iterator++).string == "alphanumeric");
-      REQUIRE(token_stack.at(iterator++).string == ",");
-      REQUIRE(token_stack.at(iterator++).string == "especially");
-      REQUIRE(token_stack.at(iterator++).string == "with");
-      REQUIRE(token_stack.at(iterator++).string == "numbers");
-      REQUIRE(token_stack.at(iterator++).string == "like");
-      REQUIRE(token_stack.at(iterator++).string == "123");
-      REQUIRE(token_stack.at(iterator++).string == "work");
-      REQUIRE(token_stack.at(iterator++).string == "for");
-      REQUIRE(token_stack.at(iterator++).string == "the");
-      REQUIRE(token_stack.at(iterator++).string == "lexer");
+      #define caze(x) REQUIRE(token_stack.at(iterator++).string == x)
+        caze("Example");
+        caze("test");
+        caze("input");
+        caze("to");
+        caze("see");
+        caze("if");
+        caze("alphanumeric");
+        caze(",");
+        caze("especially");
+        caze("with");
+        caze("numbers");
+        caze("like");
+        caze("123");
+        caze("work");
+        caze("for");
+        caze("the");
+        caze("lexer");
+      #undef caze
     }
     SECTION("Check if the types are correct")
     {
       using namespace tul::protocols;
       unsigned iterator = 0;
-      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_CLASS);
-      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_PACKAGE);
-      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_PACKAGE);
-      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_PACKAGE);
-      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_PACKAGE);
-      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_PACKAGE);
-      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_PACKAGE);
-      REQUIRE(token_stack.at(iterator++).token_type == TokenType::UNIDENTIFIED);
-      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_PACKAGE);
-      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_PACKAGE);
-      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_PACKAGE);
-      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_PACKAGE);
-      REQUIRE(token_stack.at(iterator++).token_type == TokenType::INTEGER_LITERAL);
-      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_PACKAGE);
-      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_PACKAGE);
-      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_PACKAGE);
-      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_PACKAGE);
+      #define caze(x) REQUIRE(token_stack.at(iterator++).token_type == TokenType::x)
+        caze(IDENTIFIER_CLASS);
+        caze(IDENTIFIER_PACKAGE);
+        caze(IDENTIFIER_PACKAGE);
+        caze(IDENTIFIER_PACKAGE);
+        caze(IDENTIFIER_PACKAGE);
+        caze(IDENTIFIER_PACKAGE);
+        caze(IDENTIFIER_PACKAGE);
+        caze(UNIDENTIFIED);
+        caze(IDENTIFIER_PACKAGE);
+        caze(IDENTIFIER_PACKAGE);
+        caze(IDENTIFIER_PACKAGE);
+        caze(IDENTIFIER_PACKAGE);
+        caze(INTEGER_LITERAL);
+        caze(IDENTIFIER_PACKAGE);
+        caze(IDENTIFIER_PACKAGE);
+        caze(IDENTIFIER_PACKAGE);
+        caze(IDENTIFIER_PACKAGE);
+      #undef caze
     }
   }
   SECTION("Check if the lexer lexes string literals correctly")
@@ -85,13 +89,15 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
     {
       using namespace tul::protocols;
       unsigned iterator = 0;
-      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_CLASS);
-      REQUIRE(token_stack.at(iterator++).token_type == TokenType::PRIMITIVE_SIGNED);
-      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_VARIABLE);
-      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_PACKAGE);
-      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_PACKAGE);
-      REQUIRE(token_stack.at(iterator++).token_type == TokenType::PRIMITIVE_UNSIGNED);
-      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_SUBROUTINE);
+      #define caze(x) REQUIRE(token_stack.at(iterator++).token_type == TokenType::x)
+        caze(IDENTIFIER_CLASS);
+        caze(PRIMITIVE_SIGNED);
+        caze(IDENTIFIER_VARIABLE);
+        caze(IDENTIFIER_PACKAGE);
+        caze(IDENTIFIER_PACKAGE);
+        caze(PRIMITIVE_UNSIGNED);
+        caze(IDENTIFIER_SUBROUTINE);
+      #undef caze
     }
   }
   SECTION("Ensure that the groupers work")
