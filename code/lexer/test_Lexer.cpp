@@ -39,6 +39,7 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
         caze("the");
         caze("lexer");
       #undef caze
+      REQUIRE(token_stack.size() == iterator);
     }
     SECTION("Check if the types are correct")
     {
@@ -63,6 +64,7 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
         caze(IDENTIFIER_PACKAGE);
         caze(IDENTIFIER_PACKAGE);
       #undef caze
+      REQUIRE(token_stack.size() == iterator);
     }
   }
   SECTION("Check if the lexer lexes string literals correctly")
@@ -98,6 +100,7 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
         caze(PRIMITIVE_UNSIGNED);
         caze(IDENTIFIER_SUBROUTINE);
       #undef caze
+      REQUIRE(token_stack.size() == iterator);
     }
   }
   SECTION("Ensure that the groupers work")
@@ -137,6 +140,31 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
         caze(PRIMITIVE_UNSIGNED);
         caze(IDENTIFIER_SUBROUTINE);
       #undef caze
+      REQUIRE(token_stack.size() == iterator);
+    }
+  }
+  SECTION("Check if symbols are lexed")
+  {
+    tul::lexer::Lexer lexer;
+    for (char character : std::string("Muh * + sym ++bols/\\"))
+      lexer.insertCharacter(/*character :*/ character);
+
+    std::vector<tul::protocols::Token> &token_stack = lexer.getTokenStack();
+
+    REQUIRE(token_stack.size() == 6);
+    SECTION("Check if the types are correct")
+    {
+      using namespace tul::protocols;
+      unsigned iterator = 0;
+      #define caze(x) REQUIRE(token_stack.at(iterator++).token_type == TokenType::x)
+        caze(IDENTIFIER_CLASS);
+        caze(SYMBOL_STAR);
+        caze(SYMBOL_PLUS);
+        caze(IDENTIFIER_PACKAGE);
+        caze(SYMBOL_PLUS_PLUS);
+        caze(IDENTIFIER_PACKAGE);
+      #undef caze
+      REQUIRE(token_stack.size() == iterator);
     }
   }
 }
