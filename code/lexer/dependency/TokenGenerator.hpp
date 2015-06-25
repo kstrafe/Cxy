@@ -3,6 +3,8 @@
 #include "protocols/Action.hpp"
 #include "protocols/Token.hpp"
 
+#include <cstddef>
+
 namespace tul
 {
   namespace lexer
@@ -13,7 +15,7 @@ namespace tul
       {
       public:
 
-        bool consumeCharacter(char character, protocols::Action action);
+        std::size_t consumeCharacter(char character, protocols::Action action);
         std::vector<protocols::Token> &getTokenStack();
 
       private:

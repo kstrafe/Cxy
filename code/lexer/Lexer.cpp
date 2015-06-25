@@ -12,10 +12,13 @@ namespace tul
     {
       protocols::EntryType type_of_character = typify(character);
       protocols::Action action_to_perform = action_generator.computeAction(type_of_character);
-      if (token_generator.consumeCharacter(character, action_to_perform))
       {
+        std::size_t amount = token_generator.consumeCharacter(character, action_to_perform);
         // A new token is ready to be identified
-        identifyToken(getTokenStack().back());
+        for (std::size_t element = 0; element < amount; ++element)
+        {
+          identifyToken(getTokenStack()[getTokenStack().size() - 1 - element]);
+        }
       }
     }
 

@@ -37,7 +37,7 @@ namespace tul
 
       constexpr const tul::library::Mealy<std::size_t, protocols::Action, protocols::EntryType>::Compound ActionGenerator::table[25]
         =
-          { /*    alphanamu  GROUPING_SYMBOL     QUOTE_SYMBOL    OTHER_SYMBOL    WHITESPACE*/
+          { /*    ALPHA_DIGIT_OR_UNDERSCORE  GROUPING_SYMBOL QUOTE_SYMBOL OTHER_SYMBOL      WHITESPACE  */
             /*0*/ {1, Action::P},    {0, Action::PTG},   {2, Action::N},  {4, Action::P},   {0, Action::N},
             /*1*/ {1, Action::P},    {0, Action::TAPTG}, {2, Action::TA}, {4, Action::TAP}, {0, Action::TA},
             /*2*/ {2, Action::P},    {2, Action::P},     {3, Action::N},  {2, Action::P},   {2, Action::P},
