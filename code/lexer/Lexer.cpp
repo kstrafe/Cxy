@@ -103,6 +103,21 @@ namespace tul
           token.token_type = TokenType::IDENTIFIER_VARIABLE;
         }
       }
+      else if (token.entry_type == EntryType::GROUPING_SYMBOL)
+      {
+        switch (token.string.at(0))
+        #define caze(x) token.token_type = TokenType::x; break;
+        {
+          case '(': caze(GROUPER_LEFT_PARENTHESIS)
+          case ')': caze(GROUPER_RIGHT_PARENTHESIS)
+          case '[': caze(GROUPER_LEFT_BRACKET)
+          case ']': caze(GROUPER_RIGHT_BRACKET)
+          case '{': caze(GROUPER_LEFT_BRACE)
+          case '}': caze(GROUPER_RIGHT_BRACE)
+          default: break;
+        }
+        #undef caze
+      }
       else
       {
         token.token_type = TokenType::UNIDENTIFIED;

@@ -94,4 +94,43 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
       REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_SUBROUTINE);
     }
   }
+  SECTION("Ensure that the groupers work")
+  {
+    tul::lexer::Lexer lexer;
+    for (char character : std::string("([[You {]} 1s) _cant_ just give{[(]])]} 4u upYouGo!"))
+      lexer.insertCharacter(/*character :*/ character);
+
+    std::vector<tul::protocols::Token> &token_stack = lexer.getTokenStack();
+
+    REQUIRE(token_stack.size() == 22);
+    SECTION("Check if the types are correct")
+    {
+      using namespace tul::protocols;
+      unsigned iterator = 0;
+      #define caze(x) REQUIRE(token_stack.at(iterator++).token_type == TokenType::x)
+        caze(GROUPER_LEFT_PARENTHESIS);
+        caze(GROUPER_LEFT_BRACKET);
+        caze(GROUPER_LEFT_BRACKET);
+        caze(IDENTIFIER_CLASS);
+        caze(GROUPER_LEFT_BRACE);
+        caze(GROUPER_RIGHT_BRACKET);
+        caze(GROUPER_RIGHT_BRACE);
+        caze(PRIMITIVE_SIGNED);
+        caze(GROUPER_RIGHT_PARENTHESIS);
+        caze(IDENTIFIER_VARIABLE);
+        caze(IDENTIFIER_PACKAGE);
+        caze(IDENTIFIER_PACKAGE);
+        caze(GROUPER_LEFT_BRACE);
+        caze(GROUPER_LEFT_BRACKET);
+        caze(GROUPER_LEFT_PARENTHESIS);
+        caze(GROUPER_RIGHT_BRACKET);
+        caze(GROUPER_RIGHT_BRACKET);
+        caze(GROUPER_RIGHT_PARENTHESIS);
+        caze(GROUPER_RIGHT_BRACKET);
+        caze(GROUPER_RIGHT_BRACE);
+        caze(PRIMITIVE_UNSIGNED);
+        caze(IDENTIFIER_SUBROUTINE);
+      #undef caze
+    }
+  }
 }
