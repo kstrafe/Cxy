@@ -118,6 +118,20 @@ namespace tul
         }
         #undef caze
       }
+      else if (token.entry_type == EntryType::OTHER_SYMBOL)
+      {
+        #define caze(string_, symbol) if (token.string == string_) { token.token_type = TokenType::symbol; }
+          caze("+", SYMBOL_PLUS)
+          else caze("++", SYMBOL_PLUS_PLUS)
+          else caze("-", SYMBOL_MINUS)
+          else caze("--", SYMBOL_MINUS_MINUS)
+          else caze("*", SYMBOL_STAR)
+          else caze("*", SYMBOL_STAR_STAR)
+          else caze("/", SYMBOL_FORWARD_SLASH)
+          else caze("/", SYMBOL_FORWARD_SLASH)
+          else caze("\\", SYMBOL_BACKWARD_SLASH)
+        #undef caze
+      }
       else
       {
         token.token_type = TokenType::UNIDENTIFIED;
