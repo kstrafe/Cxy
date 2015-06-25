@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Type.hpp"
+#include "EntryType.hpp"
 #include "TokenType.hpp"
 
 #include <string>
@@ -12,7 +12,7 @@ namespace tul
     struct Token
     {
       int line;
-      Type entry_type;
+      EntryType entry_type;
       TokenType token_type;
       std::string string;
     };

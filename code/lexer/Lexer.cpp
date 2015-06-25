@@ -10,7 +10,7 @@ namespace tul
   {
     void Lexer::insertCharacter(char character)
     {
-      protocols::Type type_of_character = typify(character);
+      protocols::EntryType type_of_character = typify(character);
       protocols::Action action_to_perform = action_generator.computeAction(type_of_character);
       if (token_generator.consumeCharacter(character, action_to_perform))
       {
@@ -52,7 +52,7 @@ namespace tul
       auto is_primitive_unsigned = [&]() -> bool {return token.string.back() == 'u' && std::all_of(token.string.cbegin(), token.string.cend() - 1, [](char character) -> bool {return std::isdigit(character);});};
       auto is_variable_identifier = [&]() -> bool {return any_underscore() && any_upper() == false && any_lower();};
 
-      // enum class Type { ALPHA_DIGIT_OR_UNDERSCORE, GROUPING_SYMBOL, QUOTE_SYMBOL, OTHER_SYMBOL, WHITESPACE };
+      // enum class EntryType { ALPHA_DIGIT_OR_UNDERSCORE, GROUPING_SYMBOL, QUOTE_SYMBOL, OTHER_SYMBOL, WHITESPACE };
       // Bingo, class name. We'll need to assert that there are:
       // No underscores
       // At least one lowercase character?
@@ -65,7 +65,7 @@ namespace tul
         packagenamesarefullylowercasewithoutunderscore
       */
 
-      if (token.entry_type == Type::ALPHA_DIGIT_OR_UNDERSCORE)
+      if (token.entry_type == EntryType::ALPHA_DIGIT_OR_UNDERSCORE)
       {
         if (is_class_identifier())
         {
@@ -106,19 +106,19 @@ namespace tul
       }
     }
 
-    protocols::Type Lexer::typify (char val)
+    protocols::EntryType Lexer::typify (char val)
     {
       using namespace protocols;
       if (65 <= val && val <= 90 || 97 <= val && val <= 122 || val == 95 || 48 <= val && val <= 57)
-        return Type::ALPHA_DIGIT_OR_UNDERSCORE;
+        return EntryType::ALPHA_DIGIT_OR_UNDERSCORE;
       if (val == '"')
-        return Type::QUOTE_SYMBOL;
+        return EntryType::QUOTE_SYMBOL;
       if (isAnyOf(val, '(', ')', '{', '}', '[', ']'))
-        return Type::GROUPING_SYMBOL;
+        return EntryType::GROUPING_SYMBOL;
       else if (isAnyOf(val, ' ', '\n', '\r', '\f', '\v', '\t'))
-        return Type::WHITESPACE;
+        return EntryType::WHITESPACE;
       else
-        return Type::OTHER_SYMBOL;
+        return EntryType::OTHER_SYMBOL;
     }
   } // namespace lexer
 } // namespace tul

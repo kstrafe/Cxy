@@ -2,7 +2,7 @@
 
 #include "libraries/Mealy.hpp"
 #include "protocols/Action.hpp"
-#include "protocols/Type.hpp"
+#include "protocols/EntryType.hpp"
 
 #include <cstddef>
 
@@ -17,12 +17,12 @@ namespace tul
       public:
 
         ActionGenerator();
-        protocols::Action computeAction(protocols::Type type);
+        protocols::Action computeAction(protocols::EntryType type);
 
       private:
 
-        tul::library::Mealy<std::size_t, protocols::Action, protocols::Type> machine;
-          static const tul::library::Mealy<std::size_t, protocols::Action, protocols::Type>::Compound table[25];
+        tul::library::Mealy<std::size_t, protocols::Action, protocols::EntryType> machine;
+          static const tul::library::Mealy<std::size_t, protocols::Action, protocols::EntryType>::Compound table[25];
 
       };
     }

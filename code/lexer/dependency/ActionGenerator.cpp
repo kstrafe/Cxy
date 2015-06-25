@@ -1,6 +1,6 @@
 #include "ActionGenerator.hpp"
 #include "protocols/Action.hpp"
-#include "protocols/Type.hpp"
+#include "protocols/EntryType.hpp"
 
 #include "libraries/Mealy.hpp"
 
@@ -12,7 +12,7 @@ namespace tul
   {
     namespace dependency
     {
-      protocols::Action ActionGenerator::computeAction(protocols::Type type)
+      protocols::Action ActionGenerator::computeAction(protocols::EntryType type)
       {
         return machine.transist(type, 5);
       }
@@ -35,7 +35,7 @@ namespace tul
 
       using namespace protocols;
 
-      constexpr const tul::library::Mealy<std::size_t, protocols::Action, protocols::Type>::Compound ActionGenerator::table[25]
+      constexpr const tul::library::Mealy<std::size_t, protocols::Action, protocols::EntryType>::Compound ActionGenerator::table[25]
         =
           { /*    alphanamu  GROUPING_SYMBOL     QUOTE_SYMBOL    OTHER_SYMBOL    WHITESPACE*/
             /*0*/ {1, Action::P},    {0, Action::PTG},   {2, Action::N},  {4, Action::P},   {0, Action::N},

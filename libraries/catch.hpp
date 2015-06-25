@@ -3649,9 +3649,9 @@ namespace Clara {
         Parser() : separators( " \t=:" ) {}
 
         struct Token {
-            enum Type { Positional, ShortOpt, LongOpt };
-            Token( Type _type, std::string const& _data ) : type( _type ), data( _data ) {}
-            Type type;
+            enum EntryType { Positional, ShortOpt, LongOpt };
+            Token( EntryType _type, std::string const& _data ) : type( _type ), data( _data ) {}
+            EntryType type;
             std::string data;
         };
 

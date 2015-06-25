@@ -4,7 +4,7 @@
 #include "dependency/TokenGenerator.hpp"
 
 #include "protocols/Token.hpp"
-#include "protocols/Type.hpp"
+#include "protocols/EntryType.hpp"
 
 #include <vector>
 
@@ -35,7 +35,7 @@ namespace tul
 
       void identifyToken(protocols::Token &token);
 
-      protocols::Type typify (char val);
+      protocols::EntryType typify (char val);
 
       std::vector<protocols::Token> token_stack;
 

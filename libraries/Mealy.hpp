@@ -13,7 +13,7 @@ namespace tul
       the "argument size" parameter that's given to transist .
 
       The table is to be constructed like the following example:
-      const tul::Mealy<int, Action, Type>::Compound table[]
+      const tul::Mealy<int, Action, EntryType>::Compound table[]
       {
           {1, push},            {2, push},            {3, push},             {0, transfer},
           {1, push},            {1, push},            {0, transferWord},     {0, transferWord},
@@ -22,9 +22,9 @@ namespace tul
           {0, transferString},  {0, transferString},  {3, push},             {0, transferString},
       };
 
-      Where Action and Type are enumerable items.
+      Where Action and EntryType are enumerable items.
       The next invocation on transist will be:
-      Type t;
+      EntryType t;
       transist(t, 4);
     */
     template <typename STATE = unsigned, typename ACTION = unsigned, typename INPUT = unsigned>
