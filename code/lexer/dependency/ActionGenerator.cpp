@@ -21,11 +21,11 @@ namespace tul
       {
         /*
           n = no action
-          p = push current symbol on to the current token
+          p = push current OTHER_SYMBOL on to the current token
           tx = transfer something of type x
-          tg = transfer a grouper token
+          tg = transfer a GROUPING_SYMBOL token
           tr = transfer a string token
-          ts = transfer a symbol token
+          ts = transfer a OTHER_SYMBOL token
           ta = transfer an alnumu token
           txp = transfer x and then push
           ptx = push and then transfer
@@ -37,12 +37,12 @@ namespace tul
 
       constexpr const tul::library::Mealy<std::size_t, protocols::Action, protocols::Type>::Compound ActionGenerator::table[25]
         =
-          { /*    alphanamu  grouper     quote    symbol    whitespace*/
-            /*0*/ {1, Action::p},    {0, Action::ptg},   {2, Action::n},  {4, Action::p},   {0, Action::n},
-            /*1*/ {1, Action::p},    {0, Action::taptg}, {2, Action::ta}, {4, Action::tap}, {0, Action::ta},
-            /*2*/ {2, Action::p},    {2, Action::p},     {3, Action::n},  {2, Action::p},   {2, Action::p},
-            /*3*/ {1, Action::trp},  {0, Action::trptg}, {2, Action::p},  {4, Action::trp}, {0, Action::tr},
-            /*4*/ {1, Action::tsp},  {0, Action::tsptg}, {2, Action::ts}, {4, Action::p},   {0, Action::ts}
+          { /*    alphanamu  GROUPING_SYMBOL     QUOTE_SYMBOL    OTHER_SYMBOL    WHITESPACE*/
+            /*0*/ {1, Action::P},    {0, Action::PTG},   {2, Action::N},  {4, Action::P},   {0, Action::N},
+            /*1*/ {1, Action::P},    {0, Action::TAPTG}, {2, Action::TA}, {4, Action::TAP}, {0, Action::TA},
+            /*2*/ {2, Action::P},    {2, Action::P},     {3, Action::N},  {2, Action::P},   {2, Action::P},
+            /*3*/ {1, Action::TRP},  {0, Action::TRPTG}, {2, Action::P},  {4, Action::TRP}, {0, Action::TR},
+            /*4*/ {1, Action::TSP},  {0, Action::TSPTG}, {2, Action::TS}, {4, Action::P},   {0, Action::TS}
           };
     }
   }

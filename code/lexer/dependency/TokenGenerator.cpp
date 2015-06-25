@@ -14,53 +14,53 @@ namespace tul
         using namespace protocols;
         switch (action)
         {
-          case Action::n:
+          case Action::N:
             // Do nothing
             return false;
           break;
-          case Action::p:
+          case Action::P:
             current_working_lexeme.push_back(character);
             return false;
           break;
-          case Action::ptg:
+          case Action::PTG:
             current_working_lexeme.push_back(character);
-            tokens.emplace_back(Token {0, Type::grouper, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
+            tokens.emplace_back(Token {0, Type::GROUPING_SYMBOL, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
           break;
-          case Action::taptg:
-            tokens.emplace_back(Token {0, Type::alphanumu, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
+          case Action::TAPTG:
+            tokens.emplace_back(Token {0, Type::ALPHA_DIGIT_OR_UNDERSCORE, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
             current_working_lexeme.push_back(character);
-            tokens.emplace_back(Token {0, Type::grouper, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
+            tokens.emplace_back(Token {0, Type::GROUPING_SYMBOL, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
           break;
-          case Action::ta:
-            tokens.emplace_back(Token {0, Type::alphanumu, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
+          case Action::TA:
+            tokens.emplace_back(Token {0, Type::ALPHA_DIGIT_OR_UNDERSCORE, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
           break;
-          case Action::tap:
-            tokens.emplace_back(Token {0, Type::alphanumu, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
-            current_working_lexeme.push_back(character);
-          break;
-          case Action::trp:
-            tokens.emplace_back(Token {0, Type::quote, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
+          case Action::TAP:
+            tokens.emplace_back(Token {0, Type::ALPHA_DIGIT_OR_UNDERSCORE, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
             current_working_lexeme.push_back(character);
           break;
-          case Action::trptg:
-            tokens.emplace_back(Token {0, Type::quote, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
-            current_working_lexeme.push_back(character);
-            tokens.emplace_back(Token {0, Type::grouper, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
-          break;
-          case Action::tsp:
-            tokens.emplace_back(Token {0, Type::symbol, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
+          case Action::TRP:
+            tokens.emplace_back(Token {0, Type::QUOTE_SYMBOL, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
             current_working_lexeme.push_back(character);
           break;
-          case Action::tsptg:
-            tokens.emplace_back(Token {0, Type::symbol, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
+          case Action::TRPTG:
+            tokens.emplace_back(Token {0, Type::QUOTE_SYMBOL, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
             current_working_lexeme.push_back(character);
-            tokens.emplace_back(Token {0, Type::grouper, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
+            tokens.emplace_back(Token {0, Type::GROUPING_SYMBOL, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
           break;
-          case Action::ts:
-            tokens.emplace_back(Token {0, Type::symbol, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
+          case Action::TSP:
+            tokens.emplace_back(Token {0, Type::OTHER_SYMBOL, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
+            current_working_lexeme.push_back(character);
           break;
-          case Action::tr:
-            tokens.emplace_back(Token {0, Type::quote, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
+          case Action::TSPTG:
+            tokens.emplace_back(Token {0, Type::OTHER_SYMBOL, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
+            current_working_lexeme.push_back(character);
+            tokens.emplace_back(Token {0, Type::GROUPING_SYMBOL, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
+          break;
+          case Action::TS:
+            tokens.emplace_back(Token {0, Type::OTHER_SYMBOL, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
+          break;
+          case Action::TR:
+            tokens.emplace_back(Token {0, Type::QUOTE_SYMBOL, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
           break;
           default:
           break;

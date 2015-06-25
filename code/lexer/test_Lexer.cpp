@@ -43,22 +43,22 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
       using namespace tul::protocols;
       unsigned iterator = 0;
       REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_CLASS);
-      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_VARIABLE_OR_SUBROUTINE);
-      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_VARIABLE_OR_SUBROUTINE);
-      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_VARIABLE_OR_SUBROUTINE);
-      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_VARIABLE_OR_SUBROUTINE);
-      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_VARIABLE_OR_SUBROUTINE);
-      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_VARIABLE_OR_SUBROUTINE);
+      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_PACKAGE);
+      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_PACKAGE);
+      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_PACKAGE);
+      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_PACKAGE);
+      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_PACKAGE);
+      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_PACKAGE);
       REQUIRE(token_stack.at(iterator++).token_type == TokenType::UNIDENTIFIED);
-      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_VARIABLE_OR_SUBROUTINE);
-      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_VARIABLE_OR_SUBROUTINE);
-      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_VARIABLE_OR_SUBROUTINE);
-      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_VARIABLE_OR_SUBROUTINE);
+      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_PACKAGE);
+      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_PACKAGE);
+      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_PACKAGE);
+      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_PACKAGE);
       REQUIRE(token_stack.at(iterator++).token_type == TokenType::INTEGER_LITERAL);
-      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_VARIABLE_OR_SUBROUTINE);
-      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_VARIABLE_OR_SUBROUTINE);
-      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_VARIABLE_OR_SUBROUTINE);
-      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_VARIABLE_OR_SUBROUTINE);
+      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_PACKAGE);
+      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_PACKAGE);
+      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_PACKAGE);
+      REQUIRE(token_stack.at(iterator++).token_type == TokenType::IDENTIFIER_PACKAGE);
     }
   }
   SECTION("Check if the lexer lexes string literals correctly")

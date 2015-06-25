@@ -4,6 +4,7 @@ namespace tul
 {
   namespace protocols
   {
-    enum class Action { n, p, ptg, taptg, ta, tap, trp, tr, trptg, tsp, tsptg, ts };
+    // See ..lexer::dependency::ActionGenerator for symbol meanings
+    enum class Action { N, P, PTG, TAPTG, TA, TAP, TRP, TR, TRPTG, TSP, TSPTG, TS  };
   }
 }

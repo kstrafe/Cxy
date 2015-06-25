@@ -28,39 +28,76 @@ namespace tul
     {
       using namespace protocols;
 
-      // enum class Type { alphanumu, grouper, quote, symbol, whitespace };
+      auto all_digit = [&token]() -> bool {return std::all_of(token.string.cbegin(), token.string.cend(), [](char character) -> bool {return std::isdigit(character);});};
+      auto all_lower = [&token]() -> bool {return std::all_of(token.string.cbegin(), token.string.cend(), [](char character) -> bool {return std::islower(character);});};
+      auto all_upper = [&token]() -> bool {return std::all_of(token.string.cbegin(), token.string.cend(), [](char character) -> bool {return std::isupper(character);});};
 
-      if (token.entry_type == Type::alphanumu)
+      auto any_lower = [&token]() -> bool {return std::any_of(token.string.cbegin(), token.string.cend(), [](char character) -> bool {return std::islower(character);});};
+      auto any_underscore = [&token]() -> bool {return std::any_of(token.string.cbegin(), token.string.cend(), [](char character) -> bool {return character == '_'; });};
+      auto any_upper = [&token]() -> bool {return std::any_of(token.string.cbegin(), token.string.cend(), [](char character) -> bool {return std::isupper(character);});};
+
+      auto begins_with_lowercase = [&token]() -> bool {return std::islower(token.string.front());};
+      auto begins_with_underscore = [&token]() -> bool {return token.string.front() == '_';};
+      auto begins_with_uppercase = [&token]() -> bool {return std::isupper(token.string.front());};
+
+      auto ends_with_lowercase = [&token]() -> bool {return std::islower(token.string.back());};
+      auto ends_with_lowercase_u_or_s = [&token]() -> bool {return token.string.back() == 'u' || token.string.back() == 's';};
+
+      auto is_class_identifier = [&]() -> bool {return begins_with_uppercase() && any_underscore() == false && ends_with_lowercase();};
+      auto is_enumeration_identifier = [&]() -> bool {return begins_with_uppercase() && any_underscore() == true && any_lower() == false || all_upper();};
+      auto is_function_identifier = [&]() -> bool {return begins_with_lowercase() && any_underscore() == false && ends_with_lowercase() && any_upper();};
+      auto is_number_literal = [&]() -> bool {return all_digit();};
+      auto is_package_identifier = [&]() -> bool {return all_lower();};
+      auto is_primitive_signed = [&]() -> bool {return token.string.back() == 's' && std::all_of(token.string.cbegin(), token.string.cend() - 1, [](char character) -> bool {return std::isdigit(character);});};
+      auto is_primitive_unsigned = [&]() -> bool {return token.string.back() == 'u' && std::all_of(token.string.cbegin(), token.string.cend() - 1, [](char character) -> bool {return std::isdigit(character);});};
+      auto is_variable_identifier = [&]() -> bool {return any_underscore() && any_upper() == false && any_lower();};
+
+      // enum class Type { ALPHA_DIGIT_OR_UNDERSCORE, GROUPING_SYMBOL, QUOTE_SYMBOL, OTHER_SYMBOL, WHITESPACE };
+      // Bingo, class name. We'll need to assert that there are:
+      // No underscores
+      // At least one lowercase character?
+      // Say:
+      /*
+        ClassNamesAreLikeThisNoUnderScoreEndWithSmallCharacter
+        variable_names_are_like_this_must_have_underscore, _cool
+        functionNamesMustAlwaysHaveAtLeastOneSmallBeginningCharacter
+        ENUMERATIVENAMESLIKETHIS, THEY_ALLOW_UNDERSCORES
+        packagenamesarefullylowercasewithoutunderscore
+      */
+
+      if (token.entry_type == Type::ALPHA_DIGIT_OR_UNDERSCORE)
       {
-        // We know it's either a Class name, function, variable, number, or primitive
-        if (std::isupper(token.string.at(0)))
+        if (is_class_identifier())
         {
-          // Bingo, class name!
-          token.token_type = TokenType::IDENTIFIER_CLASS;
+           token.token_type = TokenType::IDENTIFIER_CLASS;
         }
-        else if (std::islower(token.string.at(0)))
+        else if (is_enumeration_identifier())
         {
-          // If all characters are lower: var or sub identifier
-          if (std::all_of(token.string.cbegin() + 1, token.string.cend(), [](char character) -> bool {return std::islower(character);}))
-          {
-            token.token_type = TokenType::IDENTIFIER_VARIABLE_OR_SUBROUTINE;
-          }
+          token.token_type = TokenType::IDENTIFIER_ENUMERATION;
         }
-        else if (std::isdigit(token.string.at(0)))
+        else if (is_function_identifier())
         {
-          // Check if last is u or s
-          if (std::isdigit(token.string.back()))
-          {
-            token.token_type = TokenType::INTEGER_LITERAL;
-            // TODO Now we must assert that all internal parts are numbers as well...
-          }
-          else
-          {
-            if (token.string.back() == 's')
-              token.token_type = TokenType::PRIMITIVE_SIGNED;
-            else if (token.string.back() == 'u')
-              token.token_type = TokenType::PRIMITIVE_UNSIGNED;
-          }
+          token.token_type = TokenType::IDENTIFIER_SUBROUTINE;
+        }
+        else if (is_number_literal())
+        {
+          token.token_type = TokenType::INTEGER_LITERAL;
+        }
+        else if (is_package_identifier())
+        {
+          token.token_type = TokenType::IDENTIFIER_PACKAGE;
+        }
+        else if (is_primitive_signed())
+        {
+          token.token_type = TokenType::PRIMITIVE_SIGNED;
+        }
+        else if (is_primitive_unsigned())
+        {
+          token.token_type = TokenType::PRIMITIVE_UNSIGNED;
+        }
+        else if (is_variable_identifier())
+        {
+          token.token_type = TokenType::IDENTIFIER_VARIABLE;
         }
       }
       else
@@ -73,15 +110,15 @@ namespace tul
     {
       using namespace protocols;
       if (65 <= val && val <= 90 || 97 <= val && val <= 122 || val == 95 || 48 <= val && val <= 57)
-        return Type::alphanumu;
+        return Type::ALPHA_DIGIT_OR_UNDERSCORE;
       if (val == '"')
-        return Type::quote;
+        return Type::QUOTE_SYMBOL;
       if (isAnyOf(val, '(', ')', '{', '}', '[', ']'))
-        return Type::grouper;
+        return Type::GROUPING_SYMBOL;
       else if (isAnyOf(val, ' ', '\n', '\r', '\f', '\v', '\t'))
-        return Type::whitespace;
+        return Type::WHITESPACE;
       else
-        return Type::symbol;
+        return Type::OTHER_SYMBOL;
     }
   } // namespace lexer
 } // namespace tul
