@@ -53,7 +53,7 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
         caze(IDENTIFIER_PACKAGE);
         caze(IDENTIFIER_PACKAGE);
         caze(IDENTIFIER_PACKAGE);
-        caze(UNIDENTIFIED);
+        caze(SYMBOL_COMMA);
         caze(IDENTIFIER_PACKAGE);
         caze(IDENTIFIER_PACKAGE);
         caze(IDENTIFIER_PACKAGE);
