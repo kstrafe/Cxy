@@ -35,7 +35,7 @@ namespace tul
 
       using namespace protocols;
 
-      constexpr const tul::library::Mealy<std::size_t, protocols::Action, protocols::EntryType>::Compound ActionGenerator::table[25]
+      constexpr const tul::library::Mealy<std::size_t, protocols::Action, protocols::EntryType>::Compound ActionGenerator::table[]
         =
           { /*    ALPHA_DIGIT_OR_UNDERSCORE  GROUPING_SYMBOL QUOTE_SYMBOL OTHER_SYMBOL      WHITESPACE  */
             /*0*/ {1, Action::P},    {0, Action::PTG},   {2, Action::N},  {4, Action::P},   {0, Action::N},

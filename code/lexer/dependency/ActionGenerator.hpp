@@ -22,7 +22,7 @@ namespace tul
       private:
 
         tul::library::Mealy<std::size_t, protocols::Action, protocols::EntryType> machine;
-          static const tul::library::Mealy<std::size_t, protocols::Action, protocols::EntryType>::Compound table[25];
+          static const tul::library::Mealy<std::size_t, protocols::Action, protocols::EntryType>::Compound table[];
 
       };
     }
