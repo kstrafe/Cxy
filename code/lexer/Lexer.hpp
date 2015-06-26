@@ -16,7 +16,7 @@ namespace tul
     {
     public:
 
-      void insertCharacter(char character);
+      bool insertCharacter(char character);
       std::vector<protocols::Token> &getTokenStack();
 
     private:

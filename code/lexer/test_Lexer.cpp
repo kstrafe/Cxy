@@ -198,4 +198,19 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
     #undef caze
     REQUIRE(token_stack.size() == iterator);
   }
+  SECTION("Deal with UTF-8 code points")
+  {
+    using namespace tul::protocols;
+
+    tul::lexer::Lexer lexer;
+    for (char character : std::string("æøå\u0000\u0001\u0002\u0003\u0004\u0005\u0006\u0007\u0008\u000E\u000F\u0010\u0011\u0012\u0013\u0014\u0015\u0016\u0017\u0018\u0019\u001A\u001B\u001C\u001D\u001E\u001F"))
+      REQUIRE (lexer.insertCharacter(/*character :*/ character) == false );
+    for (char character : std::string("\"æøå\u0000\u0001\u0002\u0003\u0004\u0005\u0006\u0007\u0008\u000E\u000F\u0010\u0011\u0012\u0013\u0014\u0015\u0016\u0017\u0018\u0019\u001A\u001B\u001C\u001D\u001E\u001F\" "))
+      REQUIRE (lexer.insertCharacter(/*character :*/ character) == true );
+
+    std::vector<tul::protocols::Token> &token_stack = lexer.getTokenStack();
+    REQUIRE ( token_stack.size() == 1 );
+    REQUIRE ( token_stack.at(0).string == "æøå\u0000\u0001\u0002\u0003\u0004\u0005\u0006\u0007\u0008\u000E\u000F\u0010\u0011\u0012\u0013\u0014\u0015\u0016\u0017\u0018\u0019\u001A\u001B\u001C\u001D\u001E\u001F");
+    REQUIRE ( token_stack.at(0).token_type == TokenType::STRING);
+  }
 }

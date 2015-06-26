@@ -4,6 +4,7 @@
 #include "protocols/EntryType.hpp"
 
 #include <cstddef>
+#include <limits>
 
 namespace tul
 {
@@ -24,6 +25,9 @@ namespace tul
           case Action::P:
             current_working_lexeme.push_back(character);
             return 0;
+          break;
+          case Action::E:
+            return std::numeric_limits<std::size_t>::max();
           break;
           case Action::PTG:
             current_working_lexeme.push_back(character);

@@ -2,24 +2,30 @@
 #include "protocols/Token.hpp"
 
 #include <algorithm>
+#include <limits>
 #include <vector>
 
 namespace tul
 {
   namespace lexer
   {
-    void Lexer::insertCharacter(char character)
+    bool Lexer::insertCharacter(char character)
     {
       protocols::EntryType type_of_character = typify(character);
       protocols::Action action_to_perform = action_generator.computeAction(type_of_character);
       {
         std::size_t amount = token_generator.consumeCharacter(character, action_to_perform);
+        if (amount == std::numeric_limits<std::size_t>::max())
+        {
+          return false;
+        }
         // A new token is ready to be identified
         for (std::size_t element = 0; element < amount; ++element)
         {
           identifyToken(getTokenStack()[getTokenStack().size() - 1 - element]);
         }
       }
+      return true;
     }
 
     std::vector<protocols::Token> &Lexer::getTokenStack()
@@ -187,6 +193,7 @@ namespace tul
     protocols::EntryType Lexer::typify (char val)
     {
       using namespace protocols;
+      const constexpr unsigned char UTF_8_LIMIT = 128;
       if (65 <= val && val <= 90 || 97 <= val && val <= 122 || val == 95 || 48 <= val && val <= 57)
         return EntryType::ALPHA_DIGIT_OR_UNDERSCORE;
       if (val == '"')
@@ -195,6 +202,8 @@ namespace tul
         return EntryType::GROUPING_SYMBOL;
       else if (isAnyOf(val, ' ', '\n', '\r', '\f', '\v', '\t'))
         return EntryType::WHITESPACE;
+      else if (static_cast<unsigned char>(val) >= UTF_8_LIMIT || isAnyOf(val, 0, 1, 2, 3, 4, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 127))
+        return EntryType::UNKNOWN_CODE_POINT;
       else
         return EntryType::OTHER_SYMBOL;
     }
