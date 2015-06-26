@@ -51,7 +51,7 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
         caze(IDENTIFIER_PACKAGE);
         caze(IDENTIFIER_PACKAGE);
         caze(IDENTIFIER_PACKAGE);
-        caze(IDENTIFIER_PACKAGE);
+        caze(KEYWORD_IF);
         caze(IDENTIFIER_PACKAGE);
         caze(SYMBOL_COMMA);
         caze(IDENTIFIER_PACKAGE);
@@ -60,7 +60,7 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
         caze(IDENTIFIER_PACKAGE);
         caze(INTEGER_LITERAL);
         caze(IDENTIFIER_PACKAGE);
-        caze(IDENTIFIER_PACKAGE);
+        caze(KEYWORD_FOR);
         caze(IDENTIFIER_PACKAGE);
         caze(IDENTIFIER_PACKAGE);
       #undef caze
@@ -167,5 +167,35 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
       #undef caze
       REQUIRE(token_stack.size() == iterator);
     }
+  }
+  SECTION("Are keywords detected?")
+  {
+    tul::lexer::Lexer lexer;
+    for (char character : std::string("Muh * if()while() assembly{} + sym ++bols/\\"))
+      lexer.insertCharacter(/*character :*/ character);
+
+    std::vector<tul::protocols::Token> &token_stack = lexer.getTokenStack();
+
+    REQUIRE(token_stack.size() == 15);
+    using namespace tul::protocols;
+    unsigned iterator = 0;
+    #define caze(x) REQUIRE(token_stack.at(iterator++).token_type == TokenType::x)
+      caze(IDENTIFIER_CLASS);
+      caze(SYMBOL_STAR);
+      caze(KEYWORD_IF);
+      caze(GROUPER_LEFT_PARENTHESIS);
+      caze(GROUPER_RIGHT_PARENTHESIS);
+      caze(KEYWORD_WHILE);
+      caze(GROUPER_LEFT_PARENTHESIS);
+      caze(GROUPER_RIGHT_PARENTHESIS);
+      caze(KEYWORD_ASSEMBLY);
+      caze(GROUPER_LEFT_BRACE);
+      caze(GROUPER_RIGHT_BRACE);
+      caze(SYMBOL_PLUS);
+      caze(IDENTIFIER_PACKAGE);
+      caze(SYMBOL_PLUS_PLUS);
+      caze(IDENTIFIER_PACKAGE);
+    #undef caze
+    REQUIRE(token_stack.size() == iterator);
   }
 }

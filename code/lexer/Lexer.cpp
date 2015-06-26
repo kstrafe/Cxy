@@ -27,6 +27,24 @@ namespace tul
       return token_generator.getTokenStack();
     }
 
+    protocols::TokenType Lexer::getKeyword(const std::string &lexeme) const
+    {
+      using namespace protocols;
+      #define caze(x, y) if (x == lexeme) return TokenType::y;
+        caze("assembly", KEYWORD_ASSEMBLY)
+        else caze("do", KEYWORD_DO)
+        else caze("for", KEYWORD_FOR)
+        else caze("goto", KEYWORD_GOTO)
+        else caze("if", KEYWORD_IF)
+        else caze("label", KEYWORD_LABEL)
+        else caze("private", KEYWORD_PRIVATE)
+        else caze("public", KEYWORD_PUBLIC)
+        else caze("restricted", KEYWORD_RESTRICTED)
+        else caze("while", KEYWORD_WHILE)
+      #undef caze
+        else return TokenType::UNIDENTIFIED;
+    }
+
     void Lexer::identifyToken(protocols::Token &token)
     {
       using namespace protocols;
@@ -49,6 +67,7 @@ namespace tul
       auto is_class_identifier = [&]() -> bool {return begins_with_uppercase() && any_underscore() == false && ends_with_lowercase();};
       auto is_enumeration_identifier = [&]() -> bool {return begins_with_uppercase() && any_underscore() == true && any_lower() == false || all_upper();};
       auto is_function_identifier = [&]() -> bool {return begins_with_lowercase() && any_underscore() == false && ends_with_lowercase() && any_upper();};
+      auto is_keyword = [&]() -> bool {return getKeyword(token.string) != TokenType::UNIDENTIFIED;};
       auto is_number_literal = [&]() -> bool {return all_digit();};
       auto is_package_identifier = [&]() -> bool {return all_lower();};
       auto is_primitive_signed = [&]() -> bool {return token.string.back() == 's' && std::all_of(token.string.cbegin(), token.string.cend() - 1, [](char character) -> bool {return std::isdigit(character);});};
@@ -86,6 +105,10 @@ namespace tul
         {
           token.token_type = TokenType::INTEGER_LITERAL;
         }
+        else if (is_keyword())
+        {
+          token.token_type = getKeyword(token.string);
+        }
         else if (is_package_identifier())
         {
           token.token_type = TokenType::IDENTIFIER_PACKAGE;
@@ -101,6 +124,10 @@ namespace tul
         else if (is_variable_identifier())
         {
           token.token_type = TokenType::IDENTIFIER_VARIABLE;
+        }
+        else
+        {
+          token.token_type = TokenType::UNIDENTIFIED;
         }
       }
       else if (token.entry_type == EntryType::GROUPING_SYMBOL)

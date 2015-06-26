@@ -33,6 +33,8 @@ namespace tul
         return a == f || isAnyOf(a, fs...);
       }
 
+      protocols::TokenType getKeyword(const std::string &lexeme) const;
+
       void identifyToken(protocols::Token &token);
 
       protocols::EntryType typify (char val);
