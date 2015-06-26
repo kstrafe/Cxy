@@ -118,6 +118,10 @@ namespace tul
         }
         #undef caze
       }
+      else if (token.entry_type == EntryType::QUOTE_SYMBOL)
+      {
+        token.token_type = TokenType::STRING;
+      }
       else if (token.entry_type == EntryType::OTHER_SYMBOL)
       {
         #define caze(string_, symbol) if (token.string == string_) { token.token_type = TokenType::symbol; }

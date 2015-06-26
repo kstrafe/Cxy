@@ -24,6 +24,8 @@ namespace tul
       PRIMITIVE_SIGNED,
       PRIMITIVE_UNSIGNED,
 
+      STRING,
+
       SYMBOL_PLUS,
       SYMBOL_PLUS_PLUS,
       SYMBOL_MINUS,

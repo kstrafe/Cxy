@@ -77,6 +77,7 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
 
     REQUIRE(token_stack.size() == 1);
     REQUIRE(token_stack.at(0).string == "Example test input to see if alphanumeric, especially with numbers like 123 work for the lexer.");
+    REQUIRE(token_stack.at(0).token_type == tul::protocols::TokenType::STRING);
   }
   SECTION("Confirm the different alphanumeric identifies")
   {
