@@ -1,6 +1,7 @@
 #pragma once
 
 #include "dependency/ActionGenerator.hpp"
+#include "dependency/PositionCounter.hpp"
 #include "dependency/TokenGenerator.hpp"
 
 #include "protocols/Token.hpp"
@@ -42,6 +43,7 @@ namespace tul
       std::vector<protocols::Token> token_stack;
 
       dependency::ActionGenerator action_generator;
+      dependency::PositionCounter position_counter;
       dependency::TokenGenerator token_generator;
 
     };

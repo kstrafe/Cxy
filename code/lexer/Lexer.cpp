@@ -23,8 +23,11 @@ namespace tul
         for (std::size_t new_token = 0; new_token < amount_of_new_tokens; ++new_token)
         {
           identifyToken(getTokenStack()[getTokenStack().size() - 1 - new_token]);
+          getTokenStack()[getTokenStack().size() - 1 - new_token].column_number = position_counter.getCurrentColumnNumber();
+          getTokenStack()[getTokenStack().size() - 1 - new_token].line_number = position_counter.getCurrentLineNumber();
         }
       }
+      position_counter.countCharacter(character_);
       return true;
     }
 

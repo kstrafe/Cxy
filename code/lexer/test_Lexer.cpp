@@ -20,24 +20,26 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
     SECTION("Check if the lexemes are correct")
     {
       unsigned iterator_ = 0;
-      #define caze(string_) REQUIRE(token_stack.at(iterator_++).accompanying_lexeme == string_)
-        caze("Example");
-        caze("test");
-        caze("input");
-        caze("to");
-        caze("see");
-        caze("if");
-        caze("alphanumeric");
-        caze(",");
-        caze("especially");
-        caze("with");
-        caze("numbers");
-        caze("like");
-        caze("123");
-        caze("work");
-        caze("for");
-        caze("the");
-        caze("lexer");
+      #define caze(string_) REQUIRE(token_stack.at(iterator_).accompanying_lexeme == string_)
+      #define caze2(col_number) REQUIRE(token_stack.at(iterator_++).column_number == col_number)
+        caze("Example"); caze2(8);
+        caze("test"); caze2(13);
+        caze("input"); caze2(19);
+        caze("to"); caze2(22);
+        caze("see"); caze2(26);
+        caze("if"); caze2(29);
+        caze("alphanumeric"); caze2(42);
+        caze(","); caze2(43);
+        caze("especially"); caze2(54);
+        caze("with"); caze2(59);
+        caze("numbers"); caze2(67);
+        caze("like"); caze2(72);
+        caze("123"); caze2(76);
+        caze("work"); caze2(81);
+        caze("for"); caze2(85);
+        caze("the"); caze2(89);
+        caze("lexer"); caze2(95);
+      #undef caze2
       #undef caze
       REQUIRE(token_stack.size() == iterator_);
     }
@@ -78,6 +80,7 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
     REQUIRE(token_stack.size() == 1);
     REQUIRE(token_stack.at(0).accompanying_lexeme == "Example test input to see if alphanumeric, especially with numbers like 123 work for the lexer.");
     REQUIRE(token_stack.at(0).token_type == tul::protocols::TokenType::STRING);
+    REQUIRE(token_stack.at(0).column_number == 98);
   }
   SECTION("Confirm the different alphanumeric identifies")
   {
@@ -92,14 +95,16 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
     {
       using namespace tul::protocols;
       unsigned iterator_ = 0;
-      #define caze(type_name) REQUIRE(token_stack.at(iterator_++).token_type == TokenType::type_name)
-        caze(IDENTIFIER_CLASS);
-        caze(PRIMITIVE_SIGNED);
-        caze(IDENTIFIER_VARIABLE);
-        caze(IDENTIFIER_PACKAGE);
-        caze(IDENTIFIER_PACKAGE);
-        caze(PRIMITIVE_UNSIGNED);
-        caze(IDENTIFIER_SUBROUTINE);
+      #define caze(type_name) REQUIRE(token_stack.at(iterator_).token_type == TokenType::type_name)
+      #define caze2(col_number) REQUIRE(token_stack.at(iterator_++).column_number == col_number)
+        caze(IDENTIFIER_CLASS); caze2(4);
+        caze(PRIMITIVE_SIGNED); caze2(7);
+        caze(IDENTIFIER_VARIABLE); caze2(14);
+        caze(IDENTIFIER_PACKAGE); caze2(19);
+        caze(IDENTIFIER_PACKAGE); caze2(24);
+        caze(PRIMITIVE_UNSIGNED); caze2(27);
+        caze(IDENTIFIER_SUBROUTINE); caze2(35);
+      #undef caze2
       #undef caze
       REQUIRE(token_stack.size() == iterator_);
     }
