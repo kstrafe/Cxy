@@ -17,12 +17,12 @@ namespace tul
       public:
 
         ActionGenerator();
-        protocols::Action computeAction(protocols::EntryType type);
+        protocols::Action computeAction(protocols::EntryType with_type);
 
       private:
 
-        tul::library::Mealy<std::size_t, protocols::Action, protocols::EntryType> machine;
-          static const tul::library::Mealy<std::size_t, protocols::Action, protocols::EntryType>::Compound table[];
+        tul::library::Mealy<std::size_t, protocols::Action, protocols::EntryType> mealy_machine;
+        static const tul::library::Mealy<std::size_t, protocols::Action, protocols::EntryType>::Compound action_table[];
 
       };
     }

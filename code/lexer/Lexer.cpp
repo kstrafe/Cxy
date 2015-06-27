@@ -9,20 +9,20 @@ namespace tul
 {
   namespace lexer
   {
-    bool Lexer::insertCharacter(char character)
+    bool Lexer::insertCharacter(char character_)
     {
-      protocols::EntryType type_of_character = typify(character);
+      protocols::EntryType type_of_character = typify(character_);
       protocols::Action action_to_perform = action_generator.computeAction(type_of_character);
       {
-        std::size_t amount = token_generator.consumeCharacter(character, action_to_perform);
-        if (amount == std::numeric_limits<std::size_t>::max())
+        std::size_t amount_of_new_tokens = token_generator.consumeCharacter(character_, action_to_perform);
+        if (amount_of_new_tokens == std::numeric_limits<std::size_t>::max())
         {
           return false;
         }
         // A new token is ready to be identified
-        for (std::size_t element = 0; element < amount; ++element)
+        for (std::size_t new_token = 0; new_token < amount_of_new_tokens; ++new_token)
         {
-          identifyToken(getTokenStack()[getTokenStack().size() - 1 - element]);
+          identifyToken(getTokenStack()[getTokenStack().size() - 1 - new_token]);
         }
       }
       return true;
@@ -33,10 +33,10 @@ namespace tul
       return token_generator.getTokenStack();
     }
 
-    protocols::TokenType Lexer::getKeyword(const std::string &lexeme) const
+    protocols::TokenType Lexer::getKeyword(const std::string &test_lexeme) const
     {
       using namespace protocols;
-      #define caze(x, y) if (x == lexeme) return TokenType::y;
+      #define caze(lexeme_to_identify, token_type) if (lexeme_to_identify == test_lexeme) return TokenType::token_type;
         caze("assembly", KEYWORD_ASSEMBLY)
         else caze("do", KEYWORD_DO)
         else caze("for", KEYWORD_FOR)
@@ -51,33 +51,33 @@ namespace tul
         else return TokenType::UNIDENTIFIED;
     }
 
-    void Lexer::identifyToken(protocols::Token &token)
+    void Lexer::identifyToken(protocols::Token &input_token)
     {
       using namespace protocols;
 
-      auto all_digit = [&token]() -> bool {return std::all_of(token.string.cbegin(), token.string.cend(), [](char character) -> bool {return std::isdigit(character);});};
-      auto all_lower = [&token]() -> bool {return std::all_of(token.string.cbegin(), token.string.cend(), [](char character) -> bool {return std::islower(character);});};
-      auto all_upper = [&token]() -> bool {return std::all_of(token.string.cbegin(), token.string.cend(), [](char character) -> bool {return std::isupper(character);});};
+      auto all_digit = [&input_token]() -> bool {return std::all_of(input_token.accompanying_lexeme.cbegin(), input_token.accompanying_lexeme.cend(), [](char in_character) -> bool {return std::isdigit(in_character);});};
+      auto all_lower = [&input_token]() -> bool {return std::all_of(input_token.accompanying_lexeme.cbegin(), input_token.accompanying_lexeme.cend(), [](char in_character) -> bool {return std::islower(in_character);});};
+      auto all_upper = [&input_token]() -> bool {return std::all_of(input_token.accompanying_lexeme.cbegin(), input_token.accompanying_lexeme.cend(), [](char in_character) -> bool {return std::isupper(in_character);});};
 
-      auto any_lower = [&token]() -> bool {return std::any_of(token.string.cbegin(), token.string.cend(), [](char character) -> bool {return std::islower(character);});};
-      auto any_underscore = [&token]() -> bool {return std::any_of(token.string.cbegin(), token.string.cend(), [](char character) -> bool {return character == '_'; });};
-      auto any_upper = [&token]() -> bool {return std::any_of(token.string.cbegin(), token.string.cend(), [](char character) -> bool {return std::isupper(character);});};
+      auto any_lower = [&input_token]() -> bool {return std::any_of(input_token.accompanying_lexeme.cbegin(), input_token.accompanying_lexeme.cend(), [](char in_character) -> bool {return std::islower(in_character);});};
+      auto any_underscore = [&input_token]() -> bool {return std::any_of(input_token.accompanying_lexeme.cbegin(), input_token.accompanying_lexeme.cend(), [](char in_character) -> bool {return in_character == '_'; });};
+      auto any_upper = [&input_token]() -> bool {return std::any_of(input_token.accompanying_lexeme.cbegin(), input_token.accompanying_lexeme.cend(), [](char in_character) -> bool {return std::isupper(in_character);});};
 
-      auto begins_with_lowercase = [&token]() -> bool {return std::islower(token.string.front());};
-      auto begins_with_underscore = [&token]() -> bool {return token.string.front() == '_';};
-      auto begins_with_uppercase = [&token]() -> bool {return std::isupper(token.string.front());};
+      auto begins_with_lowercase = [&input_token]() -> bool {return std::islower(input_token.accompanying_lexeme.front());};
+      auto begins_with_underscore = [&input_token]() -> bool {return input_token.accompanying_lexeme.front() == '_';};
+      auto begins_with_uppercase = [&input_token]() -> bool {return std::isupper(input_token.accompanying_lexeme.front());};
 
-      auto ends_with_lowercase = [&token]() -> bool {return std::islower(token.string.back());};
-      auto ends_with_lowercase_u_or_s = [&token]() -> bool {return token.string.back() == 'u' || token.string.back() == 's';};
+      auto ends_with_lowercase = [&input_token]() -> bool {return std::islower(input_token.accompanying_lexeme.back());};
+      auto ends_with_lowercase_u_or_s = [&input_token]() -> bool {return input_token.accompanying_lexeme.back() == 'u' || input_token.accompanying_lexeme.back() == 's';};
 
       auto is_class_identifier = [&]() -> bool {return begins_with_uppercase() && any_underscore() == false && ends_with_lowercase();};
       auto is_enumeration_identifier = [&]() -> bool {return begins_with_uppercase() && any_underscore() == true && any_lower() == false || all_upper();};
       auto is_function_identifier = [&]() -> bool {return begins_with_lowercase() && any_underscore() == false && ends_with_lowercase() && any_upper();};
-      auto is_keyword = [&]() -> bool {return getKeyword(token.string) != TokenType::UNIDENTIFIED;};
+      auto is_keyword = [&]() -> bool {return getKeyword(input_token.accompanying_lexeme) != TokenType::UNIDENTIFIED;};
       auto is_number_literal = [&]() -> bool {return all_digit();};
       auto is_package_identifier = [&]() -> bool {return all_lower();};
-      auto is_primitive_signed = [&]() -> bool {return token.string.back() == 's' && std::all_of(token.string.cbegin(), token.string.cend() - 1, [](char character) -> bool {return std::isdigit(character);});};
-      auto is_primitive_unsigned = [&]() -> bool {return token.string.back() == 'u' && std::all_of(token.string.cbegin(), token.string.cend() - 1, [](char character) -> bool {return std::isdigit(character);});};
+      auto is_primitive_signed = [&]() -> bool {return input_token.accompanying_lexeme.back() == 's' && std::all_of(input_token.accompanying_lexeme.cbegin(), input_token.accompanying_lexeme.cend() - 1, [](char in_character) -> bool {return std::isdigit(in_character);});};
+      auto is_primitive_unsigned = [&]() -> bool {return input_token.accompanying_lexeme.back() == 'u' && std::all_of(input_token.accompanying_lexeme.cbegin(), input_token.accompanying_lexeme.cend() - 1, [](char in_character) -> bool {return std::isdigit(in_character);});};
       auto is_variable_identifier = [&]() -> bool {return any_underscore() && any_upper() == false && any_lower();};
 
       // enum class EntryType { ALPHA_DIGIT_OR_UNDERSCORE, GROUPING_SYMBOL, QUOTE_SYMBOL, OTHER_SYMBOL, WHITESPACE };
@@ -93,53 +93,53 @@ namespace tul
         packagenamesarefullylowercasewithoutunderscore
       */
 
-      if (token.entry_type == EntryType::ALPHA_DIGIT_OR_UNDERSCORE)
+      if (input_token.entry_type == EntryType::ALPHA_DIGIT_OR_UNDERSCORE)
       {
         if (is_class_identifier())
         {
-           token.token_type = TokenType::IDENTIFIER_CLASS;
+           input_token.token_type = TokenType::IDENTIFIER_CLASS;
         }
         else if (is_enumeration_identifier())
         {
-          token.token_type = TokenType::IDENTIFIER_ENUMERATION;
+          input_token.token_type = TokenType::IDENTIFIER_ENUMERATION;
         }
         else if (is_function_identifier())
         {
-          token.token_type = TokenType::IDENTIFIER_SUBROUTINE;
+          input_token.token_type = TokenType::IDENTIFIER_SUBROUTINE;
         }
         else if (is_number_literal())
         {
-          token.token_type = TokenType::INTEGER_LITERAL;
+          input_token.token_type = TokenType::INTEGER_LITERAL;
         }
         else if (is_keyword())
         {
-          token.token_type = getKeyword(token.string);
+          input_token.token_type = getKeyword(input_token.accompanying_lexeme);
         }
         else if (is_package_identifier())
         {
-          token.token_type = TokenType::IDENTIFIER_PACKAGE;
+          input_token.token_type = TokenType::IDENTIFIER_PACKAGE;
         }
         else if (is_primitive_signed())
         {
-          token.token_type = TokenType::PRIMITIVE_SIGNED;
+          input_token.token_type = TokenType::PRIMITIVE_SIGNED;
         }
         else if (is_primitive_unsigned())
         {
-          token.token_type = TokenType::PRIMITIVE_UNSIGNED;
+          input_token.token_type = TokenType::PRIMITIVE_UNSIGNED;
         }
         else if (is_variable_identifier())
         {
-          token.token_type = TokenType::IDENTIFIER_VARIABLE;
+          input_token.token_type = TokenType::IDENTIFIER_VARIABLE;
         }
         else
         {
-          token.token_type = TokenType::UNIDENTIFIED;
+          input_token.token_type = TokenType::UNIDENTIFIED;
         }
       }
-      else if (token.entry_type == EntryType::GROUPING_SYMBOL)
+      else if (input_token.entry_type == EntryType::GROUPING_SYMBOL)
       {
-        switch (token.string.at(0))
-        #define caze(x) token.token_type = TokenType::x; break;
+        switch (input_token.accompanying_lexeme.at(0))
+        #define caze(enum_token_type) input_token.token_type = TokenType::enum_token_type; break;
         {
           case '(': caze(GROUPER_LEFT_PARENTHESIS)
           case ')': caze(GROUPER_RIGHT_PARENTHESIS)
@@ -151,13 +151,13 @@ namespace tul
         }
         #undef caze
       }
-      else if (token.entry_type == EntryType::QUOTE_SYMBOL)
+      else if (input_token.entry_type == EntryType::QUOTE_SYMBOL)
       {
-        token.token_type = TokenType::STRING;
+        input_token.token_type = TokenType::STRING;
       }
-      else if (token.entry_type == EntryType::OTHER_SYMBOL)
+      else if (input_token.entry_type == EntryType::OTHER_SYMBOL)
       {
-        #define caze(string_, symbol) if (token.string == string_) { token.token_type = TokenType::symbol; }
+        #define caze(string_, symbol_) if (input_token.accompanying_lexeme == string_) { input_token.token_type = TokenType::symbol_; }
           caze("+", SYMBOL_PLUS)
           else caze("++", SYMBOL_PLUS_PLUS)
           else caze("-", SYMBOL_MINUS)
@@ -186,23 +186,23 @@ namespace tul
       }
       else
       {
-        token.token_type = TokenType::UNIDENTIFIED;
+        input_token.token_type = TokenType::UNIDENTIFIED;
       }
     }
 
-    protocols::EntryType Lexer::typify (char val)
+    protocols::EntryType Lexer::typify (char val_)
     {
       using namespace protocols;
       const constexpr unsigned char UTF_8_LIMIT = 128;
-      if (65 <= val && val <= 90 || 97 <= val && val <= 122 || val == 95 || 48 <= val && val <= 57)
+      if (65 <= val_ && val_ <= 90 || 97 <= val_ && val_ <= 122 || val_ == 95 || 48 <= val_ && val_ <= 57)
         return EntryType::ALPHA_DIGIT_OR_UNDERSCORE;
-      if (val == '"')
+      if (val_ == '"')
         return EntryType::QUOTE_SYMBOL;
-      if (isAnyOf(val, '(', ')', '{', '}', '[', ']'))
+      if (isAnyOf(val_, '(', ')', '{', '}', '[', ']'))
         return EntryType::GROUPING_SYMBOL;
-      else if (isAnyOf(val, ' ', '\n', '\r', '\f', '\v', '\t'))
+      else if (isAnyOf(val_, ' ', '\n', '\r', '\f', '\v', '\t'))
         return EntryType::WHITESPACE;
-      else if (static_cast<unsigned char>(val) >= UTF_8_LIMIT || isAnyOf(val, 0, 1, 2, 3, 4, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 127))
+      else if (static_cast<unsigned char>(val_) >= UTF_8_LIMIT || isAnyOf(val_, 0, 1, 2, 3, 4, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 127))
         return EntryType::UNKNOWN_CODE_POINT;
       else
         return EntryType::OTHER_SYMBOL;

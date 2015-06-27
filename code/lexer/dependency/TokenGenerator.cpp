@@ -13,70 +13,70 @@ namespace tul
     namespace dependency
     {
 
-      std::size_t TokenGenerator::consumeCharacter(char character, protocols::Action action)
+      std::size_t TokenGenerator::consumeCharacter(char character_, protocols::Action action_)
       {
         using namespace protocols;
-        switch (action)
+        switch (action_)
         {
           case Action::N:
             // Do nothing
             return 0;
           break;
           case Action::P:
-            current_working_lexeme.push_back(character);
+            current_working_lexeme.push_back(character_);
             return 0;
           break;
           case Action::E:
             return std::numeric_limits<std::size_t>::max();
           break;
           case Action::PTG:
-            current_working_lexeme.push_back(character);
-            tokens.emplace_back(Token {0, EntryType::GROUPING_SYMBOL, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
+            current_working_lexeme.push_back(character_);
+            token_stack.emplace_back(Token {0, EntryType::GROUPING_SYMBOL, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
             return 1;
           break;
           case Action::TAPTG:
-            tokens.emplace_back(Token {0, EntryType::ALPHA_DIGIT_OR_UNDERSCORE, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
-            current_working_lexeme.push_back(character);
-            tokens.emplace_back(Token {0, EntryType::GROUPING_SYMBOL, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
+            token_stack.emplace_back(Token {0, EntryType::ALPHA_DIGIT_OR_UNDERSCORE, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
+            current_working_lexeme.push_back(character_);
+            token_stack.emplace_back(Token {0, EntryType::GROUPING_SYMBOL, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
             return 2;
           break;
           case Action::TA:
-            tokens.emplace_back(Token {0, EntryType::ALPHA_DIGIT_OR_UNDERSCORE, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
+            token_stack.emplace_back(Token {0, EntryType::ALPHA_DIGIT_OR_UNDERSCORE, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
             return 1;
           break;
           case Action::TAP:
-            tokens.emplace_back(Token {0, EntryType::ALPHA_DIGIT_OR_UNDERSCORE, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
-            current_working_lexeme.push_back(character);
+            token_stack.emplace_back(Token {0, EntryType::ALPHA_DIGIT_OR_UNDERSCORE, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
+            current_working_lexeme.push_back(character_);
             return 1;
           break;
           case Action::TRP:
-            tokens.emplace_back(Token {0, EntryType::QUOTE_SYMBOL, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
-            current_working_lexeme.push_back(character);
+            token_stack.emplace_back(Token {0, EntryType::QUOTE_SYMBOL, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
+            current_working_lexeme.push_back(character_);
             return 1;
           break;
           case Action::TRPTG:
-            tokens.emplace_back(Token {0, EntryType::QUOTE_SYMBOL, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
-            current_working_lexeme.push_back(character);
-            tokens.emplace_back(Token {0, EntryType::GROUPING_SYMBOL, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
+            token_stack.emplace_back(Token {0, EntryType::QUOTE_SYMBOL, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
+            current_working_lexeme.push_back(character_);
+            token_stack.emplace_back(Token {0, EntryType::GROUPING_SYMBOL, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
             return 2;
           break;
           case Action::TSP:
-            tokens.emplace_back(Token {0, EntryType::OTHER_SYMBOL, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
-            current_working_lexeme.push_back(character);
+            token_stack.emplace_back(Token {0, EntryType::OTHER_SYMBOL, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
+            current_working_lexeme.push_back(character_);
             return 1;
           break;
           case Action::TSPTG:
-            tokens.emplace_back(Token {0, EntryType::OTHER_SYMBOL, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
-            current_working_lexeme.push_back(character);
-            tokens.emplace_back(Token {0, EntryType::GROUPING_SYMBOL, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
+            token_stack.emplace_back(Token {0, EntryType::OTHER_SYMBOL, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
+            current_working_lexeme.push_back(character_);
+            token_stack.emplace_back(Token {0, EntryType::GROUPING_SYMBOL, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
             return 2;
           break;
           case Action::TS:
-            tokens.emplace_back(Token {0, EntryType::OTHER_SYMBOL, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
+            token_stack.emplace_back(Token {0, EntryType::OTHER_SYMBOL, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
             return 1;
           break;
           case Action::TR:
-            tokens.emplace_back(Token {0, EntryType::QUOTE_SYMBOL, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
+            token_stack.emplace_back(Token {0, EntryType::QUOTE_SYMBOL, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
             return 1;
           break;
           default:
@@ -87,7 +87,7 @@ namespace tul
 
       std::vector<protocols::Token> &TokenGenerator::getTokenStack()
       {
-        return tokens;
+        return token_stack;
       }
     } // namespace dependency
   } // namespace lexer

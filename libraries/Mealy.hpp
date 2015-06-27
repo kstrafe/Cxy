@@ -35,25 +35,25 @@ namespace tul
       struct Compound
       {
         STATE new_state;
-        ACTION out;
+        ACTION action_out;
       };
 
-      ACTION transist (const INPUT input, const STATE alphabet_size)
+      ACTION transist (const INPUT input_element, const STATE alphabet_size)
       {
         Compound compound
           = transition_table
           [
             static_cast<std::size_t>(current_state)
             * static_cast<std::size_t>(alphabet_size)
-            + static_cast<std::size_t>(input)
+            + static_cast<std::size_t>(input_element)
           ];
         current_state = compound.new_state;
-        return compound.out;
+        return compound.action_out;
       }
 
-      void setState(const STATE state)
+      void setState(const STATE state_)
       {
-        current_state = state;
+        current_state = state_;
       }
 
       STATE getState() const
@@ -61,9 +61,9 @@ namespace tul
         return current_state;
       }
 
-      void setTransitionTable(const Compound *table)
+      void setTransitionTable(const Compound *action_table)
       {
-        transition_table = table;
+        transition_table = action_table;
       }
 
     private:

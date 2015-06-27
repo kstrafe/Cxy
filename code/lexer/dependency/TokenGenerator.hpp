@@ -15,12 +15,12 @@ namespace tul
       {
       public:
 
-        std::size_t consumeCharacter(char character, protocols::Action action);
+        std::size_t consumeCharacter(char character_, protocols::Action action_);
         std::vector<protocols::Token> &getTokenStack();
 
       private:
 
-        std::vector<protocols::Token> tokens;
+        std::vector<protocols::Token> token_stack;
         std::string        current_working_lexeme;
 
       };

@@ -11,10 +11,10 @@ namespace tul
   {
     struct Token
     {
-      int line;
+      int line_number;
       EntryType entry_type;
       TokenType token_type;
-      std::string string;
+      std::string accompanying_lexeme;
     };
   }
 }

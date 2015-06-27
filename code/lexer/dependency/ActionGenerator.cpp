@@ -12,9 +12,9 @@ namespace tul
   {
     namespace dependency
     {
-      protocols::Action ActionGenerator::computeAction(protocols::EntryType type)
+      protocols::Action ActionGenerator::computeAction(protocols::EntryType with_type)
       {
-        return machine.transist(type, 6);
+        return mealy_machine.transist(with_type, 6);
       }
 
       ActionGenerator::ActionGenerator()
@@ -31,12 +31,12 @@ namespace tul
           txp = transfer x and then push
           ptx = push and then transfer
         */
-        machine.setTransitionTable(table);
+        mealy_machine.setTransitionTable(action_table);
       }
 
       using namespace protocols;
 
-      constexpr const tul::library::Mealy<std::size_t, protocols::Action, protocols::EntryType>::Compound ActionGenerator::table[]
+      constexpr const tul::library::Mealy<std::size_t, protocols::Action, protocols::EntryType>::Compound ActionGenerator::action_table[]
         =
           { /*    ALPHA_DIGIT_OR_UNDERSCORE  GROUPING_SYMBOL     QUOTE_SYMBOL     OTHER_SYMBOL      UNKNOWN_CODE_POINT  WHITESPACE  */
             /*0*/ {1, Action::P},            {0, Action::PTG},   {2, Action::N},  {4, Action::P},   {0, Action::E},     {0, Action::N},

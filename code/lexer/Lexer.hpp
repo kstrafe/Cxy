@@ -16,28 +16,28 @@ namespace tul
     {
     public:
 
-      bool insertCharacter(char character);
+      bool insertCharacter(char in_character);
       std::vector<protocols::Token> &getTokenStack();
 
     private:
 
       template <typename F>
-      bool isAnyOf(char a, F f)
+      bool isAnyOf(char a_, F f_)
       {
-        return a == f;
+        return a_ == f_;
       }
 
       template <typename F, typename ...Fs>
-      bool isAnyOf(char a, F f, Fs ...fs)
+      bool isAnyOf(char a_, F f_, Fs ...fs_)
       {
-        return a == f || isAnyOf(a, fs...);
+        return a_ == f_ || isAnyOf(a_, fs_...);
       }
 
-      protocols::TokenType getKeyword(const std::string &lexeme) const;
+      protocols::TokenType getKeyword(const std::string &test_lexeme) const;
 
       void identifyToken(protocols::Token &token);
 
-      protocols::EntryType typify (char val);
+      protocols::EntryType typify (char val_);
 
       std::vector<protocols::Token> token_stack;
 
