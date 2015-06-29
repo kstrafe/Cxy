@@ -86,8 +86,7 @@ TEST_CASE("Test the kernel of the LL(1) parser", "[test-LL1]")
     ll_parser.pushSymbol(END);
     ll_parser.pushSymbol(SUM);
 
-    std::vector<Symbols> input_symbols
-    {LPAREN, NUM, PLUS, NUM, RPAREN, STAR, NUM, END};
+    std::vector<Symbols> input_symbols{LPAREN, NUM, PLUS, NUM, RPAREN, STAR, NUM, END};
 
     for (Symbols input_symbol : input_symbols)
     {
