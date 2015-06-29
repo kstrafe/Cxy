@@ -1,0 +1,100 @@
+#pragma once
+
+#include <map>
+#include <set>
+#include <vector>
+
+#include <iostream>
+
+namespace tul
+{
+  namespace libraries
+  {
+    /**
+      The goal of this class is to hold data about the production rules and
+      act as a map between rule and lookahead terminal.
+
+      This simply means that this class - when given a 'current symbol' and a
+      lookahead symbol - will decide which production of an LL(1) grammar to
+      return. The production comes in the form of a struct. This struct is
+      called "ParseReturn". It contains a pointer to a vector of children for
+      the 'current symbol'.
+
+      A function or class that invokes this class is one that implements
+      a stack of tokens.
+
+      A rule should not be added parseSymbol is called. This is because the
+      returned vector is a pointer and may be invalidated.
+    */
+    template <typename SYMBOL>
+    class LLOneProductionDeducer
+    {
+    public:
+
+      struct ParseReturn
+      {
+        const std::vector<SYMBOL> *child_symbols;
+        enum class Action
+        {
+          OBSERVE_ERROR, REMOVE_TOP,
+          CONTINUE, EPSILONATE
+        } desired_action;
+      };
+
+      ////////////////////////////////////////////////////////////
+      #define thisSymbolHasAnEpsilonRule() epsilonable_symbols.find(top_of_stack) != epsilonable_symbols.cend()
+      #define thereExistsNoProduction() iterator_over_map == production_rules[top_of_stack].cend()
+      #define getEntry() production_rules[top_of_stack].find(symbol_to_parse)
+      #define MapIteratorType typename std::map<SYMBOL, std::vector<SYMBOL>>::iterator
+
+        ParseReturn parseSymbol(const SYMBOL &symbol_to_parse, const SYMBOL &top_of_stack)
+        {
+          if (symbol_to_parse == top_of_stack)
+          {
+            return {nullptr, ParseReturn::Action::REMOVE_TOP};
+          }
+
+          MapIteratorType iterator_over_map = getEntry();
+          if (thereExistsNoProduction())
+          {
+            if (thisSymbolHasAnEpsilonRule())
+            {
+              return {nullptr, ParseReturn::Action::EPSILONATE};
+            }
+            return {nullptr, ParseReturn::Action::OBSERVE_ERROR};
+          }
+
+          return {&iterator_over_map->second, ParseReturn::Action::CONTINUE};
+
+        }
+
+      #undef MapIteratorType
+      #undef getEntry
+      #undef thereExistsNoProduction
+      #undef thisSymbolHasAnEpsilonRule
+      ////////////////////////////////////////////////////////////
+
+      bool addRule(const SYMBOL &left_side, const SYMBOL &transition_symbol, const std::vector<SYMBOL> &right_side)
+      {
+        typename std::map<SYMBOL, std::vector<SYMBOL>>::iterator iterator_over_map = production_rules[left_side].find(transition_symbol);
+        if (iterator_over_map == production_rules[left_side].cend())
+        {
+          production_rules[left_side][transition_symbol] = right_side;
+          return true;
+        }
+        return false;
+      }
+
+      void addEpsilon(const SYMBOL &left_side)
+      {
+        epsilonable_symbols.emplace(left_side);
+      }
+
+    private:
+
+      std::set<SYMBOL> epsilonable_symbols;
+      std::map<SYMBOL, std::map<SYMBOL, std::vector<SYMBOL>>> production_rules;
+
+    };
+  }
+}
