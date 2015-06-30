@@ -67,11 +67,9 @@ namespace tul
       auto any_upper = [&input_token]() -> bool {return std::any_of(input_token.accompanying_lexeme.cbegin(), input_token.accompanying_lexeme.cend(), [](char in_character) -> bool {return std::isupper(in_character);});};
 
       auto begins_with_lowercase = [&input_token]() -> bool {return std::islower(input_token.accompanying_lexeme.front());};
-      auto begins_with_underscore = [&input_token]() -> bool {return input_token.accompanying_lexeme.front() == '_';};
       auto begins_with_uppercase = [&input_token]() -> bool {return std::isupper(input_token.accompanying_lexeme.front());};
 
       auto ends_with_lowercase = [&input_token]() -> bool {return std::islower(input_token.accompanying_lexeme.back());};
-      auto ends_with_lowercase_u_or_s = [&input_token]() -> bool {return input_token.accompanying_lexeme.back() == 'u' || input_token.accompanying_lexeme.back() == 's';};
 
       auto is_class_identifier = [&]() -> bool {return begins_with_uppercase() && any_underscore() == false && ends_with_lowercase();};
       auto is_enumeration_identifier = [&]() -> bool {return begins_with_uppercase() && any_underscore() == true && any_lower() == false || all_upper();};
@@ -83,11 +81,6 @@ namespace tul
       auto is_primitive_unsigned = [&]() -> bool {return input_token.accompanying_lexeme.back() == 'u' && std::all_of(input_token.accompanying_lexeme.cbegin(), input_token.accompanying_lexeme.cend() - 1, [](char in_character) -> bool {return std::isdigit(in_character);});};
       auto is_variable_identifier = [&]() -> bool {return any_underscore() && any_upper() == false && any_lower();};
 
-      // enum class EntryType { ALPHA_DIGIT_OR_UNDERSCORE, GROUPING_SYMBOL, QUOTE_SYMBOL, OTHER_SYMBOL, WHITESPACE };
-      // Bingo, class name. We'll need to assert that there are:
-      // No underscores
-      // At least one lowercase character?
-      // Say:
       /*
         ClassNamesAreLikeThisNoUnderScoreEndWithSmallCharacter
         variable_names_are_like_this_must_have_underscore, _cool
