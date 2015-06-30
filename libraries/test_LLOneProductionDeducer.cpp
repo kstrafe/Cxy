@@ -4,9 +4,11 @@
 #include <iostream>
 #include <stack>
 
+#include <vector>
+#include <map>
+
 TEST_CASE("Test the kernel of the LL(1) production transducer", "[test-LL1]")
 {
-
   SECTION("Try parsing a counting grammar of (), where each entry must match and line up.")
   {
     enum Symbols
@@ -32,7 +34,8 @@ TEST_CASE("Test the kernel of the LL(1) production transducer", "[test-LL1]")
 
     for (Symbols input_symbol : input_symbols)
     {
-      tul::libraries::LLOneProductionDeducer<Symbols>::ParseReturn current_return {nullptr, tul::libraries::LLOneProductionDeducer<Symbols>::ParseReturn::Action::CONTINUE};
+      using namespace tul::protocols;
+      ParseReturn<Symbols> current_return {nullptr, ParseReturn<Symbols>::Action::CONTINUE};
       bool break_out = false;
       do
       {
@@ -40,7 +43,7 @@ TEST_CASE("Test the kernel of the LL(1) production transducer", "[test-LL1]")
 
         switch (current_return.desired_action)
         {
-          case tul::libraries::LLOneProductionDeducer<Symbols>::ParseReturn::Action::CONTINUE:
+          case tul::protocols::ParseReturn<Symbols>::Action::CONTINUE:
             symbol_stack.pop();
             for
             (
@@ -55,15 +58,15 @@ TEST_CASE("Test the kernel of the LL(1) production transducer", "[test-LL1]")
             }
             break_out = false;
           break;
-          case tul::libraries::LLOneProductionDeducer<Symbols>::ParseReturn::Action::EPSILONATE:
+          case tul::protocols::ParseReturn<Symbols>::Action::EPSILONATE:
             symbol_stack.pop();
             break_out = false;
           break;
-          case tul::libraries::LLOneProductionDeducer<Symbols>::ParseReturn::Action::OBSERVE_ERROR:
+          case tul::protocols::ParseReturn<Symbols>::Action::OBSERVE_ERROR:
             std::cout << "ERROR" << std::endl;
             break_out = true;
           break;
-          case tul::libraries::LLOneProductionDeducer<Symbols>::ParseReturn::Action::REMOVE_TOP:
+          case tul::protocols::ParseReturn<Symbols>::Action::REMOVE_TOP:
             symbol_stack.pop();
             break_out = true;
           break;
@@ -73,6 +76,5 @@ TEST_CASE("Test the kernel of the LL(1) production transducer", "[test-LL1]")
       }
       while (break_out == false);
     }
-    std::cout << "Size at exit: " << symbol_stack.size() << std::endl;
   }
 }

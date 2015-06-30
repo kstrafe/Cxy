@@ -1,5 +1,7 @@
 #pragma once
 
+#include "protocols/ParseReturn.hpp"
+
 #include <map>
 #include <set>
 #include <vector>
@@ -31,27 +33,18 @@ namespace tul
     {
     public:
 
-      struct ParseReturn
-      {
-        const std::vector<SYMBOL> *child_symbols;
-        enum class Action
-        {
-          OBSERVE_ERROR, REMOVE_TOP,
-          CONTINUE, EPSILONATE
-        } desired_action;
-      };
-
       ////////////////////////////////////////////////////////////
       #define thisSymbolHasAnEpsilonRule() epsilonable_symbols.find(top_of_stack) != epsilonable_symbols.cend()
       #define thereExistsNoProduction() iterator_over_map == production_rules[top_of_stack].cend()
       #define getEntry() production_rules[top_of_stack].find(symbol_to_parse)
       #define MapIteratorType typename std::map<SYMBOL, std::vector<SYMBOL>>::iterator
 
-        ParseReturn parseSymbol(const SYMBOL &symbol_to_parse, const SYMBOL &top_of_stack)
+        protocols::ParseReturn<SYMBOL> parseSymbol(const SYMBOL &symbol_to_parse, const SYMBOL &top_of_stack)
         {
+          using namespace protocols;
           if (symbol_to_parse == top_of_stack)
           {
-            return {nullptr, ParseReturn::Action::REMOVE_TOP};
+            return {nullptr, ParseReturn<SYMBOL>::Action::REMOVE_TOP};
           }
 
           MapIteratorType iterator_over_map = getEntry();
@@ -59,13 +52,11 @@ namespace tul
           {
             if (thisSymbolHasAnEpsilonRule())
             {
-              return {nullptr, ParseReturn::Action::EPSILONATE};
+              return {nullptr, ParseReturn<SYMBOL>::Action::EPSILONATE};
             }
-            return {nullptr, ParseReturn::Action::OBSERVE_ERROR};
+            return {nullptr, ParseReturn<SYMBOL>::Action::OBSERVE_ERROR};
           }
-
-          return {&iterator_over_map->second, ParseReturn::Action::CONTINUE};
-
+          return {&iterator_over_map->second, ParseReturn<SYMBOL>::Action::CONTINUE};
         }
 
       #undef MapIteratorType
@@ -74,20 +65,20 @@ namespace tul
       #undef thisSymbolHasAnEpsilonRule
       ////////////////////////////////////////////////////////////
 
-      bool addRule(const SYMBOL &left_side, const SYMBOL &transition_symbol, const std::vector<SYMBOL> &right_side)
+      void addRule(const SYMBOL &left_side, const SYMBOL &transition_symbol, const std::vector<SYMBOL> &right_side)
       {
-        typename std::map<SYMBOL, std::vector<SYMBOL>>::iterator iterator_over_map = production_rules[left_side].find(transition_symbol);
-        if (iterator_over_map == production_rules[left_side].cend())
-        {
-          production_rules[left_side][transition_symbol] = right_side;
-          return true;
-        }
-        return false;
+        production_rules[left_side][transition_symbol] = right_side;
       }
 
       void addEpsilon(const SYMBOL &left_side)
       {
         epsilonable_symbols.emplace(left_side);
+      }
+
+      bool doesRuleExist(const SYMBOL &left_side, const SYMBOL &transition_symbol)
+      {
+        typename std::map<SYMBOL, std::vector<SYMBOL>>::iterator iterator_over_map = production_rules[left_side].find(transition_symbol);
+        return iterator_over_map != production_rules[left_side].cend();
       }
 
     private:

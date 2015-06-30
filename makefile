@@ -1,4 +1,4 @@
-CPPFLAGS=g++ -std=c++11 -g
+CPPFLAGS=g++ -Wall -std=c++11 -g
 SOURCES=`find -name *.cpp | grep -Pv test.*?\.cpp`
 TEST_SOURCES=`find -name *.cpp | grep -Pv main.*?\.cpp`
 INCLUDE=-I.
