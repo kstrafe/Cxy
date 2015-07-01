@@ -11,14 +11,17 @@ namespace tul
       {
         // Set up parse table
         using namespace protocols;
-        #define eps(left) ll_parser.addEpsilon(left)
+        #define cT(name) CrossTerminal::name
+        #define eps(left) ll_parser.addEpsilon(CrossTerminal::left)
         #define add(left, middle) \
-          if (ll_parser.doesRuleExist(left, middle)) throw std::string(#left) + " already has transition " + std::string(#middle); \
-          ll_parser.addRule(left, middle,
+          if (ll_parser.doesRuleExist(CrossTerminal::left, CrossTerminal::middle)) throw std::string(#left) + " already has transition " + std::string(#middle); \
+          ll_parser.addRule(CrossTerminal::left, CrossTerminal::middle,
 
-          add(CrossTerminal::NONE, CrossTerminal::ENTER) {CrossTerminal::ENTER});
-          eps(CrossTerminal::ENTER);
+          add(ENTER, GROUPER_LEFT_PARENTHESIS) {cT(ENTER)});
+          add(ENTER, KEYWORD_PRIVATE) {cT(DECLARATION), cT(OPTIONAL_EQUALS)});
         #undef add
+        #undef eps
+        #undef cT
       }
 
       protocols::ParseReturn<protocols::CrossTerminal> CrossTerminalParser::parseSymbol(const protocols::CrossTerminal &input_element)
