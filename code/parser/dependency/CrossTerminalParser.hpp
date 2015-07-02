@@ -23,7 +23,7 @@ namespace tul
 
         CrossTerminalParser();
 
-        protocols::ParseReturn<protocols::CrossTerminal> parseSymbol(const protocols::CrossTerminal &input_element);
+        protocols::ParseReturn<protocols::CrossTerminal> parseSymbol(const protocols::CrossTerminal stack_top, const protocols::CrossTerminal &input_element);
 
       private:
 
