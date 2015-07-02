@@ -30,6 +30,28 @@ TEST_CASE("Test cross-terminal output", "[test-CrossTerminalParser]")
     addT(IDENTIFIER_CLASS);
     addT(IDENTIFIER_VARIABLE);
     addT(SYMBOL_SEMICOLON);
+
+    addT(KEYWORD_PRIVATE);
+    addT(IDENTIFIER_CLASS);
+    addT(IDENTIFIER_VARIABLE);
+    addT(SYMBOL_SEMICOLON);
+
+    addT(KEYWORD_PRIVATE);
+    addT(IDENTIFIER_CLASS);
+    addT(IDENTIFIER_VARIABLE);
+    addT(SYMBOL_SEMICOLON);
+    addT(KEYWORD_PRIVATE);
+    addT(IDENTIFIER_CLASS);
+    addT(IDENTIFIER_VARIABLE);
+    addT(SYMBOL_SEMICOLON);
+    addT(KEYWORD_PRIVATE);
+    addT(IDENTIFIER_CLASS);
+    addT(IDENTIFIER_VARIABLE);
+    addT(SYMBOL_SEMICOLON);
+    addT(KEYWORD_PRIVATE);
+    addT(IDENTIFIER_CLASS);
+    addT(IDENTIFIER_VARIABLE);
+    addT(SYMBOL_SEMICOLON);
   #undef addT
 
   while (parse_stack.empty() == false && input_token_types.empty() == false)
@@ -63,4 +85,5 @@ TEST_CASE("Test cross-terminal output", "[test-CrossTerminalParser]")
       break;
     }
   }
+  REQUIRE(input_token_types.size() == 0);
 }
