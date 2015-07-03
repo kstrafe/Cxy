@@ -40,6 +40,11 @@ namespace tul
         #undef cT
       }
 
+      std::vector<protocols::CrossTerminal> CrossTerminalParser::calculateExpectedTokens(const protocols::CrossTerminal stack_top)
+      {
+        return ll_parser.getTransitionTokens(stack_top);
+      }
+
       protocols::ParseReturn<protocols::CrossTerminal> CrossTerminalParser::parseSymbol
       (const protocols::CrossTerminal stack_top, const protocols::CrossTerminal &input_element)
       {

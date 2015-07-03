@@ -81,6 +81,18 @@ namespace tul
         return iterator_over_map != production_rules[left_side].cend();
       }
 
+      std::vector<SYMBOL> getTransitionTokens(const SYMBOL symbol_) const
+      {
+        auto iterator_ = production_rules.find(symbol_);
+        if (iterator_ == production_rules.end())
+          return {};
+        auto &transition_map = iterator_->second;
+        std::vector<SYMBOL> return_;
+        for (auto &prod_ : transition_map)
+          return_.emplace_back(prod_.first);
+        return return_;
+      }
+
     private:
 
       std::set<SYMBOL> epsilonable_symbols;

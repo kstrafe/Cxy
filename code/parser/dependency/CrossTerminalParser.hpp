@@ -23,6 +23,8 @@ namespace tul
 
         CrossTerminalParser();
 
+        std::vector<protocols::CrossTerminal> calculateExpectedTokens(const protocols::CrossTerminal stack_top);
+
         protocols::ParseReturn<protocols::CrossTerminal> parseSymbol(const protocols::CrossTerminal stack_top, const protocols::CrossTerminal &input_element);
 
       private:
