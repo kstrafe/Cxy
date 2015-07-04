@@ -58,7 +58,7 @@ namespace tul
 					case protocols::CrossTerminal::SYMBOL_STAR: return "SYMBOL_STAR";
 					case protocols::CrossTerminal::SYMBOL_STAR__STAR: return "SYMBOL_STAR__STAR";
 					case protocols::CrossTerminal::SYMBOL_FORWARD_SLASH: return "SYMBOL_FORWARD_SLASH";
-					case protocols::CrossTerminal::SYMBOL_BACKWARD_SLASH__BACKWARD_SLASH: return "SYMBOL_BACKWARD_SLASH__BACKWARD_SLASH";
+					case protocols::CrossTerminal::SYMBOL_BACKWARD_SLASH: return "SYMBOL_BACKWARD_SLASH";
 					case protocols::CrossTerminal::SYMBOL_AMPERSAND__AMPERSAND: return "SYMBOL_AMPERSAND__AMPERSAND";
 					case protocols::CrossTerminal::SYMBOL_BAR__BAR: return "SYMBOL_BAR__BAR";
 					case protocols::CrossTerminal::SYMBOL_AMPERSAND: return "SYMBOL_AMPERSAND";

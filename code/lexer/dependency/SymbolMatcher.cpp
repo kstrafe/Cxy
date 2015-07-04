@@ -13,7 +13,6 @@ namespace tul
 				if (lexeme == "++") return protocols::TokenType::SYMBOL_PLUS__PLUS;
 				else if (lexeme == "--") return protocols::TokenType::SYMBOL_MINUS__MINUS;
 				else if (lexeme == "**") return protocols::TokenType::SYMBOL_STAR__STAR;
-				else if (lexeme == "\\\\") return protocols::TokenType::SYMBOL_BACKWARD_SLASH__BACKWARD_SLASH;
 				else if (lexeme == "&&") return protocols::TokenType::SYMBOL_AMPERSAND__AMPERSAND;
 				else if (lexeme == "||") return protocols::TokenType::SYMBOL_BAR__BAR;
 				else if (lexeme == "..") return protocols::TokenType::SYMBOL_DOT__DOT;
@@ -24,6 +23,7 @@ namespace tul
 				else if (lexeme == "-") return protocols::TokenType::SYMBOL_MINUS;
 				else if (lexeme == "*") return protocols::TokenType::SYMBOL_STAR;
 				else if (lexeme == "/") return protocols::TokenType::SYMBOL_FORWARD_SLASH;
+				else if (lexeme == "\\") return protocols::TokenType::SYMBOL_BACKWARD_SLASH;
 				else if (lexeme == "&") return protocols::TokenType::SYMBOL_AMPERSAND;
 				else if (lexeme == "|") return protocols::TokenType::SYMBOL_BAR;
 				else if (lexeme == "^") return protocols::TokenType::SYMBOL_CARET;
