@@ -1,14 +1,11 @@
 #include "CrossTerminalParser.hpp"
+#include "CrossTerminalToString.hpp"
 
 #include "libraries/catch.hpp"
 
 #include <iostream>
 #include <vector>
 
-namespace
-{
-
-}
 
 TEST_CASE("Test cross-terminal output", "[test-CrossTerminalParser]")
 {
@@ -46,12 +43,12 @@ TEST_CASE("Test cross-terminal output", "[test-CrossTerminalParser]")
     addT(IDENTIFIER_VARIABLE);
     addT(SYMBOL_SEMICOLON);
 
-    addT(KEYWORD_PRIVATE);
+    addT(KEYWORD_RESTRICTED);
     addT(IDENTIFIER_CLASS);
     addT(IDENTIFIER_VARIABLE);
     addT(SYMBOL_SEMICOLON);
 
-    addT(KEYWORD_PRIVATE);
+    addT(KEYWORD_PUBLIC);
     addT(IDENTIFIER_CLASS);
     addT(IDENTIFIER_VARIABLE);
     addT(SYMBOL_SEMICOLON);
@@ -61,7 +58,10 @@ TEST_CASE("Test cross-terminal output", "[test-CrossTerminalParser]")
   {
     ParseReturn<CrossTerminal> returned
       = cross_terminal_parser.parseSymbol(parse_stack.front(), input_token_types.front());
-    std::cout << (int)returned.desired_action << " and top: " << (int) parse_stack.front() << " input: " << (int) input_token_types.front() << std::endl;
+    /*std::cout
+      << "top: " << CrossTerminalToString::convertToString(parse_stack.front())
+      << " input: " << CrossTerminalToString::convertToString(input_token_types.front())
+      << std::endl;*/
     switch (returned.desired_action)
     {
       case ParseReturn<CrossTerminal>::Action::REMOVE_TOP: // Match, also remove from the input stack
@@ -72,9 +72,7 @@ TEST_CASE("Test cross-terminal output", "[test-CrossTerminalParser]")
       break;
       case ParseReturn<CrossTerminal>::Action::EPSILONATE:
         REQUIRE(parse_stack.size() > 0);
-        std::cout << "Does this run? " << parse_stack.size() << std::endl;
         parse_stack.erase(parse_stack.begin());
-        std::cout << "Does this run? " << parse_stack.size() << std::endl;
       break;
       case ParseReturn<CrossTerminal>::Action::CONTINUE:
         parse_stack.erase(parse_stack.begin());
@@ -84,10 +82,37 @@ TEST_CASE("Test cross-terminal output", "[test-CrossTerminalParser]")
       break;
       case ParseReturn<CrossTerminal>::Action::OBSERVE_ERROR:
       {
+        /*
         std::vector<CrossTerminal> expected_crossterminals = cross_terminal_parser.calculateExpectedTokens(parse_stack.front());
-        std::cerr << "Error: expected token(s): ";
-        for (CrossTerminal ct_ : expected_crossterminals)
-          std::cout << static_cast<int>(ct_) << ", or ";
+
+        if (expected_crossterminals.empty())
+        {
+          std::cerr
+            << "Error: expected token: '"
+            << CrossTerminalToString::convertToString(parse_stack.front())
+            << "' but got '"
+            << CrossTerminalToString::convertToString(input_token_types.front())
+            << '\'';
+        }
+        else
+        {
+          if (expected_crossterminals.size() == 1)
+          {
+            std::cerr
+              << "Error: expected token: '"
+              << CrossTerminalToString::convertToString(expected_crossterminals[0])
+              << "' but got '"
+              << CrossTerminalToString::convertToString(input_token_types.front())
+              << '\'';
+          }
+          else
+          {
+            std::cerr << "Error: expected tokens: '";
+            for (int i = 0; i < expected_crossterminals.size() - 1; ++i)
+              std::cerr << CrossTerminalToString::convertToString(expected_crossterminals[i]) << "' , or '";
+            std::cerr << CrossTerminalToString::convertToString(expected_crossterminals.back()) << '\'';
+          }
+        }*/
         REQUIRE(false);
       }
       break;

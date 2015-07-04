@@ -35,8 +35,8 @@ namespace tul
     */
     bool Parser::parseSymbol(const protocols::Token &input_token)
     {
-      convertTokenTypeToCrossTerminal(input_token.token_type);
-      
+      protocols::CrossTerminal cross_terminal = convertTokenTypeToCrossTerminal(input_token.token_type);
+
       return false;
     }
 

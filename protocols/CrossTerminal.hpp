@@ -114,6 +114,7 @@ namespace tul
       SYMBOL_GREATER_THAN_GREATER_THAN,
       SYMBOL_GREATER_THAN,
 
+      ENUM_END, // Used for iterating this enum
     };
   }
 }
