@@ -1,5 +1,7 @@
 #include "Lexer.hpp"
 #include "protocols/Token.hpp"
+#include "dependency/KeywordMatcher.hpp"
+#include "dependency/SymbolMatcher.hpp"
 
 #include <algorithm>
 #include <limits>
@@ -38,20 +40,7 @@ namespace tul
 
     protocols::TokenType Lexer::getKeyword(const std::string &test_lexeme) const
     {
-      using namespace protocols;
-      #define caze(lexeme_to_identify, token_type) if (lexeme_to_identify == test_lexeme) return TokenType::token_type;
-        caze("assembly", KEYWORD_ASSEMBLY)
-        else caze("do", KEYWORD_DO)
-        else caze("for", KEYWORD_FOR)
-        else caze("goto", KEYWORD_GOTO)
-        else caze("if", KEYWORD_IF)
-        else caze("label", KEYWORD_LABEL)
-        else caze("private", KEYWORD_PRIVATE)
-        else caze("public", KEYWORD_PUBLIC)
-        else caze("restricted", KEYWORD_RESTRICTED)
-        else caze("while", KEYWORD_WHILE)
-      #undef caze
-        else return TokenType::UNIDENTIFIED;
+      return dependency::KeywordMatcher::getKeyword(test_lexeme);
     }
 
     void Lexer::identifyToken(protocols::Token &input_token)
@@ -153,32 +142,7 @@ namespace tul
       }
       else if (input_token.entry_type == EntryType::OTHER_SYMBOL)
       {
-        #define caze(string_, symbol_) if (input_token.accompanying_lexeme == string_) { input_token.token_type = TokenType::symbol_; }
-          caze("+", SYMBOL_PLUS)
-          else caze("++", SYMBOL_PLUS_PLUS)
-          else caze("-", SYMBOL_MINUS)
-          else caze("--", SYMBOL_MINUS_MINUS)
-          else caze("*", SYMBOL_STAR)
-          else caze("*", SYMBOL_STAR_STAR)
-          else caze("/", SYMBOL_FORWARD_SLASH)
-          else caze("&&", SYMBOL_AMPERSAND_AMPERSAND)
-          else caze("||", SYMBOL_BAR_BAR)
-          else caze("&", SYMBOL_AMPERSAND)
-          else caze("|", SYMBOL_BAR)
-          else caze("^", SYMBOL_CARET)
-          else caze("!", SYMBOL_EXCLAMATION_MARK)
-          else caze("..", SYMBOL_DOT_DOT)
-          else caze(".", SYMBOL_DOT)
-          else caze(",", SYMBOL_COMMA)
-          else caze("::", SYMBOL_COLON_COLON)
-          else caze(":", SYMBOL_COLON)
-          else caze(";", SYMBOL_SEMICOLON)
-          else caze("<<", SYMBOL_LESS_THAN_LESS_THAN)
-          else caze("<", SYMBOL_LESS_THAN_LESS_THAN)
-          else caze(">>", SYMBOL_GREATER_THAN_GREATER_THAN)
-          else caze(">", SYMBOL_GREATER_THAN)
-          else caze("\\", SYMBOL_BACKWARD_SLASH)
-        #undef caze
+        input_token.token_type = dependency::SymbolMatcher::getSymbol(input_token.accompanying_lexeme);
       }
       else
       {

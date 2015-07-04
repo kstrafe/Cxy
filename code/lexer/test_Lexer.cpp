@@ -167,7 +167,7 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
         caze(SYMBOL_STAR);
         caze(SYMBOL_PLUS);
         caze(IDENTIFIER_PACKAGE);
-        caze(SYMBOL_PLUS_PLUS);
+        caze(SYMBOL_PLUS__PLUS);
         caze(IDENTIFIER_PACKAGE);
       #undef caze
       REQUIRE(token_stack.size() == iterator_);
@@ -198,7 +198,7 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
       caze(GROUPER_RIGHT_BRACE);
       caze(SYMBOL_PLUS);
       caze(IDENTIFIER_PACKAGE);
-      caze(SYMBOL_PLUS_PLUS);
+      caze(SYMBOL_PLUS__PLUS);
       caze(IDENTIFIER_PACKAGE);
     #undef caze
     REQUIRE(token_stack.size() == iterator_);
