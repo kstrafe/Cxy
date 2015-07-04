@@ -40,14 +40,17 @@ TEST_CASE("Test cross-terminal output", "[test-CrossTerminalParser]")
     addT(IDENTIFIER_CLASS);
     addT(IDENTIFIER_VARIABLE);
     addT(SYMBOL_SEMICOLON);
+
     addT(KEYWORD_PRIVATE);
     addT(IDENTIFIER_CLASS);
     addT(IDENTIFIER_VARIABLE);
     addT(SYMBOL_SEMICOLON);
+
     addT(KEYWORD_PRIVATE);
     addT(IDENTIFIER_CLASS);
     addT(IDENTIFIER_VARIABLE);
     addT(SYMBOL_SEMICOLON);
+
     addT(KEYWORD_PRIVATE);
     addT(IDENTIFIER_CLASS);
     addT(IDENTIFIER_VARIABLE);
@@ -58,7 +61,6 @@ TEST_CASE("Test cross-terminal output", "[test-CrossTerminalParser]")
   {
     ParseReturn<CrossTerminal> returned
       = cross_terminal_parser.parseSymbol(parse_stack.front(), input_token_types.front());
-    REQUIRE(returned.desired_action != ParseReturn<CrossTerminal>::Action::OBSERVE_ERROR);
     std::cout << (int)returned.desired_action << " and top: " << (int) parse_stack.front() << " input: " << (int) input_token_types.front() << std::endl;
     switch (returned.desired_action)
     {
@@ -79,6 +81,15 @@ TEST_CASE("Test cross-terminal output", "[test-CrossTerminalParser]")
         for (int i = returned.child_symbols->size() - 1; i >= 0; --i)
           parse_stack.insert(parse_stack.begin(), returned.child_symbols->at(i));
         continue;
+      break;
+      case ParseReturn<CrossTerminal>::Action::OBSERVE_ERROR:
+      {
+        std::vector<CrossTerminal> expected_crossterminals = cross_terminal_parser.calculateExpectedTokens(parse_stack.front());
+        std::cerr << "Error: expected token(s): ";
+        for (CrossTerminal ct_ : expected_crossterminals)
+          std::cout << static_cast<int>(ct_) << ", or ";
+        REQUIRE(false);
+      }
       break;
       default:
         REQUIRE(false);
