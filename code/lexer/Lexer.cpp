@@ -61,7 +61,7 @@ namespace tul
       auto ends_with_lowercase = [&input_token]() -> bool {return std::islower(input_token.accompanying_lexeme.back());};
 
       auto is_class_identifier = [&]() -> bool {return begins_with_uppercase() && any_underscore() == false && ends_with_lowercase();};
-      auto is_enumeration_identifier = [&]() -> bool {return begins_with_uppercase() && any_underscore() == true && any_lower() == false || all_upper();};
+      auto is_enumeration_identifier = [&]() -> bool {return (begins_with_uppercase() && any_underscore() == true && any_lower() == false) || all_upper();};
       auto is_function_identifier = [&]() -> bool {return begins_with_lowercase() && any_underscore() == false && ends_with_lowercase() && any_upper();};
       auto is_keyword = [&]() -> bool {return getKeyword(input_token.accompanying_lexeme) != TokenType::UNIDENTIFIED;};
       auto is_number_literal = [&]() -> bool {return all_digit();};
@@ -154,7 +154,7 @@ namespace tul
     {
       using namespace protocols;
       const constexpr unsigned char UTF_8_LIMIT = 128;
-      if (65 <= val_ && val_ <= 90 || 97 <= val_ && val_ <= 122 || val_ == 95 || 48 <= val_ && val_ <= 57)
+      if ((65 <= val_ && val_ <= 90) || (97 <= val_ && val_ <= 122) || val_ == 95 || (48 <= val_ && val_ <= 57))
         return EntryType::ALPHA_DIGIT_OR_UNDERSCORE;
       if (val_ == '"')
         return EntryType::QUOTE_SYMBOL;
