@@ -28,7 +28,7 @@ namespace tul
     {
       using namespace protocols;
       CrossTerminal cross_terminal = dependency::TokenTypeToCrossTerminal::convertToCrossTerminal(input_token.token_type);
-      while (true)
+      while (symbol_stack.empty() == false)
       {
         ParseReturn<protocols::CrossTerminal> parse_return = cross_parser.parseSymbol(symbol_stack.top()->node_type, cross_terminal);
         switch (parse_return.desired_action)
