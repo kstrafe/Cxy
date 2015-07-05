@@ -50,6 +50,8 @@ namespace tul
 					case protocols::TokenType::SYMBOL_BAR: return protocols::CrossTerminal::SYMBOL_BAR;
 					case protocols::TokenType::SYMBOL_CARET: return protocols::CrossTerminal::SYMBOL_CARET;
 					case protocols::TokenType::SYMBOL_EXCLAMATION_MARK: return protocols::CrossTerminal::SYMBOL_EXCLAMATION_MARK;
+					case protocols::TokenType::SYMBOL_EQUAL: return protocols::CrossTerminal::SYMBOL_EQUAL;
+					case protocols::TokenType::SYMBOL_EQUAL__EQUAL: return protocols::CrossTerminal::SYMBOL_EQUAL__EQUAL;
 					case protocols::TokenType::SYMBOL_DOT__DOT: return protocols::CrossTerminal::SYMBOL_DOT__DOT;
 					case protocols::TokenType::SYMBOL_DOT: return protocols::CrossTerminal::SYMBOL_DOT;
 					case protocols::TokenType::SYMBOL_COMMA: return protocols::CrossTerminal::SYMBOL_COMMA;

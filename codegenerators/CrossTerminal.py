@@ -53,6 +53,8 @@ terminals = [
     'SYMBOL_BAR',
     'SYMBOL_CARET',
     'SYMBOL_EXCLAMATION_MARK',
+    'SYMBOL_EQUAL',
+    'SYMBOL_EQUAL__EQUAL',
     'SYMBOL_DOT__DOT',
     'SYMBOL_DOT',
     'SYMBOL_COMMA',
@@ -84,6 +86,12 @@ non_terminals = [
     'COMMA_SEPARATED_LIST_ITEM',
     'STATEMENT',
     'TYPE',
+    'OPTIONAL_ASSIGNMENT',
+    'ARGUMENT_LIST',
+    'FUNCTION_SIGNATURE',
+    'SUBROUTINE_LIST',
+    'SUBROUTINE',
+    'EXPRESSION',
     'EPSILONATE'
 ]
 
@@ -138,6 +146,8 @@ def createcodelexerdependencyKeywordMatchercpp():
                 return '-'
             elif name == 'PLUS':
                 return '+'
+            elif name == 'EQUAL':
+                return '='
             else:
                 return "SYMBOL_NOT_FOUND_" + name
         set = []
