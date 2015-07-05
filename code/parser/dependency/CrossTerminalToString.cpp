@@ -26,6 +26,7 @@ namespace tul
 					case protocols::CrossTerminal::COMMA_SEPARATED_LIST_ITEM: return "COMMA_SEPARATED_LIST_ITEM";
 					case protocols::CrossTerminal::STATEMENT: return "STATEMENT";
 					case protocols::CrossTerminal::TYPE: return "TYPE";
+					case protocols::CrossTerminal::EPSILONATE: return "EPSILONATE";
 					case protocols::CrossTerminal::GROUPER_LEFT_BRACE: return "GROUPER_LEFT_BRACE";
 					case protocols::CrossTerminal::GROUPER_RIGHT_BRACE: return "GROUPER_RIGHT_BRACE";
 					case protocols::CrossTerminal::GROUPER_LEFT_BRACKET: return "GROUPER_LEFT_BRACKET";

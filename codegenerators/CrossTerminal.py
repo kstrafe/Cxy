@@ -84,6 +84,7 @@ non_terminals = [
     'COMMA_SEPARATED_LIST_ITEM',
     'STATEMENT',
     'TYPE',
+    'EPSILONATE'
 ]
 
 

@@ -37,8 +37,6 @@ namespace tul
 
     private:
 
-      protocols::CrossTerminal convertTokenTypeToCrossTerminal(const protocols::TokenType token_type);
-
       dependency::CrossTerminalParser cross_parser;
       protocols::ConcreteSyntaxTree *syntax_tree_root;
       std::stack<protocols::ConcreteSyntaxTree *> symbol_stack;
