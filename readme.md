@@ -40,4 +40,15 @@ The makefile contains the instructions to build the project.
 The BEST language ever uses simple, consistent lexing and parsing.  
 Hand-written of course for crisp minimalism!  
 Visual tools:
+What on earth DOES IT MEAN?!
+The green nodes are verified to be completely PURE subtrees.  
+Blue nodes are part of a pure subtree, and can later be verified or
+cleaned to be pure.  
+Red nodes are not pure.  
+Purity primer:  
+```
+functional purity: same input into function -> same output. Always  
+modular purity: object creation with same operations -> same object
+```
+We can only guarantee purity if the object never uses a global.  
 ![Dependency Graph](./documentation/dependency_graph.png)
