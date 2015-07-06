@@ -1,3 +1,40 @@
+# Copyright © 2015 Kevin Robert Stravers
+"""
+This file is part of Unnamed-Language Compiler Reference Implementation (ULCRI).
+
+ULCRI is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+ULCRI is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
+"""
+
+LICENSE_STRING = '''// Copyright © 2015 Kevin Robert Stravers
+/*
+This file is part of Unnamed-Language Compiler Reference Implementation (ULCRI).
+
+ULCRI is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+ULCRI is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
+*/
+'''
+
 # Take a list of cross-terminals and create the following files:
 # Note: project is the folder where readme.md is located (the root)
 # project/code/lexer/dependency/KeywordMatcher.cpp - Matches a lexeme with a TokenType, terminals starting with KEYWORD_ will be put there.
@@ -97,7 +134,7 @@ non_terminals = [
 
 
 def createcodelexerdependencyKeywordMatchercpp():
-    header = '#include "KeywordMatcher.hpp"\n\n\nnamespace tul\n{\n\tnamespace lexer\n\t{\n\t\tnamespace dependency\n\t\t{\n\t\t\tprotocols::TokenType KeywordMatcher::getKeyword(const std::string &lexeme)\n\t\t\t{\n\t\t\t\t'
+    header = LICENSE_STRING + '#include "KeywordMatcher.hpp"\n\n\nnamespace tul\n{\n\tnamespace lexer\n\t{\n\t\tnamespace dependency\n\t\t{\n\t\t\tprotocols::TokenType KeywordMatcher::getKeyword(const std::string &lexeme)\n\t\t\t{\n\t\t\t\t'
     footer = '\t\t\t\telse return protocols::TokenType::UNIDENTIFIED;\n\t\t\t}\n\t\t}\n\t}\n}'
     with open('./code/lexer/dependency/KeywordMatcher.cpp', 'w') as file:
         file.write(header)
@@ -155,7 +192,7 @@ def createcodelexerdependencyKeywordMatchercpp():
             set.append(convertSymbolNameToSymbol(i))
         return set
 
-    header = '#include "SymbolMatcher.hpp"\n\n\nnamespace tul\n{\n\tnamespace lexer\n\t{\n\t\tnamespace dependency\n\t\t{\n\t\t\tprotocols::TokenType SymbolMatcher::getSymbol(const std::string &lexeme)\n\t\t\t{\n\t\t\t\tusing namespace protocols;\n\t\t\t\t'
+    header = LICENSE_STRING + '#include "SymbolMatcher.hpp"\n\n\nnamespace tul\n{\n\tnamespace lexer\n\t{\n\t\tnamespace dependency\n\t\t{\n\t\t\tprotocols::TokenType SymbolMatcher::getSymbol(const std::string &lexeme)\n\t\t\t{\n\t\t\t\tusing namespace protocols;\n\t\t\t\t'
     footer = '\t\t\t\telse return protocols::TokenType::UNIDENTIFIED;\n\t\t\t}\n\t\t}\n\t}\n}'
     symbols = []
     for i in terminals:
@@ -177,7 +214,7 @@ def createcodelexerdependencyKeywordMatchercpp():
 
 
 def createcodeparserdependencyCrossTerminalToStringcpp():
-    header = '#include "CrossTerminalToString.hpp"\n\n\nnamespace tul\n{\n\tnamespace parser\n\t{\n\t\tnamespace dependency\n\t\t{\n\t\t\tstd::string CrossTerminalToString::convertToString(protocols::CrossTerminal cross_terminal)\n\t\t\t{\n\t\t\t\tswitch (cross_terminal)\n\t\t\t\t{\n'
+    header = LICENSE_STRING + '#include "CrossTerminalToString.hpp"\n\n\nnamespace tul\n{\n\tnamespace parser\n\t{\n\t\tnamespace dependency\n\t\t{\n\t\t\tstd::string CrossTerminalToString::convertToString(protocols::CrossTerminal cross_terminal)\n\t\t\t{\n\t\t\t\tswitch (cross_terminal)\n\t\t\t\t{\n'
     footer = '\t\t\t\t\tdefault: return "";\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n}'
     with open('./code/parser/dependency/CrossTerminalToString.cpp', 'w') as file:
         file.write(header)
@@ -189,7 +226,7 @@ def createcodeparserdependencyCrossTerminalToStringcpp():
 
 
 def createcodeparserdependencyTokenTypeToCrossTerminalcpp():
-    header = '#include "TokenTypeToCrossTerminal.hpp"\n\n\nnamespace tul\n{\n\tnamespace parser\n\t{\n\t\tnamespace dependency\n\t\t{\n\t\t\tprotocols::CrossTerminal TokenTypeToCrossTerminal::convertToCrossTerminal(protocols::TokenType token_type)\n\t\t\t{\n\t\t\t\tswitch (token_type)\n\t\t\t\t{\n'
+    header = LICENSE_STRING + '#include "TokenTypeToCrossTerminal.hpp"\n\n\nnamespace tul\n{\n\tnamespace parser\n\t{\n\t\tnamespace dependency\n\t\t{\n\t\t\tprotocols::CrossTerminal TokenTypeToCrossTerminal::convertToCrossTerminal(protocols::TokenType token_type)\n\t\t\t{\n\t\t\t\tswitch (token_type)\n\t\t\t\t{\n'
     footer = '\t\t\t\t\tdefault: return protocols::CrossTerminal::UNIDENTIFIED;\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n}'
     with open('./code/parser/dependency/TokenTypeToCrossTerminal.cpp', 'w') as file:
         file.write(header)
@@ -199,7 +236,7 @@ def createcodeparserdependencyTokenTypeToCrossTerminalcpp():
 
 
 def createprotocolsCrossTerminalhpp():
-    header = '#pragma once\n\nnamespace tul\n{\n\tnamespace protocols\n\t{\n\t\tenum class CrossTerminal\n\t\t{\n'
+    header = LICENSE_STRING + '#pragma once\n\nnamespace tul\n{\n\tnamespace protocols\n\t{\n\t\tenum class CrossTerminal\n\t\t{\n'
     footer = '\t\t\tENUM_END\n\t\t};\n\t}\n}'
     with open('./protocols/CrossTerminal.hpp', 'w') as file:
         file.write(header)
@@ -211,7 +248,7 @@ def createprotocolsCrossTerminalhpp():
 
 
 def createprotocolsTokenTypehpp():
-    header = '#pragma once\n\nnamespace tul\n{\n\tnamespace protocols\n\t{\n\t\tenum class TokenType\n\t\t{\n'
+    header = LICENSE_STRING + '#pragma once\n\nnamespace tul\n{\n\tnamespace protocols\n\t{\n\t\tenum class TokenType\n\t\t{\n'
     footer = '\t\t\tENUM_END\n\t\t};\n\t}\n}'
     with open('./protocols/TokenType.hpp', 'w') as file:
         file.write(header)
