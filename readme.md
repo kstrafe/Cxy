@@ -3,7 +3,7 @@
 # The Best. Language. Ever.
 >We want to make _the best_ language, ever.  
 The cleanest. The nicest. The fastest. The most consistent. Language. Ever.  
-We want control from assembly and easyness from scripting.  
+We want raw control with assembly, and ease of coding with scripting.  
 We want EXTREME power... with EXTREME templates.  
 This language will be. The best. When it is done, all other languages will disappear.  
 It is: The Final Programming Language
@@ -20,7 +20,7 @@ totally new project with ease!
 ## Have *AWESOME* ideas? Want to contribute?
 
 Send a pull request or send me an email at macocio [at] gmail [dot] com.  
-I'm also available on skype as 'macocio'.  
+I'm also available on Skype as 'macocio'.  
 
 # How this project is organized
 
