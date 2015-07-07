@@ -33,6 +33,13 @@ namespace tul
         symbol_stack.top()->node_type = CrossTerminal::ENTER;
       }
 
+
+      protocols::ConcreteSyntaxTree *Parser::getConcreteSyntaxTree()
+      {
+        return syntax_tree_root;
+      }
+
+
       /**
         Here we simply decode the token's symbol into a CrossTerminal
         and feed it to the CrossTerminalParser. This will be a big switch for
