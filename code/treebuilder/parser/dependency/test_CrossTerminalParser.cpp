@@ -30,7 +30,7 @@ TEST_CASE("Test cross-terminal output", "[test-CrossTerminalParser]")
     Here we test whether the language is accepted.
   */
 
-  using namespace tul::parser::dependency;
+  using namespace tul::treebuilder::parser::dependency;
   using namespace tul::protocols;
   CrossTerminalParser cross_terminal_parser;
 

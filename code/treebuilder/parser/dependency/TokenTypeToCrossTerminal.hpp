@@ -22,18 +22,21 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace tul
 {
-	namespace parser
-	{
-		namespace dependency
+	namespace treebuilder
+  {
+		namespace parser
 		{
-      class TokenTypeToCrossTerminal
-      {
+			namespace dependency
+			{
+	      class TokenTypeToCrossTerminal
+	      {
 
-      public:
+	      public:
 
-  			static protocols::CrossTerminal convertToCrossTerminal(protocols::TokenType token_type);
+	  			static protocols::CrossTerminal convertToCrossTerminal(protocols::TokenType token_type);
 
-      };
+	      };
+			}
 		}
 	}
 }

@@ -29,7 +29,7 @@ TEST_CASE("Test parser", "[test-Parser]")
   SECTION("Try parsing simple a simple expression")
   {
     using namespace tul::protocols;
-    tul::parser::Parser parser_;
+    tul::treebuilder::parser::Parser parser_;
     auto parseSymbol = [&parser_](const TokenType &token_type) -> void {Token token_; token_.token_type = token_type; REQUIRE(parser_.parseSymbol(token_) == true);};
     auto parseFail = [&parser_](const TokenType &token_type) -> void {Token token_; token_.token_type = token_type; REQUIRE(parser_.parseSymbol(token_) == false);};
 

@@ -23,7 +23,7 @@ TEST_CASE("Test symbol matcher", "[test-SymbolMatcher]")
 {
   SECTION("Attempting to match a few symbols")
   {
-    using namespace tul::lexer::dependency;
+    using namespace tul::treebuilder::lexer::dependency;
     using namespace tul::protocols;
     auto checkReturn = [](const std::string &lexeme) -> bool { return  SymbolMatcher::getSymbol(lexeme) != TokenType::UNIDENTIFIED; };
     REQUIRE(checkReturn("++"));

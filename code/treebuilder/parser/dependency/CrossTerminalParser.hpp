@@ -24,31 +24,34 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace tul
 {
-  namespace parser
+  namespace treebuilder
   {
-    namespace dependency
+    namespace parser
     {
-      /**
-        The goal of this class is to set up the parser correctly. It will need
-        to add all productions and check if any production is invalid.
-        This class also acts as a barrier as to avoid tight coupling, since it
-        only accepts crossterminals and nothing more.
-      */
-      class CrossTerminalParser
+      namespace dependency
       {
-      public:
+        /**
+          The goal of this class is to set up the parser correctly. It will need
+          to add all productions and check if any production is invalid.
+          This class also acts as a barrier as to avoid tight coupling, since it
+          only accepts crossterminals and nothing more.
+        */
+        class CrossTerminalParser
+        {
+        public:
 
-        CrossTerminalParser();
+          CrossTerminalParser();
 
-        std::vector<protocols::CrossTerminal> calculateExpectedTokens(const protocols::CrossTerminal stack_top);
+          std::vector<protocols::CrossTerminal> calculateExpectedTokens(const protocols::CrossTerminal stack_top);
 
-        protocols::ParseReturn<protocols::CrossTerminal> parseSymbol(const protocols::CrossTerminal stack_top, const protocols::CrossTerminal &input_element);
+          protocols::ParseReturn<protocols::CrossTerminal> parseSymbol(const protocols::CrossTerminal stack_top, const protocols::CrossTerminal &input_element);
 
-      private:
+        private:
 
-        libraries::LLOneProductionDeducer<protocols::CrossTerminal> ll_parser;
+          libraries::LLOneProductionDeducer<protocols::CrossTerminal> ll_parser;
 
-      };
+        };
+      }
     }
   }
 }

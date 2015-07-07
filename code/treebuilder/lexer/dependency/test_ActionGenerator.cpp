@@ -25,7 +25,7 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 
 TEST_CASE("Test the action generator", "[test-ActionGenerator]")
 {
-  using namespace tul::lexer::dependency;
+  using namespace tul::treebuilder::lexer::dependency;
   using namespace tul::protocols;
   using ac = tul::protocols::Action;
   // enum class EntryType { ALPHA_DIGIT_OR_UNDERSCORE, GROUPING_SYMBOL, QUOTE_SYMBOL, OTHER_SYMBOL, UNKNOWN_CODE_POINT, WHITESPACE };
