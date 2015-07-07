@@ -1,4 +1,5 @@
-# Copyright 2015 Kevin Robert Stravers
+# -*- coding: utf-8 -*-
+# Copyright © 2015 Kevin Robert Stravers
 """
 This file is part of Unnamed-Language Compiler Reference Implementation (ULCRI).
 
