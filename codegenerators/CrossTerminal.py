@@ -192,7 +192,7 @@ def createcodelexerdependencyKeywordMatchercpp():
             set.append(convertSymbolNameToSymbol(i))
         return set
 
-    header = '#include "SymbolMatcher.hpp"\n\n\nnamespace tul\n{\n\tnamespace treebuilder\n\t{\n\t\tnamespace lexer\n\t\t{\n\t\t\tnamespace dependency\n\t\t\t{\n\t\t\t\tprotocols::TokenType SymbolMatcher::getSymbol(const std::string &lexeme)\n\t\t\t\t{\n\t\t\t\t\tusing namespace protocols;\n\t\t\t\t\t'
+    header = LICENSE_STRING + '#include "SymbolMatcher.hpp"\n\n\nnamespace tul\n{\n\tnamespace treebuilder\n\t{\n\t\tnamespace lexer\n\t\t{\n\t\t\tnamespace dependency\n\t\t\t{\n\t\t\t\tprotocols::TokenType SymbolMatcher::getSymbol(const std::string &lexeme)\n\t\t\t\t{\n\t\t\t\t\tusing namespace protocols;\n\t\t\t\t\t'
     footer = '\t\t\t\t\telse return protocols::TokenType::UNIDENTIFIED;\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n}'
     symbols = []
     for i in terminals:
@@ -214,7 +214,7 @@ def createcodelexerdependencyKeywordMatchercpp():
 
 
 def createcodeparserdependencyCrossTerminalToStringcpp():
-    header = '#include "CrossTerminalToString.hpp"\n\n\nnamespace tul\n{\n\tnamespace treebuilder\n\t{\n\t\tnamespace parser\n\t\t{\n\t\t\tnamespace dependency\n\t\t\t{\n\t\t\t\tstd::string CrossTerminalToString::convertToString(protocols::CrossTerminal cross_terminal)\n\t\t\t\t{\n\t\t\t\t\tswitch (cross_terminal)\n\t\t\t\t\t{\n'
+    header = LICENSE_STRING + '#include "CrossTerminalToString.hpp"\n\n\nnamespace tul\n{\n\tnamespace treebuilder\n\t{\n\t\tnamespace parser\n\t\t{\n\t\t\tnamespace dependency\n\t\t\t{\n\t\t\t\tstd::string CrossTerminalToString::convertToString(protocols::CrossTerminal cross_terminal)\n\t\t\t\t{\n\t\t\t\t\tswitch (cross_terminal)\n\t\t\t\t\t{\n'
     footer = '\t\t\t\t\t\tdefault: return "";\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n}'
     with open('./code/treebuilder/parser/dependency/CrossTerminalToString.cpp', 'w') as file:
         file.write(header)
@@ -226,7 +226,7 @@ def createcodeparserdependencyCrossTerminalToStringcpp():
 
 
 def createcodeparserdependencyTokenTypeToCrossTerminalcpp():
-    header = '#include "TokenTypeToCrossTerminal.hpp"\n\n\nnamespace tul\n{\n\tnamespace treebuilder\n\t{\n\t\tnamespace parser\n\t\t{\n\t\t\tnamespace dependency\n\t\t\t{\n\t\t\t\tprotocols::CrossTerminal TokenTypeToCrossTerminal::convertToCrossTerminal(protocols::TokenType token_type)\n\t\t\t\t{\n\t\t\t\t\tswitch (token_type)\n\t\t\t\t\t{\n'
+    header = LICENSE_STRING + '#include "TokenTypeToCrossTerminal.hpp"\n\n\nnamespace tul\n{\n\tnamespace treebuilder\n\t{\n\t\tnamespace parser\n\t\t{\n\t\t\tnamespace dependency\n\t\t\t{\n\t\t\t\tprotocols::CrossTerminal TokenTypeToCrossTerminal::convertToCrossTerminal(protocols::TokenType token_type)\n\t\t\t\t{\n\t\t\t\t\tswitch (token_type)\n\t\t\t\t\t{\n'
     footer = '\t\t\t\t\t\tdefault: return protocols::CrossTerminal::UNIDENTIFIED;\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n}'
     with open('./code/treebuilder/parser/dependency/TokenTypeToCrossTerminal.cpp', 'w') as file:
         file.write(header)

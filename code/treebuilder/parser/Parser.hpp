@@ -45,7 +45,7 @@ namespace tul
         result will be the action "transfer with '(', 'boolean_expression', ')'". This will put those
         tokens on top of the stack. It will also need to link the last token into a tree somehow.
 
-        transfer[top][input] => {New, Terminals, And, NonjjjjjjTerminals}
+        transfer[top][input] => {New, Terminals, And, Non-Terminals}
       */
       class Parser
       {
