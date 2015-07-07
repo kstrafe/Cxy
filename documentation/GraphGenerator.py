@@ -123,6 +123,7 @@ if __name__ == '__main__':
     style['vertex_size'] = 500
 
     style['vertex_color'] = [vertex['vertex_color'] if vertex['vertex_color'] else 'red' for vertex in graph.vs]
+    style['vertex_color'][0] = 'orange'
     style['vertex_label'] = [re.sub('(.{12})', '\\1\n', os.path.basename(name), 0, re.DOTALL) for name in graph.vs['name']]
     style['vertex_label_size'] = 70
     style['edge_width'] = 20
