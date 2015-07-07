@@ -19,13 +19,29 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 import igraph  # To install: `pip3 install python-igraph`
 
 import os
+import re
 
 
 pure_subtrees = {
-    'code/lexer',
-    'code/parser',
-    'code/parser/Parser.cpp'
+    'code/treebuilder/lexer',
+    'code/treebuilder/parser',
+    'code/treebuilder/parser/Parser.cpp',
+
+    # Libraries
+    'libraries/LLOneProductionDeducer.hpp',
+    'libraries/Mealy.hpp',
+
+    # Protocols
+    'protocols',
+    'protocols/Action.hpp',
+    'protocols/ConcreteSyntaxTree.hpp',
+    'protocols/CrossTerminal.hpp',
+    'protocols/EntryType.hpp',
+    'protocols/ParseReturn.hpp',
+    'protocols/Token.hpp',
+    'protocols/TokenType.hpp',
 }
+
 
 uses_global = {
 
@@ -34,6 +50,7 @@ uses_global = {
 
 pure = '#00FF00'
 subtree_pure = '#00BFFF'
+impure = 'red'
 
 def createGraph(graph, parent, directory, purity=subtree_pure):
     for root, directories, files in os.walk(directory, topdown=True):
@@ -67,32 +84,52 @@ if __name__ == '__main__':
     graph.to_directed()
     graph.add_vertex(name='Unnamed-Language')
 
-    for root, directories, files in os.walk('code', topdown=True):
-        graph.add_vertex(name=root)
-        root_node = len(graph.vs) - 1
-        for file in files:
-            if file.startswith('test_'):
-                continue
-            graph.add_vertex(name=file)
-            graph.add_edge(source=root_node, target=len(graph.vs) - 1)
-        for directory in directories:
-            createGraph(graph=graph, parent=root_node, directory=os.path.join(root, directory))
-        break
+    purity = impure
+    directories = ['code', 'libraries', 'protocols']
 
-    graph.add_edge(source=0, target=1)
+    for directory in directories:
+
+        for root, directories, files in os.walk(directory, topdown=True):
+            graph.add_vertex(name=root)
+            graph.add_edge(source=0, target=len(graph.vs) - 1)
+
+            if directory in pure_subtrees:
+                purity = subtree_pure
+                graph.vs[len(graph.vs) - 1]['vertex_color'] = pure
+            else:
+                graph.vs[len(graph.vs) - 1]['vertex_color'] = purity
+
+            root_node = len(graph.vs) - 1
+            for file in files:
+                if file.startswith('test_'):
+                    continue
+                graph.add_vertex(name=file)
+                if os.path.join(directory, file) in pure_subtrees:
+                    graph.vs[len(graph.vs) - 1]['vertex_color'] = pure
+                    purity = pure
+                else:
+                    graph.vs[len(graph.vs) - 1]['vertex_color'] = purity
+
+                graph.add_edge(source=root_node, target=len(graph.vs) - 1)
+            for directory in directories:
+                createGraph(graph=graph, parent=root_node, directory=os.path.join(root, directory))
+            break
+
 
 
     layout = graph.layout('kk')
     style = {}
 
-    style['vertex_size'] = 200
+    style['vertex_size'] = 500
 
-    style['vertex_color'] = ['red' for vertex in graph.vs]
     style['vertex_color'] = [vertex['vertex_color'] if vertex['vertex_color'] else 'red' for vertex in graph.vs]
-    style['vertex_label'] = graph.vs['name']
+    style['vertex_label'] = [re.sub('(.{12})', '\\1\n', os.path.basename(name), 0, re.DOTALL) for name in graph.vs['name']]
+    style['vertex_label_size'] = 70
+    style['edge_width'] = 20
+    style['edge_arrow_size'] = 10
     style['edge_curved'] = 0.3
     style['layout'] = layout
-    style['bbox'] = (5000, 5000)
+    style['bbox'] = (10000, 10000)
     style['margin'] = 300
     igraph.plot(
         graph,
