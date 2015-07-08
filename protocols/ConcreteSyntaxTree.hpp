@@ -33,6 +33,8 @@ namespace tul
     */
     struct ConcreteSyntaxTree
     {
+      ~ConcreteSyntaxTree();
+
       Token token_;
       CrossTerminal node_type;
       std::vector<ConcreteSyntaxTree *> children_;

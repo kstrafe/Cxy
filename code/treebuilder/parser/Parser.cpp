@@ -35,6 +35,12 @@ namespace tul
       }
 
 
+      Parser::~Parser()
+      {
+        delete syntax_tree_root;
+      }
+
+
       protocols::ConcreteSyntaxTree *Parser::getConcreteSyntaxTree()
       {
         return syntax_tree_root;
