@@ -31,7 +31,7 @@ namespace tul
         std::vector<protocols::Token> &token_stack = lexer_object.getTokenStack();
         for (int i = 0; i < token_stack.size(); ++i)
         {
-          std::cout << parser::dependency::CrossTerminalToString::convertToString(parser::dependency::TokenTypeToCrossTerminal::convertToCrossTerminal(token_stack.back().token_type)) << std::endl;
+          // std::cout << parser::dependency::CrossTerminalToString::convertToString(parser::dependency::TokenTypeToCrossTerminal::convertToCrossTerminal(token_stack.back().token_type)) << std::endl;
           if (false == parser_object.parseSymbol(token_stack[token_stack.size() - 1]))
           {
             std::cout << "Parser failed" << std::endl;

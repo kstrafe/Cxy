@@ -36,16 +36,6 @@ namespace tul
             if (ll_parser.doesRuleExist(CrossTerminal::left, CrossTerminal::middle)) throw std::string(#left) + " already has transition " + std::string(#middle); \
             ll_parser.addRule(CrossTerminal::left, CrossTerminal::middle,
 
-            /*
-              Note that we put the non-terminals in a greedy, alphabetic order.
-              ENTER derives MODULE_DATA_LIST and MODULE_METHOD_LIST in that order,
-              this means that the next two entries are those non-terminals
-              in that specific order. The reason is to keep the grammar
-              consistent and easy to read. Transitive transitions are taken
-              _after_ having derived the previous collection.
-              All transitions from the previous one have zero lines between themselves.
-              From this we derive terminals and non-terminals
-            */
             // We start with simple `private 32u x = 3; public Something y(arg: "hello!");`
             add(ENTER, KEYWORD_PRIVATE) {cT(ACCESS_SPECIFIER), cT(DECLARATION), cT(OPTIONAL_ASSIGNMENT), cT(SYMBOL_SEMICOLON), cT(FIELD_DECLARATION_LIST)});
             add(ENTER, KEYWORD_PUBLIC) {cT(ACCESS_SPECIFIER), cT(DECLARATION), cT(OPTIONAL_ASSIGNMENT), cT(SYMBOL_SEMICOLON), cT(FIELD_DECLARATION_LIST)});
