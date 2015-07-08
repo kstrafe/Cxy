@@ -61,6 +61,7 @@ namespace tul
 
             eps(DECLARATION);
             eps(OPTIONAL_EQUALS);
+            eps(OPTIONAL_ASSIGNMENT);
             eps(FIELD_DECLARATION_LIST);
             eps(OPTIONAL_ASSIGNMENT);
 

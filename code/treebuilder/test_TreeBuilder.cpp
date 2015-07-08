@@ -24,17 +24,35 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <iostream>
 
+
 TEST_CASE("TreeBuilder must build concrete syntax trees", "[test-TreeBuilder]")
 {
   SECTION("Attempting to create a small tree of one node (enter)")
   {
     using namespace tul::treebuilder;
+
     TreeBuilder builder_object;
-    std::string input_string = "private Class x";
+    std::string input_string = "private Class x_; public String identifier_name; ";
     for (auto input_character : input_string)
     {
-      std::cout << input_character << std::flush;
-      REQUIRE (builder_object.buildTree(input_character));
+      // Note that each character is validated, and aded to the tree if it completes
+      // a token. Data structure:
+      /*
+        string: current building token. (characters are appended)
+        TokenTree
+        | --> TokenTree
+              | --> TokenTree
+        | --> TokenTree --> TokenTree
+
+        The tokentree is a tree of tokens. Once the current building token
+        is finished, it's appended to the tree by the internal parser.
+      */
+      REQUIRE(builder_object.buildTree(input_character));
     }
+
+    /*
+      Eventually, we want to get that tree out:
+    */
+    REQUIRE(builder_object.getConcreteSyntaxTree() != nullptr);
   }
 }
