@@ -25,7 +25,26 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 #include <iostream>
 
 
-TEST_CASE("TreeBuilder must build concrete syntax trees", "[test-TreeBuilder]")
+namespace
+{
+  bool validate(const std::string &string)
+  {
+    using namespace tul::treebuilder;
+
+    TreeBuilder builder_object;
+    std::string input_string = "private 32u x_ = 3;";
+    bool ret_val = true;
+    for (auto input_character : input_string)
+    {
+      if (builder_object.buildTree(input_character) == false)
+        return false;
+    }
+    return true;
+  }
+}
+
+
+TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 {
   SECTION("Attempting to create a small tree of one node (enter)")
   {
@@ -54,5 +73,34 @@ TEST_CASE("TreeBuilder must build concrete syntax trees", "[test-TreeBuilder]")
       Eventually, we want to get that tree out:
     */
     REQUIRE(builder_object.getConcreteSyntaxTree() != nullptr);
+  }
+
+  SECTION("Try parsing the optional assignments")
+  {
+    using namespace tul::treebuilder;
+
+    TreeBuilder builder_object;
+    std::string input_string = "private 32u x_ = 3;";
+    for (auto input_character : input_string)
+    {
+      bool x = false;
+      CHECK((x = builder_object.buildTree(input_character)));
+      if (!x)
+      {
+        std::vector<std::string> expected = builder_object.getExpectedTokens();
+        std::cout << "\nError: expected:\n";
+        for (std::string &string : expected)
+        {
+          std::cout << string << ", " << std::endl;
+        }
+        REQUIRE(false);
+      }
+    }
+  }
+
+  SECTION("Try parsing the optional assignments")
+  {
+    REQUIRE(validate("restricted String str_ = "));
+    REQUIRE(validate("restricted String str_ = \"Is this also good?\"d ; ;:d as "));
   }
 }

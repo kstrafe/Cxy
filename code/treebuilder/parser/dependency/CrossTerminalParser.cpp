@@ -57,7 +57,7 @@ namespace tul
 
             // Used in declarations: `private 32u x = 3; public Something y(arg: "hello!");`, the `= 3` and `(arg: "hello!")`
             add(OPTIONAL_ASSIGNMENT, GROUPER_LEFT_PARENTHESIS) {cT(GROUPER_LEFT_PARENTHESIS), cT(ARGUMENT_LIST), cT(GROUPER_RIGHT_PARENTHESIS)});
-            add(OPTIONAL_ASSIGNMENT, SYMBOL_EQUAL) {cT(EXPRESSION)});
+            add(OPTIONAL_ASSIGNMENT, SYMBOL_EQUAL) {cT(SYMBOL_EQUAL), cT(EXPRESSION)});
 
             eps(DECLARATION);
             eps(OPTIONAL_EQUALS);
@@ -70,6 +70,10 @@ namespace tul
             add(ACCESS_SPECIFIER, KEYWORD_RESTRICTED) {cT(KEYWORD_RESTRICTED)});
 
             add(DECLARATION, IDENTIFIER_CLASS) {cT(IDENTIFIER_CLASS), cT(IDENTIFIER_VARIABLE)});
+            add(DECLARATION, PRIMITIVE_SIGNED) {cT(PRIMITIVE_SIGNED), cT(IDENTIFIER_VARIABLE)});
+            add(DECLARATION, PRIMITIVE_UNSIGNED) {cT(PRIMITIVE_UNSIGNED), cT(IDENTIFIER_VARIABLE)});
+
+            add(EXPRESSION, INTEGER_LITERAL) {cT(INTEGER_LITERAL)});
 
           #undef add
           #undef eps

@@ -24,6 +24,7 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 #include "protocols/Token.hpp"
 
 #include <stack>
+#include <string>
 
 namespace tul
 {
@@ -54,6 +55,8 @@ namespace tul
         Parser();
         bool parseSymbol(const protocols::Token &input_token);
         protocols::ConcreteSyntaxTree *getConcreteSyntaxTree();
+
+        std::vector<std::string> formulateExpectedTokens();
 
       private:
 

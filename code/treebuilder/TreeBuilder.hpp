@@ -20,6 +20,10 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "protocols/ConcreteSyntaxTree.hpp"
 
+#include <string>
+#include <vector>
+
+
 namespace tul
 {
   namespace treebuilder
@@ -31,6 +35,8 @@ namespace tul
       bool buildTree(char character);
 
       protocols::ConcreteSyntaxTree *getConcreteSyntaxTree();
+
+      std::vector<std::string> getExpectedTokens();
 
     private:
 

@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "Parser.hpp"
+#include "dependency/CrossTerminalToString.hpp"
 #include "dependency/TokenTypeToCrossTerminal.hpp"
 
 
@@ -93,6 +94,22 @@ namespace tul
         }
 
         return false;
+      }
+
+
+      std::vector<std::string> Parser::formulateExpectedTokens()
+      {
+        using namespace protocols;
+        if (symbol_stack.empty())
+          return {};
+        CrossTerminal cross_t = symbol_stack.top()->node_type;
+        std::vector<CrossTerminal> expected_tokens = cross_parser.calculateExpectedTokens(cross_t);
+        std::vector<std::string> serialized_tokens;
+        for (CrossTerminal ct_ : expected_tokens)
+        {
+          serialized_tokens.emplace_back(dependency::CrossTerminalToString::convertToString(ct_));
+        }
+        return serialized_tokens;
       }
 
     }

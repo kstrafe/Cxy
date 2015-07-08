@@ -56,5 +56,10 @@ namespace tul
       return parser_object.getConcreteSyntaxTree();
     }
 
+    std::vector<std::string> TreeBuilder::getExpectedTokens()
+    {
+      return parser_object.formulateExpectedTokens();
+    }
+
   }
 }
