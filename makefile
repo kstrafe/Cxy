@@ -7,6 +7,9 @@ all:
 	mkdir -p binaries
 	$(CPPFLAGS) $(SOURCES) -o binaries/tulc.exe $(INCLUDE)
 
+gen:
+	python3 ./codegenerators/CrossTerminal.py
+
 test:
 	./tests/test_runner.sh
 	$(CPPFLAGS) $(TEST_SOURCES) -o binaries/tulc_test.exe $(INCLUDE)

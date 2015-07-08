@@ -46,6 +46,7 @@ namespace tul
 						case protocols::CrossTerminal::STATEMENT: return "STATEMENT";
 						case protocols::CrossTerminal::TYPE: return "TYPE";
 						case protocols::CrossTerminal::OPTIONAL_ASSIGNMENT: return "OPTIONAL_ASSIGNMENT";
+						case protocols::CrossTerminal::OPTIONAL_STRING_PLUS: return "OPTIONAL_STRING_PLUS";
 						case protocols::CrossTerminal::ARGUMENT_LIST: return "ARGUMENT_LIST";
 						case protocols::CrossTerminal::FUNCTION_SIGNATURE: return "FUNCTION_SIGNATURE";
 						case protocols::CrossTerminal::SUBROUTINE_LIST: return "SUBROUTINE_LIST";

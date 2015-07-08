@@ -64,6 +64,10 @@ namespace tul
             add(DECLARATION, PRIMITIVE_UNSIGNED) {cT(PRIMITIVE_UNSIGNED), cT(IDENTIFIER_VARIABLE)});
 
             add(EXPRESSION, INTEGER_LITERAL) {cT(INTEGER_LITERAL)});
+            add(EXPRESSION, STRING) {cT(STRING), cT(OPTIONAL_STRING_PLUS)});
+
+            add(OPTIONAL_STRING_PLUS, SYMBOL_PLUS) {cT(SYMBOL_PLUS), cT(STRING), cT(OPTIONAL_STRING_PLUS)});
+            eps(OPTIONAL_STRING_PLUS);
 
           #undef add
           #undef eps

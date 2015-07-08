@@ -32,9 +32,8 @@ namespace
     using namespace tul::treebuilder;
 
     TreeBuilder builder_object;
-    std::string input_string = "private 32u x_ = 3;";
     bool ret_val = true;
-    for (auto input_character : input_string)
+    for (auto input_character : string)
     {
       if (builder_object.buildTree(input_character) == false)
         return false;
@@ -101,6 +100,8 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
   SECTION("Try parsing the optional assignments")
   {
     REQUIRE(validate("restricted String str_ = "));
-    REQUIRE(validate("restricted String str_ = \"Is this also good?\"d ; ;:d as "));
+    REQUIRE(validate("restricted String str_ = \"Is this also good?\" ; "));
+    REQUIRE(validate("restricted String str_ = \"Is this also good?\" + \"\nHopefully we can add strings together!\"; "));
+    REQUIRE(validate("restricted String str_ = \"Is this also good?\" + \"\nHopefully we can add strings together!\" + \"AND EVEN \"\"MORE\"\"\"; "));
   }
 }
