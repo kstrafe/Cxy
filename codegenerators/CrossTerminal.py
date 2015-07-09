@@ -196,9 +196,75 @@ productions = {
         ['SYMBOL_COMMA', 'ARGUMENT_LIST'],
     ],
     'EXPRESSION': [
-        ['PRODUCT', 'OPTIONAL_PLUS'],
+        ['OR_EXPRESSION'],
     ],
 ################################################################################
+    'OR_EXPRESSION': [
+        ['AND_EXPRESSION', 'OPTIONAL_OR_EXPRESSION'],
+    ],
+################################################################################
+    'AND_EXPRESSION': [
+        ['BITWISE_OR_EXPRESSION', 'OPTIONAL_AND_EXPRESSION'],
+    ],
+    'OPTIONAL_OR_EXPRESSION': [
+        ['SYMBOL_BAR__BAR', 'OR_EXPRESSION'],
+    ],
+################################################################################
+    'BITWISE_OR_EXPRESSION': [
+        ['BITWISE_XOR_EXPRESSION', 'OPTIONAL_BITWISE_OR_EXPRESSION'],
+    ],
+    'OPTIONAL_AND_EXPRESSION': [
+        ['SYMBOL_AMPERSAND__AMPERSAND', 'AND_EXPRESSION'],
+    ],
+################################################################################
+    'BITWISE_XOR_EXPRESSION': [
+        ['BITWISE_AND_EXPRESSION', 'OPTIONAL_BITWISE_XOR_EXPRESSION'],
+    ],
+    'OPTIONAL_BITWISE_OR_EXPRESSION': [
+        ['SYMBOL_BAR', 'BITWISE_OR_EXPRESSION'],
+    ],
+################################################################################
+    'BITWISE_AND_EXPRESSION': [
+        ['EQUALITY_EXPRESSION', 'OPTIONAL_BITWISE_AND_EXPRESSION'],
+    ],
+    'OPTIONAL_BITWISE_XOR_EXPRESSION': [
+        ['SYMBOL_CARET', 'BITWISE_XOR_EXPRESSION'],
+    ],
+################################################################################
+    'EQUALITY_EXPRESSION': [
+        ['RELATIONAL_EXPRESSION', 'OPTIONAL_EQUALITY_EXPRESSION'],
+    ],
+    'OPTIONAL_BITWISE_AND_EXPRESSION': [
+        ['SYMBOL_AMPERSAND', 'BITWISE_AND_EXPRESSION'],
+    ],
+################################################################################
+    'RELATIONAL_EXPRESSION': [
+        ['ADDITIVE_EXPRESSION', 'OPTIONAL_RELATIONAL_EXPRESSION'],
+    ],
+    'OPTIONAL_EQUALITY_EXPRESSION': [
+        ['SYMBOL_EQUAL__EQUAL', 'EQUALITY_EXPRESSION'],
+    ],
+################################################################################
+    'ADDITIVE_EXPRESSION': [
+        ['MULTIPLICATIVE_EXPRESSION', 'OPTIONAL_ADDITIVE_EXPRESSION'],
+    ],
+    'OPTIONAL_RELATIONAL_EXPRESSION': [
+        ['RELATIONAL_OPERATOR', 'EQUALITY_EXPRESSION'],
+    ],
+################################################################################
+    'MULTIPLICATIVE_EXPRESSION': [
+        ['IDENTIFIER_VARIABLE', 'OPTIONAL_MULTIPLICATIVE_EXPRESSION'],
+    ],
+    'OPTIONAL_ADDITIVE_EXPRESSION': [
+        ['SYMBOL_PLUS', 'ADDITIVE_EXPRESSION'],
+        ['SYMBOL_MINUS', 'ADDITIVE_EXPRESSION'],
+    ],
+################################################################################
+    'OPTIONAL_MULTIPLICATIVE_EXPRESSION': [
+        ['SYMBOL_STAR', 'IDENTIFIER_VARIABLE'],
+        ['SYMBOL_FORWARD_SLASH', 'IDENTIFIER_VARIABLE'],
+    ]
+
 }
 
 
