@@ -72,7 +72,7 @@ def computeTransitions(symbol_name, productions):
     return transition_set
 
 
-def generateTransitionMapCode(transition_set):
+def generateTransitionMapCode(transition_set, productions):
     lines_ = []
     for symbol_ in transition_set:
         for look_ahead in transition_set[symbol_]:
@@ -83,4 +83,6 @@ def generateTransitionMapCode(transition_set):
             line_ += ', '.join(products_)
             line_ += '});'
             lines_.append(line_)
+        if isEpsilonable(symbol_, productions):
+            lines_.append('eps(' + symbol_ + ');')
     return '\n'.join(lines_)
