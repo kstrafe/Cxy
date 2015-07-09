@@ -36,6 +36,8 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 */
 '''
 
+import ParserTableGenerator
+
 # Take a list of cross-terminals and create the following files:
 # Note: project is the folder where readme.md is located (the root)
 # project/code/treebuilder/lexer/dependency/KeywordMatcher.cpp - Matches a lexeme with a TokenType, terminals starting with KEYWORD_ will be put there.
@@ -135,7 +137,72 @@ non_terminals = [
 ]
 
 
-def createcodelexerdependencyKeywordMatchercpp():
+productions = {
+################################################################################
+    'ENTER': [
+        ['ACCESS_SPECIFIER', 'DECL_OR_FUNC'],
+        [],
+    ],
+################################################################################
+    'ACCESS_SPECIFIER': [
+        ['KEYWORD_PRIVATE'],
+        ['KEYWORD_PUBLIC'],
+        ['KEYWORD_RESTRICTED'],
+    ],
+    'DECL_OR_FUNC': [
+        ['FUNCTION_DEFINITION', 'FUNCTION_LIST'],
+        ['DATA_DECLARATION', 'ENTER'],
+    ],
+################################################################################
+    'FUNCTION_DEFINITION': [
+        ['FUNCTION_SIGNATURE', 'IDENTIFIER_SUBROUTINE', 'GROUPER_LEFT_BRACE', 'STATEMENT_LIST', 'GROUPER_RIGHT_BRACE']
+    ],
+    'FUNCTION_LIST': [
+        ['ACCESS_SPECIFIER', 'FUNCTION_DEFINITION', 'FUNCTION_LIST']
+    ],
+    'DATA_DECLARATION': [
+        ['TYPE', 'IDENTIFIER_VARIABLE'],
+    ],
+################################################################################
+    'FUNCTION_SIGNATURE': [
+        ['GROUPER_LEFT_PARENTHESIS', 'ARGUMENT_LIST', 'SYMBOL_COLON', 'ARGUMENT_LIST' 'GROUPER_RIGHT_PARENTHESIS'],
+    ],
+    'STATEMENT_LIST': [
+        ['STATEMENT', 'STATEMENT_LIST'],
+        [],
+    ],
+    'TYPE': [
+        ['IDENTIFIER_CLASS'],
+        ['PRIMITIVE_SIGNED'],
+        ['PRIMITIVE_UNSIGNED'],
+    ],
+################################################################################
+    'ARGUMENT_LIST': [
+        ['ARGUMENT'],
+        [],
+    ],
+    'STATEMENT': [
+        ['ASSIGNMENT'],
+    ],
+################################################################################
+    'ARGUMENT': [
+        ['DATA_DECLARATION', 'COMMA_ARGUMENT_LIST'],
+    ],
+    'ASSIGNMENT': [
+        ['IDENTIFIER_VARIABLE', 'SYMBOL_EQUAL', 'EXPRESSION'],
+    ],
+################################################################################
+    'COMMA_ARGUMENT_LIST': [
+        ['SYMBOL_COMMA', 'ARGUMENT_LIST'],
+    ],
+    'EXPRESSION': [
+        ['PRODUCT', 'OPTIONAL_PLUS'],
+    ],
+################################################################################
+}
+
+
+def createcodetreebuilderlexerdependencyKeywordMatchercpp():
     header = LICENSE_STRING + '#include "KeywordMatcher.hpp"\n\n\nnamespace tul\n{\n\tnamespace lexer\n\t{\n\t\tnamespace dependency\n\t\t{\n\t\t\tprotocols::TokenType KeywordMatcher::getKeyword(const std::string &lexeme)\n\t\t\t{\n\t\t\t\t'
     footer = '\t\t\t\telse return protocols::TokenType::UNIDENTIFIED;\n\t\t\t}\n\t\t}\n\t}\n}'
     with open('./code/treebuilder/lexer/dependency/KeywordMatcher.cpp', 'w') as file:
@@ -151,7 +218,7 @@ def createcodelexerdependencyKeywordMatchercpp():
         file.write(footer)
 
 
-def createcodelexerdependencyKeywordMatchercpp():
+def createcodetreebuilderlexerdependencyKeywordMatchercpp():
 
     def convertSymbolSet(symbol_set):
         def convertSymbolNameToSymbol(name):
@@ -215,7 +282,16 @@ def createcodelexerdependencyKeywordMatchercpp():
         file.write(footer)
 
 
-def createcodeparserdependencyCrossTerminalToStringcpp():
+def createcodetreebuilderparserdependencyCrossTerminalParserinc():
+    ParserTableGenerator.validateAllFirstSets(productions)
+    lines_ = []
+    for start_nonterminal in sorted(productions):
+        lines_.append(ParserTableGenerator.generateTransitionMapCode(ParserTableGenerator.computeTransitions(start_nonterminal, productions)))
+
+    print('\n'.join(lines_))
+
+
+def createcodetreebuilderparserdependencyCrossTerminalToStringcpp():
     header = LICENSE_STRING + '#include "CrossTerminalToString.hpp"\n\n\nnamespace tul\n{\n\tnamespace treebuilder\n\t{\n\t\tnamespace parser\n\t\t{\n\t\t\tnamespace dependency\n\t\t\t{\n\t\t\t\tstd::string CrossTerminalToString::convertToString(protocols::CrossTerminal cross_terminal)\n\t\t\t\t{\n\t\t\t\t\tswitch (cross_terminal)\n\t\t\t\t\t{\n'
     footer = '\t\t\t\t\t\tdefault: return "";\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n}'
     with open('./code/treebuilder/parser/dependency/CrossTerminalToString.cpp', 'w') as file:
@@ -227,7 +303,7 @@ def createcodeparserdependencyCrossTerminalToStringcpp():
         file.write(footer)
 
 
-def createcodeparserdependencyTokenTypeToCrossTerminalcpp():
+def createcodetreebuilderparserdependencyTokenTypeToCrossTerminalcpp():
     header = LICENSE_STRING + '#include "TokenTypeToCrossTerminal.hpp"\n\n\nnamespace tul\n{\n\tnamespace treebuilder\n\t{\n\t\tnamespace parser\n\t\t{\n\t\t\tnamespace dependency\n\t\t\t{\n\t\t\t\tprotocols::CrossTerminal TokenTypeToCrossTerminal::convertToCrossTerminal(protocols::TokenType token_type)\n\t\t\t\t{\n\t\t\t\t\tswitch (token_type)\n\t\t\t\t\t{\n'
     footer = '\t\t\t\t\t\tdefault: return protocols::CrossTerminal::UNIDENTIFIED;\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n}'
     with open('./code/treebuilder/parser/dependency/TokenTypeToCrossTerminal.cpp', 'w') as file:
@@ -260,9 +336,10 @@ def createprotocolsTokenTypehpp():
 
 
 def enterMain():
-    createcodelexerdependencyKeywordMatchercpp()
-    createcodeparserdependencyCrossTerminalToStringcpp()
-    createcodeparserdependencyTokenTypeToCrossTerminalcpp()
+    createcodetreebuilderlexerdependencyKeywordMatchercpp()
+    createcodetreebuilderparserdependencyCrossTerminalToStringcpp()
+    createcodetreebuilderparserdependencyCrossTerminalParserinc()
+    createcodetreebuilderparserdependencyTokenTypeToCrossTerminalcpp()
     createprotocolsCrossTerminalhpp()
     createprotocolsTokenTypehpp()
 

@@ -7,7 +7,7 @@ all:
 	mkdir -p binaries
 	$(CPPFLAGS) $(SOURCES) -o binaries/tulc.exe $(INCLUDE)
 
-gen:
+cg:
 	python3 ./codegenerators/CrossTerminal.py
 
 test:
