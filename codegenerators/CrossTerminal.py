@@ -158,7 +158,8 @@ productions = {
         ['FUNCTION_SIGNATURE', 'IDENTIFIER_SUBROUTINE', 'GROUPER_LEFT_BRACE', 'STATEMENT_LIST', 'GROUPER_RIGHT_BRACE']
     ],
     'FUNCTION_LIST': [
-        ['ACCESS_SPECIFIER', 'FUNCTION_DEFINITION', 'FUNCTION_LIST']
+        ['ACCESS_SPECIFIER', 'FUNCTION_DEFINITION', 'FUNCTION_LIST'],
+        []
     ],
     'DATA_DECLARATION': [
         ['TYPE', 'IDENTIFIER_VARIABLE', 'OPTIONAL_ASSIGNMENT'],
@@ -168,7 +169,7 @@ productions = {
         ['GROUPER_LEFT_PARENTHESIS', 'ARGUMENT_LIST', 'SYMBOL_COLON', 'ARGUMENT_LIST', 'GROUPER_RIGHT_PARENTHESIS'],
     ],
     'STATEMENT_LIST': [
-        ['STATEMENT', 'STATEMENT_LIST'],
+        ['STATEMENT', 'SYMBOL_SEMICOLON', 'STATEMENT_LIST'],
         [],
     ],
     'TYPE': [
@@ -259,6 +260,7 @@ productions = {
 ################################################################################
     'MULTIPLICATIVE_EXPRESSION': [
         ['RESOURCE', 'OPTIONAL_MULTIPLICATIVE_EXPRESSION'],
+        ['IDENTIFIER_SUBROUTINE', 'GROUPER_LEFT_PARENTHESIS', 'GROUPER_RIGHT_PARENTHESIS']
     ],
     'OPTIONAL_ADDITIVE_EXPRESSION': [
         ['SYMBOL_PLUS', 'ADDITIVE_EXPRESSION'],
@@ -267,8 +269,8 @@ productions = {
     ],
 ################################################################################
     'OPTIONAL_MULTIPLICATIVE_EXPRESSION': [
-        ['SYMBOL_STAR', 'IDENTIFIER_VARIABLE'],
-        ['SYMBOL_FORWARD_SLASH', 'IDENTIFIER_VARIABLE'],
+        ['SYMBOL_STAR', 'MULTIPLICATIVE_EXPRESSION'],
+        ['SYMBOL_FORWARD_SLASH', 'MULTIPLICATIVE_EXPRESSION'],
         []
     ],
 ################################################################################

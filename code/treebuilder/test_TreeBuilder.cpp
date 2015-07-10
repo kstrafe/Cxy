@@ -36,9 +36,19 @@ namespace
     for (auto input_character : string)
     {
       if (builder_object.buildTree(input_character) == false)
-        return false;
+      {
+        ret_val = false;
+        break;
+      }
     }
-    return true;
+    if (ret_val == false)
+    {
+      std::vector<std::string> expected = builder_object.getExpectedTokens();
+      std::cout << "\nError: expected:\n";
+      for (std::string &string : expected)
+        std::cout << string << ", " << std::endl;
+    }
+    return ret_val;
   }
 }
 
@@ -105,9 +115,32 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
     REQUIRE(validate("restricted String str_ = \"Is this also good?\" + \"\nHopefully we can add strings together!\" + \"AND EVEN \"\"MORE\"\"\"; "));
   }
 
-  SECTION("Check non-data class")
+  SECTION("Check non-data class with expressions")
   {
     REQUIRE(validate("public (:) "));
     REQUIRE(validate("public (:) enterProgram { } "));
+    REQUIRE(validate("public (:) enterProgram { a_ = \"Hi!\"; } "));
+    REQUIRE(validate("public (:) enterProgram { a_ = \"Hi!\"; b_ = 300; } "));
+    REQUIRE(validate("public (:) enterProgram { a_ = \"Hi!\"; b_ = 300; b_a_ =  b_; } "));
+    REQUIRE(validate("public (:) enterProgram { a_ = \"Hi!\"; b_ = 300; b_a_ = 10 * b_; } "));
+    REQUIRE(validate("public (:) enterProgram { b_a_ = 100 && 10 * b_ + 5 / 3 - another_identifier; } "));
+    REQUIRE(validate("public (:) enterProgram { b_a_ = 100 && 10 * b_ + 5 / 3 - another_identifier | \"Cool m8\"; } "));
+    REQUIRE(validate("public (:) enterProgram { b_a_ = sampleFunction(); } "));
+    REQUIRE(validate("public (:) enterProgram { b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction() - another_identifier | \"Cool m8\"; } "));
+    REQUIRE
+    (
+      validate
+      (
+        R"(
+          public (:) enterProgram
+          {
+            b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction() - another_identifier | "Cool m8";
+            b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction() - another_identifier | "Cool m8";
+            b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction() - another_identifier | "Cool m8";
+            b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction() ^sampleFunction() - another_identifier | "Cool m8";
+          }
+        )"
+      )
+    );
   }
 }
