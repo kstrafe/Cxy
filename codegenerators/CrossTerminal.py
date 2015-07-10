@@ -299,7 +299,7 @@ def createcodetreebuilderlexerdependencyKeywordMatchercpp(terminal_set):
     with open('./code/treebuilder/lexer/dependency/KeywordMatcher.cpp', 'w') as file:
         file.write(header)
         first_keyword = True
-        for i in terminal_set:
+        for i in sorted(terminal_set):
             if i.startswith('KEYWORD_'):
                 if first_keyword:
                     first_keyword = False
@@ -355,7 +355,7 @@ def createcodetreebuilderlexerdependencyKeywordMatchercpp(terminal_set):
     header = LICENSE_STRING + '#include "SymbolMatcher.hpp"\n\n\nnamespace tul\n{\n\tnamespace treebuilder\n\t{\n\t\tnamespace lexer\n\t\t{\n\t\t\tnamespace dependency\n\t\t\t{\n\t\t\t\tprotocols::TokenType SymbolMatcher::getSymbol(const std::string &lexeme)\n\t\t\t\t{\n\t\t\t\t\tusing namespace protocols;\n\t\t\t\t\t'
     footer = '\t\t\t\t\telse return protocols::TokenType::UNIDENTIFIED;\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n}'
     symbols = []
-    for i in terminal_set:
+    for i in sorted(terminal_set):
         if i.startswith('SYMBOL_'):
             symbols.append([convertSymbolSet(i[7:].split('__')), i])
 
@@ -364,7 +364,7 @@ def createcodetreebuilderlexerdependencyKeywordMatchercpp(terminal_set):
     with open('./code/treebuilder/lexer/dependency/SymbolMatcher.cpp', 'w') as file:
         file.write(header)
         first_keyword = True
-        for i in symbols:
+        for i in sorted(symbols):
             if first_keyword:
                 first_keyword = False
                 file.write('if (lexeme == "' + ''.join(i[0]) + '") return protocols::TokenType::' + i[1] + ';\n')
@@ -379,6 +379,7 @@ def createcodetreebuilderparserdependencyCrossTerminalParserinc():
     for start_nonterminal in sorted(productions):
         transitions_ = ParserTableGenerator.computeTransitions(start_nonterminal, productions)
         lines_.append(ParserTableGenerator.generateTransitionMapCode(transitions_, productions))
+
     with open('./code/treebuilder/parser/dependency/CrossTerminalParser.inc', 'w') as file:
         file.write('\n'.join(lines_))
 
@@ -388,9 +389,9 @@ def createcodetreebuilderparserdependencyCrossTerminalToStringcpp(terminal_set, 
     footer = '\t\t\t\t\t\tdefault: return "";\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n}'
     with open('./code/treebuilder/parser/dependency/CrossTerminalToString.cpp', 'w') as file:
         file.write(header)
-        for i in non_terminal_set:
+        for i in sorted(non_terminal_set):
             file.write('\t\t\t\t\t\tcase protocols::CrossTerminal::' + i + ': return "' + i + '";\n')
-        for i in terminal_set:
+        for i in sorted(terminal_set):
             file.write('\t\t\t\t\t\tcase protocols::CrossTerminal::' + i + ': return "' + i + '";\n')
         file.write(footer)
 
@@ -400,7 +401,7 @@ def createcodetreebuilderparserdependencyTokenTypeToCrossTerminalcpp(terminal_se
     footer = '\t\t\t\t\t\tdefault: return protocols::CrossTerminal::UNIDENTIFIED;\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n}'
     with open('./code/treebuilder/parser/dependency/TokenTypeToCrossTerminal.cpp', 'w') as file:
         file.write(header)
-        for i in terminal_set:
+        for i in sorted(terminal_set):
             file.write('\t\t\t\t\t\tcase protocols::TokenType::' + i + ': return protocols::CrossTerminal::' + i + ';\n')
         file.write(footer)
 
@@ -410,9 +411,9 @@ def createprotocolsCrossTerminalhpp(terminal_set, non_terminals):
     footer = '\t\t\tENUM_END\n\t\t};\n\t}\n}'
     with open('./protocols/CrossTerminal.hpp', 'w') as file:
         file.write(header)
-        for i in non_terminals:
+        for i in sorted(non_terminals):
             file.write('\t\t\t' + i + ',\n')
-        for i in terminal_set:
+        for i in sorted(terminal_set):
             file.write('\t\t\t' + i + ',\n')
         file.write(footer)
 
@@ -422,7 +423,7 @@ def createprotocolsTokenTypehpp(terminal_set, non_terminal_set):
     footer = '\t\t\tENUM_END\n\t\t};\n\t}\n}'
     with open('./protocols/TokenType.hpp', 'w') as file:
         file.write(header)
-        for i in terminal_set:
+        for i in sorted(terminal_set):
             file.write('\t\t\t' + i + ',\n')
         file.write(footer)
 

@@ -105,6 +105,7 @@ def generateTransitionMapCode(transition_set, productions):
             lines_.append(line_)
         if isEpsilonable(symbol_, productions):
             lines_.append('eps(' + symbol_ + ');')
+    lines_.sort()
     return '\n'.join(lines_)
 
 
