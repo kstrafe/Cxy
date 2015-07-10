@@ -47,7 +47,7 @@ import ParserTableGenerator
 # project/protocols/CrossTerminal.hpp - A simple enum containing all our CrossTerminals
 # project/protocols/TokenType.hpp - A simple enum containing only terminals, without any non-terminals
 
-terminals = [
+terminals = {
     'GROUPER_LEFT_BRACE',
     'GROUPER_RIGHT_BRACE',
     'GROUPER_LEFT_BRACKET',
@@ -107,10 +107,10 @@ terminals = [
     'SYMBOL_GREATER_THAN',
 
     'UNIDENTIFIED',
-]
+}
 
 
-non_terminals = [
+non_terminals = {
     'ENTER',
     'EXIT',
     'NONE',
@@ -134,7 +134,7 @@ non_terminals = [
     'SUBROUTINE',
     'EXPRESSION',
     'EPSILONATE'
-]
+}
 
 
 productions = {
@@ -151,7 +151,7 @@ productions = {
     ],
     'DECL_OR_FUNC': [
         ['FUNCTION_DEFINITION', 'FUNCTION_LIST'],
-        ['DATA_DECLARATION', 'ENTER'],
+        ['DATA_DECLARATION', 'SYMBOL_SEMICOLON', 'ENTER'],
     ],
 ################################################################################
     'FUNCTION_DEFINITION': [
@@ -161,7 +161,7 @@ productions = {
         ['ACCESS_SPECIFIER', 'FUNCTION_DEFINITION', 'FUNCTION_LIST']
     ],
     'DATA_DECLARATION': [
-        ['TYPE', 'IDENTIFIER_VARIABLE'],
+        ['TYPE', 'IDENTIFIER_VARIABLE', 'OPTIONAL_ASSIGNMENT'],
     ],
 ################################################################################
     'FUNCTION_SIGNATURE': [
@@ -176,6 +176,10 @@ productions = {
         ['PRIMITIVE_SIGNED'],
         ['PRIMITIVE_UNSIGNED'],
     ],
+    'OPTIONAL_ASSIGNMENT': [
+        ['SYMBOL_EQUAL', 'EXPRESSION'],
+        []
+    ],
 ################################################################################
     'ARGUMENT_LIST': [
         ['ARGUMENT'],
@@ -184,23 +188,17 @@ productions = {
     'STATEMENT': [
         ['ASSIGNMENT'],
     ],
-################################################################################
-    'ARGUMENT': [
-        ['DATA_DECLARATION', 'COMMA_ARGUMENT_LIST'],
-    ],
-    'ASSIGNMENT': [
-        ['IDENTIFIER_VARIABLE', 'SYMBOL_EQUAL', 'EXPRESSION'],
-    ],
-################################################################################
-    'COMMA_ARGUMENT_LIST': [
-        ['SYMBOL_COMMA', 'ARGUMENT_LIST'],
-    ],
     'EXPRESSION': [
         ['OR_EXPRESSION'],
     ],
 ################################################################################
+# EXPRESSION BLOCK.
+# Contains all valid expressions in the language. These are sums, == compares...
+# a + b * c - d
+################################################################################
     'OR_EXPRESSION': [
         ['AND_EXPRESSION', 'OPTIONAL_OR_EXPRESSION'],
+        ['GROUPER_LEFT_PARENTHESIS', 'OPTIONAL_OR_EXPRESSION'],
     ],
 ################################################################################
     'AND_EXPRESSION': [
@@ -260,7 +258,7 @@ productions = {
     ],
 ################################################################################
     'MULTIPLICATIVE_EXPRESSION': [
-        ['IDENTIFIER_VARIABLE', 'OPTIONAL_MULTIPLICATIVE_EXPRESSION'],
+        ['RESOURCE', 'OPTIONAL_MULTIPLICATIVE_EXPRESSION'],
     ],
     'OPTIONAL_ADDITIVE_EXPRESSION': [
         ['SYMBOL_PLUS', 'ADDITIVE_EXPRESSION'],
@@ -272,18 +270,36 @@ productions = {
         ['SYMBOL_STAR', 'IDENTIFIER_VARIABLE'],
         ['SYMBOL_FORWARD_SLASH', 'IDENTIFIER_VARIABLE'],
         []
-    ]
-
+    ],
+################################################################################
+################################################################################
+################################################################################
+    'RESOURCE': [
+        ['IDENTIFIER_VARIABLE'],
+        ['STRING'],
+        ['INTEGER_LITERAL'],
+    ],
+################################################################################
+    'ARGUMENT': [
+        ['DATA_DECLARATION', 'COMMA_ARGUMENT_LIST'],
+    ],
+    'ASSIGNMENT': [
+        ['IDENTIFIER_VARIABLE', 'SYMBOL_EQUAL', 'EXPRESSION'],
+    ],
+################################################################################
+    'COMMA_ARGUMENT_LIST': [
+        ['SYMBOL_COMMA', 'ARGUMENT_LIST'],
+    ],
 }
 
 
-def createcodetreebuilderlexerdependencyKeywordMatchercpp():
+def createcodetreebuilderlexerdependencyKeywordMatchercpp(terminal_set):
     header = LICENSE_STRING + '#include "KeywordMatcher.hpp"\n\n\nnamespace tul\n{\n\tnamespace lexer\n\t{\n\t\tnamespace dependency\n\t\t{\n\t\t\tprotocols::TokenType KeywordMatcher::getKeyword(const std::string &lexeme)\n\t\t\t{\n\t\t\t\t'
     footer = '\t\t\t\telse return protocols::TokenType::UNIDENTIFIED;\n\t\t\t}\n\t\t}\n\t}\n}'
     with open('./code/treebuilder/lexer/dependency/KeywordMatcher.cpp', 'w') as file:
         file.write(header)
         first_keyword = True
-        for i in terminals:
+        for i in terminal_set:
             if i.startswith('KEYWORD_'):
                 if first_keyword:
                     first_keyword = False
@@ -293,7 +309,7 @@ def createcodetreebuilderlexerdependencyKeywordMatchercpp():
         file.write(footer)
 
 
-def createcodetreebuilderlexerdependencyKeywordMatchercpp():
+def createcodetreebuilderlexerdependencyKeywordMatchercpp(terminal_set):
 
     def convertSymbolSet(symbol_set):
         def convertSymbolNameToSymbol(name):
@@ -339,7 +355,7 @@ def createcodetreebuilderlexerdependencyKeywordMatchercpp():
     header = LICENSE_STRING + '#include "SymbolMatcher.hpp"\n\n\nnamespace tul\n{\n\tnamespace treebuilder\n\t{\n\t\tnamespace lexer\n\t\t{\n\t\t\tnamespace dependency\n\t\t\t{\n\t\t\t\tprotocols::TokenType SymbolMatcher::getSymbol(const std::string &lexeme)\n\t\t\t\t{\n\t\t\t\t\tusing namespace protocols;\n\t\t\t\t\t'
     footer = '\t\t\t\t\telse return protocols::TokenType::UNIDENTIFIED;\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n}'
     symbols = []
-    for i in terminals:
+    for i in terminal_set:
         if i.startswith('SYMBOL_'):
             symbols.append([convertSymbolSet(i[7:].split('__')), i])
 
@@ -363,61 +379,65 @@ def createcodetreebuilderparserdependencyCrossTerminalParserinc():
     for start_nonterminal in sorted(productions):
         transitions_ = ParserTableGenerator.computeTransitions(start_nonterminal, productions)
         lines_.append(ParserTableGenerator.generateTransitionMapCode(transitions_, productions))
+    with open('./code/treebuilder/parser/dependency/CrossTerminalParser.inc', 'w') as file:
+        file.write('\n'.join(lines_))
 
-    print('\n'.join(lines_))
 
-
-def createcodetreebuilderparserdependencyCrossTerminalToStringcpp():
+def createcodetreebuilderparserdependencyCrossTerminalToStringcpp(terminal_set, non_terminal_set):
     header = LICENSE_STRING + '#include "CrossTerminalToString.hpp"\n\n\nnamespace tul\n{\n\tnamespace treebuilder\n\t{\n\t\tnamespace parser\n\t\t{\n\t\t\tnamespace dependency\n\t\t\t{\n\t\t\t\tstd::string CrossTerminalToString::convertToString(protocols::CrossTerminal cross_terminal)\n\t\t\t\t{\n\t\t\t\t\tswitch (cross_terminal)\n\t\t\t\t\t{\n'
     footer = '\t\t\t\t\t\tdefault: return "";\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n}'
     with open('./code/treebuilder/parser/dependency/CrossTerminalToString.cpp', 'w') as file:
         file.write(header)
-        for i in non_terminals:
+        for i in non_terminal_set:
             file.write('\t\t\t\t\t\tcase protocols::CrossTerminal::' + i + ': return "' + i + '";\n')
-        for i in terminals:
+        for i in terminal_set:
             file.write('\t\t\t\t\t\tcase protocols::CrossTerminal::' + i + ': return "' + i + '";\n')
         file.write(footer)
 
 
-def createcodetreebuilderparserdependencyTokenTypeToCrossTerminalcpp():
+def createcodetreebuilderparserdependencyTokenTypeToCrossTerminalcpp(terminal_set):
     header = LICENSE_STRING + '#include "TokenTypeToCrossTerminal.hpp"\n\n\nnamespace tul\n{\n\tnamespace treebuilder\n\t{\n\t\tnamespace parser\n\t\t{\n\t\t\tnamespace dependency\n\t\t\t{\n\t\t\t\tprotocols::CrossTerminal TokenTypeToCrossTerminal::convertToCrossTerminal(protocols::TokenType token_type)\n\t\t\t\t{\n\t\t\t\t\tswitch (token_type)\n\t\t\t\t\t{\n'
     footer = '\t\t\t\t\t\tdefault: return protocols::CrossTerminal::UNIDENTIFIED;\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n}'
     with open('./code/treebuilder/parser/dependency/TokenTypeToCrossTerminal.cpp', 'w') as file:
         file.write(header)
-        for i in terminals:
+        for i in terminal_set:
             file.write('\t\t\t\t\t\tcase protocols::TokenType::' + i + ': return protocols::CrossTerminal::' + i + ';\n')
         file.write(footer)
 
 
-def createprotocolsCrossTerminalhpp():
+def createprotocolsCrossTerminalhpp(terminal_set, non_terminals):
     header = LICENSE_STRING + '#pragma once\n\nnamespace tul\n{\n\tnamespace protocols\n\t{\n\t\tenum class CrossTerminal\n\t\t{\n'
     footer = '\t\t\tENUM_END\n\t\t};\n\t}\n}'
     with open('./protocols/CrossTerminal.hpp', 'w') as file:
         file.write(header)
         for i in non_terminals:
             file.write('\t\t\t' + i + ',\n')
-        for i in terminals:
+        for i in terminal_set:
             file.write('\t\t\t' + i + ',\n')
         file.write(footer)
 
 
-def createprotocolsTokenTypehpp():
+def createprotocolsTokenTypehpp(terminal_set, non_terminal_set):
     header = LICENSE_STRING + '#pragma once\n\nnamespace tul\n{\n\tnamespace protocols\n\t{\n\t\tenum class TokenType\n\t\t{\n'
     footer = '\t\t\tENUM_END\n\t\t};\n\t}\n}'
     with open('./protocols/TokenType.hpp', 'w') as file:
         file.write(header)
-        for i in terminals:
+        for i in terminal_set:
             file.write('\t\t\t' + i + ',\n')
         file.write(footer)
 
 
 def enterMain():
-    createcodetreebuilderlexerdependencyKeywordMatchercpp()
-    createcodetreebuilderparserdependencyCrossTerminalToStringcpp()
+    terminal_set, non_terminal_set = ParserTableGenerator.computeTerminals(productions)
+    terminal_set |= terminals
+    non_terminal_set |= non_terminals
+
+    createcodetreebuilderlexerdependencyKeywordMatchercpp(terminal_set)
     createcodetreebuilderparserdependencyCrossTerminalParserinc()
-    createcodetreebuilderparserdependencyTokenTypeToCrossTerminalcpp()
-    createprotocolsCrossTerminalhpp()
-    createprotocolsTokenTypehpp()
+    createcodetreebuilderparserdependencyCrossTerminalToStringcpp(terminal_set, non_terminal_set)
+    createcodetreebuilderparserdependencyTokenTypeToCrossTerminalcpp(terminal_set)
+    createprotocolsCrossTerminalhpp(terminal_set, non_terminal_set)
+    createprotocolsTokenTypehpp(terminal_set, non_terminal_set)
 
 
 if __name__ == '__main__':

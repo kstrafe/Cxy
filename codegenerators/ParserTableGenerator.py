@@ -17,14 +17,13 @@ You should have received a copy of the GNU General Public License
 along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-
-def isEpsilonable(symbol_name, productions):
-    if symbol_name in productions:
-        if [] in productions[symbol_name]:
-            return True
-        else:
-            return False
-    return False
+def computeAllCrossTerminals(productions):
+    cross_terminals = {}
+    for symbol_name in productions:
+        for production in productions[symbol_name]:
+            for element in production:
+                cross_terminals[element] = None
+    return cross_terminals
 
 
 def computeFirstSet(symbol_name, productions, already_used=[]):
@@ -49,9 +48,21 @@ def computeFirstSet(symbol_name, productions, already_used=[]):
         return [symbol_name], False
 
 
-def validateAllFirstSets(productions):
-    for start_nonterminal in sorted(productions):
-        items, eps = computeFirstSet(start_nonterminal, productions, [])
+def computeTerminals(productions):
+    terminal_set = set()
+    non_terminal_set = set()
+    for non_terminal in productions:
+        for results_ in productions[non_terminal]:
+            for token_ in results_:
+                first_set, epsilonable_ = computeFirstSet(token_, productions, [])
+                for terminal_ in first_set:
+                    terminal_set.add(terminal_)
+    cross_set = computeAllCrossTerminals(productions)
+    for type_ in cross_set:
+        if type_ not in terminal_set:
+            if type_ not in non_terminal_set:
+                non_terminal_set.add(type_)
+    return terminal_set, non_terminal_set
 
 
 def computeTransitions(symbol_name, productions):
@@ -72,6 +83,15 @@ def computeTransitions(symbol_name, productions):
     return transition_set
 
 
+def isEpsilonable(symbol_name, productions):
+    if symbol_name in productions:
+        if [] in productions[symbol_name]:
+            return True
+        else:
+            return False
+    return False
+
+
 def generateTransitionMapCode(transition_set, productions):
     lines_ = []
     for symbol_ in transition_set:
@@ -86,3 +106,8 @@ def generateTransitionMapCode(transition_set, productions):
         if isEpsilonable(symbol_, productions):
             lines_.append('eps(' + symbol_ + ');')
     return '\n'.join(lines_)
+
+
+def validateAllFirstSets(productions):
+    for start_nonterminal in sorted(productions):
+        items, eps = computeFirstSet(start_nonterminal, productions, [])

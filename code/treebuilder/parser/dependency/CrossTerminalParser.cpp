@@ -36,6 +36,8 @@ namespace tul
             if (ll_parser.doesRuleExist(CrossTerminal::left, CrossTerminal::middle)) throw std::string(#left) + " already has transition " + std::string(#middle); \
             ll_parser.addRule(CrossTerminal::left, CrossTerminal::middle,
 
+            #include "CrossTerminalParser.inc"
+
             // We start with simple `private 32u x = 3; public Something y(arg: "hello!");`
             add(ENTER, KEYWORD_PRIVATE) {cT(ACCESS_SPECIFIER), cT(DECLARATION), cT(OPTIONAL_ASSIGNMENT), cT(SYMBOL_SEMICOLON), cT(FIELD_DECLARATION_LIST)});
             add(ENTER, KEYWORD_PUBLIC) {cT(ACCESS_SPECIFIER), cT(DECLARATION), cT(OPTIONAL_ASSIGNMENT), cT(SYMBOL_SEMICOLON), cT(FIELD_DECLARATION_LIST)});
