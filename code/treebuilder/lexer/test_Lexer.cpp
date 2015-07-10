@@ -251,7 +251,7 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
   }
 
 
-  SECTION("Identify a data declaration lexemes")
+  SECTION("Identify data declaration lexemes")
   {
     using namespace tul::treebuilder::lexer;
     Lexer lex_eng;
@@ -270,6 +270,30 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
       caze(INTEGER_LITERAL);
       caze(SYMBOL_SEMICOLON);
     #undef caze
+    REQUIRE(token_stack.size() == iterator_);
+  }
+
+
+  SECTION("Identify function declaration lexemes")
+  {
+    using namespace tul::treebuilder::lexer;
+    Lexer lex_eng;
+    for (auto char_ : std::string("public (:)   public (: ) "))
+      lex_eng.insertCharacter(char_);
+
+    std::vector<tul::protocols::Token> &token_stack = lex_eng.getTokenStack();
+    REQUIRE(token_stack.size() == 8);
+    unsigned iterator_ = 0;
+    for (int i = 0; i < 2; ++i)
+    {
+      using namespace tul::protocols;
+      #define caze(type_name) REQUIRE(token_stack.at(iterator_++).token_type == TokenType::type_name)
+        caze(KEYWORD_PUBLIC);
+        caze(GROUPER_LEFT_PARENTHESIS);
+        caze(SYMBOL_COLON);
+        caze(GROUPER_RIGHT_PARENTHESIS);
+      #undef caze
+    }
     REQUIRE(token_stack.size() == iterator_);
   }
 

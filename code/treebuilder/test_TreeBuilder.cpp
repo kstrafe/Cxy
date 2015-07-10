@@ -104,4 +104,10 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
     REQUIRE(validate("restricted String str_ = \"Is this also good?\" + \"\nHopefully we can add strings together!\"; "));
     REQUIRE(validate("restricted String str_ = \"Is this also good?\" + \"\nHopefully we can add strings together!\" + \"AND EVEN \"\"MORE\"\"\"; "));
   }
+
+  SECTION("Check non-data class")
+  {
+    REQUIRE(validate("public (:) "));
+    REQUIRE(validate("public (:) enterProgram { } "));
+  }
 }
