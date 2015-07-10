@@ -1,4 +1,4 @@
-CPPFLAGS=g++ -Wall -std=c++11 -g
+CPPFLAGS=g++ -Wall -Wfatal-errors -std=c++11 -g
 SOURCES=`find -name *.cpp | grep -Pv test.*?\.cpp`
 TEST_SOURCES=`find -name *.cpp | grep -Pv main.*?\.cpp`
 INCLUDE=-I.
@@ -14,3 +14,7 @@ test:
 	./tests/test_runner.sh
 	$(CPPFLAGS) $(TEST_SOURCES) -o binaries/tulc_test.exe $(INCLUDE)
 	./binaries/tulc_test.exe
+
+tdd:
+	$(MAKE) cg
+	$(MAKE) test

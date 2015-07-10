@@ -24,6 +24,8 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 
 TEST_CASE("Test lexer output", "[test-Lexer]")
 {
+
+
   SECTION("Lexing a natural language string")
   {
     tul::treebuilder::lexer::Lexer lexing_engine;
@@ -86,6 +88,8 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
       REQUIRE(token_stack.size() == iterator_);
     }
   }
+
+
   SECTION("Check if the lexer lexes string literals correctly")
   {
     tul::treebuilder::lexer::Lexer lexing_engine;
@@ -99,6 +103,8 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
     REQUIRE(token_stack.at(0).token_type == tul::protocols::TokenType::STRING);
     REQUIRE(token_stack.at(0).column_number == 98);
   }
+
+
   SECTION("Confirm the different alphanumeric identifies")
   {
     tul::treebuilder::lexer::Lexer lexing_engine;
@@ -126,6 +132,8 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
       REQUIRE(token_stack.size() == iterator_);
     }
   }
+
+
   SECTION("Ensure that the groupers work")
   {
     tul::treebuilder::lexer::Lexer lexing_engine;
@@ -166,6 +174,8 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
       REQUIRE(token_stack.size() == iterator_);
     }
   }
+
+
   SECTION("Check if symbols are lexed")
   {
     tul::treebuilder::lexer::Lexer lexing_engine;
@@ -190,6 +200,8 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
       REQUIRE(token_stack.size() == iterator_);
     }
   }
+
+
   SECTION("Are keywords detected?")
   {
     tul::treebuilder::lexer::Lexer lexing_engine;
@@ -220,6 +232,8 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
     #undef caze
     REQUIRE(token_stack.size() == iterator_);
   }
+
+
   SECTION("Deal with UTF-8 code points")
   {
     using namespace tul::protocols;
@@ -235,4 +249,29 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
     REQUIRE(token_stack.at(0).accompanying_lexeme == "æøå\u0000\u0001\u0002\u0003\u0004\u0005\u0006\u0007\u0008\u000E\u000F\u0010\u0011\u0012\u0013\u0014\u0015\u0016\u0017\u0018\u0019\u001A\u001B\u001C\u001D\u001E\u001F");
     REQUIRE(token_stack.at(0).token_type == TokenType::STRING);
   }
+
+
+  SECTION("Identify a data declaration lexemes")
+  {
+    using namespace tul::treebuilder::lexer;
+    Lexer lex_eng;
+    for (auto char_ : std::string("private 32u x_ = 3; "))
+      lex_eng.insertCharacter(char_);
+
+    std::vector<tul::protocols::Token> &token_stack = lex_eng.getTokenStack();
+    REQUIRE(token_stack.size() == 6);
+    using namespace tul::protocols;
+    unsigned iterator_ = 0;
+    #define caze(type_name) REQUIRE(token_stack.at(iterator_++).token_type == TokenType::type_name)
+      caze(KEYWORD_PRIVATE);
+      caze(PRIMITIVE_UNSIGNED);
+      caze(IDENTIFIER_VARIABLE);
+      caze(SYMBOL_EQUAL);
+      caze(INTEGER_LITERAL);
+      caze(SYMBOL_SEMICOLON);
+    #undef caze
+    REQUIRE(token_stack.size() == iterator_);
+  }
+
+
 }
