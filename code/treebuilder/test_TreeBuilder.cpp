@@ -135,12 +135,45 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
           public (:) enterProgram
           {
             b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction() - another_identifier | "Cool m8";
-            b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction() - another_identifier | "Cool m8";
+            q_a_d = 100 && 10 * b_ + 5 / 3 * sampleFunction() - another_identifier | "Cool m8";
             b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction() - another_identifier | "Cool m8";
             b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction() ^sampleFunction() - another_identifier | "Cool m8";
+            Type b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction() ^sampleFunction() - another_identifier | "Cool m8";
+            800u b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction() ^sampleFunction() - another_identifier | "Cool m8";
+            8s b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction() ^sampleFunction() - another_identifier | "Cool m8";
+            AnotherClassName b_a_ = 100 > 5 && 10 * b_ + 5 / 3 * sampleFunction() ^sampleFunction() - another_identifier | "Cool m8";
+          }
+        )"
+      )
+    );
+    REQUIRE(validate("public (:) enterProgram { const ClassName "));
+    REQUIRE(validate("public (:) enterProgram { const ptr ClassName alpha_; }"));
+    REQUIRE(false == validate("public (:) enterProgram { const const ClassName alpha_; }"));
+    REQUIRE(validate("public (:) enterProgram { const ptr const ClassName alpha_; }"));
+  }
+
+  SECTION("A class using different statement types")
+  {
+    REQUIRE
+    (
+      validate
+      (
+        R"(
+          public (:) enterProgram
+          {
+            32u max_ = 1000;
+            32u counter_ = 0;
+            while (counter_ < 1000)
+            {
+              if (counter_ > 500 + 20)
+              { printSomething(); }
+              for (const 33s cuda_ = 10; cuda_ < 20; ++cuda_;)
+              {}
+            }
           }
         )"
       )
     );
   }
+
 }

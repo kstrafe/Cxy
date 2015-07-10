@@ -163,6 +163,7 @@ productions = {
     ],
     'DATA_DECLARATION': [
         ['TYPE', 'IDENTIFIER_VARIABLE', 'OPTIONAL_ASSIGNMENT'],
+        ['KEYWORD_CONST', 'DATA_DECLARATION_NO_CONST'],
     ],
 ################################################################################
     'FUNCTION_SIGNATURE': [
@@ -170,7 +171,8 @@ productions = {
     ],
     'STATEMENT_LIST': [
         ['STATEMENT', 'SYMBOL_SEMICOLON', 'STATEMENT_LIST'],
-        [],
+        ['NO_SEMICOLON_STATEMENT', 'STATEMENT_LIST'],
+        []
     ],
     'TYPE': [
         ['IDENTIFIER_CLASS'],
@@ -181,6 +183,10 @@ productions = {
         ['SYMBOL_EQUAL', 'EXPRESSION'],
         []
     ],
+    'DATA_DECLARATION_NO_CONST': [
+        ['TYPE', 'IDENTIFIER_VARIABLE', 'OPTIONAL_ASSIGNMENT'],
+        ['KEYWORD_PTR', 'DATA_DECLARATION']
+    ],
 ################################################################################
     'ARGUMENT_LIST': [
         ['ARGUMENT'],
@@ -188,9 +194,44 @@ productions = {
     ],
     'STATEMENT': [
         ['ASSIGNMENT'],
+        ['DATA_DECLARATION'],
+        ['CALL'],
+        ['ITER_STATEMENT'],
+    ],
+    'NO_SEMICOLON_STATEMENT': [
+        ['DO_STATEMENT'],
+        ['FOR_STATEMENT'],
+        ['IF_STATEMENT'],
+        ['WHILE_STATEMENT'],
     ],
     'EXPRESSION': [
         ['OR_EXPRESSION'],
+    ],
+################################################################################
+    'ARGUMENT': [
+        ['DATA_DECLARATION', 'COMMA_ARGUMENT_LIST'],
+    ],
+    'ASSIGNMENT': [
+        ['IDENTIFIER_VARIABLE', 'SYMBOL_EQUAL', 'EXPRESSION'],
+    ],
+    'CALL': [
+        ['IDENTIFIER_SUBROUTINE', 'GROUPER_LEFT_PARENTHESIS', 'GROUPER_RIGHT_PARENTHESIS']
+    ],
+    'ITER_STATEMENT': [
+        ['SYMBOL_PLUS__PLUS', 'IDENTIFIER_VARIABLE'],
+        ['SYMBOL_MINUS__MINUS', 'IDENTIFIER_VARIABLE'],
+    ],
+    'DO_STATEMENT': [
+        ['KEYWORD_DO', 'GROUPER_LEFT_PARENTHESIS', 'EXPRESSION', 'GROUPER_RIGHT_PARENTHESIS', 'CODE_BLOCK']
+    ],
+    'FOR_STATEMENT': [
+        ['KEYWORD_FOR', 'GROUPER_LEFT_PARENTHESIS', 'DATA_DECLARATION', 'SYMBOL_SEMICOLON', 'EXPRESSION', 'SYMBOL_SEMICOLON', 'STATEMENT_LIST', 'GROUPER_RIGHT_PARENTHESIS', 'CODE_BLOCK']
+    ],
+    'IF_STATEMENT': [
+        ['KEYWORD_IF', 'GROUPER_LEFT_PARENTHESIS', 'EXPRESSION', 'GROUPER_RIGHT_PARENTHESIS', 'CODE_BLOCK']
+    ],
+    'WHILE_STATEMENT': [
+        ['KEYWORD_WHILE', 'GROUPER_LEFT_PARENTHESIS', 'EXPRESSION', 'GROUPER_RIGHT_PARENTHESIS', 'CODE_BLOCK']
     ],
 ################################################################################
 # EXPRESSION BLOCK.
@@ -276,28 +317,30 @@ productions = {
 ################################################################################
 ################################################################################
 ################################################################################
+    'RELATIONAL_OPERATOR': [
+        ['SYMBOL_LESS_THAN'],
+        ['SYMBOL_GREATER_THAN'],
+        ['SYMBOL_LESS_THAN__EQUAL'],
+        ['SYMBOL_GREATER_THAN__EQUAL'],
+    ],
     'RESOURCE': [
         ['IDENTIFIER_VARIABLE'],
         ['STRING'],
         ['INTEGER_LITERAL'],
     ],
 ################################################################################
-    'ARGUMENT': [
-        ['DATA_DECLARATION', 'COMMA_ARGUMENT_LIST'],
-    ],
-    'ASSIGNMENT': [
-        ['IDENTIFIER_VARIABLE', 'SYMBOL_EQUAL', 'EXPRESSION'],
-    ],
-################################################################################
     'COMMA_ARGUMENT_LIST': [
         ['SYMBOL_COMMA', 'ARGUMENT_LIST'],
     ],
+    'CODE_BLOCK': [
+        ['GROUPER_LEFT_BRACE', 'STATEMENT_LIST', 'GROUPER_RIGHT_BRACE']
+    ]
 }
 
 
 def createcodetreebuilderlexerdependencyKeywordMatchercpp(terminal_set):
-    header = LICENSE_STRING + '#include "KeywordMatcher.hpp"\n\n\nnamespace tul\n{\n\tnamespace lexer\n\t{\n\t\tnamespace dependency\n\t\t{\n\t\t\tprotocols::TokenType KeywordMatcher::getKeyword(const std::string &lexeme)\n\t\t\t{\n\t\t\t\t'
-    footer = '\t\t\t\telse return protocols::TokenType::UNIDENTIFIED;\n\t\t\t}\n\t\t}\n\t}\n}'
+    header = LICENSE_STRING + '#include "KeywordMatcher.hpp"\n\n\nnamespace tul\n{\n\tnamespace treebuilder\n\t{\n\t\tnamespace lexer\n\t\t{\n\t\t\tnamespace dependency\n\t\t\t{\n\t\t\t\tprotocols::TokenType KeywordMatcher::getKeyword(const std::string &lexeme)\n\t\t\t\t{\n\t\t\t\t\t'
+    footer = '\t\t\t\t\telse return protocols::TokenType::UNIDENTIFIED;\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n}'
     with open('./code/treebuilder/lexer/dependency/KeywordMatcher.cpp', 'w') as file:
         file.write(header)
         first_keyword = True
@@ -307,11 +350,11 @@ def createcodetreebuilderlexerdependencyKeywordMatchercpp(terminal_set):
                     first_keyword = False
                     file.write('if (lexeme == "' + i.split('_')[1].lower() + '") return protocols::TokenType::' + i + ';\n')
                 else:
-                    file.write('\t\t\t\telse if (lexeme == "' + i.split('_')[1].lower() + '") return protocols::TokenType::' + i + ';\n')
+                    file.write('\t\t\t\t\telse if (lexeme == "' + i.split('_')[1].lower() + '") return protocols::TokenType::' + i + ';\n')
         file.write(footer)
 
 
-def createcodetreebuilderlexerdependencyKeywordMatchercpp(terminal_set):
+def createcodetreebuilderlexerdependencySymbolMatchercpp(terminal_set):
 
     def convertSymbolSet(symbol_set):
         def convertSymbolNameToSymbol(name):
@@ -436,6 +479,7 @@ def enterMain():
     non_terminal_set |= non_terminals
 
     createcodetreebuilderlexerdependencyKeywordMatchercpp(terminal_set)
+    createcodetreebuilderlexerdependencySymbolMatchercpp(terminal_set)
     createcodetreebuilderparserdependencyCrossTerminalParserinc()
     createcodetreebuilderparserdependencyCrossTerminalToStringcpp(terminal_set, non_terminal_set)
     createcodetreebuilderparserdependencyTokenTypeToCrossTerminalcpp(terminal_set)

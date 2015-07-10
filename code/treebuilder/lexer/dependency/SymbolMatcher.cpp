@@ -34,9 +34,11 @@ namespace tul
 					else if (lexeme == "^") return protocols::TokenType::SYMBOL_CARET;
 					else if (lexeme == "\\") return protocols::TokenType::SYMBOL_BACKWARD_SLASH;
 					else if (lexeme == ">>") return protocols::TokenType::SYMBOL_GREATER_THAN__GREATER_THAN;
+					else if (lexeme == ">=") return protocols::TokenType::SYMBOL_GREATER_THAN__EQUAL;
 					else if (lexeme == ">") return protocols::TokenType::SYMBOL_GREATER_THAN;
 					else if (lexeme == "==") return protocols::TokenType::SYMBOL_EQUAL__EQUAL;
 					else if (lexeme == "=") return protocols::TokenType::SYMBOL_EQUAL;
+					else if (lexeme == "<=") return protocols::TokenType::SYMBOL_LESS_THAN__EQUAL;
 					else if (lexeme == "<<") return protocols::TokenType::SYMBOL_LESS_THAN__LESS_THAN;
 					else if (lexeme == "<") return protocols::TokenType::SYMBOL_LESS_THAN;
 					else if (lexeme == ";") return protocols::TokenType::SYMBOL_SEMICOLON;
