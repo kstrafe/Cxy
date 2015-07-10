@@ -30,7 +30,6 @@ namespace tul
 				{
 					switch (token_type)
 					{
-						case protocols::TokenType::ARGUMENT_LISTGROUPER_RIGHT_PARENTHESIS: return protocols::CrossTerminal::ARGUMENT_LISTGROUPER_RIGHT_PARENTHESIS;
 						case protocols::TokenType::GROUPER_LEFT_BRACE: return protocols::CrossTerminal::GROUPER_LEFT_BRACE;
 						case protocols::TokenType::GROUPER_LEFT_BRACKET: return protocols::CrossTerminal::GROUPER_LEFT_BRACKET;
 						case protocols::TokenType::GROUPER_LEFT_PARENTHESIS: return protocols::CrossTerminal::GROUPER_LEFT_PARENTHESIS;

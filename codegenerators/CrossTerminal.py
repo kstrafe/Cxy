@@ -165,7 +165,7 @@ productions = {
     ],
 ################################################################################
     'FUNCTION_SIGNATURE': [
-        ['GROUPER_LEFT_PARENTHESIS', 'ARGUMENT_LIST', 'SYMBOL_COLON', 'ARGUMENT_LIST' 'GROUPER_RIGHT_PARENTHESIS'],
+        ['GROUPER_LEFT_PARENTHESIS', 'ARGUMENT_LIST', 'SYMBOL_COLON', 'ARGUMENT_LIST', 'GROUPER_RIGHT_PARENTHESIS'],
     ],
     'STATEMENT_LIST': [
         ['STATEMENT', 'STATEMENT_LIST'],
@@ -364,7 +364,7 @@ def createcodetreebuilderlexerdependencyKeywordMatchercpp(terminal_set):
     with open('./code/treebuilder/lexer/dependency/SymbolMatcher.cpp', 'w') as file:
         file.write(header)
         first_keyword = True
-        for i in sorted(symbols):
+        for i in sorted(symbols, reverse=True):
             if first_keyword:
                 first_keyword = False
                 file.write('if (lexeme == "' + ''.join(i[0]) + '") return protocols::TokenType::' + i[1] + ';\n')
@@ -381,7 +381,7 @@ def createcodetreebuilderparserdependencyCrossTerminalParserinc():
         lines_.append(ParserTableGenerator.generateTransitionMapCode(transitions_, productions))
 
     with open('./code/treebuilder/parser/dependency/CrossTerminalParser.inc', 'w') as file:
-        file.write('\n'.join(lines_))
+        file.write(LICENSE_STRING + '\n'.join(lines_))
 
 
 def createcodetreebuilderparserdependencyCrossTerminalToStringcpp(terminal_set, non_terminal_set):

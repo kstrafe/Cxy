@@ -79,7 +79,6 @@ namespace tul
 						case protocols::CrossTerminal::SUBROUTINE: return "SUBROUTINE";
 						case protocols::CrossTerminal::SUBROUTINE_LIST: return "SUBROUTINE_LIST";
 						case protocols::CrossTerminal::TYPE: return "TYPE";
-						case protocols::CrossTerminal::ARGUMENT_LISTGROUPER_RIGHT_PARENTHESIS: return "ARGUMENT_LISTGROUPER_RIGHT_PARENTHESIS";
 						case protocols::CrossTerminal::GROUPER_LEFT_BRACE: return "GROUPER_LEFT_BRACE";
 						case protocols::CrossTerminal::GROUPER_LEFT_BRACKET: return "GROUPER_LEFT_BRACKET";
 						case protocols::CrossTerminal::GROUPER_LEFT_PARENTHESIS: return "GROUPER_LEFT_PARENTHESIS";
