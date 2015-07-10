@@ -32,12 +32,11 @@ namespace tul
         for (int i = 0; i < token_stack.size(); ++i)
         {
           // std::cout << parser::dependency::CrossTerminalToString::convertToString(parser::dependency::TokenTypeToCrossTerminal::convertToCrossTerminal(token_stack.back().token_type)) << std::endl;
-          if (false == parser_object.parseSymbol(token_stack[token_stack.size() - 1]))
+          if (false == parser_object.parseSymbol(token_stack[i]))
           {
             std::cout << "Parser failed" << std::endl;
             return false;
           }
-          token_stack.pop_back();
         }
         token_stack.clear();
         return true;
