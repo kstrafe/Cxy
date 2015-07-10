@@ -60,8 +60,11 @@ namespace tul
 						case protocols::CrossTerminal::FUNCTION_DEFINITION: return "FUNCTION_DEFINITION";
 						case protocols::CrossTerminal::FUNCTION_LIST: return "FUNCTION_LIST";
 						case protocols::CrossTerminal::FUNCTION_SIGNATURE: return "FUNCTION_SIGNATURE";
+						case protocols::CrossTerminal::GOTO_STATEMENT: return "GOTO_STATEMENT";
 						case protocols::CrossTerminal::IF_STATEMENT: return "IF_STATEMENT";
 						case protocols::CrossTerminal::ITER_STATEMENT: return "ITER_STATEMENT";
+						case protocols::CrossTerminal::LABEL_STATEMENT: return "LABEL_STATEMENT";
+						case protocols::CrossTerminal::MEMBER_EXPRESSION: return "MEMBER_EXPRESSION";
 						case protocols::CrossTerminal::METHOD_DECLARATION_LIST: return "METHOD_DECLARATION_LIST";
 						case protocols::CrossTerminal::MULTIPLICATIVE_EXPRESSION: return "MULTIPLICATIVE_EXPRESSION";
 						case protocols::CrossTerminal::NONE: return "NONE";
@@ -75,6 +78,7 @@ namespace tul
 						case protocols::CrossTerminal::OPTIONAL_CALL: return "OPTIONAL_CALL";
 						case protocols::CrossTerminal::OPTIONAL_EQUALITY_EXPRESSION: return "OPTIONAL_EQUALITY_EXPRESSION";
 						case protocols::CrossTerminal::OPTIONAL_EQUALS: return "OPTIONAL_EQUALS";
+						case protocols::CrossTerminal::OPTIONAL_MEMBER_EXPRESSION: return "OPTIONAL_MEMBER_EXPRESSION";
 						case protocols::CrossTerminal::OPTIONAL_MULTIPLICATIVE_EXPRESSION: return "OPTIONAL_MULTIPLICATIVE_EXPRESSION";
 						case protocols::CrossTerminal::OPTIONAL_OR_EXPRESSION: return "OPTIONAL_OR_EXPRESSION";
 						case protocols::CrossTerminal::OPTIONAL_RELATIONAL_EXPRESSION: return "OPTIONAL_RELATIONAL_EXPRESSION";
@@ -88,6 +92,7 @@ namespace tul
 						case protocols::CrossTerminal::SUBROUTINE: return "SUBROUTINE";
 						case protocols::CrossTerminal::SUBROUTINE_LIST: return "SUBROUTINE_LIST";
 						case protocols::CrossTerminal::TYPE: return "TYPE";
+						case protocols::CrossTerminal::UNARY_EXPRESSION: return "UNARY_EXPRESSION";
 						case protocols::CrossTerminal::WHILE_STATEMENT: return "WHILE_STATEMENT";
 						case protocols::CrossTerminal::GROUPER_LEFT_BRACE: return "GROUPER_LEFT_BRACE";
 						case protocols::CrossTerminal::GROUPER_LEFT_BRACKET: return "GROUPER_LEFT_BRACKET";

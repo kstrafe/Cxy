@@ -201,7 +201,9 @@ productions = {
     'NO_SEMICOLON_STATEMENT': [
         ['DO_STATEMENT'],
         ['FOR_STATEMENT'],
+        ['GOTO_STATEMENT'],
         ['IF_STATEMENT'],
+        ['LABEL_STATEMENT'],
         ['WHILE_STATEMENT'],
     ],
     'EXPRESSION': [
@@ -227,8 +229,14 @@ productions = {
     'FOR_STATEMENT': [
         ['KEYWORD_FOR', 'GROUPER_LEFT_PARENTHESIS', 'DATA_DECLARATION', 'SYMBOL_SEMICOLON', 'EXPRESSION', 'SYMBOL_SEMICOLON', 'STATEMENT_LIST', 'GROUPER_RIGHT_PARENTHESIS', 'CODE_BLOCK']
     ],
+    'GOTO_STATEMENT': [
+        ['KEYWORD_GOTO', 'IDENTIFIER_VARIABLE']
+    ],
     'IF_STATEMENT': [
         ['KEYWORD_IF', 'GROUPER_LEFT_PARENTHESIS', 'EXPRESSION', 'GROUPER_RIGHT_PARENTHESIS', 'CODE_BLOCK']
+    ],
+    'LABEL_STATEMENT': [
+        ['KEYWORD_LABEL', 'IDENTIFIER_VARIABLE']
     ],
     'WHILE_STATEMENT': [
         ['KEYWORD_WHILE', 'GROUPER_LEFT_PARENTHESIS', 'EXPRESSION', 'GROUPER_RIGHT_PARENTHESIS', 'CODE_BLOCK']
@@ -300,8 +308,7 @@ productions = {
     ],
 ################################################################################
     'MULTIPLICATIVE_EXPRESSION': [
-        ['RESOURCE', 'OPTIONAL_MULTIPLICATIVE_EXPRESSION'],
-        ['IDENTIFIER_SUBROUTINE', 'GROUPER_LEFT_PARENTHESIS', 'GROUPER_RIGHT_PARENTHESIS']
+        ['UNARY_EXPRESSION', 'OPTIONAL_MULTIPLICATIVE_EXPRESSION'],
     ],
     'OPTIONAL_ADDITIVE_EXPRESSION': [
         ['SYMBOL_PLUS', 'ADDITIVE_EXPRESSION'],
@@ -309,9 +316,26 @@ productions = {
         []
     ],
 ################################################################################
+    'UNARY_EXPRESSION': [
+        ['SYMBOL_EXCLAMATION_MARK'],
+        ['MEMBER_EXPRESSION'],
+        ['SYMBOL_MINUS', 'UNARY_EXPRESSION'],
+    ],
     'OPTIONAL_MULTIPLICATIVE_EXPRESSION': [
         ['SYMBOL_STAR', 'MULTIPLICATIVE_EXPRESSION'],
         ['SYMBOL_FORWARD_SLASH', 'MULTIPLICATIVE_EXPRESSION'],
+        []
+    ],
+################################################################################
+    'MEMBER_EXPRESSION': [
+        ['IDENTIFIER_CLASS', 'SYMBOL_DOT', 'MEMBER_EXPRESSION'],
+        ['IDENTIFIER_PACKAGE', 'SYMBOL_DOT', 'MEMBER_EXPRESSION'],
+        ['IDENTIFIER_SUBROUTINE', 'GROUPER_LEFT_PARENTHESIS', 'GROUPER_RIGHT_PARENTHESIS'],
+        ['RESOURCE', 'OPTIONAL_MEMBER_EXPRESSION'],
+    ],
+################################################################################
+    'OPTIONAL_MEMBER_EXPRESSION': [
+        ['SYMBOL_DOT', 'MEMBER_EXPRESSION'],
         []
     ],
 ################################################################################

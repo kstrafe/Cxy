@@ -25,6 +25,10 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 #include <iostream>
 
 
+////////////////////////////////////////////////////////////////////////////////
+// This is only a small utility validator... if you want to see how
+// TreeBuilder works just go down to "TEST_CASE"
+////////////////////////////////////////////////////////////////////////////////
 namespace
 {
   bool validate(const std::string &string)
@@ -51,16 +55,27 @@ namespace
     return ret_val;
   }
 }
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
-
+////////////////////////////////////////////////////////////////////////////////
+// The API is quite simple. It is demonstrated and tested here.
+////////////////////////////////////////////////////////////////////////////////
 TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 {
-  SECTION("Attempting to create a small tree of one node (enter)")
-  {
-    using namespace tul::treebuilder;
+  using namespace tul::treebuilder;
 
+  SECTION("Attempting to validate a small program")
+  {
+    // Create an instance and feed characters into it.
+    // Every time a character is fed the return value
+    // tells you if the input is still valid.
     TreeBuilder builder_object;
-    std::string input_string = "private Class x_; public String identifier_name; ";
+    std::string input_string = "private ClassName variable_name; public String identifier_name; ";
+    // Note the trailing space in the string. This causes the TreeBuilder to be able
+    // To turn ; into a token, and thereby finish the input. If we left it out
+    // The ; would merely be in a "current_working" state. Nothing would be invalidated,
+    // It's just that we would not see it in the tree.
     for (auto input_character : input_string)
     {
       // Note that each character is validated, and aded to the tree if it completes
@@ -78,35 +93,16 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
       REQUIRE(builder_object.buildTree(input_character));
     }
 
-    /*
-      Eventually, we want to get that tree out:
-    */
+    // Eventually, we may want to get that tree
     REQUIRE(builder_object.getConcreteSyntaxTree() != nullptr);
   }
-
+  ////////////////////////////////////////////////////////////////////////////////
   SECTION("Try parsing the optional assignments")
   {
-    using namespace tul::treebuilder;
-
-    TreeBuilder builder_object;
-    std::string input_string = "private 32u x_ = 3;";
-    for (auto input_character : input_string)
-    {
-      bool x = false;
-      CHECK((x = builder_object.buildTree(input_character)));
-      if (!x)
-      {
-        std::vector<std::string> expected = builder_object.getExpectedTokens();
-        std::cout << "\nError: expected:\n";
-        for (std::string &string : expected)
-        {
-          std::cout << string << ", " << std::endl;
-        }
-        REQUIRE(false);
-      }
-    }
+    REQUIRE(validate("private 32u value_ = 9000;"));
+    REQUIRE(validate("public 64s value_ = -9000;"));
   }
-
+  ////////////////////////////////////////////////////////////////////////////////
   SECTION("Try parsing the optional assignments")
   {
     REQUIRE(validate("restricted String str_ = "));
@@ -114,7 +110,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
     REQUIRE(validate("restricted String str_ = \"Is this also good?\" + \"\nHopefully we can add strings together!\"; "));
     REQUIRE(validate("restricted String str_ = \"Is this also good?\" + \"\nHopefully we can add strings together!\" + \"AND EVEN \"\"MORE\"\"\"; "));
   }
-
+  ////////////////////////////////////////////////////////////////////////////////
   SECTION("Check non-data class with expressions")
   {
     REQUIRE(validate("public (:) "));
@@ -151,7 +147,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
     REQUIRE(false == validate("public (:) enterProgram { const const ClassName alpha_; }"));
     REQUIRE(validate("public (:) enterProgram { const ptr const ClassName alpha_; }"));
   }
-
+  ////////////////////////////////////////////////////////////////////////////////
   SECTION("A class using different statement types")
   {
     REQUIRE
@@ -167,13 +163,56 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
             {
               if (counter_ > 500 + 20)
               { printSomething(); }
-              for (const 33s cuda_ = 10; cuda_ < 20; ++cuda_;)
-              {}
+              for (const 33s cuda_ = 10; cuda_ < 20; ++cuda_; --cuda_;)
+              {
+                ++global_var;
+              }
             }
           }
         )"
       )
     );
   }
+  ////////////////////////////////////////////////////////////////////////////////
+  SECTION("Multiple function definitions")
+  {
+    ////////////////////////////////////////////////////////////
+    REQUIRE
+    (validate(R"(
+
+    restricted 32u variable_ = 0;
+
+    public (:) enterProgram
+    {
+      ++variable_;
+    }
+
+    private (:) performCalculation
+    {
+      --variable_;
+    }
+
+    )"));
+    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////
+    REQUIRE
+    (validate(R"(
+
+    restricted 32u variable_ = 0;
+
+    public (:) enterProgram
+    {
+      ++variable_;
+    }
+
+    private (:) performCalculation
+    {
+      --variable_;
+    }
+
+    )"));
+    ////////////////////////////////////////////////////////////
+  }
+
 
 }
