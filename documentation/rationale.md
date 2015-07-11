@@ -753,8 +753,10 @@ What about the different operator types and define their semantics:
     ~     // Extracts the specified return parameter from a function call
 
     // Reference operators
-    $     // Gets the address of a variable
-    @     // Dereferences a pointer to a variable
+    $      // Gets the address of a variable
+    $$     // Gets the address to a const variable
+    @      // Dereferences a pointer to a variable
+    @@     // Dereferences a pointer to a const variable
 
 This is interesting because this would deprecate C-like non-operations like `!!`
 . In C, this operation would mean to NOT twice, which is nonsensical. I think
