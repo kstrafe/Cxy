@@ -9,7 +9,7 @@ you get total awesomeness. So awesome that it doesn't even have a name.
 
 # Introduction #
 To make a new programming language we need to start looking somewhere.
-We start of looking at history. Throughout the short history of programming
+We start off looking at history. Throughout the short history of programming
 we've seen languages come and go. Ideas spring to life, and subsequently die.
 There is a constant evolution: an evolution of the languages. As languages
 evolve, so do computers. Nathan's first law says `software is a gas` (
