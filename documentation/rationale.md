@@ -541,19 +541,30 @@ nicely. This should be a valid type and degenerate to a pointer to the start of
 the array. The declaration above makes it easy to visualize as well, as we can
 read and draw from left-to-right:
 
-      0-----1-----2-----3-----4
-      |     |     |     |     |
-0    32u   32u   32u   32u   32u
-1    32u   32u   32u   32u   32u
-2    32u   32u   32u   32u   32u
-3    32u   32u   32u   32u   32u
-4    32u   32u   32u   32u   32u
-5    32u   32u   32u   32u   32u
-6    32u   32u   32u   32u   32u
-7    32u   32u   32u   32u   32u
-8    32u   32u   32u   32u   32u
-9    32u   32u   32u   32u   32u
+          0-----1-----2-----3-----4
+          |     |     |     |     |
+    0    32u   32u   32u   32u   32u
+    1    32u   32u   32u   32u   32u
+    2    32u   32u   32u   32u   32u
+    3    32u   32u   32u   32u   32u
+    4    32u   32u   32u   32u   32u
+    5    32u   32u   32u   32u   32u
+    6    32u   32u   32u   32u   32u
+    7    32u   32u   32u   32u   32u
+    8    32u   32u   32u   32u   32u
+    9    32u   32u   32u   32u   32u
 
+
+How do we access an array? Well since [] haven't been used before in an
+expression, we can add them to any variable as a suffix:
+
+    [10, [20, 32u]] values_;
+    // Initialize the values...
+    assert(values[3, 5] == values[3][5]);
+
+Note that the comma-array-access-notation is syntactic sugar. If only that
+notation is used then the compiler may be able to lay them in memory as a single
+array. This often aids efficiency.
 
 *Tangent*: See `Reference Types`.
 
