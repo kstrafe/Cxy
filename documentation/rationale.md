@@ -385,7 +385,7 @@ Let's look at what appears practical
 Why use arrows when typing is cheaper using ':'? The function declaration will
 have to start with a '('. What if we want a variable of - say - a class to be
 assigned functions? Use function pointers. This means declarations starting with
-`(` are static functions that are unassignable.  
+`(` are static functions that are nonassignable.  
 Having a collected signature of functions is very clean and useful. It makes the
 language terser and is also easily parsable. Not to mention more easily
 understandable due to the nature of nested functions:
@@ -433,7 +433,7 @@ Number four and five are a little more tricky to parse. Note that variable_ will
 be an identifier. The problem with this statement is that we can allow arbitrary
 expressions as statements (function calls mostly). We can not know until we
 parse the ":" token that this is a declaration. This makes the grammar more
-error-prone. The same goes gor a human understanding. The human needs to read
+error-prone. The same goes for a human understanding. The human needs to read
 until he gets to the ":". Only then will he understand that it is a declaration.
 
 Number one and three are also interesting. I'd like to avoid the star in one
@@ -592,11 +592,11 @@ reference-of operator. There are some symbols that we should consider...
 
     $a_       // Let $ return the address-of
     $$a_      // Let $$ return a const-address-of, because an address of an
-              // address is non-sensical.
+              // address is nonsensical.
 
     @a_       // Let @ dereference a type.
     @@a_      // Let @@ return a const-reference, because a reference to a
-              // reference is non-sensical.
+              // reference is nonsensical.
 
     ^a_       // Let ^ return the actual object pointed to.
     ^^a_      // Let ^^ return a const-object that is pointed to.
@@ -757,7 +757,7 @@ What about the different operator types and define their semantics:
     @     // Dereferences a pointer to a variable
 
 This is interesting because this would deprecate C-like non-operations like `!!`
-. In C, this operation would mean to NOT twice, which is non-sensical. I think
+. In C, this operation would mean to NOT twice, which is nonsensical. I think
 C might've had the idea that, since ! is a unary operator, that it would not be
 useful to force groupings of symbols to mean something else. This needs to be
 conveyed clearly to anyone using the language. Symbols are always grouper
@@ -934,7 +934,7 @@ allows subtrees of dependencies to share data in a simple manner. It also
 localizes data to the top node that declares the glocal.
 
 Looking back at Classes and Data Structures reminds me that we need to know -
-preferably without searching other classes - what typ the glocal `action_stage`
+preferably without searching other classes - what type the glocal `action_stage`
 is. We can try the following:
 
     // Child.tul
@@ -1152,7 +1152,7 @@ include a dependency by walking up the tree. First we try the descendants, then
 the current folder, the parent, that parent's parent, etc... root.
 
 Is this a good solution? It somehow manage itself under the dynamic discovery
-problem. It also allows us to promote certain modules to a higher leven if they
+problem. It also allows us to promote certain modules to a higher level if they
 are requested there. The problem this creates is that all classes ought to have
 different names. Is it really that much of a problem though..? We could say that
 all classes can have the same name so long they are not in the same folder. I
