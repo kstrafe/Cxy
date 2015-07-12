@@ -1,7 +1,7 @@
 # How UL Came To Be #
-I was programming and it suddenly struck me: "It needs to be simple".
+I was programming and it suddenly struck me: "It must be simple".
 My view on life changed in an instant. Boom. It was over. It's happening.
-It needs to be simple.
+It must be simple.
 
 You take professional laziness and mix it together with my love of sleep and
 you get total awesomeness. So awesome that it doesn't even have a name.
@@ -9,19 +9,19 @@ you get total awesomeness. So awesome that it doesn't even have a name.
 
 # Introduction #
 To make a new programming language we need to start looking somewhere.
-We start off looking at history. Throughout the short history of programming
-we've seen languages come and go. Ideas spring to life, and subsequently die.
-There is a constant evolution: an evolution of the languages. As languages
+We start looking at history. Throughout the short history of programming
+we've seen languages come and go. Ideas born, and then die.
+There is a constant evolution: the evolution of the languages. As languages
 evolve, so do computers. Nathan's first law says `software is a gas` (
 as the computing power expands, so does the software's computing requirements).
 Programming languages have followed Nathan's first law. A language that
-mitigates tedious operations from the programmer to the computer can be called
+mitigates tedious operations from the programmer to the computer is called
 `higher leveled` than a language that does not.
 
 Some languages, like C++, may use abstractions that do not incur a run-time
 overhead. A good example of this are what we call "templates" in C++. A template
 basically generates code (Not exactly, but this will be understandable
-for the non-c++ crowd). Sometimes though, C++ compilers perform a long time
+for the non-c++ crowd). Sometimes though, C++ compilers spend a long time
 processing templates during compile-time.
 
 Other languages like Python or JavaScript dynamically (during run-time) abstract
@@ -45,45 +45,46 @@ To remedy the problem, the programmer could create a code-generator in some
 scripting language. This would be easy and fast - if he knew a scripting
 language. The trouble with using another language is that it's non-standard.
 It's a hack. And when requirements change, the entire code-generator may not
-have the ability to recognize configuration.
+be able to recognize configuration.
 
 So the programmer adds a tonne of functionality to the code-generator and it
 becomes a grand mix of spaghetti and unrecognizable sauce with chunks so small
-that they're hard to identify.
+that they're difficult to study.
 
 Having code-generation would be nice. Actual injected code, that is.  
 
 Code generation is not the only thing to consider. An interesting  programming
-language is called "Haskell". Haskell has this fantastic system where we
-consider functions to be "pure". Unfortunately, haskell as a language is
+language is "Haskell". Haskell has this fantastic system where we
+consider functions as "pure". Unfortunately, Haskell as a language is
 remarkably impractical, and more on the forefront of theoretical language
 research.
 We're not looking for that.
 We're looking to solve problems. Fast. Safely. Cleanly.
 
-Functional purity is at the heart of cleanliness and safety. The codebase
+Functional purity is at the heart of cleanliness and safety. The code base
 becomes a lot more reliable with pure semantics. The fact that you can
-designate an entire subtree of code as "pure" means that you can move that tree
+appoint an entire sub-tree of code as "pure" means that you can move that tree
 pretty much anywhere, call its top-level function, and it'll work. Guaranteed.
 It won't read or write mutable state, and it will not return different things
-for the same input.
+for the same input data.
 
 That's nice to know. Now what's this "sub-tree" and "top-level" I'm talking
 about?
 
 Java is a programming language where we can take this from (as well as Python).
 In Java, the natural thing to do is to list dependencies from the directory
-that the compiler is invoked in, also known as the "classpath". This means that
+that the compiler gets invoked from, also known as the "classpath". This means that
 if we have two folders with one file each:
 
-          | a/ -> A.java
-    Root/ |
+
+    Root/ | a/ -> A.java
+          |
           | b/ -> B.java
 
 Then if A uses B, it will need to import b/B (b.B in Java). Using such a
 mechanism would keep dependencies organized and clean. If you've ever looked
-at any C project you'll know that B.c could contain 15 different structs
-and whenever a struct is referenced from another file that imports 20
+at any C project you'll know that B.c could contain 15 different structs.
+When a struct is referenced from another file that imports 20
 other files, you have to search through all those files to find the struct.
 This is a major weakness that I would like to address and enforce the solution
 of.
@@ -94,20 +95,20 @@ be expanded into different domains. Not only are pure functions possible, but
 so are pure trees.
 
     pure tree:
-      Create an object 'a_' of a pure subtree.
+      Create an object 'a_' of a pure sub-tree.
       Perform a finite amount of operations on 'a_'.
 
-      Create an object 'b_' of the same pure subtree as 'a_'.
+      Create an object 'b_' of the same pure sub-tree as 'a_'.
       Perform the same operations as performed on 'a_', on 'b_'.
 
       The two objects should be in an exactly equal state.
 
-This makes sense because we can only guarantee purity if the subtree
-(from here on referred to as module) modules do not have any other data that
-might make them unequal. For example, if an object read from an implicit
-variable, or from a socket. We can not guarantee modular purity in those cases.
+This makes sense because we can only guarantee purity if the sub-tree
+(from here on referred to as module) does not access any other data that
+might make them unequal. we can not guarantee modular purity if some data is
+read from an implicit variable, or from a socket.
 
-Good, we got a few ideas written down:
+Good, we got a few ideas written:
 * Meta Programming
 * Functional Purity
 * Modular Purity
@@ -116,9 +117,9 @@ Good, we got a few ideas written down:
 What about platform dependence? Ah yes, something Java has always boasted about.
 Never forget: it's not "Code once, run everywhere", it's "Code once,
 test everywhere". Still, it'd be nice to have _some_ guarantees. In any case,
-having all our pure modules work on every platform should work. After all, it's
-a computation. It's logic. No Input/Output. No OpenGL rendering. No printing.
-Pure parts should be fully portable.
+having all our pure modules work on every platform is a requirement. After all
+, it's a computation. It's logic. No Input/Output. No OpenGL rendering. No
+printing. Pure parts should be fully portable.
 
 One thing that has always annoyed me is the inability to define your own bit
 requirements. I sometimes want a 15 bit integer because I just want it.
@@ -132,14 +133,17 @@ those 19 bits. You give the compiler the ability to optimize for speed and size
 on the platform you are compiling on. That's a good thing to have.
 
 For the non-pure parts, it's probably fine having a wrapper library (not part
-of the language) or just using a static if. A static if is evaluated during
+of the language) or just using a `static if`. A static if is evaluated during
 compile time. This way we can check if we need to call system with "cls" or
-"clear", depending on the platform.
+"clear", depending on the platform. The nice thing about the static if is that
+the program will compile even if the body uses module(s) that don't exist. The
+reason for this is because the static if truly makes code invisible if its
+condition is false.
 
 Oh, and something I've always wanted: a "global" tied to a class object's scope.
 This "glocal" is implicitly passed to all functions called from within the
 object. This makes all objects that use the glocal impure, but if the module
-that provides the glocal itself does not use any global/glocal, then the subtree
+that provides the glocal itself does not use any global/glocal, then the sub-tree
 will be pure.
 
 * Meta Programming
@@ -159,8 +163,8 @@ It would be useful if all these elements can be identified by their name alone.
 
 Good. Anything else? I think we've got most of it covered. Note that the tree
 structure should be enforced such that you have only access to two paths:
-1. A top-level modules (directly from root)
-2. Direct children (relative from you)
+1. Modules in root
+2. Direct children (relative to the current module)
 
 This prevents ugly graphs of dependencies and promotes local growth of
 necessities. Of course sometimes we need to import a library like OpenGL, or
@@ -168,10 +172,10 @@ a UNIX socket library. In that case, we can safely know that only our impure
 parts may import this (since OpenGL and UNIX sockets are impure).
 
 Another idea regarding this is the handling of globals. How are globals to be
-handled? A global of pure modules should be fine. Anyone in the dependency tree
+handled? A global of a pure module should be fine. Anyone in the dependency tree
 who uses this global is to be deemed impure. You can imagine a global as an
-implicit parameter that is everywhere. This would not make pure functions impure
- but we say it does simply because it is _implicit information_.
+implicit parameter. This would not make pure functions impure but we say it does
+simply because it is _implicit information_.
 
 What about globals that are impure? How are they to be handled? There's a
 solution that I've been toying around with. Suppose there are either two
@@ -208,6 +212,7 @@ mean that Cool, B, and Basename may gain access to OpenGL. Luckily, the entire
 OpenGL module will only be a single entity. If we want to make more entities, we
 need to change the tree:
 
+    .
                             | B.tul
                  | b/       | Basename.tul
                  |
@@ -218,7 +223,7 @@ need to change the tree:
             | oglmany/ | OpenGLWrap.tul
 
 Suppose OpenGLWrap is merely a module that uses OpenGL. It is automatically
-impure. When Aa now declared OpenGLWrap global, one instance is created.
+impure. When Aa now declares OpenGLWrap global, one instance is created.
 This single instance is however able to create many instances of OpenGL.
 
 Again, we're forced to always go through OpenGLWrap as a gateway, as we're
@@ -227,6 +232,7 @@ unable to access the contained OpenGL object because they're impure.
 Let's look at pure dependencies and how they are more friendly (this promotes
 using pure modules.):
 
+    .
                             | B.tul
                  | b/       | Basename.tul
                  |
@@ -242,8 +248,8 @@ using pure modules.):
             |
             | customstrings/  | UTF8String.tul
 
-Suppose all but the a/ subtree is pure. array, datastructures, and customstrings
-are all pure subtrees. In fact, all containing files have to be pure in this
+Suppose all but the a/ sub-tree is pure. array, datastructures, and customstrings
+are all pure sub-trees. In fact, all containing files have to be pure in this
 case. Now suppose that Aa wishes to use UTF8String, but so does B. Is this
 allowed? Yes! Because they're pure it's perfectly valid and even encouraged!
 This way we move as much of the logic to the pure modules. This improves
@@ -263,7 +269,7 @@ To summarize (TL;DR):
 * Tree Structure
 * Relative and classpath includes
   * Only allow direct child access. No transitive access. Deeper parts are to be
-  considered internal 'private' modules.
+  considered internal - 'private' - modules.
 * User-Defined Bit-Length Integers
 * Pure Modules Portable
 * Glocal
@@ -280,15 +286,15 @@ The standard GNU versioning scheme will be applied.
 
 # General Note #
 The sections are divided into different topics. Each topic starts with possible
-cases/uses. Then we choose one and give a reason. At the end a result is stated.  
-The result is in a grammar specification. All characters are terminals except
-for <:enclosed:> lexemes. These are non-terminals. Any point in the topic may be
-interjected with the "tangent"s. Tangents refer to another topic in order to
-clarify what is later used in the current topic.
+cases/uses. Then we choose one and give a reason. The result is stated at the
+end. The result is in a grammar specification. All characters are terminals
+except for <:enclosed:> lexemes. These are non-terminals. Any point in the
+topic may be interjected with the "tangent"s. Tangents refer to another topic in
+order to clarify what is later used in the current topic.
 
 The format of a rationale-entry is:
 * Problem - A short description of the problem that needs to be resolved
-* Discussion - A short discussion of potential solutions
+* Discussion - A discussion of potential solutions
 * Conclusion - A subset of the discussion is presented as the solution
 
 An additional entry called the "tangent" may be added. This is placed such that
@@ -298,7 +304,15 @@ problem. It can be peppered in anywhere. Let's start with the rationale!
 # Index #
 * Entry Point
 * Function Declaration
-
+* Variable/Type Declaration
+* Plain Old Data (POD) Types
+* Reference Types
+* Naming Scheme
+* Operators
+* Classes and Data Structures
+* Globals and Glocals
+* Const Correctness and Purity
+* Module Organization
 
 ## Entry Point ##
 
@@ -749,6 +763,29 @@ What about the different operator types and define their semantics:
     /     // Divide two elements.
     %     // Take the remainder of the left side with respect to the right side.
 
+   	// Comparison operators
+   	== 	  // Equal to
+   	>= 	  // Greater than or equal
+   	<= 	  // Less than or equal to
+   	!!=   // Not equal to
+   	>	    // Greater than
+   	<	    // Less than
+
+   	// Compound operators
+   	+= 	  // Add to
+   	-= 	  // Subtract from
+   	*= 	  // Multiply bu
+   	/= 	  // Divide by
+   	%= 	  // Modulo by
+
+   	&&=   // AND by
+   	||=   // OR by
+   	^^=   // XOR by
+
+   	&=    // Bitwise AND by
+   	|=    // Bitwise OR by
+   	^=    // Bitwise XOR by
+
     // Boolean operators
     &&    // Logical AND
     ||    // Logical OR
@@ -943,7 +980,7 @@ I shall present you to the "glocal". This is a global tied to a single object.
 
 Note that the above example does not require us to pass action_stage into
 child_node's `doSomething` method, yet it was still given read access. This
-allows subtrees of dependencies to share data in a simple manner. It also
+allows sub-trees of dependencies to share data in a simple manner. It also
 localizes data to the top node that declares the glocal.
 
 Looking back at Classes and Data Structures reminds me that we need to know -
@@ -962,7 +999,7 @@ Should we have `extern global` and `extern global`? Should the distinction not
 be there? If our module declares just an `extern` variable, how will that module
 be observed by us? Will we think: "Oh, look, a module. It has a dependency. If I
 tie it to a custom class that provides that dependency then that'll be a pure
-subtree. No worries."? In any case, what's the difference between a glocal and
+sub-tree. No worries."? In any case, what's the difference between a glocal and
 a global on a conceptual level?
 
 We know the global to be independent of any object's instances, yet a glocal is
@@ -979,7 +1016,7 @@ utilizes both types of externs:
     extern glocal 32u object_count;
 
 What's actually quite useful is that it can read and/or write its own object
-count used within a pure subtree. It can also read/write the global object
+count used within a pure sub-tree. It can also read/write the global object
 count. Is it useful to know this? I suppose it's a little more comforting
 from the programmer's standpoint to see "glocal" instead of nothing. That means
 it's probably not a terribly dangerous object to read or write from.
@@ -1074,8 +1111,8 @@ observed. Imagine the following:
 
     (32u array_: : pure) cleverAlgorithm
     {
-      ptr 32u int_arr = new [32u, 100]; // Create 100 objects of 32u
-      ptr 32u int_arr2 = new [32u, 100]; // Create 100 objects of 32u
+      ptr 32u int_arr = new [100, 32u]; // Create 100 objects of 32u
+      ptr 32u int_arr2 = new [100, 32u]; // Create 100 objects of 32u
       if (int_arr == int_arr2)
       {
         // This if is allowed. It only checks if two pointers point to the same
@@ -1092,6 +1129,29 @@ observed. Imagine the following:
       return array_: int_arr;
     }
 
+Notice that using the new operator on a type creates an object of the entirety
+of that type. This means that `new [5, [3, 8u]]` will instantiate the entire
+table five pointers to three 8u variables. If you want to prevent this, then one
+can do so by degenerating to a pointer: `new [5, ptr 8u]`. This allocates five
+pointers to 8u. The pointers are of unknown size and hence not initialized.
+One can now loop over them and assign different sizes.
+
+    32u amount_ = 5;
+    ptr ptr 8u a_ = new [amount_, ptr 8u];
+    for (32u i_ = 0; i_ < amount_; ++i;)
+    {
+    	a_[i_] = new [i_ + 1, 8u];
+    }
+
+The above code should create the following two-dimensional array.
+
+    O----O----O----O----O
+    |    |    |    |    |
+    8u   8u   8u   8u   8u
+         8u   8u   8u   8u
+              8u   8u   8u
+                   8u   8u
+                        8u
 
 *Conclusion*: To declare const and/or pure methods, and pure modules, we write
 this property in the signature.
@@ -1139,14 +1199,14 @@ their trees. I will formalize a tree format using indentation.
 An idea is to state the following:
   A dependency is only located from:
 
-  * Subtree directories - without transitivity
+  * Sub-tree directories - without transitivity
   * Root directory - without transitivity
 
 This means that you can only access direct subdirectory modules, but you can not
 enter their subdirectories again. The same goes for what is accessible from root
 . This forces isolation and dependency management.
 
-The problem with the above proposal is that it's impossible to define subtree
+The problem with the above proposal is that it's impossible to define sub-tree
 local protocols. Suppose my `Alpha.tul` as shown in the above graph would like to
 communicate to the different algorithms using a protocols that is intrinsic to
 those algorithms. This forces that protocol (a module basically) to reside
@@ -1173,7 +1233,7 @@ strongly dislike the idea entirely because it makes us - the programmers - look
 for dependencies manually. That's something to be avoided.
 
 At least the programmer will know that the module resides either in the children
-or the subtree above, but not all the branches. This makes it a tonne easier to
+or the sub-tree above, but not all the branches. This makes it a tonne easier to
 locate. I still don't like the idea because it's too tempting to state that a
 module only has access to its children and root. That would make projects flat
 and clean.
