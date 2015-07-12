@@ -38,6 +38,7 @@ namespace tul
 					else if (lexeme == "private") return protocols::TokenType::KEYWORD_PRIVATE;
 					else if (lexeme == "ptr") return protocols::TokenType::KEYWORD_PTR;
 					else if (lexeme == "public") return protocols::TokenType::KEYWORD_PUBLIC;
+					else if (lexeme == "ref") return protocols::TokenType::KEYWORD_REF;
 					else if (lexeme == "restricted") return protocols::TokenType::KEYWORD_RESTRICTED;
 					else if (lexeme == "while") return protocols::TokenType::KEYWORD_WHILE;
 					else return protocols::TokenType::UNIDENTIFIED;

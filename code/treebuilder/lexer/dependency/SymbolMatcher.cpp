@@ -33,6 +33,8 @@ namespace tul
 					else if (lexeme == "|") return protocols::TokenType::SYMBOL_BAR;
 					else if (lexeme == "^") return protocols::TokenType::SYMBOL_CARET;
 					else if (lexeme == "\\") return protocols::TokenType::SYMBOL_BACKWARD_SLASH;
+					else if (lexeme == "@@") return protocols::TokenType::SYMBOL_APETAIL__APETAIL;
+					else if (lexeme == "@") return protocols::TokenType::SYMBOL_APETAIL;
 					else if (lexeme == ">>") return protocols::TokenType::SYMBOL_GREATER_THAN__GREATER_THAN;
 					else if (lexeme == ">=") return protocols::TokenType::SYMBOL_GREATER_THAN__EQUAL;
 					else if (lexeme == ">") return protocols::TokenType::SYMBOL_GREATER_THAN;
@@ -56,6 +58,9 @@ namespace tul
 					else if (lexeme == "*") return protocols::TokenType::SYMBOL_STAR;
 					else if (lexeme == "&&") return protocols::TokenType::SYMBOL_AMPERSAND__AMPERSAND;
 					else if (lexeme == "&") return protocols::TokenType::SYMBOL_AMPERSAND;
+					else if (lexeme == "$$") return protocols::TokenType::SYMBOL_DOLLAR__DOLLAR;
+					else if (lexeme == "$") return protocols::TokenType::SYMBOL_DOLLAR;
+					else if (lexeme == "!!") return protocols::TokenType::SYMBOL_EXCLAMATION_MARK__EXCLAMATION_MARK;
 					else if (lexeme == "!") return protocols::TokenType::SYMBOL_EXCLAMATION_MARK;
 					else return protocols::TokenType::UNIDENTIFIED;
 				}

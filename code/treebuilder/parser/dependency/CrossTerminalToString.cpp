@@ -46,7 +46,6 @@ namespace tul
 						case protocols::CrossTerminal::COMMA_SEPARATED_LIST_ITEM: return "COMMA_SEPARATED_LIST_ITEM";
 						case protocols::CrossTerminal::COMMA_SEPARATED_TYPE_AND_NAME_LIST: return "COMMA_SEPARATED_TYPE_AND_NAME_LIST";
 						case protocols::CrossTerminal::DATA_DECLARATION: return "DATA_DECLARATION";
-						case protocols::CrossTerminal::DATA_DECLARATION_NO_CONST: return "DATA_DECLARATION_NO_CONST";
 						case protocols::CrossTerminal::DECLARATION: return "DECLARATION";
 						case protocols::CrossTerminal::DECL_OR_FUNC: return "DECL_OR_FUNC";
 						case protocols::CrossTerminal::DO_STATEMENT: return "DO_STATEMENT";
@@ -92,6 +91,10 @@ namespace tul
 						case protocols::CrossTerminal::SUBROUTINE: return "SUBROUTINE";
 						case protocols::CrossTerminal::SUBROUTINE_LIST: return "SUBROUTINE_LIST";
 						case protocols::CrossTerminal::TYPE: return "TYPE";
+						case protocols::CrossTerminal::TYPE_PREFIX: return "TYPE_PREFIX";
+						case protocols::CrossTerminal::TYPE_PREFIX_AFTER_CONST: return "TYPE_PREFIX_AFTER_CONST";
+						case protocols::CrossTerminal::TYPE_PREFIX_AFTER_REF: return "TYPE_PREFIX_AFTER_REF";
+						case protocols::CrossTerminal::TYPE_PREFIX_AFTER_REF_CONST: return "TYPE_PREFIX_AFTER_REF_CONST";
 						case protocols::CrossTerminal::UNARY_EXPRESSION: return "UNARY_EXPRESSION";
 						case protocols::CrossTerminal::WHILE_STATEMENT: return "WHILE_STATEMENT";
 						case protocols::CrossTerminal::GROUPER_LEFT_BRACE: return "GROUPER_LEFT_BRACE";
@@ -116,6 +119,7 @@ namespace tul
 						case protocols::CrossTerminal::KEYWORD_PRIVATE: return "KEYWORD_PRIVATE";
 						case protocols::CrossTerminal::KEYWORD_PTR: return "KEYWORD_PTR";
 						case protocols::CrossTerminal::KEYWORD_PUBLIC: return "KEYWORD_PUBLIC";
+						case protocols::CrossTerminal::KEYWORD_REF: return "KEYWORD_REF";
 						case protocols::CrossTerminal::KEYWORD_RESTRICTED: return "KEYWORD_RESTRICTED";
 						case protocols::CrossTerminal::KEYWORD_WHILE: return "KEYWORD_WHILE";
 						case protocols::CrossTerminal::PRIMITIVE_SIGNED: return "PRIMITIVE_SIGNED";
@@ -123,6 +127,8 @@ namespace tul
 						case protocols::CrossTerminal::STRING: return "STRING";
 						case protocols::CrossTerminal::SYMBOL_AMPERSAND: return "SYMBOL_AMPERSAND";
 						case protocols::CrossTerminal::SYMBOL_AMPERSAND__AMPERSAND: return "SYMBOL_AMPERSAND__AMPERSAND";
+						case protocols::CrossTerminal::SYMBOL_APETAIL: return "SYMBOL_APETAIL";
+						case protocols::CrossTerminal::SYMBOL_APETAIL__APETAIL: return "SYMBOL_APETAIL__APETAIL";
 						case protocols::CrossTerminal::SYMBOL_BACKWARD_SLASH: return "SYMBOL_BACKWARD_SLASH";
 						case protocols::CrossTerminal::SYMBOL_BAR: return "SYMBOL_BAR";
 						case protocols::CrossTerminal::SYMBOL_BAR__BAR: return "SYMBOL_BAR__BAR";
@@ -130,11 +136,14 @@ namespace tul
 						case protocols::CrossTerminal::SYMBOL_COLON: return "SYMBOL_COLON";
 						case protocols::CrossTerminal::SYMBOL_COLON__COLON: return "SYMBOL_COLON__COLON";
 						case protocols::CrossTerminal::SYMBOL_COMMA: return "SYMBOL_COMMA";
+						case protocols::CrossTerminal::SYMBOL_DOLLAR: return "SYMBOL_DOLLAR";
+						case protocols::CrossTerminal::SYMBOL_DOLLAR__DOLLAR: return "SYMBOL_DOLLAR__DOLLAR";
 						case protocols::CrossTerminal::SYMBOL_DOT: return "SYMBOL_DOT";
 						case protocols::CrossTerminal::SYMBOL_DOT__DOT: return "SYMBOL_DOT__DOT";
 						case protocols::CrossTerminal::SYMBOL_EQUAL: return "SYMBOL_EQUAL";
 						case protocols::CrossTerminal::SYMBOL_EQUAL__EQUAL: return "SYMBOL_EQUAL__EQUAL";
 						case protocols::CrossTerminal::SYMBOL_EXCLAMATION_MARK: return "SYMBOL_EXCLAMATION_MARK";
+						case protocols::CrossTerminal::SYMBOL_EXCLAMATION_MARK__EXCLAMATION_MARK: return "SYMBOL_EXCLAMATION_MARK__EXCLAMATION_MARK";
 						case protocols::CrossTerminal::SYMBOL_FORWARD_SLASH: return "SYMBOL_FORWARD_SLASH";
 						case protocols::CrossTerminal::SYMBOL_GREATER_THAN: return "SYMBOL_GREATER_THAN";
 						case protocols::CrossTerminal::SYMBOL_GREATER_THAN__EQUAL: return "SYMBOL_GREATER_THAN__EQUAL";

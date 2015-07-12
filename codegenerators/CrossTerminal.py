@@ -162,8 +162,7 @@ productions = {
         []
     ],
     'DATA_DECLARATION': [
-        ['TYPE', 'IDENTIFIER_VARIABLE', 'OPTIONAL_ASSIGNMENT'],
-        ['KEYWORD_CONST', 'DATA_DECLARATION_NO_CONST'],
+        ['TYPE_PREFIX', 'IDENTIFIER_VARIABLE', 'OPTIONAL_ASSIGNMENT'],
     ],
 ################################################################################
     'FUNCTION_SIGNATURE': [
@@ -174,18 +173,15 @@ productions = {
         ['NO_SEMICOLON_STATEMENT', 'STATEMENT_LIST'],
         []
     ],
-    'TYPE': [
-        ['IDENTIFIER_CLASS'],
-        ['PRIMITIVE_SIGNED'],
-        ['PRIMITIVE_UNSIGNED'],
-    ],
     'OPTIONAL_ASSIGNMENT': [
         ['SYMBOL_EQUAL', 'EXPRESSION'],
         []
     ],
-    'DATA_DECLARATION_NO_CONST': [
-        ['TYPE', 'IDENTIFIER_VARIABLE', 'OPTIONAL_ASSIGNMENT'],
-        ['KEYWORD_PTR', 'DATA_DECLARATION']
+    'TYPE_PREFIX': [
+        ['KEYWORD_REF', 'TYPE_PREFIX_AFTER_REF'],
+        ['KEYWORD_PTR', 'TYPE_PREFIX'],
+        ['KEYWORD_CONST', 'TYPE_PREFIX_AFTER_CONST'],
+        ['TYPE'],
     ],
 ################################################################################
     'ARGUMENT_LIST': [
@@ -209,6 +205,20 @@ productions = {
     'EXPRESSION': [
         ['OR_EXPRESSION'],
     ],
+    'TYPE_PREFIX_AFTER_REF': [
+        ['TYPE'],
+        ['KEYWORD_PTR', 'TYPE_PREFIX'],
+        ['KEYWORD_CONST', 'TYPE_PREFIX_AFTER_REF_CONST'],
+    ],
+    'TYPE': [
+        ['IDENTIFIER_CLASS'],
+        ['PRIMITIVE_SIGNED'],
+        ['PRIMITIVE_UNSIGNED'],
+    ],
+    'TYPE_PREFIX_AFTER_CONST': [
+        ['TYPE'],
+        ['KEYWORD_PTR', 'TYPE_PREFIX'],
+    ],
 ################################################################################
     'ARGUMENT': [
         ['DATA_DECLARATION', 'COMMA_ARGUMENT_LIST'],
@@ -220,8 +230,8 @@ productions = {
         ['IDENTIFIER_SUBROUTINE', 'GROUPER_LEFT_PARENTHESIS', 'GROUPER_RIGHT_PARENTHESIS']
     ],
     'ITER_STATEMENT': [
-        ['SYMBOL_PLUS__PLUS', 'IDENTIFIER_VARIABLE'],
-        ['SYMBOL_MINUS__MINUS', 'IDENTIFIER_VARIABLE'],
+        ['SYMBOL_PLUS__PLUS', 'EXPRESSION'],
+        ['SYMBOL_MINUS__MINUS', 'EXPRESSION'],
     ],
     'DO_STATEMENT': [
         ['KEYWORD_DO', 'GROUPER_LEFT_PARENTHESIS', 'EXPRESSION', 'GROUPER_RIGHT_PARENTHESIS', 'CODE_BLOCK']
@@ -241,6 +251,11 @@ productions = {
     'WHILE_STATEMENT': [
         ['KEYWORD_WHILE', 'GROUPER_LEFT_PARENTHESIS', 'EXPRESSION', 'GROUPER_RIGHT_PARENTHESIS', 'CODE_BLOCK']
     ],
+    'TYPE_PREFIX_AFTER_REF_CONST': [
+        ['TYPE'],
+        ['KEYWORD_PTR', 'TYPE_PREFIX'],
+        ['KEYWORD_CONST', 'TYPE_PREFIX_AFTER_REF_CONST'],
+    ],
 ################################################################################
 # EXPRESSION BLOCK.
 # Contains all valid expressions in the language. These are sums, == compares...
@@ -248,7 +263,7 @@ productions = {
 ################################################################################
     'OR_EXPRESSION': [
         ['AND_EXPRESSION', 'OPTIONAL_OR_EXPRESSION'],
-        ['GROUPER_LEFT_PARENTHESIS', 'OPTIONAL_OR_EXPRESSION'],
+        ['GROUPER_LEFT_PARENTHESIS', 'OR_EXPRESSION', 'GROUPER_RIGHT_PARENTHESIS'],
     ],
 ################################################################################
     'AND_EXPRESSION': [
@@ -317,9 +332,14 @@ productions = {
     ],
 ################################################################################
     'UNARY_EXPRESSION': [
-        ['SYMBOL_EXCLAMATION_MARK'],
+        ['SYMBOL_EXCLAMATION_MARK', 'EXPRESSION'],
+        ['SYMBOL_EXCLAMATION_MARK__EXCLAMATION_MARK', 'EXPRESSION'],
+        ['SYMBOL_DOLLAR', 'EXPRESSION'],
+        ['SYMBOL_DOLLAR__DOLLAR', 'EXPRESSION'],
+        ['SYMBOL_APETAIL__APETAIL', 'EXPRESSION'],
+        ['SYMBOL_APETAIL', 'EXPRESSION'],
         ['MEMBER_EXPRESSION'],
-        ['SYMBOL_MINUS', 'UNARY_EXPRESSION'],
+        ['SYMBOL_MINUS', 'EXPRESSION'],
     ],
     'OPTIONAL_MULTIPLICATIVE_EXPRESSION': [
         ['SYMBOL_STAR', 'MULTIPLICATIVE_EXPRESSION'],
@@ -394,6 +414,10 @@ def createcodetreebuilderlexerdependencySymbolMatchercpp(terminal_set):
                 return ','
             elif name == 'DOT':
                 return '.'
+            elif name == 'APETAIL':
+                return '@'
+            elif name == 'DOLLAR':
+                return '$'
             elif name == 'EXCLAMATION_MARK':
                 return '!'
             elif name == 'CARET':

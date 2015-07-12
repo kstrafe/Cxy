@@ -123,11 +123,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
     REQUIRE(validate("public (:) enterProgram { b_a_ = 100 && 10 * b_ + 5 / 3 - another_identifier | \"Cool m8\"; } "));
     REQUIRE(validate("public (:) enterProgram { b_a_ = sampleFunction(); } "));
     REQUIRE(validate("public (:) enterProgram { b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction() - another_identifier | \"Cool m8\"; } "));
-    REQUIRE
-    (
-      validate
-      (
-        R"(
+    REQUIRE(validate(R"(
           public (:) enterProgram
           {
             b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction() - another_identifier | "Cool m8";
@@ -139,9 +135,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
             8s b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction() ^sampleFunction() - another_identifier | "Cool m8";
             AnotherClassName b_a_ = 100 > 5 && 10 * b_ + 5 / 3 * sampleFunction() ^sampleFunction() - another_identifier | "Cool m8";
           }
-        )"
-      )
-    );
+    )"));
     REQUIRE(validate("public (:) enterProgram { const ClassName "));
     REQUIRE(validate("public (:) enterProgram { const ptr ClassName alpha_; }"));
     REQUIRE(false == validate("public (:) enterProgram { const const ClassName alpha_; }"));
@@ -150,11 +144,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
   ////////////////////////////////////////////////////////////////////////////////
   SECTION("A class using different statement types")
   {
-    REQUIRE
-    (
-      validate
-      (
-        R"(
+    REQUIRE(validate(R"(
           public (:) enterProgram
           {
             32u max_ = 1000;
@@ -169,50 +159,100 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
               }
             }
           }
-        )"
-      )
-    );
+    )"));
   }
   ////////////////////////////////////////////////////////////////////////////////
   SECTION("Multiple function definitions")
   {
     ////////////////////////////////////////////////////////////
-    REQUIRE
-    (validate(R"(
+    REQUIRE(validate(R"(
+          restricted 32u variable_ = 0;
 
-    restricted 32u variable_ = 0;
+          public (:) enterProgram
+          {
+            ++variable_;
+          }
 
-    public (:) enterProgram
-    {
-      ++variable_;
-    }
-
-    private (:) performCalculation
-    {
-      --variable_;
-    }
-
+          private (:) performCalculation
+          {
+            --variable_;
+          }
     )"));
     ////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////
-    REQUIRE
-    (validate(R"(
+    REQUIRE(validate(R"(
+            restricted 32u variable_ = 0;
 
-    restricted 32u variable_ = 0;
+            public (:) enterProgram
+            {
+              ++variable_;
+            }
 
-    public (:) enterProgram
-    {
-      ++variable_;
-    }
-
-    private (:) performCalculation
-    {
-      --variable_;
-    }
-
+            private (:) performCalculation
+            {
+              --variable_;
+            }
     )"));
     ////////////////////////////////////////////////////////////
   }
+  ////////////////////////////////////////////////////////////
+  SECTION("Unary operators")
+  {
+    REQUIRE(validate(R"(
+            public (:) enterProgram
+            {
+              32u a_ = 1000;
+              ptr 32u b_ = $a_;
+            }
+          )"
+    ));
+    REQUIRE(validate(R"(
+            public (:) enterProgram
+            {
+              32u a_ = 1000;
+              ptr 32u b_ = $$a_;
+            }
+          )"
+    ));
+    REQUIRE(validate(R"(
+            public (:) enterProgram
+            {
+              32u a_ = 1000;
+              ptr const 32u b_ = $$a_;
+            }
+          )"
+    ));
+    REQUIRE(validate(R"(
+            public (:) enterProgram
+            {
+              32u a_ = 1000;
+              ptr const 32u b_ = $$a_;
+              32u c_ = @@b_;
+            }
+          )"
+    ));
+    REQUIRE(validate(R"(
+            public (:) enterProgram
+            {
+              32u a_ = 1000;
+              ptr 32u b_ = $a_;
+              ++ @b_;
+            }
+          )"
+    ));
+    REQUIRE(validate(R"(
+            public (:) enterProgram
+            {
+              32u a_ = 1000;
+              ptr 32u b_ = $a_;
+              if (!! (@b_ > 100))
+              {
 
+              }
+            }
+          )"
+    ));
+  }
+  ////////////////////////////////////////////////////////////
 
 }
