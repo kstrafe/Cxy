@@ -595,7 +595,7 @@ writer to decide.
 An example of the above grammar:
 
     ptr [5, 8u] a_;
-    ref ptr [5, 8u] b_ = ref a_;
+    ref ptr [5, 8u] b_ = $a_;
 
 
 ## Reference Types ##
