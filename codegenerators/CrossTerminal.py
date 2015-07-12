@@ -185,7 +185,7 @@ productions = {
     ],
 ################################################################################
     'ARGUMENT_LIST': [
-        ['ARGUMENT'],
+        ['ARGUMENT', 'OPTIONAL_ARGUMENT_LIST'],
         [],
     ],
     'OPTIONAL_ATTRIBUTE_LIST': [
@@ -225,7 +225,11 @@ productions = {
     ],
 ################################################################################
     'ARGUMENT': [
-        ['DATA_DECLARATION', 'COMMA_ARGUMENT_LIST'],
+        ['DATA_DECLARATION'],
+    ],
+    'OPTIONAL_ARGUMENT_LIST': [
+        ['SYMBOL_COMMA', 'ARGUMENT_LIST'],
+        []
     ],
     'ATTRIBUTE_LIST': [
         ['KEYWORD_CONST', 'ATTRIBUTE_LIST_AFTER_CONST'],
@@ -381,9 +385,6 @@ productions = {
         ['INTEGER_LITERAL'],
     ],
 ################################################################################
-    'COMMA_ARGUMENT_LIST': [
-        ['SYMBOL_COMMA', 'ARGUMENT_LIST'],
-    ],
     'ATTRIBUTE_LIST_AFTER_CONST': [
         ['KEYWORD_PURE'],
         [],

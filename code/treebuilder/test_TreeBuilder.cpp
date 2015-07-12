@@ -212,6 +212,14 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
             public (:) enterProgram
             {
               32u a_ = 1000;
+              ptr 32u b_ = $a_;
+              ++@b_;
+            }
+    )"));
+    REQUIRE(validate(R"(
+            public (:) enterProgram
+            {
+              32u a_ = 1000;
               ptr 32u b_ = $$a_;
             }
     )"));
@@ -264,6 +272,39 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
             {
 
             }
+    )"));
+    REQUIRE(validate(R"(
+            public (:) enterProgram
+            {
+              32u a_ = 1000;
+              ptr 32u b_ = $a_;
+              if (!! (@b_ > 100))
+              {
+
+              }
+            }
+
+            public (: : const) strToInt
+            {}
+
+            public (: : const pure) funcTion
+            {}
+    )"));
+  }
+  ////////////////////////////////////////////////////////////
+  SECTION("Argument Lists")
+  {
+    REQUIRE(validate(R"(
+            public (32u a_:32u b_) myFunction
+            {}
+    )"));
+    REQUIRE(validate(R"(
+            public (32u a_, Class b_:32u c_) myFunction
+            {}
+    )"));
+    REQUIRE(validate(R"(
+            public (32u a_, Class b_ : Class c_, 32u d_) myFunction
+            {}
     )"));
   }
   ////////////////////////////////////////////////////////////
