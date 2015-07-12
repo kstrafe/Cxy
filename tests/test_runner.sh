@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # check if stdout is a terminal...
-if [ -t 1 ]; then
+if [ -t 1 ] && command tput 2>/dev/null; then
 
     # see if it supports colors...
     ncolors=$(tput colors)

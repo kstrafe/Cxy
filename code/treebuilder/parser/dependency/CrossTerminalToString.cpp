@@ -36,6 +36,7 @@ namespace tul
 						case protocols::CrossTerminal::ARGUMENT: return "ARGUMENT";
 						case protocols::CrossTerminal::ARGUMENT_LIST: return "ARGUMENT_LIST";
 						case protocols::CrossTerminal::ASSIGNMENT: return "ASSIGNMENT";
+						case protocols::CrossTerminal::BASIC_TYPE: return "BASIC_TYPE";
 						case protocols::CrossTerminal::BITWISE_AND_EXPRESSION: return "BITWISE_AND_EXPRESSION";
 						case protocols::CrossTerminal::BITWISE_OR_EXPRESSION: return "BITWISE_OR_EXPRESSION";
 						case protocols::CrossTerminal::BITWISE_XOR_EXPRESSION: return "BITWISE_XOR_EXPRESSION";
@@ -90,7 +91,6 @@ namespace tul
 						case protocols::CrossTerminal::STATEMENT_LIST: return "STATEMENT_LIST";
 						case protocols::CrossTerminal::SUBROUTINE: return "SUBROUTINE";
 						case protocols::CrossTerminal::SUBROUTINE_LIST: return "SUBROUTINE_LIST";
-						case protocols::CrossTerminal::TYPE: return "TYPE";
 						case protocols::CrossTerminal::TYPE_PREFIX: return "TYPE_PREFIX";
 						case protocols::CrossTerminal::TYPE_PREFIX_AFTER_CONST: return "TYPE_PREFIX_AFTER_CONST";
 						case protocols::CrossTerminal::TYPE_PREFIX_AFTER_REF: return "TYPE_PREFIX_AFTER_REF";

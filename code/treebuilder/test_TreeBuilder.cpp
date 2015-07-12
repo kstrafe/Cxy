@@ -31,12 +31,13 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 ////////////////////////////////////////////////////////////////////////////////
 namespace
 {
-  bool validate(const std::string &string)
+  bool validate(const std::string &string, bool print_error_if_exists = true)
   {
     using namespace tul::treebuilder;
 
     TreeBuilder builder_object;
     bool ret_val = true;
+    char current_ = '\0';
     for (auto input_character : string)
     {
       if (builder_object.buildTree(input_character) == false)
@@ -44,9 +45,11 @@ namespace
         ret_val = false;
         break;
       }
+      current_ = input_character;
     }
-    if (ret_val == false)
+    if (ret_val == false && print_error_if_exists)
     {
+      std::cout << "last char: " << current_ << std::endl;
       std::vector<std::string> expected = builder_object.getExpectedTokens();
       std::cout << "\nError: expected:\n";
       for (std::string &string : expected)
@@ -138,7 +141,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
     )"));
     REQUIRE(validate("public (:) enterProgram { const ClassName "));
     REQUIRE(validate("public (:) enterProgram { const ptr ClassName alpha_; }"));
-    REQUIRE(false == validate("public (:) enterProgram { const const ClassName alpha_; }"));
+    REQUIRE(false == validate("public (:) enterProgram { const const ClassName alpha_; }", false));
     REQUIRE(validate("public (:) enterProgram { const ptr const ClassName alpha_; }"));
   }
   ////////////////////////////////////////////////////////////////////////////////
@@ -204,24 +207,21 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
               32u a_ = 1000;
               ptr 32u b_ = $a_;
             }
-          )"
-    ));
+    )"));
     REQUIRE(validate(R"(
             public (:) enterProgram
             {
               32u a_ = 1000;
               ptr 32u b_ = $$a_;
             }
-          )"
-    ));
+    )"));
     REQUIRE(validate(R"(
             public (:) enterProgram
             {
               32u a_ = 1000;
               ptr const 32u b_ = $$a_;
             }
-          )"
-    ));
+    )"));
     REQUIRE(validate(R"(
             public (:) enterProgram
             {
@@ -229,8 +229,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
               ptr const 32u b_ = $$a_;
               32u c_ = @@b_;
             }
-          )"
-    ));
+    )"));
     REQUIRE(validate(R"(
             public (:) enterProgram
             {
@@ -238,8 +237,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
               ptr 32u b_ = $a_;
               ++ @b_;
             }
-          )"
-    ));
+    )"));
     REQUIRE(validate(R"(
             public (:) enterProgram
             {
@@ -250,8 +248,23 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 
               }
             }
-          )"
-    ));
+    )"));
+    REQUIRE(validate(R"(
+            public (:) enterProgram
+            {
+              32u a_ = 1000;
+              ptr 32u b_ = $a_;
+              if (!! (@b_ > 100))
+              {
+
+              }
+            }
+
+            public (:: pure) funcTion
+            {
+
+            }
+    )"));
   }
   ////////////////////////////////////////////////////////////
 

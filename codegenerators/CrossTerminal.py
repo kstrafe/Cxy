@@ -125,7 +125,7 @@ non_terminals = {
     'STATEMENT_LIST',
     'COMMA_SEPARATED_LIST_ITEM',
     'STATEMENT',
-    'TYPE',
+    'BASIC_TYPE',
     'OPTIONAL_ASSIGNMENT',
     'OPTIONAL_STRING_PLUS',
     'ARGUMENT_LIST',
@@ -181,7 +181,7 @@ productions = {
         ['KEYWORD_REF', 'TYPE_PREFIX_AFTER_REF'],
         ['KEYWORD_PTR', 'TYPE_PREFIX'],
         ['KEYWORD_CONST', 'TYPE_PREFIX_AFTER_CONST'],
-        ['TYPE'],
+        ['BASIC_TYPE'],
     ],
 ################################################################################
     'ARGUMENT_LIST': [
@@ -206,17 +206,17 @@ productions = {
         ['OR_EXPRESSION'],
     ],
     'TYPE_PREFIX_AFTER_REF': [
-        ['TYPE'],
+        ['BASIC_TYPE'],
         ['KEYWORD_PTR', 'TYPE_PREFIX'],
         ['KEYWORD_CONST', 'TYPE_PREFIX_AFTER_REF_CONST'],
     ],
-    'TYPE': [
+    'BASIC_TYPE': [
         ['IDENTIFIER_CLASS'],
         ['PRIMITIVE_SIGNED'],
         ['PRIMITIVE_UNSIGNED'],
     ],
     'TYPE_PREFIX_AFTER_CONST': [
-        ['TYPE'],
+        ['BASIC_TYPE'],
         ['KEYWORD_PTR', 'TYPE_PREFIX'],
     ],
 ################################################################################
@@ -252,7 +252,7 @@ productions = {
         ['KEYWORD_WHILE', 'GROUPER_LEFT_PARENTHESIS', 'EXPRESSION', 'GROUPER_RIGHT_PARENTHESIS', 'CODE_BLOCK']
     ],
     'TYPE_PREFIX_AFTER_REF_CONST': [
-        ['TYPE'],
+        ['BASIC_TYPE'],
         ['KEYWORD_PTR', 'TYPE_PREFIX'],
         ['KEYWORD_CONST', 'TYPE_PREFIX_AFTER_REF_CONST'],
     ],
