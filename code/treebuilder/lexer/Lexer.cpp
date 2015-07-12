@@ -41,11 +41,41 @@ namespace tul
             return false;
           }
           // A new token is ready to be identified
-          for (std::size_t new_token = 0; new_token < amount_of_new_tokens; ++new_token)
+          for
+          (
+            std::size_t new_token = getTokenStack().size() - amount_of_new_tokens
+            ; new_token < getTokenStack().size();
+            ++new_token
+          )
           {
-            identifyToken(getTokenStack()[getTokenStack().size() - 1 - new_token]);
-            getTokenStack()[getTokenStack().size() - 1 - new_token].column_number = position_counter.getCurrentColumnNumber();
-            getTokenStack()[getTokenStack().size() - 1 - new_token].line_number = position_counter.getCurrentLineNumber();
+            protocols::Token &curr_token = getTokenStack()[new_token];
+            identifyToken(curr_token);
+
+            {
+              protocols::Token potential_next {0, 0, protocols::EntryType::OTHER_SYMBOL, protocols::TokenType::UNIDENTIFIED, ""};
+              while
+              (
+                curr_token.token_type == protocols::TokenType::UNIDENTIFIED
+                && curr_token.entry_type == protocols::EntryType::OTHER_SYMBOL
+              )
+              {
+                if (curr_token.accompanying_lexeme.empty())
+                {
+                  return false;
+                }
+                // Take the last character off...
+                char last = curr_token.accompanying_lexeme.back();
+                curr_token.accompanying_lexeme.erase(curr_token.accompanying_lexeme.size() - 1);
+                potential_next.accompanying_lexeme.insert(potential_next.accompanying_lexeme.begin(), last);
+                identifyToken(curr_token);
+              }
+              if (potential_next.accompanying_lexeme.empty() == false)
+              {
+                getTokenStack().insert(getTokenStack().begin() + new_token + 1, potential_next);
+              }
+            }
+            getTokenStack()[new_token].column_number = position_counter.getCurrentColumnNumber();
+            getTokenStack()[new_token].line_number = position_counter.getCurrentLineNumber();
           }
         }
         position_counter.countCharacter(character_);
