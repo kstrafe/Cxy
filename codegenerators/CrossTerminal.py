@@ -166,7 +166,7 @@ productions = {
     ],
 ################################################################################
     'FUNCTION_SIGNATURE': [
-        ['GROUPER_LEFT_PARENTHESIS', 'ARGUMENT_LIST', 'SYMBOL_COLON', 'ARGUMENT_LIST', 'GROUPER_RIGHT_PARENTHESIS'],
+        ['GROUPER_LEFT_PARENTHESIS', 'ARGUMENT_LIST', 'SYMBOL_COLON', 'ARGUMENT_LIST', 'OPTIONAL_ATTRIBUTE_LIST', 'GROUPER_RIGHT_PARENTHESIS'],
     ],
     'STATEMENT_LIST': [
         ['STATEMENT', 'SYMBOL_SEMICOLON', 'STATEMENT_LIST'],
@@ -187,6 +187,10 @@ productions = {
     'ARGUMENT_LIST': [
         ['ARGUMENT'],
         [],
+    ],
+    'OPTIONAL_ATTRIBUTE_LIST': [
+        ['SYMBOL_COLON', 'ATTRIBUTE_LIST'],
+        []
     ],
     'STATEMENT': [
         ['ASSIGNMENT'],
@@ -222,6 +226,10 @@ productions = {
 ################################################################################
     'ARGUMENT': [
         ['DATA_DECLARATION', 'COMMA_ARGUMENT_LIST'],
+    ],
+    'ATTRIBUTE_LIST': [
+        ['KEYWORD_CONST', 'ATTRIBUTE_LIST_AFTER_CONST'],
+        ['KEYWORD_PURE'],
     ],
     'ASSIGNMENT': [
         ['IDENTIFIER_VARIABLE', 'SYMBOL_EQUAL', 'EXPRESSION'],
@@ -375,6 +383,10 @@ productions = {
 ################################################################################
     'COMMA_ARGUMENT_LIST': [
         ['SYMBOL_COMMA', 'ARGUMENT_LIST'],
+    ],
+    'ATTRIBUTE_LIST_AFTER_CONST': [
+        ['KEYWORD_PURE'],
+        [],
     ],
     'CODE_BLOCK': [
         ['GROUPER_LEFT_BRACE', 'STATEMENT_LIST', 'GROUPER_RIGHT_BRACE']

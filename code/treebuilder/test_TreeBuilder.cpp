@@ -260,7 +260,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
               }
             }
 
-            public (:: pure) funcTion
+            public (: : pure) funcTion
             {
 
             }

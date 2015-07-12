@@ -36,6 +36,8 @@ namespace tul
 						case protocols::CrossTerminal::ARGUMENT: return "ARGUMENT";
 						case protocols::CrossTerminal::ARGUMENT_LIST: return "ARGUMENT_LIST";
 						case protocols::CrossTerminal::ASSIGNMENT: return "ASSIGNMENT";
+						case protocols::CrossTerminal::ATTRIBUTE_LIST: return "ATTRIBUTE_LIST";
+						case protocols::CrossTerminal::ATTRIBUTE_LIST_AFTER_CONST: return "ATTRIBUTE_LIST_AFTER_CONST";
 						case protocols::CrossTerminal::BASIC_TYPE: return "BASIC_TYPE";
 						case protocols::CrossTerminal::BITWISE_AND_EXPRESSION: return "BITWISE_AND_EXPRESSION";
 						case protocols::CrossTerminal::BITWISE_OR_EXPRESSION: return "BITWISE_OR_EXPRESSION";
@@ -72,6 +74,7 @@ namespace tul
 						case protocols::CrossTerminal::OPTIONAL_ADDITIVE_EXPRESSION: return "OPTIONAL_ADDITIVE_EXPRESSION";
 						case protocols::CrossTerminal::OPTIONAL_AND_EXPRESSION: return "OPTIONAL_AND_EXPRESSION";
 						case protocols::CrossTerminal::OPTIONAL_ASSIGNMENT: return "OPTIONAL_ASSIGNMENT";
+						case protocols::CrossTerminal::OPTIONAL_ATTRIBUTE_LIST: return "OPTIONAL_ATTRIBUTE_LIST";
 						case protocols::CrossTerminal::OPTIONAL_BITWISE_AND_EXPRESSION: return "OPTIONAL_BITWISE_AND_EXPRESSION";
 						case protocols::CrossTerminal::OPTIONAL_BITWISE_OR_EXPRESSION: return "OPTIONAL_BITWISE_OR_EXPRESSION";
 						case protocols::CrossTerminal::OPTIONAL_BITWISE_XOR_EXPRESSION: return "OPTIONAL_BITWISE_XOR_EXPRESSION";
@@ -119,6 +122,7 @@ namespace tul
 						case protocols::CrossTerminal::KEYWORD_PRIVATE: return "KEYWORD_PRIVATE";
 						case protocols::CrossTerminal::KEYWORD_PTR: return "KEYWORD_PTR";
 						case protocols::CrossTerminal::KEYWORD_PUBLIC: return "KEYWORD_PUBLIC";
+						case protocols::CrossTerminal::KEYWORD_PURE: return "KEYWORD_PURE";
 						case protocols::CrossTerminal::KEYWORD_REF: return "KEYWORD_REF";
 						case protocols::CrossTerminal::KEYWORD_RESTRICTED: return "KEYWORD_RESTRICTED";
 						case protocols::CrossTerminal::KEYWORD_WHILE: return "KEYWORD_WHILE";
