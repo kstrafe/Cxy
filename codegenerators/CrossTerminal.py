@@ -98,7 +98,6 @@ terminals = {
     'SYMBOL_DOT__DOT',
     'SYMBOL_DOT',
     'SYMBOL_COMMA',
-    'SYMBOL_COLON__COLON',
     'SYMBOL_COLON',
     'SYMBOL_SEMICOLON',
     'SYMBOL_LESS_THAN__LESS_THAN',
@@ -162,7 +161,7 @@ productions = {
         []
     ],
     'DATA_DECLARATION': [
-        ['TYPE_PREFIX', 'IDENTIFIER_VARIABLE', 'OPTIONAL_ASSIGNMENT'],
+        ['TYPE', 'IDENTIFIER_VARIABLE', 'OPTIONAL_ASSIGNMENT', 'OPTIONAL_DATA_DECLARATION'],
     ],
 ################################################################################
     'FUNCTION_SIGNATURE': [
@@ -177,11 +176,16 @@ productions = {
         ['SYMBOL_EQUAL', 'EXPRESSION'],
         []
     ],
-    'TYPE_PREFIX': [
-        ['KEYWORD_REF', 'TYPE_PREFIX_AFTER_REF'],
-        ['KEYWORD_PTR', 'TYPE_PREFIX'],
-        ['KEYWORD_CONST', 'TYPE_PREFIX_AFTER_CONST'],
+    'TYPE': [
         ['BASIC_TYPE'],
+        ['GROUPER_LEFT_BRACKET', 'INTEGER_LITERAL', 'SYMBOL_COMMA', 'TYPE', 'GROUPER_RIGHT_BRACKET'],
+        ['KEYWORD_CONST', 'TYPE_AFTER_CONST'],
+        ['KEYWORD_PTR', 'TYPE'],
+        ['KEYWORD_REF', 'TYPE_AFTER_REF'],
+    ],
+    'OPTIONAL_DATA_DECLARATION': [
+        ['SYMBOL_COMMA', 'IDENTIFIER_VARIABLE', 'OPTIONAL_ASSIGNMENT', 'OPTIONAL_DATA_DECLARATION'],
+        [],
     ],
 ################################################################################
     'ARGUMENT_LIST': [
@@ -209,26 +213,26 @@ productions = {
     'EXPRESSION': [
         ['OR_EXPRESSION'],
     ],
-    'TYPE_PREFIX_AFTER_REF': [
+    'TYPE_AFTER_REF': [
         ['BASIC_TYPE'],
-        ['KEYWORD_PTR', 'TYPE_PREFIX'],
-        ['KEYWORD_CONST', 'TYPE_PREFIX_AFTER_REF_CONST'],
+        ['KEYWORD_PTR', 'TYPE'],
+        ['KEYWORD_CONST', 'TYPE_AFTER_REF_CONST'],
     ],
     'BASIC_TYPE': [
         ['IDENTIFIER_CLASS'],
         ['PRIMITIVE_SIGNED'],
         ['PRIMITIVE_UNSIGNED'],
     ],
-    'TYPE_PREFIX_AFTER_CONST': [
+    'TYPE_AFTER_CONST': [
         ['BASIC_TYPE'],
-        ['KEYWORD_PTR', 'TYPE_PREFIX'],
+        ['KEYWORD_PTR', 'TYPE'],
     ],
 ################################################################################
     'ARGUMENT': [
-        ['DATA_DECLARATION'],
+        ['TYPE', 'IDENTIFIER_VARIABLE', 'OPTIONAL_ASSIGNMENT'],
     ],
     'OPTIONAL_ARGUMENT_LIST': [
-        ['SYMBOL_COMMA', 'ARGUMENT_LIST'],
+        ['SYMBOL_COMMA', 'ARGUMENT_LIST_AFTER_FIRST'],
         []
     ],
     'ATTRIBUTE_LIST': [
@@ -263,10 +267,10 @@ productions = {
     'WHILE_STATEMENT': [
         ['KEYWORD_WHILE', 'GROUPER_LEFT_PARENTHESIS', 'EXPRESSION', 'GROUPER_RIGHT_PARENTHESIS', 'CODE_BLOCK']
     ],
-    'TYPE_PREFIX_AFTER_REF_CONST': [
+    'TYPE_AFTER_REF_CONST': [
         ['BASIC_TYPE'],
-        ['KEYWORD_PTR', 'TYPE_PREFIX'],
-        ['KEYWORD_CONST', 'TYPE_PREFIX_AFTER_REF_CONST'],
+        ['KEYWORD_PTR', 'TYPE'],
+        ['KEYWORD_CONST', 'TYPE_AFTER_REF_CONST'],
     ],
 ################################################################################
 # EXPRESSION BLOCK.
@@ -383,6 +387,10 @@ productions = {
         ['IDENTIFIER_VARIABLE'],
         ['STRING'],
         ['INTEGER_LITERAL'],
+    ],
+    'ARGUMENT_LIST_AFTER_FIRST': [
+        ['TYPE', 'IDENTIFIER_VARIABLE', 'OPTIONAL_ASSIGNMENT', 'OPTIONAL_ARGUMENT_LIST', 'OPTIONAL_ARGUMENT_LIST'],
+        ['IDENTIFIER_VARIABLE', 'OPTIONAL_ARGUMENT_LIST', 'OPTIONAL_ARGUMENT_LIST'],
     ],
 ################################################################################
     'ATTRIBUTE_LIST_AFTER_CONST': [

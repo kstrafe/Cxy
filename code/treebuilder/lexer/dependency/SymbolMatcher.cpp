@@ -44,7 +44,6 @@ namespace tul
 					else if (lexeme == "<<") return protocols::TokenType::SYMBOL_LESS_THAN__LESS_THAN;
 					else if (lexeme == "<") return protocols::TokenType::SYMBOL_LESS_THAN;
 					else if (lexeme == ";") return protocols::TokenType::SYMBOL_SEMICOLON;
-					else if (lexeme == "::") return protocols::TokenType::SYMBOL_COLON__COLON;
 					else if (lexeme == ":") return protocols::TokenType::SYMBOL_COLON;
 					else if (lexeme == "/") return protocols::TokenType::SYMBOL_FORWARD_SLASH;
 					else if (lexeme == "..") return protocols::TokenType::SYMBOL_DOT__DOT;

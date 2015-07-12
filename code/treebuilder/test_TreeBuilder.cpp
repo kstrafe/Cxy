@@ -306,7 +306,19 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
             public (32u a_, Class b_ : Class c_, 32u d_) myFunction
             {}
     )"));
+    REQUIRE(validate(R"(
+            public (32u a_, b_ : Class c_, c2_, 32u d_, e_) myFunction
+            {}
+    )"));
   }
   ////////////////////////////////////////////////////////////
-
+  SECTION("Array types")
+  {
+    REQUIRE(validate(R"(
+            public (:) enterProgram
+            {
+              [3, 32u] arr_;
+            }
+    )"));
+  }
 }
