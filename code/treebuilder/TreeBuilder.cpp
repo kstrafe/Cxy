@@ -18,7 +18,6 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 #include "TreeBuilder.hpp"
 #include "parser/dependency/CrossTerminalToString.hpp"
 #include "parser/dependency/TokenTypeToCrossTerminal.hpp"
-#include <iostream>
 
 namespace tul
 {
@@ -34,7 +33,6 @@ namespace tul
           // std::cout << parser::dependency::CrossTerminalToString::convertToString(parser::dependency::TokenTypeToCrossTerminal::convertToCrossTerminal(token_stack.back().token_type)) << std::endl;
           if (false == parser_object.parseSymbol(token_stack[i]))
           {
-            std::cout << "Parser failed" << std::endl;
             return false;
           }
         }
@@ -43,10 +41,8 @@ namespace tul
       }
       else
       {
-        std::cout << "Lexer failed" << std::endl;
         return false;
       }
-      std::cout << "Lexer failed" << std::endl;
       return false;
     }
 
