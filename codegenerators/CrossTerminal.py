@@ -139,25 +139,33 @@ non_terminals = {
 productions = {
 ################################################################################
     'ENTER': [
-        ['ACCESS_SPECIFIER', 'DECL_OR_FUNC'],
+        ['ACCESS_SPECIFICATION', 'DECL_OR_FUNC'],
         [],
     ],
 ################################################################################
-    'ACCESS_SPECIFIER': [
-        ['KEYWORD_PRIVATE'],
-        ['KEYWORD_PUBLIC'],
-        ['KEYWORD_RESTRICTED'],
+    'ACCESS_SPECIFICATION': [
+        ['ACCESS_SPECIFIER', 'OBJECT_ACCESS_SPECIFIER']
     ],
     'DECL_OR_FUNC': [
         ['FUNCTION_DEFINITION', 'FUNCTION_LIST'],
         ['DATA_DECLARATION', 'SYMBOL_SEMICOLON', 'ENTER'],
     ],
 ################################################################################
+    'ACCESS_SPECIFIER': [
+        ['KEYWORD_GLOBAL'],
+        ['KEYWORD_GLOCAL'],
+        []
+    ],
+    'OBJECT_ACCESS_SPECIFIER': [
+        ['KEYWORD_PRIVATE'],
+        ['KEYWORD_PUBLIC'],
+        ['KEYWORD_RESTRICTED'],
+    ],
     'FUNCTION_DEFINITION': [
         ['FUNCTION_SIGNATURE', 'IDENTIFIER_SUBROUTINE', 'GROUPER_LEFT_BRACE', 'STATEMENT_LIST', 'GROUPER_RIGHT_BRACE']
     ],
     'FUNCTION_LIST': [
-        ['ACCESS_SPECIFIER', 'FUNCTION_DEFINITION', 'FUNCTION_LIST'],
+        ['ACCESS_SPECIFICATION', 'FUNCTION_DEFINITION', 'FUNCTION_LIST'],
         []
     ],
     'DATA_DECLARATION': [
@@ -201,6 +209,7 @@ productions = {
         ['DATA_DECLARATION'],
         ['CALL'],
         ['ITER_STATEMENT'],
+        ['RETURN_STATEMENT']
     ],
     'NO_SEMICOLON_STATEMENT': [
         ['DO_STATEMENT'],
@@ -238,16 +247,20 @@ productions = {
     'ATTRIBUTE_LIST': [
         ['KEYWORD_CONST', 'ATTRIBUTE_LIST_AFTER_CONST'],
         ['KEYWORD_PURE'],
+        []
     ],
     'ASSIGNMENT': [
-        ['IDENTIFIER_VARIABLE', 'SYMBOL_EQUAL', 'EXPRESSION'],
+        ['IDENTIFIER_VARIABLE', 'OPTIONAL_MEMBER_EXPRESSION', 'SYMBOL_EQUAL', 'EXPRESSION'],
     ],
     'CALL': [
-        ['IDENTIFIER_SUBROUTINE', 'GROUPER_LEFT_PARENTHESIS', 'GROUPER_RIGHT_PARENTHESIS']
+        ['IDENTIFIER_SUBROUTINE', 'GROUPER_LEFT_PARENTHESIS', 'PARAMETER_LIST', 'GROUPER_RIGHT_PARENTHESIS', 'OPTIONAL_EXTRACTOR']
     ],
     'ITER_STATEMENT': [
         ['SYMBOL_PLUS__PLUS', 'EXPRESSION'],
         ['SYMBOL_MINUS__MINUS', 'EXPRESSION'],
+    ],
+    'RETURN_STATEMENT': [
+        ['KEYWORD_RETURN', 'PARAMETER_LIST'],
     ],
     'DO_STATEMENT': [
         ['KEYWORD_DO', 'GROUPER_LEFT_PARENTHESIS', 'EXPRESSION', 'GROUPER_RIGHT_PARENTHESIS', 'CODE_BLOCK']
@@ -279,7 +292,6 @@ productions = {
 ################################################################################
     'OR_EXPRESSION': [
         ['AND_EXPRESSION', 'OPTIONAL_OR_EXPRESSION'],
-        ['GROUPER_LEFT_PARENTHESIS', 'OR_EXPRESSION', 'GROUPER_RIGHT_PARENTHESIS'],
     ],
 ################################################################################
     'AND_EXPRESSION': [
@@ -339,7 +351,7 @@ productions = {
     ],
 ################################################################################
     'MULTIPLICATIVE_EXPRESSION': [
-        ['UNARY_EXPRESSION', 'OPTIONAL_MULTIPLICATIVE_EXPRESSION'],
+        ['CAST_EXPRESSION', 'OPTIONAL_MULTIPLICATIVE_EXPRESSION'],
     ],
     'OPTIONAL_ADDITIVE_EXPRESSION': [
         ['SYMBOL_PLUS', 'ADDITIVE_EXPRESSION'],
@@ -347,15 +359,14 @@ productions = {
         []
     ],
 ################################################################################
+    'CAST_EXPRESSION': [
+        ['UNARY_EXPRESSION'],
+        ['KEYWORD_CAST', 'GROUPER_LEFT_PARENTHESIS', 'TYPE', 'GROUPER_RIGHT_PARENTHESIS', 'GROUPER_LEFT_BRACE', 'EXPRESSION', 'GROUPER_RIGHT_BRACE']
+    ],
+################################################################################
     'UNARY_EXPRESSION': [
-        ['SYMBOL_EXCLAMATION_MARK', 'EXPRESSION'],
-        ['SYMBOL_EXCLAMATION_MARK__EXCLAMATION_MARK', 'EXPRESSION'],
-        ['SYMBOL_DOLLAR', 'EXPRESSION'],
-        ['SYMBOL_DOLLAR__DOLLAR', 'EXPRESSION'],
-        ['SYMBOL_APETAIL__APETAIL', 'EXPRESSION'],
-        ['SYMBOL_APETAIL', 'EXPRESSION'],
+        ['UNARY_OPERATOR', 'CAST_EXPRESSION'],
         ['MEMBER_EXPRESSION'],
-        ['SYMBOL_MINUS', 'EXPRESSION'],
     ],
     'OPTIONAL_MULTIPLICATIVE_EXPRESSION': [
         ['SYMBOL_STAR', 'MULTIPLICATIVE_EXPRESSION'],
@@ -366,17 +377,28 @@ productions = {
     'MEMBER_EXPRESSION': [
         ['IDENTIFIER_CLASS', 'SYMBOL_DOT', 'MEMBER_EXPRESSION'],
         ['IDENTIFIER_PACKAGE', 'SYMBOL_DOT', 'MEMBER_EXPRESSION'],
-        ['IDENTIFIER_SUBROUTINE', 'GROUPER_LEFT_PARENTHESIS', 'GROUPER_RIGHT_PARENTHESIS'],
+        ['IDENTIFIER_SUBROUTINE', 'GROUPER_LEFT_PARENTHESIS', 'PARAMETER_LIST', 'GROUPER_RIGHT_PARENTHESIS', 'SYMBOL_TILDE', 'IDENTIFIER_VARIABLE'],
         ['RESOURCE', 'OPTIONAL_MEMBER_EXPRESSION'],
     ],
 ################################################################################
     'OPTIONAL_MEMBER_EXPRESSION': [
         ['SYMBOL_DOT', 'MEMBER_EXPRESSION'],
+        ['GROUPER_LEFT_BRACKET', 'EXPRESSION', 'GROUPER_RIGHT_BRACKET', 'OPTIONAL_MEMBER_EXPRESSION'],
+        ['GROUPER_LEFT_PARENTHESIS', 'PARAMETER_LIST', 'GROUPER_RIGHT_PARENTHESIS', 'SYMBOL_TILDE', 'IDENTIFIER_VARIABLE', 'OPTIONAL_MEMBER_EXPRESSION'],
         []
     ],
 ################################################################################
 ################################################################################
 ################################################################################
+    'UNARY_OPERATOR': [
+        ['SYMBOL_APETAIL'],
+        ['SYMBOL_APETAIL__APETAIL'],
+        ['SYMBOL_DOLLAR'],
+        ['SYMBOL_DOLLAR__DOLLAR'],
+        ['SYMBOL_EXCLAMATION_MARK'],
+        ['SYMBOL_EXCLAMATION_MARK__EXCLAMATION_MARK'],
+        ['SYMBOL_MINUS', 'CAST_EXPRESSION'],
+    ],
     'RELATIONAL_OPERATOR': [
         ['SYMBOL_LESS_THAN'],
         ['SYMBOL_GREATER_THAN'],
@@ -387,10 +409,19 @@ productions = {
         ['IDENTIFIER_VARIABLE'],
         ['STRING'],
         ['INTEGER_LITERAL'],
+        ['GROUPER_LEFT_PARENTHESIS', 'EXPRESSION', 'GROUPER_RIGHT_PARENTHESIS']
     ],
     'ARGUMENT_LIST_AFTER_FIRST': [
         ['TYPE', 'IDENTIFIER_VARIABLE', 'OPTIONAL_ASSIGNMENT', 'OPTIONAL_ARGUMENT_LIST', 'OPTIONAL_ARGUMENT_LIST'],
         ['IDENTIFIER_VARIABLE', 'OPTIONAL_ARGUMENT_LIST', 'OPTIONAL_ARGUMENT_LIST'],
+    ],
+    'PARAMETER_LIST': [
+        ['IDENTIFIER_VARIABLE', 'SYMBOL_COLON', 'EXPRESSION', 'OPTIONAL_PARAMETER_LIST'],
+        []
+    ],
+    'OPTIONAL_EXTRACTOR': [
+        ['SYMBOL_TILDE', 'IDENTIFIER_VARIABLE'],
+        []
     ],
 ################################################################################
     'ATTRIBUTE_LIST_AFTER_CONST': [
@@ -399,6 +430,10 @@ productions = {
     ],
     'CODE_BLOCK': [
         ['GROUPER_LEFT_BRACE', 'STATEMENT_LIST', 'GROUPER_RIGHT_BRACE']
+    ],
+    'OPTIONAL_PARAMETER_LIST': [
+        ['SYMBOL_COMMA', 'PARAMETER_LIST'],
+        []
     ]
 }
 
@@ -459,6 +494,8 @@ def createcodetreebuilderlexerdependencySymbolMatchercpp(terminal_set):
                 return '+'
             elif name == 'EQUAL':
                 return '='
+            elif name == 'TILDE':
+                return '~'
             else:
                 return "SYMBOL_NOT_FOUND_" + name
         set = []

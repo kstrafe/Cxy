@@ -29,7 +29,8 @@ namespace tul
 				protocols::TokenType SymbolMatcher::getSymbol(const std::string &lexeme)
 				{
 					using namespace protocols;
-					if (lexeme == "||") return protocols::TokenType::SYMBOL_BAR__BAR;
+					if (lexeme == "~") return protocols::TokenType::SYMBOL_TILDE;
+					else if (lexeme == "||") return protocols::TokenType::SYMBOL_BAR__BAR;
 					else if (lexeme == "|") return protocols::TokenType::SYMBOL_BAR;
 					else if (lexeme == "^") return protocols::TokenType::SYMBOL_CARET;
 					else if (lexeme == "\\") return protocols::TokenType::SYMBOL_BACKWARD_SLASH;

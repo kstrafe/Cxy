@@ -124,19 +124,19 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
     REQUIRE(validate("public (:) enterProgram { a_ = \"Hi!\"; b_ = 300; b_a_ = 10 * b_; } "));
     REQUIRE(validate("public (:) enterProgram { b_a_ = 100 && 10 * b_ + 5 / 3 - another_identifier; } "));
     REQUIRE(validate("public (:) enterProgram { b_a_ = 100 && 10 * b_ + 5 / 3 - another_identifier | \"Cool m8\"; } "));
-    REQUIRE(validate("public (:) enterProgram { b_a_ = sampleFunction(); } "));
-    REQUIRE(validate("public (:) enterProgram { b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction() - another_identifier | \"Cool m8\"; } "));
+    REQUIRE(validate("public (:) enterProgram { b_a_ = sampleFunction()~a_; } "));
+    REQUIRE(validate("public (:) enterProgram { b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction()~a_ - another_identifier | \"Cool m8\"; } "));
     REQUIRE(validate(R"(
           public (:) enterProgram
           {
-            b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction() - another_identifier | "Cool m8";
-            q_a_d = 100 && 10 * b_ + 5 / 3 * sampleFunction() - another_identifier | "Cool m8";
-            b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction() - another_identifier | "Cool m8";
-            b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction() ^sampleFunction() - another_identifier | "Cool m8";
-            Type b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction() ^sampleFunction() - another_identifier | "Cool m8";
-            800u b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction() ^sampleFunction() - another_identifier | "Cool m8";
-            8s b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction() ^sampleFunction() - another_identifier | "Cool m8";
-            AnotherClassName b_a_ = 100 > 5 && 10 * b_ + 5 / 3 * sampleFunction() ^sampleFunction() - another_identifier | "Cool m8";
+            b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction()~a_ - another_identifier | "Cool m8";
+            q_a_d = 100 && 10 * b_ + 5 / 3 * sampleFunction()~a_ - another_identifier | "Cool m8";
+            b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction()~a_ - another_identifier | "Cool m8";
+            b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction()~a_ ^sampleFunction()~a_ - another_identifier | "Cool m8";
+            Type b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction()~a_ ^sampleFunction()~a_ - another_identifier | "Cool m8";
+            800u b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction()~a_ ^sampleFunction()~a_ - another_identifier | "Cool m8";
+            8s b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction()~a_ ^sampleFunction()~a_ - another_identifier | "Cool m8";
+            AnotherClassName b_a_ = 100 > 5 && 10 * b_ + 5 / 3 * sampleFunction()~a_ ^sampleFunction()~a_ - another_identifier | "Cool m8";
           }
     )"));
     REQUIRE(validate("public (:) enterProgram { const ClassName "));
@@ -289,6 +289,13 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 
             public (: : const pure) funcTion
             {}
+
+
+            public (:: const) strToInte
+            {}
+
+            public (:: const pure) funcTione
+            {}
     )"));
   }
   ////////////////////////////////////////////////////////////
@@ -322,7 +329,47 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
             public (:) enterProgram
             {
               [3, 32u] arr_;
+              arr_[1] = 200;
             }
+
+            public (:) anotherFunction
+            {
+              [2, [3, [4, [5, 8u]]]] szt_;
+            }
+    )"));
+  }
+  ////////////////////////////////////////////////////////////
+  SECTION("Putting variables in the middle is not allowed")
+  {
+    REQUIRE(false == validate(R"(
+            public (:) enterProgram
+            {}
+
+            public 32u var_;
+    )", false));
+  }
+  ////////////////////////////////////////////////////////////
+  SECTION("Type casting")
+  {
+    REQUIRE(validate(R"(
+          public (:) enterProgram
+          {
+            32u a_ = 100;
+            16u b_ = cast(16u) { a_ } * 5;
+          }
+    )"));
+  }
+  ////////////////////////////////////////////////////////////
+  SECTION("Member expression")
+  {
+    REQUIRE(validate(R"(
+          public (:) enterProgram
+          {
+            SomeClass a_ = SomeClass.createInstance()~instance_;
+            SomeClass b_ = SomeClass.Cool.Bool.Stool.Drool.Zool.Zulu.something_()~ck_()~x_;
+            SomeClass c_ = sys.Cool.Bool.Stool.Drool.Zool.Zulu.something_()~ck_()~x_[3 + 8];
+            16u b_ = cast(16u) { a_ } * 5;
+          }
     )"));
   }
 }

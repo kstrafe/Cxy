@@ -29,9 +29,12 @@ namespace tul
 				protocols::TokenType KeywordMatcher::getKeyword(const std::string &lexeme)
 				{
 					if (lexeme == "assembly") return protocols::TokenType::KEYWORD_ASSEMBLY;
+					else if (lexeme == "cast") return protocols::TokenType::KEYWORD_CAST;
 					else if (lexeme == "const") return protocols::TokenType::KEYWORD_CONST;
 					else if (lexeme == "do") return protocols::TokenType::KEYWORD_DO;
 					else if (lexeme == "for") return protocols::TokenType::KEYWORD_FOR;
+					else if (lexeme == "global") return protocols::TokenType::KEYWORD_GLOBAL;
+					else if (lexeme == "glocal") return protocols::TokenType::KEYWORD_GLOCAL;
 					else if (lexeme == "goto") return protocols::TokenType::KEYWORD_GOTO;
 					else if (lexeme == "if") return protocols::TokenType::KEYWORD_IF;
 					else if (lexeme == "label") return protocols::TokenType::KEYWORD_LABEL;
@@ -41,6 +44,7 @@ namespace tul
 					else if (lexeme == "pure") return protocols::TokenType::KEYWORD_PURE;
 					else if (lexeme == "ref") return protocols::TokenType::KEYWORD_REF;
 					else if (lexeme == "restricted") return protocols::TokenType::KEYWORD_RESTRICTED;
+					else if (lexeme == "return") return protocols::TokenType::KEYWORD_RETURN;
 					else if (lexeme == "while") return protocols::TokenType::KEYWORD_WHILE;
 					else return protocols::TokenType::UNIDENTIFIED;
 				}

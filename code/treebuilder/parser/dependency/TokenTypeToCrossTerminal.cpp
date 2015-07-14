@@ -43,9 +43,12 @@ namespace tul
 						case protocols::TokenType::IDENTIFIER_VARIABLE: return protocols::CrossTerminal::IDENTIFIER_VARIABLE;
 						case protocols::TokenType::INTEGER_LITERAL: return protocols::CrossTerminal::INTEGER_LITERAL;
 						case protocols::TokenType::KEYWORD_ASSEMBLY: return protocols::CrossTerminal::KEYWORD_ASSEMBLY;
+						case protocols::TokenType::KEYWORD_CAST: return protocols::CrossTerminal::KEYWORD_CAST;
 						case protocols::TokenType::KEYWORD_CONST: return protocols::CrossTerminal::KEYWORD_CONST;
 						case protocols::TokenType::KEYWORD_DO: return protocols::CrossTerminal::KEYWORD_DO;
 						case protocols::TokenType::KEYWORD_FOR: return protocols::CrossTerminal::KEYWORD_FOR;
+						case protocols::TokenType::KEYWORD_GLOBAL: return protocols::CrossTerminal::KEYWORD_GLOBAL;
+						case protocols::TokenType::KEYWORD_GLOCAL: return protocols::CrossTerminal::KEYWORD_GLOCAL;
 						case protocols::TokenType::KEYWORD_GOTO: return protocols::CrossTerminal::KEYWORD_GOTO;
 						case protocols::TokenType::KEYWORD_IF: return protocols::CrossTerminal::KEYWORD_IF;
 						case protocols::TokenType::KEYWORD_LABEL: return protocols::CrossTerminal::KEYWORD_LABEL;
@@ -55,6 +58,7 @@ namespace tul
 						case protocols::TokenType::KEYWORD_PURE: return protocols::CrossTerminal::KEYWORD_PURE;
 						case protocols::TokenType::KEYWORD_REF: return protocols::CrossTerminal::KEYWORD_REF;
 						case protocols::TokenType::KEYWORD_RESTRICTED: return protocols::CrossTerminal::KEYWORD_RESTRICTED;
+						case protocols::TokenType::KEYWORD_RETURN: return protocols::CrossTerminal::KEYWORD_RETURN;
 						case protocols::TokenType::KEYWORD_WHILE: return protocols::CrossTerminal::KEYWORD_WHILE;
 						case protocols::TokenType::PRIMITIVE_SIGNED: return protocols::CrossTerminal::PRIMITIVE_SIGNED;
 						case protocols::TokenType::PRIMITIVE_UNSIGNED: return protocols::CrossTerminal::PRIMITIVE_UNSIGNED;
@@ -91,6 +95,7 @@ namespace tul
 						case protocols::TokenType::SYMBOL_SEMICOLON: return protocols::CrossTerminal::SYMBOL_SEMICOLON;
 						case protocols::TokenType::SYMBOL_STAR: return protocols::CrossTerminal::SYMBOL_STAR;
 						case protocols::TokenType::SYMBOL_STAR__STAR: return protocols::CrossTerminal::SYMBOL_STAR__STAR;
+						case protocols::TokenType::SYMBOL_TILDE: return protocols::CrossTerminal::SYMBOL_TILDE;
 						case protocols::TokenType::UNIDENTIFIED: return protocols::CrossTerminal::UNIDENTIFIED;
 						default: return protocols::CrossTerminal::UNIDENTIFIED;
 					}
