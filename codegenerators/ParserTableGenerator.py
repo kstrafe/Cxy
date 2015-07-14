@@ -26,16 +26,16 @@ def computeAllCrossTerminals(productions):
     return cross_terminals
 
 
-def computeFirstSet(symbol_name, productions, already_used=[]):
+def computeFirstSet(symbol_name, productions, already_used, root):
     if symbol_name in already_used:
-        raise AssertionError('Fatal error: symbol already used in FIRST set: \'' + symbol_name + '\'')
+        raise AssertionError('Fatal error: symbol already used in FIRST set: \'' + symbol_name + '\' in expansion of \'' + root + '\'')
         sys.exit()
     first_set = []
     already_used.append(symbol_name)
     if symbol_name in productions:
         for production in productions[symbol_name]:
             for element in production:
-                sub_first_set, is_element_epsilonable = computeFirstSet(element, productions, already_used)
+                sub_first_set, is_element_epsilonable = computeFirstSet(element, productions, already_used, root + '->' + element)
                 first_set.extend(sub_first_set)
 
                 # If the element is epsilonable, that means we go to the next element as well
@@ -54,7 +54,7 @@ def computeTerminals(productions):
     for non_terminal in productions:
         for results_ in productions[non_terminal]:
             for token_ in results_:
-                first_set, epsilonable_ = computeFirstSet(token_, productions, [])
+                first_set, epsilonable_ = computeFirstSet(token_, productions, [], non_terminal)
                 for terminal_ in first_set:
                     terminal_set.add(terminal_)
     cross_set = computeAllCrossTerminals(productions)
@@ -71,7 +71,7 @@ def computeTransitions(symbol_name, productions):
     for production in productions[symbol_name]:
         first_set = []
         for element in production:
-            sub_first_set, is_element_epsilonable = computeFirstSet(element, productions, [])
+            sub_first_set, is_element_epsilonable = computeFirstSet(element, productions, [], element)
             first_set.append(sub_first_set)
             if is_element_epsilonable:
                 continue
@@ -111,4 +111,4 @@ def generateTransitionMapCode(transition_set, productions):
 
 def validateAllFirstSets(productions):
     for start_nonterminal in sorted(productions):
-        items, eps = computeFirstSet(start_nonterminal, productions, [])
+        items, eps = computeFirstSet(start_nonterminal, productions, [], start_nonterminal)
