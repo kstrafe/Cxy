@@ -366,10 +366,40 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
           public (:) enterProgram
           {
             SomeClass a_ = SomeClass.createInstance()~instance_;
-            SomeClass b_ = SomeClass.Cool.Bool.Stool.Drool.Zool.Zulu.something_()~ck_()~x_;
-            SomeClass c_ = sys.Cool.Bool.Stool.Drool.Zool.Zulu.something_()~ck_()~x_[3 + 8];
-            16u b_ = cast(16u) { a_ } * 5;
+            SomeClass b_ = SomeClass.something_()~ck_;
+            SomeClass c_ = sys.Cool.something_()~ck_()~x_[3 + 8];
+            Qs d_ = q.Qz.ctOr()~obj_;
           }
     )"));
+    REQUIRE(validate(R"(
+          public (:) enterProgram
+          {
+            Aa a_ = Aa();
+          }
+    )"));
+    REQUIRE(validate(R"(
+          public (:) enterProgram
+          {
+            a.Aa a_ = Aa();
+          }
+    )"));
+    REQUIRE(validate(R"(
+          public (:) enterProgram
+          {
+            a.Aa a_ = a.Aa();
+          }
+    )"));
+    REQUIRE(false == validate(R"(
+          public (:) enterProgram
+          {
+            a.Aa a_ = a.b.Aa();
+          }
+    )", false));
+    REQUIRE(false == validate(R"(
+          public (:) enterProgram
+          {
+            a.b.Aa a_ = a.Aa();
+          }
+    )", false));
   }
 }

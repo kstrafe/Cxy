@@ -228,6 +228,7 @@ productions = {
         ['KEYWORD_CONST', 'TYPE_AFTER_REF_CONST'],
     ],
     'BASIC_TYPE': [
+        ['IDENTIFIER_PACKAGE', 'SYMBOL_DOT', 'IDENTIFIER_CLASS'],
         ['IDENTIFIER_CLASS'],
         ['PRIMITIVE_SIGNED'],
         ['PRIMITIVE_UNSIGNED'],
@@ -375,17 +376,34 @@ productions = {
     ],
 ################################################################################
     'MEMBER_EXPRESSION': [
-        ['IDENTIFIER_CLASS', 'SYMBOL_DOT', 'MEMBER_EXPRESSION'],
-        ['IDENTIFIER_PACKAGE', 'SYMBOL_DOT', 'MEMBER_EXPRESSION'],
-        ['IDENTIFIER_SUBROUTINE', 'GROUPER_LEFT_PARENTHESIS', 'PARAMETER_LIST', 'GROUPER_RIGHT_PARENTHESIS', 'SYMBOL_TILDE', 'IDENTIFIER_VARIABLE'],
+        ['IDENTIFIER_CLASS', 'CLASS_MEMBER_EXPRESSION'],
+        ['IDENTIFIER_PACKAGE', 'PACKAGE_MEMBER_EXPRESSION'],
+        ['IDENTIFIER_SUBROUTINE', 'OPTIONAL_CALL'],
         ['RESOURCE', 'OPTIONAL_MEMBER_EXPRESSION'],
     ],
+
 ################################################################################
+    'CLASS_MEMBER_EXPRESSION': [
+        ['SYMBOL_DOT', 'CLASS_MEMBER', 'OPTIONAL_MEMBER_EXPRESSION'],
+        ['GROUPER_LEFT_PARENTHESIS', 'PARAMETER_LIST', 'GROUPER_RIGHT_PARENTHESIS'],
+    ],
+    'PACKAGE_MEMBER_EXPRESSION': [
+        ['SYMBOL_DOT', 'IDENTIFIER_CLASS', 'CLASS_MEMBER_EXPRESSION']
+    ],
+    'OPTIONAL_CALL': [
+        ['GROUPER_LEFT_PARENTHESIS', 'PARAMETER_LIST', 'GROUPER_RIGHT_PARENTHESIS', 'SYMBOL_TILDE', 'IDENTIFIER_VARIABLE', 'OPTIONAL_MEMBER_EXPRESSION'],
+        []
+    ],
     'OPTIONAL_MEMBER_EXPRESSION': [
         ['SYMBOL_DOT', 'MEMBER_EXPRESSION'],
         ['GROUPER_LEFT_BRACKET', 'EXPRESSION', 'GROUPER_RIGHT_BRACKET', 'OPTIONAL_MEMBER_EXPRESSION'],
         ['GROUPER_LEFT_PARENTHESIS', 'PARAMETER_LIST', 'GROUPER_RIGHT_PARENTHESIS', 'SYMBOL_TILDE', 'IDENTIFIER_VARIABLE', 'OPTIONAL_MEMBER_EXPRESSION'],
         []
+    ],
+################################################################################
+    'CLASS_MEMBER': [
+        ['IDENTIFIER_SUBROUTINE'],
+        ['IDENTIFIER_VARIABLE'],
     ],
 ################################################################################
 ################################################################################

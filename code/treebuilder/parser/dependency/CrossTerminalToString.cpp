@@ -46,6 +46,8 @@ namespace tul
 						case protocols::CrossTerminal::BITWISE_XOR_EXPRESSION: return "BITWISE_XOR_EXPRESSION";
 						case protocols::CrossTerminal::CALL: return "CALL";
 						case protocols::CrossTerminal::CAST_EXPRESSION: return "CAST_EXPRESSION";
+						case protocols::CrossTerminal::CLASS_MEMBER: return "CLASS_MEMBER";
+						case protocols::CrossTerminal::CLASS_MEMBER_EXPRESSION: return "CLASS_MEMBER_EXPRESSION";
 						case protocols::CrossTerminal::CODE_BLOCK: return "CODE_BLOCK";
 						case protocols::CrossTerminal::COMMA_SEPARATED_LIST: return "COMMA_SEPARATED_LIST";
 						case protocols::CrossTerminal::COMMA_SEPARATED_LIST_ITEM: return "COMMA_SEPARATED_LIST_ITEM";
@@ -94,6 +96,7 @@ namespace tul
 						case protocols::CrossTerminal::OPTIONAL_RELATIONAL_EXPRESSION: return "OPTIONAL_RELATIONAL_EXPRESSION";
 						case protocols::CrossTerminal::OPTIONAL_STRING_PLUS: return "OPTIONAL_STRING_PLUS";
 						case protocols::CrossTerminal::OR_EXPRESSION: return "OR_EXPRESSION";
+						case protocols::CrossTerminal::PACKAGE_MEMBER_EXPRESSION: return "PACKAGE_MEMBER_EXPRESSION";
 						case protocols::CrossTerminal::PARAMETER_LIST: return "PARAMETER_LIST";
 						case protocols::CrossTerminal::RELATIONAL_EXPRESSION: return "RELATIONAL_EXPRESSION";
 						case protocols::CrossTerminal::RELATIONAL_OPERATOR: return "RELATIONAL_OPERATOR";
