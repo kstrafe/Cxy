@@ -46,14 +46,18 @@ namespace tul
 					else if (lexeme == "<") return protocols::TokenType::SYMBOL_LESS_THAN;
 					else if (lexeme == ";") return protocols::TokenType::SYMBOL_SEMICOLON;
 					else if (lexeme == ":") return protocols::TokenType::SYMBOL_COLON;
+					else if (lexeme == "/=") return protocols::TokenType::SYMBOL_FORWARD_SLASH__EQUAL;
 					else if (lexeme == "/") return protocols::TokenType::SYMBOL_FORWARD_SLASH;
 					else if (lexeme == "..") return protocols::TokenType::SYMBOL_DOT__DOT;
 					else if (lexeme == ".") return protocols::TokenType::SYMBOL_DOT;
+					else if (lexeme == "-=") return protocols::TokenType::SYMBOL_MINUS__EQUAL;
 					else if (lexeme == "--") return protocols::TokenType::SYMBOL_MINUS__MINUS;
 					else if (lexeme == "-") return protocols::TokenType::SYMBOL_MINUS;
 					else if (lexeme == ",") return protocols::TokenType::SYMBOL_COMMA;
+					else if (lexeme == "+=") return protocols::TokenType::SYMBOL_PLUS__EQUAL;
 					else if (lexeme == "++") return protocols::TokenType::SYMBOL_PLUS__PLUS;
 					else if (lexeme == "+") return protocols::TokenType::SYMBOL_PLUS;
+					else if (lexeme == "*=") return protocols::TokenType::SYMBOL_STAR__EQUAL;
 					else if (lexeme == "**") return protocols::TokenType::SYMBOL_STAR__STAR;
 					else if (lexeme == "*") return protocols::TokenType::SYMBOL_STAR;
 					else if (lexeme == "&&") return protocols::TokenType::SYMBOL_AMPERSAND__AMPERSAND;

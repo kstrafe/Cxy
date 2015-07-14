@@ -182,6 +182,7 @@ productions = {
     ],
     'OPTIONAL_ASSIGNMENT': [
         ['SYMBOL_EQUAL', 'EXPRESSION'],
+        ['GROUPER_LEFT_PARENTHESIS', 'PARAMETER_LIST', 'GROUPER_RIGHT_PARENTHESIS'],
         []
     ],
     'TYPE': [
@@ -220,7 +221,7 @@ productions = {
         ['WHILE_STATEMENT'],
     ],
     'EXPRESSION': [
-        ['OR_EXPRESSION'],
+        ['ASSIGNMENT_EXPRESSION'],
     ],
     'TYPE_AFTER_REF': [
         ['BASIC_TYPE'],
@@ -291,8 +292,20 @@ productions = {
 # Contains all valid expressions in the language. These are sums, == compares...
 # a + b * c - d
 ################################################################################
+    'ASSIGNMENT_EXPRESSION': [
+        ['OR_EXPRESSION', 'OPTIONAL_ASSIGNMENT_EXPRESSION']
+    ],
+################################################################################
     'OR_EXPRESSION': [
         ['AND_EXPRESSION', 'OPTIONAL_OR_EXPRESSION'],
+    ],
+    'OPTIONAL_ASSIGNMENT_EXPRESSION': [
+        ['SYMBOL_EQUAL', 'OR_EXPRESSION'],
+        ['SYMBOL_PLUS__EQUAL', 'OR_EXPRESSION'],
+        ['SYMBOL_MINUS__EQUAL', 'OR_EXPRESSION'],
+        ['SYMBOL_STAR__EQUAL', 'OR_EXPRESSION'],
+        ['SYMBOL_FORWARD_SLASH__EQUAL', 'OR_EXPRESSION'],
+        []
     ],
 ################################################################################
     'AND_EXPRESSION': [

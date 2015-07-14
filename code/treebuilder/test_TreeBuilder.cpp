@@ -401,5 +401,22 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
             a.b.Aa a_ = a.Aa();
           }
     )", false));
+    REQUIRE(validate(R"(
+          public (:) enterProgram
+          {
+            a_ += b_;
+          }
+    )"));
+    REQUIRE(validate(R"(
+          public (:) enterProgram
+          {
+            sys.Dir dir_(start_: "/");
+            sml.String paths_;
+            while (dir_.hasChild()~yes_)
+            {
+              paths_ += dir_.getCurrent()~child_;
+            }
+          }
+    )"));
   }
 }

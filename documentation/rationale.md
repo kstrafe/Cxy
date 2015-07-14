@@ -1338,6 +1338,41 @@ We return to the basic assumption made in the introduction, in addition to
 having recognized that templates (well, dependency-templates) are to be used in
 order to pass appropriate dependencies down.
 
+A consequence of this is that the grammar can not allow transitive member
+expressions:
+
+    a.Bb.Cc
+
+can not be allowed, yet
+
+    a.a_
+
+is completely fine. You're accessing a variable inside a package. Wait,... is
+that even possible? I suppose it is with globals. Anyhow, wait. No. a package is
+merely a namespace. It has no associated variables. The above is wrong.
+
+    a.Aa
+
+This is the correct usage. A namespace is _always_ followed by a class name. No
+exceptions. The nice thing about this is that it makes a lot of things very easy
+and understandable. By forcing this rule in the grammar, we exit as soon as we
+spot an error of transitive packages. This saves compilation time, as lexing and
+parsing are quite cheap compared to semantic analysis and optimization. But
+let's not get into premature optimization here. This keeps the work clean, and
+the types sufficiently short.
+
+    sys.Dir dir_(start_: "/");
+
+A directory iterator can be as simple as that. Now we iterate over the
+different folders.
+
+    sml.String paths_;
+    while (dir_.hasChild()~yes_)
+      paths_ += dir_.getCurrent()~child_;
+
+That looks so awesome! Named returns! Named parameters! Operator overloading!
+Flat structure! Awesome. This is going to be great.
+
 *Conclusion*:
   * Dependencies searched for in children
   * Dependencies searched for from root
