@@ -85,7 +85,7 @@ namespace tul
                 child_->node_type = (*parse_return.child_symbols)[i_];
 
                 symbol_stack.push(child_);
-                tree_ptr->children_.push_back(child_);
+                tree_ptr->children_.push_front(child_);
                 if (i_ == 0)
                   break;
               }

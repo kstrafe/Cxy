@@ -54,6 +54,7 @@ namespace tul
 						case protocols::CrossTerminal::DECL_OR_FUNC: return "DECL_OR_FUNC";
 						case protocols::CrossTerminal::DO_STATEMENT: return "DO_STATEMENT";
 						case protocols::CrossTerminal::ENTER: return "ENTER";
+						case protocols::CrossTerminal::ENUMERATION_MEMBER_EXPRESSION: return "ENUMERATION_MEMBER_EXPRESSION";
 						case protocols::CrossTerminal::EPSILONATE: return "EPSILONATE";
 						case protocols::CrossTerminal::EQUALITY_EXPRESSION: return "EQUALITY_EXPRESSION";
 						case protocols::CrossTerminal::EXPRESSION: return "EXPRESSION";

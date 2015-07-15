@@ -20,7 +20,7 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 #include "CrossTerminal.hpp"
 #include "Token.hpp"
 
-#include <vector>
+#include <deque>
 
 namespace tul
 {
@@ -37,7 +37,7 @@ namespace tul
 
       Token token_;
       CrossTerminal node_type;
-      std::vector<ConcreteSyntaxTree *> children_;
+      std::deque<ConcreteSyntaxTree *> children_;
     };
   }
 }
