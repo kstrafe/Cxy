@@ -281,7 +281,7 @@ To summarize (TL;DR):
 For the remainder of this document, the language will be developed from its
 entry point to its most precise detail.
 
-## Version 1.1.0 ##
+## Version 1.2.0 ##
 The standard GNU versioning scheme will be applied.
 
 # General Note #
@@ -415,7 +415,7 @@ An example of this.
 
     (64u factorial, 32s error_code : 32u to_calculate) computeRawFactorial
     {
-      64u factorial(value: to_calculate);
+      var 64u factorial(value: to_calculate);
       to_calculate -= 1;
       while (to_calculate > 1)
       {
@@ -456,12 +456,49 @@ number three (note that option two is removed along four and five).
 This is LL(1) parsable (a predictive parser). The FIRST(statement) is different
 for each production. Reads easily from left-to-right.
 
-*Conclusion*:
-<:type:> <:identifier:> <:optional_initialization:> ;
+=== Kevin R. Stravers -- 15/07/2015
 
-    ptr 32u value_ = new 32u(100);
-    const ptr 32u value_(new 32u(100));
-    82s value_(123456789123456789123456789);
+Due to the the parser being LL(1), and expressions accepting types as their
+first token, this causes a conflict. An LR(1) parser easily fixes this, but it
+is decided that an LL(1) parser is to be used. An example of the ambiguity.
+
+    a.Ab a_;
+    a.Ab.a_();
+
+The former is a declaration, the latter is a function call (an expression) on a
+function pointer a_. To avoid the ambiguity, we can use a tie-breaker in front
+of this.
+
+    var a.Ab a_;
+    expr a.Ab.a_();
+
+Either one of them, or both. Either way we want expressions to be executable in
+within the function scope. It is thus rather inconvenient to have to resort to
+writing `expr` all the time. In addition, the `var` syntax allows us to add the
+following to our basic types.
+
+    [3, 32u].element_count;
+    (const 32u).max_value;
+    ptr.max_value;
+    ptr.bit_count; // Platform-specific.
+
+This allows using these expressions as statements. Our declarations will look
+like.
+
+    var 32s x_ = 100, y_ = -400;
+    var alpha.AlphaManager manager_;
+
+The nice thing about this is that we (humans) can quickly scout the code for
+declarations. Especially when var is highlighted with some semi-obnoxious color.
+
+===
+
+*Conclusion*:
+var <:type:> <:identifier:> <:optional_initialization:> ;
+
+    var ptr 32u value_ = new 32u(100);
+    var const ptr 32u value_(new 32u(100));
+    var 82s value_(123456789123456789123456789);
 
 
 ## Plain Old Data (POD) Types ##
@@ -536,19 +573,22 @@ without any overhead during run-time (refs can not be reassigned).
 Another very import pseudo-POD is the plain array. It would be highly beneficial
 if the code can be read left-to-right. Let's look at my proposal:
 
-    [32u, 10] variable_name;
+    [32u, 10]
+    var [32u, 10] var_name;
 
 Notice how the number of elements follows the type that is going to be in each
 slot. This can be read as: `Create an array containing 32u with 10 elements`.
 How does this nest?
 
     [[32u, 5], 10]
+    var [[32u, 5], 10] var_name;
 
 Becomes `an array of an array containing 32u with 5 elements with 10 elements`.
 
 That seems confusing. Maybe we should switch flip the order?
 
     [5, [10, 32u]]
+    var [5, [10, 32u]] var_name;
 
 `Five elements of an array of 10 elements of 32u`. Wow! That rolls off much more
 nicely. This should be a valid type and degenerate to a pointer to the start of
@@ -572,7 +612,7 @@ read and draw from left-to-right:
 How do we access an array? Well since [] haven't been used before in an
 expression, we can add them to any variable as a suffix:
 
-    [10, [20, 32u]] values_;
+    var [10, [20, 32u]] values_;
     // Initialize the values...
     assert(values[3, 5] == values[3][5]);
 
@@ -594,8 +634,8 @@ writer to decide.
 
 An example of the above grammar:
 
-    ptr [5, 8u] a_;
-    ref ptr [5, 8u] b_ = $a_;
+    var ptr [5, 8u] a_;
+    var ref ptr [5, 8u] b_ = $a_;
 
 
 ## Reference Types ##
@@ -606,14 +646,14 @@ to infer what is going on without hopping around in different files. For example
 , it would be comforting to know whether a function takes in a reference by
 looking at its invocation.
 
-    32u a_ = 1000;
+    var 32u a_ = 1000;
     ClassName.doSomething(arg_: ref a_);
 
 ref could be both an operator, and used in declarations, but that seems rather
 ambiguous. This also requires us to consider the dereferencing, address-of, and
 reference-of operator. There are some symbols that we should consider...
 
-    32u a_ = 1000;
+    var 32u a_ = 1000;
 
     $a_       // Let $ return the address-of
     $$a_      // Let $$ return a const-address-of, because an address of an
@@ -632,7 +672,7 @@ local variable is not const. You need to be able to infer from the call that
 the pointer sent into the function will point to memory which will not be edited
 by the function.
 
-  32u a_ = 1000;
+  var 32u a_ = 1000;
   doSomething(arg_: $$a_);
   assert(a_ == 1000);
 
@@ -642,7 +682,7 @@ seems superfluous. Let's try the following.
 
     (:) functionName
     {
-      32u a_ = 1000;
+      var 32u a_ = 1000;
       doSomething(value_: $$a_);
     }
 
@@ -660,8 +700,8 @@ references as well.
 
     (:) functionName
     {
-      32u a_ = 1000;
-      ref 32u b_ = $a_;
+      var 32u a_ = 1000;
+      var ref 32u b_ = $a_;
     }
 
 A reference can be considered simple syntactic sugar for `ref X` ->
@@ -735,11 +775,11 @@ Let's look at some common operators.
 The conservative model is very useful when working with custom data types that
 have well-defined semantics over addition, multiplication, etc.:
 
-    Vector vec1_(1, 3, -2);
-    Vector vec2_(10, -5, 4);
-    Vector vec3_ = vec1_ + vec2_;
-    Vector vec4_ = vec1_.add(vec2_);
-    Vector vec5_ = vec1_.+(vec2_);
+    var Vector vec1_(1, 3, -2);
+    var Vector vec2_(10, -5, 4);
+    var Vector vec3_ = vec1_ + vec2_;
+    var Vector vec4_ = vec1_.add(vec2_);
+    var Vector vec5_ = vec1_.+(vec2_);
 
 The plus can be considered a member function of the Vector class.  
 Seems like a strong case for allowing at least conservative operator overloading
@@ -819,7 +859,7 @@ operators.
 
     (Vec3 result_vec : cref Vec3 left_side, cref Vec3 right_side) +
     {
-      Vec3 temp_;
+      var Vec3 temp_;
       temp_.set
       (
         x_coord: left_side.x_coord + right_side.x_coord,
@@ -971,7 +1011,7 @@ I shall present you to the "glocal". This is a global tied to a single object.
 
     public (:) doComputation
     {
-      1u y_n = child_node.doSomething();
+      var 1u y_n = child_node.doSomething();
       if (y)
       {
         ++action_stage;
@@ -1070,7 +1110,7 @@ Pure functions/methods can only call other pure functions or methods on objects.
 Pure modules are also possible. How will these be specified? The definition of a
 pure module is as follows.
 
-    ClassName a_;
+    var ClassName a_;
     a_.doOperation1(argument_1: argument_1);
     a_.doOperation2(argument_2: argument_2);
     .
@@ -1111,8 +1151,8 @@ observed. Imagine the following:
 
     (32u array_: : pure) cleverAlgorithm
     {
-      ptr 32u int_arr = new [100, 32u]; // Create 100 objects of 32u
-      ptr 32u int_arr2 = new [100, 32u]; // Create 100 objects of 32u
+      var ptr 32u int_arr = new [100, 32u]; // Create 100 objects of 32u
+      var ptr 32u int_arr2 = new [100, 32u]; // Create 100 objects of 32u
       if (int_arr == int_arr2)
       {
         // This if is allowed. It only checks if two pointers point to the same
@@ -1136,8 +1176,8 @@ can do so by degenerating to a pointer: `new [5, ptr 8u]`. This allocates five
 pointers to 8u. The pointers are of unknown size and hence not initialized.
 One can now loop over them and assign different sizes.
 
-    32u amount_ = 5;
-    ptr ptr 8u a_ = new [amount_, ptr 8u];
+    var 32u amount_ = 5;
+    var ptr ptr 8u a_ = new [amount_, ptr 8u];
     for (32u i_ = 0; i_ < amount_; ++i;)
     {
     	a_[i_] = new [i_ + 1, 8u];
@@ -1285,8 +1325,8 @@ C++ templates or Java Generics work.
 
     public (:) enterProgram
     {
-      ds.Array<TypeEnum> e_arr;
-      TypeEnum x_ = TypeEnum.BIG_DATA;
+      var ds.Array<TypeEnum> e_arr;
+      var TypeEnum x_ = TypeEnum.BIG_DATA;
       e_arr.appendItem(x_);
     }
 
@@ -1366,7 +1406,7 @@ the types sufficiently short.
 A directory iterator can be as simple as that. Now we iterate over the
 different folders.
 
-    sml.String paths_;
+    var sml.String paths_;
     while (dir_.hasChild()~yes_)
       paths_ += dir_.getCurrent()~child_;
 
