@@ -381,6 +381,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
           public (:) enterProgram
           {
             var a.Aa a_ = Aa();
+            a_ = b_;
           }
     )"));
     REQUIRE(validate(R"(
@@ -408,10 +409,17 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
             var sml.String paths_;
             while (dir_.hasChild()~yes_)
             {
+               paths_ += dir_.getCurrent()~child_[1 + f_()~g_[a.Aa.h_()~j_()~k_[l_]]];
             }
+
+            a.Aa.g_ += f_;
           }
     )"));
+    REQUIRE(false == validate(R"(
+          public (:) enterProgram
+          {
+            a_ = b_ = c_;
+          }
+    )", false));
   }
 }
-
-// paths_ += dir_.getCurrent()~child_;

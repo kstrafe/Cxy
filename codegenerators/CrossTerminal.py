@@ -209,9 +209,8 @@ productions = {
         []
     ],
     'STATEMENT': [
-        ['ASSIGNMENT'],
         ['DATA_DECLARATION_STATEMENT'],
-        ['CALL'],
+        ['EXPRESSION'],
         ['ITER_STATEMENT'],
         ['RETURN_STATEMENT']
     ],
@@ -253,12 +252,6 @@ productions = {
         ['KEYWORD_CONST', 'ATTRIBUTE_LIST_AFTER_CONST'],
         ['KEYWORD_PURE'],
         []
-    ],
-    'ASSIGNMENT': [
-        ['IDENTIFIER_VARIABLE', 'OPTIONAL_MEMBER_EXPRESSION', 'SYMBOL_EQUAL', 'EXPRESSION'],
-    ],
-    'CALL': [
-        ['IDENTIFIER_SUBROUTINE', 'GROUPER_LEFT_PARENTHESIS', 'PARAMETER_LIST', 'GROUPER_RIGHT_PARENTHESIS', 'OPTIONAL_EXTRACTOR']
     ],
     'ITER_STATEMENT': [
         ['SYMBOL_PLUS__PLUS', 'EXPRESSION'],
@@ -407,7 +400,7 @@ productions = {
         ['SYMBOL_DOT', 'IDENTIFIER_CLASS', 'CLASS_MEMBER_EXPRESSION']
     ],
     'OPTIONAL_CALL': [
-        ['GROUPER_LEFT_PARENTHESIS', 'PARAMETER_LIST', 'GROUPER_RIGHT_PARENTHESIS', 'SYMBOL_TILDE', 'IDENTIFIER_VARIABLE', 'OPTIONAL_MEMBER_EXPRESSION'],
+        ['GROUPER_LEFT_PARENTHESIS', 'PARAMETER_LIST', 'GROUPER_RIGHT_PARENTHESIS', 'OPTIONAL_EXTRACTOR'],
         []
     ],
     'OPTIONAL_MEMBER_EXPRESSION': [
@@ -417,6 +410,10 @@ productions = {
         []
     ],
 ################################################################################
+    'OPTIONAL_EXTRACTOR': [
+        ['SYMBOL_TILDE', 'IDENTIFIER_VARIABLE', 'OPTIONAL_MEMBER_EXPRESSION'],
+        []
+    ],
     'CLASS_MEMBER': [
         ['IDENTIFIER_SUBROUTINE'],
         ['IDENTIFIER_VARIABLE'],
@@ -451,10 +448,6 @@ productions = {
     ],
     'PARAMETER_LIST': [
         ['IDENTIFIER_VARIABLE', 'SYMBOL_COLON', 'EXPRESSION', 'OPTIONAL_PARAMETER_LIST'],
-        []
-    ],
-    'OPTIONAL_EXTRACTOR': [
-        ['SYMBOL_TILDE', 'IDENTIFIER_VARIABLE'],
         []
     ],
 ################################################################################
