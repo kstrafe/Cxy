@@ -171,6 +171,9 @@ productions = {
     'DATA_DECLARATION': [
         ['TYPE', 'IDENTIFIER_VARIABLE', 'OPTIONAL_ASSIGNMENT', 'OPTIONAL_DATA_DECLARATION'],
     ],
+    'DATA_DECLARATION_STATEMENT': [
+        ['KEYWORD_VAR', 'TYPE', 'IDENTIFIER_VARIABLE', 'OPTIONAL_ASSIGNMENT', 'OPTIONAL_DATA_DECLARATION'],
+    ],
 ################################################################################
     'FUNCTION_SIGNATURE': [
         ['GROUPER_LEFT_PARENTHESIS', 'ARGUMENT_LIST', 'SYMBOL_COLON', 'ARGUMENT_LIST', 'OPTIONAL_ATTRIBUTE_LIST', 'GROUPER_RIGHT_PARENTHESIS'],
@@ -207,7 +210,7 @@ productions = {
     ],
     'STATEMENT': [
         ['ASSIGNMENT'],
-        ['DATA_DECLARATION'],
+        ['DATA_DECLARATION_STATEMENT'],
         ['CALL'],
         ['ITER_STATEMENT'],
         ['RETURN_STATEMENT']

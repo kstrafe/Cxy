@@ -54,6 +54,7 @@ namespace tul
 						case protocols::CrossTerminal::COMMA_SEPARATED_LIST_ITEM: return "COMMA_SEPARATED_LIST_ITEM";
 						case protocols::CrossTerminal::COMMA_SEPARATED_TYPE_AND_NAME_LIST: return "COMMA_SEPARATED_TYPE_AND_NAME_LIST";
 						case protocols::CrossTerminal::DATA_DECLARATION: return "DATA_DECLARATION";
+						case protocols::CrossTerminal::DATA_DECLARATION_STATEMENT: return "DATA_DECLARATION_STATEMENT";
 						case protocols::CrossTerminal::DECLARATION: return "DECLARATION";
 						case protocols::CrossTerminal::DECL_OR_FUNC: return "DECL_OR_FUNC";
 						case protocols::CrossTerminal::DO_STATEMENT: return "DO_STATEMENT";
@@ -144,6 +145,7 @@ namespace tul
 						case protocols::CrossTerminal::KEYWORD_REF: return "KEYWORD_REF";
 						case protocols::CrossTerminal::KEYWORD_RESTRICTED: return "KEYWORD_RESTRICTED";
 						case protocols::CrossTerminal::KEYWORD_RETURN: return "KEYWORD_RETURN";
+						case protocols::CrossTerminal::KEYWORD_VAR: return "KEYWORD_VAR";
 						case protocols::CrossTerminal::KEYWORD_WHILE: return "KEYWORD_WHILE";
 						case protocols::CrossTerminal::PRIMITIVE_SIGNED: return "PRIMITIVE_SIGNED";
 						case protocols::CrossTerminal::PRIMITIVE_UNSIGNED: return "PRIMITIVE_UNSIGNED";

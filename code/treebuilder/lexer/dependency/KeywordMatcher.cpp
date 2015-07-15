@@ -45,6 +45,7 @@ namespace tul
 					else if (lexeme == "ref") return protocols::TokenType::KEYWORD_REF;
 					else if (lexeme == "restricted") return protocols::TokenType::KEYWORD_RESTRICTED;
 					else if (lexeme == "return") return protocols::TokenType::KEYWORD_RETURN;
+					else if (lexeme == "var") return protocols::TokenType::KEYWORD_VAR;
 					else if (lexeme == "while") return protocols::TokenType::KEYWORD_WHILE;
 					else return protocols::TokenType::UNIDENTIFIED;
 				}
