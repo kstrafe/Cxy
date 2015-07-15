@@ -20,6 +20,9 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 #include "parser/dependency/CrossTerminalToString.hpp"
 #include "parser/dependency/TokenTypeToCrossTerminal.hpp"
 
+#include "protocols/CrossTerminal.hpp"
+#include "protocols/ParseReturn.hpp"
+
 #include "libraries/catch.hpp"
 
 #include <iostream>
@@ -45,7 +48,8 @@ namespace
     ind += '\n';
     for (auto child_ : cst_->children_)
     {
-      ind += printTree(child_, indent + 2);
+      if (child_->node_type != tul::protocols::CrossTerminal::EPSILONATE)
+        ind += printTree(child_, indent + 2);
     }
     return ind;
   }
