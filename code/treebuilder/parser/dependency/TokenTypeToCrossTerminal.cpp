@@ -68,7 +68,6 @@ namespace tul
 						case protocols::TokenType::SYMBOL_AMPERSAND__AMPERSAND: return protocols::CrossTerminal::SYMBOL_AMPERSAND__AMPERSAND;
 						case protocols::TokenType::SYMBOL_APETAIL: return protocols::CrossTerminal::SYMBOL_APETAIL;
 						case protocols::TokenType::SYMBOL_APETAIL__APETAIL: return protocols::CrossTerminal::SYMBOL_APETAIL__APETAIL;
-						case protocols::TokenType::SYMBOL_BACKWARD_SLASH: return protocols::CrossTerminal::SYMBOL_BACKWARD_SLASH;
 						case protocols::TokenType::SYMBOL_BAR: return protocols::CrossTerminal::SYMBOL_BAR;
 						case protocols::TokenType::SYMBOL_BAR__BAR: return protocols::CrossTerminal::SYMBOL_BAR__BAR;
 						case protocols::TokenType::SYMBOL_CARET: return protocols::CrossTerminal::SYMBOL_CARET;
@@ -77,7 +76,6 @@ namespace tul
 						case protocols::TokenType::SYMBOL_DOLLAR: return protocols::CrossTerminal::SYMBOL_DOLLAR;
 						case protocols::TokenType::SYMBOL_DOLLAR__DOLLAR: return protocols::CrossTerminal::SYMBOL_DOLLAR__DOLLAR;
 						case protocols::TokenType::SYMBOL_DOT: return protocols::CrossTerminal::SYMBOL_DOT;
-						case protocols::TokenType::SYMBOL_DOT__DOT: return protocols::CrossTerminal::SYMBOL_DOT__DOT;
 						case protocols::TokenType::SYMBOL_EQUAL: return protocols::CrossTerminal::SYMBOL_EQUAL;
 						case protocols::TokenType::SYMBOL_EQUAL__EQUAL: return protocols::CrossTerminal::SYMBOL_EQUAL__EQUAL;
 						case protocols::TokenType::SYMBOL_EXCLAMATION_MARK: return protocols::CrossTerminal::SYMBOL_EXCLAMATION_MARK;
@@ -86,10 +84,8 @@ namespace tul
 						case protocols::TokenType::SYMBOL_FORWARD_SLASH__EQUAL: return protocols::CrossTerminal::SYMBOL_FORWARD_SLASH__EQUAL;
 						case protocols::TokenType::SYMBOL_GREATER_THAN: return protocols::CrossTerminal::SYMBOL_GREATER_THAN;
 						case protocols::TokenType::SYMBOL_GREATER_THAN__EQUAL: return protocols::CrossTerminal::SYMBOL_GREATER_THAN__EQUAL;
-						case protocols::TokenType::SYMBOL_GREATER_THAN__GREATER_THAN: return protocols::CrossTerminal::SYMBOL_GREATER_THAN__GREATER_THAN;
 						case protocols::TokenType::SYMBOL_LESS_THAN: return protocols::CrossTerminal::SYMBOL_LESS_THAN;
 						case protocols::TokenType::SYMBOL_LESS_THAN__EQUAL: return protocols::CrossTerminal::SYMBOL_LESS_THAN__EQUAL;
-						case protocols::TokenType::SYMBOL_LESS_THAN__LESS_THAN: return protocols::CrossTerminal::SYMBOL_LESS_THAN__LESS_THAN;
 						case protocols::TokenType::SYMBOL_MINUS: return protocols::CrossTerminal::SYMBOL_MINUS;
 						case protocols::TokenType::SYMBOL_MINUS__EQUAL: return protocols::CrossTerminal::SYMBOL_MINUS__EQUAL;
 						case protocols::TokenType::SYMBOL_MINUS__MINUS: return protocols::CrossTerminal::SYMBOL_MINUS__MINUS;
@@ -99,7 +95,6 @@ namespace tul
 						case protocols::TokenType::SYMBOL_SEMICOLON: return protocols::CrossTerminal::SYMBOL_SEMICOLON;
 						case protocols::TokenType::SYMBOL_STAR: return protocols::CrossTerminal::SYMBOL_STAR;
 						case protocols::TokenType::SYMBOL_STAR__EQUAL: return protocols::CrossTerminal::SYMBOL_STAR__EQUAL;
-						case protocols::TokenType::SYMBOL_STAR__STAR: return protocols::CrossTerminal::SYMBOL_STAR__STAR;
 						case protocols::TokenType::SYMBOL_TILDE: return protocols::CrossTerminal::SYMBOL_TILDE;
 						case protocols::TokenType::UNIDENTIFIED: return protocols::CrossTerminal::UNIDENTIFIED;
 						default: return protocols::CrossTerminal::UNIDENTIFIED;
