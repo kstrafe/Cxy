@@ -31,9 +31,29 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 ////////////////////////////////////////////////////////////////////////////////
 namespace
 {
+  std::string printTree(const tul::protocols::ConcreteSyntaxTree *cst_, int indent = 0)
+  {
+    std::stringstream str_strm;
+    str_strm << std::setfill('0') << std::setw(3) << indent << ':';
+    using namespace tul::treebuilder::parser::dependency;
+    std::string ind(indent, ' ');
+    ind += str_strm.str();
+    ind += CrossTerminalToString::convertToString(cst_->node_type);
+    ind += '(';
+    ind += cst_->token_.accompanying_lexeme;
+    ind += ')';
+    ind += '\n';
+    for (auto child_ : cst_->children_)
+    {
+      ind += printTree(child_, indent + 2);
+    }
+    return ind;
+  }
+
   bool validate(const std::string &string, bool print_error_if_exists = true)
   {
     using namespace tul::treebuilder;
+
 
     TreeBuilder builder_object;
     bool ret_val = true;
@@ -55,6 +75,7 @@ namespace
       for (std::string &string : expected)
         std::cout << string << ", " << std::endl;
     }
+    std::cout << printTree(builder_object.getConcreteSyntaxTree()) << std::endl;
     return ret_val;
   }
 }
