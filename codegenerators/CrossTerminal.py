@@ -120,6 +120,7 @@ productions = {
     ],
     'NO_SEMICOLON_STATEMENT': [
         ['ASSEMBLY_STATEMENT'],
+        ['CODE_BLOCK'],
         ['DO_STATEMENT'],
         ['FOR_STATEMENT'],
         ['GOTO_STATEMENT'],
@@ -189,6 +190,9 @@ productions = {
     'WHILE_STATEMENT': [
         ['KEYWORD_WHILE', 'GROUPER_LEFT_PARENTHESIS', 'EXPRESSION', 'GROUPER_RIGHT_PARENTHESIS', 'CODE_BLOCK']
     ],
+    'CODE_BLOCK': [
+        ['GROUPER_LEFT_BRACE', 'STATEMENT_LIST', 'GROUPER_RIGHT_BRACE'],
+    ],
     'DATA_DECLARATION_STATEMENT': [
         ['KEYWORD_VAR', 'TYPE', 'IDENTIFIER_VARIABLE', 'OPTIONAL_ASSIGNMENT', 'OPTIONAL_DATA_DECLARATION'],
     ],
@@ -218,9 +222,6 @@ productions = {
     'ATTRIBUTE_LIST_AFTER_CONST': [
         ['KEYWORD_PURE'],
         [],
-    ],
-    'CODE_BLOCK': [
-        ['GROUPER_LEFT_BRACE', 'STATEMENT_LIST', 'GROUPER_RIGHT_BRACE']
     ],
 ################################################################################
 # EXPRESSION BLOCK.

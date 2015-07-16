@@ -144,15 +144,15 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
   SECTION("Check non-data class with expressions")
   {
     REQUIRE(false == validate("public (:) ", false));
-    REQUIRE(validate("public (:) enterProgram { } "));
-    REQUIRE(validate("public (:) enterProgram { a_ = \"Hi!\"; } "));
-    REQUIRE(validate("public (:) enterProgram { a_ = \"Hi!\"; b_ = 300; } "));
-    REQUIRE(validate("public (:) enterProgram { a_ = \"Hi!\"; b_ = 300; b_a_ =  b_; } "));
-    REQUIRE(validate("public (:) enterProgram { a_ = \"Hi!\"; b_ = 300; b_a_ = 10 * b_; } "));
-    REQUIRE(validate("public (:) enterProgram { b_a_ = 100 && 10 * b_ + 5 / 3 - another_identifier; } "));
-    REQUIRE(validate("public (:) enterProgram { b_a_ = 100 && 10 * b_ + 5 / 3 - another_identifier | \"Cool m8\"; } "));
-    REQUIRE(validate("public (:) enterProgram { b_a_ = sampleFunction()~a_; } "));
-    REQUIRE(validate("public (:) enterProgram { b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction()~a_ - another_identifier | \"Cool m8\"; } "));
+    REQUIRE(validate("public (:) enterProgram { }"));
+    REQUIRE(validate("public (:) enterProgram { a_ = \"Hi!\"; }"));
+    REQUIRE(validate("public (:) enterProgram { a_ = \"Hi!\"; b_ = 300; }"));
+    REQUIRE(validate("public (:) enterProgram { a_ = \"Hi!\"; b_ = 300; b_a_ =  b_; }"));
+    REQUIRE(validate("public (:) enterProgram { a_ = \"Hi!\"; b_ = 300; b_a_ = 10 * b_; }"));
+    REQUIRE(validate("public (:) enterProgram { b_a_ = 100 && 10 * b_ + 5 / 3 - another_identifier; }"));
+    REQUIRE(validate("public (:) enterProgram { b_a_ = 100 && 10 * b_ + 5 / 3 - another_identifier | \"Cool m8\"; }"));
+    REQUIRE(validate("public (:) enterProgram { b_a_ = sampleFunction()~a_; }"));
+    REQUIRE(validate("public (:) enterProgram { b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction()~a_ - another_identifier | \"Cool m8\"; }"));
     REQUIRE(validate(R"(
           public (:) enterProgram
           {
@@ -414,6 +414,9 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
     REQUIRE(validate(R"(
           public (:) enterProgram
           {
+            {
+
+            }
             var a.Aa a_ = a.Aa();
           }
     )"));
