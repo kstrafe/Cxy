@@ -25,12 +25,25 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "libraries/catch.hpp"
 
+#include <cassert>
 #include <iostream>
 
 
 ////////////////////////////////////////////////////////////////////////////////
 // This is only a small utility validator... if you want to see how
 // TreeBuilder works just go down to "TEST_CASE"
+// How are we going to perform semantic analysis? First we need to convert the
+// CST to an AST. How do we do this. Let's define a few formal rules:
+// 1. Prune all epsilons. These are removed from the tree.
+// 2. Any node having one single child that is a non-terminal: -> C1 -> C2 ->,
+// will become -> C2 ->
+// 3. Prune away all groupers and symbols. These hold no semantic data and
+// Are no longer important.
+//
+// With this in mind, the concrete tree becomes an abstract tree. To process the
+// abstract tree, an action is to be determined for each node and how it will
+// act upon its sub-nodes. Herein lies the first action of validating the
+// semantic data.
 ////////////////////////////////////////////////////////////////////////////////
 namespace
 {
@@ -79,8 +92,13 @@ namespace
       ind += '\n';
       for (auto child_ : cst_->children_)
       {
-        if (child_->node_type != tul::protocols::CrossTerminal::EPSILONATE)
+        if (
+          child_->node_type != tul::protocols::CrossTerminal::EPSILONATE
+          && child_->token_.entry_type != tul::protocols::EntryType::OTHER_SYMBOL
+          && child_->token_.entry_type != tul::protocols::EntryType::GROUPING_SYMBOL
+        ) {
           ind += printTree(child_, indent + 2);
+        }
       }
       return ind;
     }
@@ -521,6 +539,17 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
           public (:) enterProgram
           {
             a_[0, 1, 2];
+          }
+    )"));
+    REQUIRE(validate(R"(
+          public (:) enterProgram
+          {
+            sys.StdOut.printLine(string_: callChild())~alpha_;
+          }
+
+          private (23u nm_, top_kek : 800u kek_) topKek
+          {
+            return nm_: kek_ + 200;
           }
     )"));
   }
