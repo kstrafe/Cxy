@@ -34,24 +34,56 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 ////////////////////////////////////////////////////////////////////////////////
 namespace
 {
-  std::string printTree(const tul::protocols::ConcreteSyntaxTree *cst_, int indent = 0)
+  int hasButOneEpsilonChild(const tul::protocols::ConcreteSyntaxTree *cst_)
   {
-    std::stringstream str_strm;
-    str_strm << std::setfill('0') << std::setw(3) << indent << ':';
-    using namespace tul::treebuilder::parser::dependency;
-    std::string ind(indent, ' ');
-    ind += str_strm.str();
-    ind += CrossTerminalToString::convertToString(cst_->node_type);
-    ind += '(';
-    ind += cst_->token_.accompanying_lexeme;
-    ind += ')';
-    ind += '\n';
+    int stored_ = -1, iter_ = 0;
+    std::size_t count_ = 0;
     for (auto child_ : cst_->children_)
     {
-      if (child_->node_type != tul::protocols::CrossTerminal::EPSILONATE)
-        ind += printTree(child_, indent + 2);
+      bool is_not_eps = static_cast<std::size_t>(child_->node_type != tul::protocols::CrossTerminal::EPSILONATE);
+      if (is_not_eps)
+      {
+        stored_ = iter_;
+        ++count_;
+      }
+      ++iter_;
     }
-    return ind;
+    if (count_ == 1)
+    {
+      return stored_;
+    }
+    else
+    {
+      return -1;
+    }
+  }
+
+  std::string printTree(const tul::protocols::ConcreteSyntaxTree *cst_, int indent = 0)
+  {
+    int non_eps_child = hasButOneEpsilonChild(cst_);
+    if (non_eps_child != -1)
+    {
+      return printTree(cst_->children_[non_eps_child], indent);
+    }
+    else
+    {
+      std::stringstream str_strm;
+      str_strm << std::setfill('0') << std::setw(3) << indent << ':';
+      using namespace tul::treebuilder::parser::dependency;
+      std::string ind(indent, ' ');
+      ind += str_strm.str();
+      ind += CrossTerminalToString::convertToString(cst_->node_type);
+      ind += '(';
+      ind += cst_->token_.accompanying_lexeme;
+      ind += ')';
+      ind += '\n';
+      for (auto child_ : cst_->children_)
+      {
+        if (child_->node_type != tul::protocols::CrossTerminal::EPSILONATE)
+          ind += printTree(child_, indent + 2);
+      }
+      return ind;
+    }
   }
 
   bool validate(const std::string &string, bool print_error_if_exists = true)
@@ -81,7 +113,11 @@ namespace
       for (std::string &string : expected)
         std::cout << string << ", " << std::endl;
     }
-    // std::cout << printTree(builder_object.getConcreteSyntaxTree()) << std::endl;
+    if (print_error_if_exists == true)
+    {
+      std::cout << string << std::endl;
+      std::cout << printTree(builder_object.getConcreteSyntaxTree()) << std::endl;
+    }
     return ret_val;
   }
 }
