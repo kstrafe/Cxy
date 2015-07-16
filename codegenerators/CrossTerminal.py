@@ -371,7 +371,7 @@ productions = {
         ['GROUPER_LEFT_PARENTHESIS', 'EXPRESSION', 'GROUPER_RIGHT_PARENTHESIS']
     ],
     'OPTIONAL_MEMBER_EXPRESSION': [
-        ['GROUPER_LEFT_BRACKET', 'EXPRESSION', 'GROUPER_RIGHT_BRACKET', 'OPTIONAL_MEMBER_EXPRESSION'],
+        ['ARRAY_ACCESS'],
         ['GROUPER_LEFT_PARENTHESIS', 'PARAMETER_LIST', 'GROUPER_RIGHT_PARENTHESIS', 'SYMBOL_TILDE', 'IDENTIFIER_VARIABLE', 'OPTIONAL_MEMBER_EXPRESSION'],
         ['SYMBOL_DOT', 'MEMBER_EXPRESSION'],
         []
@@ -385,6 +385,14 @@ productions = {
         ['SYMBOL_TILDE', 'IDENTIFIER_VARIABLE', 'OPTIONAL_MEMBER_EXPRESSION'],
         []
     ],
+    'ARRAY_ACCESS': [
+        ['GROUPER_LEFT_BRACKET', 'EXPRESSION', 'OPTIONAL_ARRAY_ACCESS', 'GROUPER_RIGHT_BRACKET', 'OPTIONAL_MEMBER_EXPRESSION']
+    ],
+################################################################################
+    'OPTIONAL_ARRAY_ACCESS': [
+        ['SYMBOL_COMMA', 'EXPRESSION', 'OPTIONAL_ARRAY_ACCESS'],
+        []
+    ]
 ################################################################################
 ################################################################################
 ################################################################################

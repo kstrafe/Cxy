@@ -34,6 +34,7 @@ std::string CrossTerminalToString::convertToString(protocols::CrossTerminal cros
         case protocols::CrossTerminal::ARGUMENT_LIST: return "ARGUMENT_LIST";
         case protocols::CrossTerminal::ARGUMENT_LIST_AFTER_FIRST: return "ARGUMENT_LIST_AFTER_FIRST";
         case protocols::CrossTerminal::ARRAY: return "ARRAY";
+        case protocols::CrossTerminal::ARRAY_ACCESS: return "ARRAY_ACCESS";
         case protocols::CrossTerminal::ASSEMBLY_STATEMENT: return "ASSEMBLY_STATEMENT";
         case protocols::CrossTerminal::ASSIGNMENT_EXPRESSION: return "ASSIGNMENT_EXPRESSION";
         case protocols::CrossTerminal::ATTRIBUTE_LIST: return "ATTRIBUTE_LIST";
@@ -102,6 +103,7 @@ std::string CrossTerminalToString::convertToString(protocols::CrossTerminal cros
         case protocols::CrossTerminal::OPTIONAL_ADDITIVE_EXPRESSION: return "OPTIONAL_ADDITIVE_EXPRESSION";
         case protocols::CrossTerminal::OPTIONAL_AND_EXPRESSION: return "OPTIONAL_AND_EXPRESSION";
         case protocols::CrossTerminal::OPTIONAL_ARGUMENT_LIST: return "OPTIONAL_ARGUMENT_LIST";
+        case protocols::CrossTerminal::OPTIONAL_ARRAY_ACCESS: return "OPTIONAL_ARRAY_ACCESS";
         case protocols::CrossTerminal::OPTIONAL_ASSIGNMENT: return "OPTIONAL_ASSIGNMENT";
         case protocols::CrossTerminal::OPTIONAL_ASSIGNMENT_EXPRESSION: return "OPTIONAL_ASSIGNMENT_EXPRESSION";
         case protocols::CrossTerminal::OPTIONAL_ATTRIBUTE_LIST: return "OPTIONAL_ATTRIBUTE_LIST";

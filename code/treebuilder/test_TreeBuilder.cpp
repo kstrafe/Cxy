@@ -163,23 +163,46 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
     REQUIRE(builder_object.getConcreteSyntaxTree() != nullptr);
   }
   ////////////////////////////////////////////////////////////////////////////////
-  SECTION("Try parsing the optional assignments")
+  SECTION("Parse the start of a module: declarations. Some permutations.")
   {
-    REQUIRE(validate("private 32u value_ = 9000;"));
-    REQUIRE(validate("public 64s value_ = -9000;"));
+    REQUIRE(validate(R"(
+      private 1u b_;
+      public 1u a_;
+      restricted 1u c_;
+    )"));
+    REQUIRE(validate(R"(
+      public 1u a_;
+      restricted 1u c_;
+      private 1u b_;
+    )"));
+    REQUIRE(validate(R"(
+      restricted 1u c_;
+      private 1u b_;
+      public 1u a_;
+    )"));
   }
   ////////////////////////////////////////////////////////////////////////////////
-  SECTION("Try parsing the optional assignments")
+  SECTION("Parse the start of a module: declarations and assignments")
   {
-    REQUIRE(false == validate("restricted String str_ = 0", false));
-    REQUIRE(validate("restricted String str_ = \"Is this also good?\" ; "));
-    REQUIRE(validate("restricted String str_ = \"Is this also good?\" + \"\nHopefully we can add strings together!\"; "));
-    REQUIRE(validate("restricted String str_ = \"Is this also good?\" + \"\nHopefully we can add strings together!\" + \"AND EVEN \"\"MORE\"\"\"; "));
+    REQUIRE(validate(R"(
+      private 1u b_ = 1;
+      public 1u a_ = 2;
+      restricted 1u c_ = 3;
+    )"));
+    REQUIRE(validate(R"(
+      public 1u a_(value_: 4);
+      restricted 1u c_(value_: 5);
+      private 1u b_(value_: 6);
+    )"));
+    REQUIRE(validate(R"(
+      restricted 1u c_(value_: 7);
+      private 1u b_ = 8;
+      public 1u a_;
+    )"));
   }
   ////////////////////////////////////////////////////////////////////////////////
   SECTION("Check non-data class with expressions")
   {
-    REQUIRE(false == validate("public (:) ", false));
     REQUIRE(validate("public (:) enterProgram { }"));
     REQUIRE(validate("public (:) enterProgram { a_ = \"Hi!\"; }"));
     REQUIRE(validate("public (:) enterProgram { a_ = \"Hi!\"; b_ = 300; }"));
@@ -487,5 +510,18 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
             a_ = b_ = c_;
           }
     )", false));
+
+    REQUIRE(validate(R"(
+          public (:) enterProgram
+          {
+            a_[0][1][2];
+          }
+    )"));
+    REQUIRE(validate(R"(
+          public (:) enterProgram
+          {
+            a_[0, 1, 2];
+          }
+    )"));
   }
 }
