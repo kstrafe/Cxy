@@ -54,6 +54,7 @@ namespace tul
 
         Parser();
         ~Parser();
+        bool isEmpty();
         bool parseSymbol(const protocols::Token &input_token);
         protocols::ConcreteSyntaxTree *getConcreteSyntaxTree();
 

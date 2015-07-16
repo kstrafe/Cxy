@@ -104,6 +104,7 @@ namespace tul
 						case protocols::CrossTerminal::UNARY_EXPRESSION: return "UNARY_EXPRESSION";
 						case protocols::CrossTerminal::UNARY_OPERATOR: return "UNARY_OPERATOR";
 						case protocols::CrossTerminal::WHILE_STATEMENT: return "WHILE_STATEMENT";
+						case protocols::CrossTerminal::END_OF_MODULE: return "END_OF_MODULE";
 						case protocols::CrossTerminal::GROUPER_LEFT_BRACE: return "GROUPER_LEFT_BRACE";
 						case protocols::CrossTerminal::GROUPER_LEFT_BRACKET: return "GROUPER_LEFT_BRACKET";
 						case protocols::CrossTerminal::GROUPER_LEFT_PARENTHESIS: return "GROUPER_LEFT_PARENTHESIS";

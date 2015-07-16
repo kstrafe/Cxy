@@ -23,6 +23,7 @@ namespace tul
 	{
 		enum class TokenType
 		{
+			END_OF_MODULE,
 			GROUPER_LEFT_BRACE,
 			GROUPER_LEFT_BRACKET,
 			GROUPER_LEFT_PARENTHESIS,

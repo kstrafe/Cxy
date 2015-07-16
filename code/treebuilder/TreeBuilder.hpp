@@ -34,6 +34,8 @@ namespace tul
 
       bool buildTree(char character);
 
+      bool endInput();
+
       protocols::ConcreteSyntaxTree *getConcreteSyntaxTree();
 
       std::vector<std::string> getExpectedTokens();

@@ -31,6 +31,8 @@ namespace tul
       {
         using namespace protocols;
         symbol_stack.emplace(syntax_tree_root = new ConcreteSyntaxTree);
+        symbol_stack.top()->node_type = CrossTerminal::END_OF_MODULE;
+        symbol_stack.emplace(syntax_tree_root = new ConcreteSyntaxTree);
         symbol_stack.top()->node_type = CrossTerminal::ENTER;
       }
 
@@ -40,6 +42,10 @@ namespace tul
         delete syntax_tree_root;
       }
 
+      bool Parser::isEmpty()
+      {
+        return symbol_stack.empty();
+      }
 
       protocols::ConcreteSyntaxTree *Parser::getConcreteSyntaxTree()
       {

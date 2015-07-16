@@ -528,7 +528,7 @@ def createprotocolsTokenTypehpp(terminal_set, non_terminal_set):
 
 def enterMain():
     terminal_set, non_terminal_set = ParserTableGenerator.computeTerminals(productions)
-    terminal_set |= {'UNIDENTIFIED'}
+    terminal_set |= {'UNIDENTIFIED', 'END_OF_MODULE'}
     non_terminal_set |= {'EPSILONATE'}
 
     createcodetreebuilderlexerdependencyKeywordMatchercpp(terminal_set)

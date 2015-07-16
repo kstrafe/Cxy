@@ -71,6 +71,8 @@ namespace
       }
       current_ = input_character;
     }
+    if (ret_val)
+      ret_val = builder_object.endInput();
     if (ret_val == false && print_error_if_exists)
     {
       std::cout << "last char: " << current_ << std::endl;
@@ -79,7 +81,7 @@ namespace
       for (std::string &string : expected)
         std::cout << string << ", " << std::endl;
     }
-    std::cout << printTree(builder_object.getConcreteSyntaxTree()) << std::endl;
+    // std::cout << printTree(builder_object.getConcreteSyntaxTree()) << std::endl;
     return ret_val;
   }
 }
@@ -133,7 +135,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
   ////////////////////////////////////////////////////////////////////////////////
   SECTION("Try parsing the optional assignments")
   {
-    REQUIRE(validate("restricted String str_ = "));
+    REQUIRE(false == validate("restricted String str_ = 0", false));
     REQUIRE(validate("restricted String str_ = \"Is this also good?\" ; "));
     REQUIRE(validate("restricted String str_ = \"Is this also good?\" + \"\nHopefully we can add strings together!\"; "));
     REQUIRE(validate("restricted String str_ = \"Is this also good?\" + \"\nHopefully we can add strings together!\" + \"AND EVEN \"\"MORE\"\"\"; "));
@@ -141,7 +143,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
   ////////////////////////////////////////////////////////////////////////////////
   SECTION("Check non-data class with expressions")
   {
-    REQUIRE(validate("public (:) "));
+    REQUIRE(false == validate("public (:) ", false));
     REQUIRE(validate("public (:) enterProgram { } "));
     REQUIRE(validate("public (:) enterProgram { a_ = \"Hi!\"; } "));
     REQUIRE(validate("public (:) enterProgram { a_ = \"Hi!\"; b_ = 300; } "));
@@ -164,7 +166,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
             var AnotherClassName b_a_ = 100 > 5 && 10 * b_ + 5 / 3 * sampleFunction()~a_ ^sampleFunction()~a_ - another_identifier | "Cool m8";
           }
     )"));
-    REQUIRE(validate("public (:) enterProgram { var const ClassName "));
+    REQUIRE(false == validate("public (:) enterProgram { var const ClassName ", false));
     REQUIRE(validate("public (:) enterProgram { var const ptr ClassName alpha_; }"));
     REQUIRE(false == validate("public (:) enterProgram { var const const ClassName alpha_; }", false));
     REQUIRE(validate("public (:) enterProgram { var const ptr const ClassName alpha_; }"));

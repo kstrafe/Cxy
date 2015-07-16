@@ -30,7 +30,6 @@ namespace tul
         std::vector<protocols::Token> &token_stack = lexer_object.getTokenStack();
         for (std::size_t i = 0; i < token_stack.size(); ++i)
         {
-          // std::cout << parser::dependency::CrossTerminalToString::convertToString(parser::dependency::TokenTypeToCrossTerminal::convertToCrossTerminal(token_stack.back().token_type)) << std::endl;
           if (false == parser_object.parseSymbol(token_stack[i]))
           {
             return false;
@@ -44,6 +43,17 @@ namespace tul
         return false;
       }
       return false;
+    }
+
+    bool TreeBuilder::endInput()
+    {
+      protocols::Token token_;
+      token_.token_type = protocols::TokenType::END_OF_MODULE;
+      if (false == parser_object.parseSymbol(token_))
+      {
+        return false;
+      }
+      return parser_object.isEmpty();
     }
 
     protocols::ConcreteSyntaxTree *TreeBuilder::getConcreteSyntaxTree()
