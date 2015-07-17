@@ -33,6 +33,7 @@ namespace tul
     */
     struct ConcreteSyntaxTree
     {
+      ConcreteSyntaxTree();
       ~ConcreteSyntaxTree();
 
       Token token_;

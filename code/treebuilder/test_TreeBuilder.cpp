@@ -552,5 +552,44 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
             return nm_: kek_ + 200;
           }
     )"));
+    REQUIRE(validate(R"(
+          public (:) enterProgram
+          {
+            if (a_)
+              aAa();
+            else if (b_)
+              bBb();
+            else if (c_)
+              cCc();
+            else
+              dDd();
+          }
+    )"));
+    REQUIRE(validate(R"(
+          public (:) enterProgram
+          {
+            if (a_)
+            {  aAa();  }
+            else if (b_)
+            {  bBb();  }
+            else if (c_)
+            {  cCc();  }
+            else
+            { dDd();   }
+            if (e_)
+              what_;
+          }
+    )"));
+    REQUIRE(validate(R"(
+          public (:) enterProgram
+          {
+            if (a_)
+              if (b_)
+                what_;
+              else
+                while (c_)
+                  inside_while;
+          }
+    )"));
   }
 }
