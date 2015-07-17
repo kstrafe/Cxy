@@ -34,6 +34,7 @@ protocols::TokenType KeywordMatcher::getKeyword(const std::string &lexeme)
     else if (lexeme == "label") return TokenType::KEYWORD_LABEL;
     else if (lexeme == "while") return TokenType::KEYWORD_WHILE;
     else if (lexeme == "cast") return TokenType::KEYWORD_CAST;
+    else if (lexeme == "else") return TokenType::KEYWORD_ELSE;
     else if (lexeme == "goto") return TokenType::KEYWORD_GOTO;
     else if (lexeme == "pure") return TokenType::KEYWORD_PURE;
     else if (lexeme == "for") return TokenType::KEYWORD_FOR;

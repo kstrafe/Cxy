@@ -43,6 +43,7 @@ protocols::CrossTerminal TokenTypeToCrossTerminal::convertToCrossTerminal(protoc
         case protocols::TokenType::KEYWORD_CAST: return protocols::CrossTerminal::KEYWORD_CAST;
         case protocols::TokenType::KEYWORD_CONST: return protocols::CrossTerminal::KEYWORD_CONST;
         case protocols::TokenType::KEYWORD_DO: return protocols::CrossTerminal::KEYWORD_DO;
+        case protocols::TokenType::KEYWORD_ELSE: return protocols::CrossTerminal::KEYWORD_ELSE;
         case protocols::TokenType::KEYWORD_FOR: return protocols::CrossTerminal::KEYWORD_FOR;
         case protocols::TokenType::KEYWORD_GLOBAL: return protocols::CrossTerminal::KEYWORD_GLOBAL;
         case protocols::TokenType::KEYWORD_GLOCAL: return protocols::CrossTerminal::KEYWORD_GLOCAL;

@@ -38,6 +38,7 @@ enum class TokenType
     KEYWORD_CAST,
     KEYWORD_CONST,
     KEYWORD_DO,
+    KEYWORD_ELSE,
     KEYWORD_FOR,
     KEYWORD_GLOBAL,
     KEYWORD_GLOCAL,

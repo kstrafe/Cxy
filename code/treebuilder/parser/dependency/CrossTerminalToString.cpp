@@ -51,6 +51,7 @@ std::string CrossTerminalToString::convertToString(protocols::CrossTerminal cros
         case protocols::CrossTerminal::DATA_DECLARATION_STATEMENT: return "DATA_DECLARATION_STATEMENT";
         case protocols::CrossTerminal::DECL_OR_FUNC: return "DECL_OR_FUNC";
         case protocols::CrossTerminal::DO_STATEMENT: return "DO_STATEMENT";
+        case protocols::CrossTerminal::ELSE_STATEMENT: return "ELSE_STATEMENT";
         case protocols::CrossTerminal::END_OF_MODULE: return "END_OF_MODULE";
         case protocols::CrossTerminal::ENTER: return "ENTER";
         case protocols::CrossTerminal::ENUMERATION_MEMBER_EXPRESSION: return "ENUMERATION_MEMBER_EXPRESSION";
@@ -80,6 +81,7 @@ std::string CrossTerminalToString::convertToString(protocols::CrossTerminal cros
         case protocols::CrossTerminal::KEYWORD_CAST: return "KEYWORD_CAST";
         case protocols::CrossTerminal::KEYWORD_CONST: return "KEYWORD_CONST";
         case protocols::CrossTerminal::KEYWORD_DO: return "KEYWORD_DO";
+        case protocols::CrossTerminal::KEYWORD_ELSE: return "KEYWORD_ELSE";
         case protocols::CrossTerminal::KEYWORD_FOR: return "KEYWORD_FOR";
         case protocols::CrossTerminal::KEYWORD_GLOBAL: return "KEYWORD_GLOBAL";
         case protocols::CrossTerminal::KEYWORD_GLOCAL: return "KEYWORD_GLOCAL";
@@ -128,6 +130,7 @@ std::string CrossTerminalToString::convertToString(protocols::CrossTerminal cros
         case protocols::CrossTerminal::RELATIONAL_OPERATOR: return "RELATIONAL_OPERATOR";
         case protocols::CrossTerminal::RESOURCE: return "RESOURCE";
         case protocols::CrossTerminal::RETURN_STATEMENT: return "RETURN_STATEMENT";
+        case protocols::CrossTerminal::SINGLE_STATEMENT_OR_CODE_BLOCK: return "SINGLE_STATEMENT_OR_CODE_BLOCK";
         case protocols::CrossTerminal::STATEMENT: return "STATEMENT";
         case protocols::CrossTerminal::STATEMENT_LIST: return "STATEMENT_LIST";
         case protocols::CrossTerminal::STRING: return "STRING";
