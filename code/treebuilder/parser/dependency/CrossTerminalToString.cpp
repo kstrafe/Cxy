@@ -126,9 +126,12 @@ std::string CrossTerminalToString::convertToString(protocols::CrossTerminal cros
         case protocols::CrossTerminal::PARAMETER_LIST: return "PARAMETER_LIST";
         case protocols::CrossTerminal::PRIMITIVE_SIGNED: return "PRIMITIVE_SIGNED";
         case protocols::CrossTerminal::PRIMITIVE_UNSIGNED: return "PRIMITIVE_UNSIGNED";
+        case protocols::CrossTerminal::PRIVATE: return "PRIVATE";
+        case protocols::CrossTerminal::PUBLIC: return "PUBLIC";
         case protocols::CrossTerminal::RELATIONAL_EXPRESSION: return "RELATIONAL_EXPRESSION";
         case protocols::CrossTerminal::RELATIONAL_OPERATOR: return "RELATIONAL_OPERATOR";
         case protocols::CrossTerminal::RESOURCE: return "RESOURCE";
+        case protocols::CrossTerminal::RESTRICTED: return "RESTRICTED";
         case protocols::CrossTerminal::RETURN_STATEMENT: return "RETURN_STATEMENT";
         case protocols::CrossTerminal::SINGLE_STATEMENT_OR_CODE_BLOCK: return "SINGLE_STATEMENT_OR_CODE_BLOCK";
         case protocols::CrossTerminal::STATEMENT: return "STATEMENT";
