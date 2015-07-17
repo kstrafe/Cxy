@@ -21,6 +21,7 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 #include "parser/dependency/TokenTypeToCrossTerminal.hpp"
 
 #include "protocols/CrossTerminal.hpp"
+#include "protocols/CrossTerminalTools.hpp"
 #include "protocols/ParseReturn.hpp"
 
 #include "libraries/catch.hpp"
@@ -73,12 +74,12 @@ namespace
 
   std::string printTree(const tul::protocols::ConcreteSyntaxTree *cst_, int indent = 0)
   {
-    int non_eps_child = hasButOneEpsilonChild(cst_);
-    if (non_eps_child != -1)
-    {
-      return printTree(cst_->children_[non_eps_child], indent);
-    }
-    else
+    // int non_eps_child = hasButOneEpsilonChild(cst_);
+    // if (non_eps_child != -1)
+    // {
+    //   return printTree(cst_->children_[non_eps_child], indent);
+    // }
+    // else
     {
       std::stringstream str_strm;
       str_strm << std::setfill('0') << std::setw(3) << indent << ':';
@@ -92,10 +93,12 @@ namespace
       ind += '\n';
       for (auto child_ : cst_->children_)
       {
+
         if (
           child_->node_type != tul::protocols::CrossTerminal::EPSILONATE
           && child_->token_.entry_type != tul::protocols::EntryType::OTHER_SYMBOL
           && child_->token_.entry_type != tul::protocols::EntryType::GROUPING_SYMBOL
+          && tul::protocols::CrossTerminalTools::isKeyword(child_->node_type) == false
         ) {
           ind += printTree(child_, indent + 2);
         }
@@ -133,8 +136,8 @@ namespace
     }
     if (print_error_if_exists == true)
     {
-      std::cout << string << std::endl;
-      std::cout << printTree(builder_object.getConcreteSyntaxTree()) << std::endl;
+      // std::cout << string << std::endl;
+      // std::cout << printTree(builder_object.getConcreteSyntaxTree()) << std::endl;
     }
     return ret_val;
   }
