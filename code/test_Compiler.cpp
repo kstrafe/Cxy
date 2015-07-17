@@ -79,5 +79,19 @@ bool validate(std::string string, bool print_error_if_exists = true)
 
 TEST_CASE("Prune a tree", "[test-system]")
 {
-  validate("public (:) enterProgram { printLine(str_: \"Howdy!\"); }");
+  REQUIRE(validate(R"(
+    public (:) enterProgram
+    {
+      printLine(str_: "Howdy!");
+    }
+  )"));
+  REQUIRE(validate(R"(
+    public (:) enterProgram
+    {
+      if (sys.Out.getStatus()~is_available)
+        sys.Out.printLine(line_: "A line");
+      else
+        @sys.Control.abortProgram;
+    }
+  )"));
 }

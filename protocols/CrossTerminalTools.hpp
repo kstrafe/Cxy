@@ -24,6 +24,7 @@ class CrossTerminalTools
 public:
 
   static bool isKeyword(const CrossTerminal &ct_);
+  static bool isExpression(const CrossTerminal &ct_);
 
 };
 

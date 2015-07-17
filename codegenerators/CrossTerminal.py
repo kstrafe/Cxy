@@ -113,7 +113,7 @@ productions = {
     ],
     'OPTIONAL_ASSIGNMENT': [
         ['GROUPER_LEFT_PARENTHESIS', 'PARAMETER_LIST', 'GROUPER_RIGHT_PARENTHESIS'],
-        ['SYMBOL_EQUAL', 'EXPRESSION'],
+        ['SYMBOL_EQUAL', 'EXPRESSION_EXPRESSION'],
         []
     ],
     'OPTIONAL_DATA_DECLARATION': [
@@ -139,7 +139,7 @@ productions = {
     ],
     'STATEMENT': [
         ['DATA_DECLARATION_STATEMENT'],
-        ['EXPRESSION'],
+        ['EXPRESSION_EXPRESSION'],
         ['GOTO_STATEMENT'],
         ['ITER_STATEMENT'],
         ['LABEL_STATEMENT'],
@@ -164,10 +164,10 @@ productions = {
         ['KEYWORD_PTR', 'TYPE'],
     ],
     'PARAMETER_LIST': [
-        ['IDENTIFIER_VARIABLE', 'SYMBOL_COLON', 'EXPRESSION', 'OPTIONAL_PARAMETER_LIST'],
+        ['IDENTIFIER_VARIABLE', 'SYMBOL_COLON', 'EXPRESSION_EXPRESSION', 'OPTIONAL_PARAMETER_LIST'],
         []
     ],
-    'EXPRESSION': [
+    'EXPRESSION_EXPRESSION': [
         ['ASSIGNMENT_EXPRESSION'],
     ],
 ################################################################################
@@ -187,16 +187,16 @@ productions = {
         ['KEYWORD_ASSEMBLY', 'CODE_BLOCK']
     ],
     'DO_STATEMENT': [
-        ['KEYWORD_DO', 'GROUPER_LEFT_PARENTHESIS', 'EXPRESSION', 'GROUPER_RIGHT_PARENTHESIS', 'SINGLE_STATEMENT_OR_CODE_BLOCK']
+        ['KEYWORD_DO', 'GROUPER_LEFT_PARENTHESIS', 'EXPRESSION_EXPRESSION', 'GROUPER_RIGHT_PARENTHESIS', 'SINGLE_STATEMENT_OR_CODE_BLOCK']
     ],
     'FOR_STATEMENT': [
-        ['KEYWORD_FOR', 'GROUPER_LEFT_PARENTHESIS', 'DATA_DECLARATION', 'SYMBOL_SEMICOLON', 'EXPRESSION', 'SYMBOL_SEMICOLON', 'STATEMENT_LIST', 'GROUPER_RIGHT_PARENTHESIS', 'SINGLE_STATEMENT_OR_CODE_BLOCK']
+        ['KEYWORD_FOR', 'GROUPER_LEFT_PARENTHESIS', 'DATA_DECLARATION', 'SYMBOL_SEMICOLON', 'EXPRESSION_EXPRESSION', 'SYMBOL_SEMICOLON', 'STATEMENT_LIST', 'GROUPER_RIGHT_PARENTHESIS', 'SINGLE_STATEMENT_OR_CODE_BLOCK']
     ],
     'IF_STATEMENT': [
-        ['KEYWORD_IF', 'GROUPER_LEFT_PARENTHESIS', 'EXPRESSION', 'GROUPER_RIGHT_PARENTHESIS', 'SINGLE_STATEMENT_OR_CODE_BLOCK', 'ELSE_STATEMENT']
+        ['KEYWORD_IF', 'GROUPER_LEFT_PARENTHESIS', 'EXPRESSION_EXPRESSION', 'GROUPER_RIGHT_PARENTHESIS', 'SINGLE_STATEMENT_OR_CODE_BLOCK', 'ELSE_STATEMENT']
     ],
     'WHILE_STATEMENT': [
-        ['KEYWORD_WHILE', 'GROUPER_LEFT_PARENTHESIS', 'EXPRESSION', 'GROUPER_RIGHT_PARENTHESIS', 'SINGLE_STATEMENT_OR_CODE_BLOCK']
+        ['KEYWORD_WHILE', 'GROUPER_LEFT_PARENTHESIS', 'EXPRESSION_EXPRESSION', 'GROUPER_RIGHT_PARENTHESIS', 'SINGLE_STATEMENT_OR_CODE_BLOCK']
     ],
     'CODE_BLOCK': [
         ['GROUPER_LEFT_BRACE', 'STATEMENT_LIST', 'GROUPER_RIGHT_BRACE'],
@@ -208,8 +208,8 @@ productions = {
         ['KEYWORD_GOTO', 'IDENTIFIER_VARIABLE']
     ],
     'ITER_STATEMENT': [
-        ['SYMBOL_PLUS__PLUS', 'EXPRESSION'],
-        ['SYMBOL_MINUS__MINUS', 'EXPRESSION'],
+        ['SYMBOL_PLUS__PLUS', 'EXPRESSION_EXPRESSION'],
+        ['SYMBOL_MINUS__MINUS', 'EXPRESSION_EXPRESSION'],
     ],
     'LABEL_STATEMENT': [
         ['KEYWORD_LABEL', 'IDENTIFIER_VARIABLE']
@@ -336,7 +336,7 @@ productions = {
     ],
 ################################################################################
     'CAST_EXPRESSION': [
-        ['KEYWORD_CAST', 'GROUPER_LEFT_PARENTHESIS', 'TYPE', 'GROUPER_RIGHT_PARENTHESIS', 'GROUPER_LEFT_BRACE', 'EXPRESSION', 'GROUPER_RIGHT_BRACE'],
+        ['KEYWORD_CAST', 'GROUPER_LEFT_PARENTHESIS', 'TYPE', 'GROUPER_RIGHT_PARENTHESIS', 'GROUPER_LEFT_BRACE', 'EXPRESSION_EXPRESSION', 'GROUPER_RIGHT_BRACE'],
         ['UNARY_EXPRESSION'],
     ],
 ################################################################################
@@ -354,7 +354,7 @@ productions = {
         ['IDENTIFIER_CLASS', 'CLASS_MEMBER_EXPRESSION'],
         ['IDENTIFIER_ENUMERATION', 'ENUMERATION_MEMBER_EXPRESSION'],
         ['IDENTIFIER_PACKAGE', 'PACKAGE_MEMBER_EXPRESSION'],
-        ['IDENTIFIER_SUBROUTINE', 'OPTIONAL_CALL'],
+        ['IDENTIFIER_SUBROUTINE', 'OPTIONAL_CALL_EXPRESSION'],
         ['RESOURCE', 'OPTIONAL_MEMBER_EXPRESSION'],
     ],
     'UNARY_OPERATOR': [
@@ -378,19 +378,19 @@ productions = {
     'PACKAGE_MEMBER_EXPRESSION': [
         ['SYMBOL_DOT', 'IDENTIFIER_CLASS', 'CLASS_MEMBER_EXPRESSION']
     ],
-    'OPTIONAL_CALL': [
-        ['GROUPER_LEFT_PARENTHESIS', 'PARAMETER_LIST', 'GROUPER_RIGHT_PARENTHESIS', 'OPTIONAL_EXTRACTOR'],
+    'OPTIONAL_CALL_EXPRESSION': [
+        ['GROUPER_LEFT_PARENTHESIS', 'PARAMETER_LIST', 'GROUPER_RIGHT_PARENTHESIS', 'OPTIONAL_EXTRACTOR_EXPRESSION'],
         []
     ],
     'RESOURCE': [
         ['IDENTIFIER_VARIABLE'],
         ['STRING'],
         ['INTEGER_LITERAL'],
-        ['GROUPER_LEFT_PARENTHESIS', 'EXPRESSION', 'GROUPER_RIGHT_PARENTHESIS']
+        ['GROUPER_LEFT_PARENTHESIS', 'EXPRESSION_EXPRESSION', 'GROUPER_RIGHT_PARENTHESIS']
     ],
     'OPTIONAL_MEMBER_EXPRESSION': [
-        ['ARRAY_ACCESS'],
-        ['GROUPER_LEFT_PARENTHESIS', 'PARAMETER_LIST', 'GROUPER_RIGHT_PARENTHESIS', 'SYMBOL_TILDE', 'IDENTIFIER_VARIABLE', 'OPTIONAL_MEMBER_EXPRESSION'],
+        ['ARRAY_ACCESS_EXPRESSION'],
+        ['GROUPER_LEFT_PARENTHESIS', 'PARAMETER_LIST', 'GROUPER_RIGHT_PARENTHESIS', 'OPTIONAL_EXTRACTOR_EXPRESSION'],
         ['SYMBOL_DOT', 'MEMBER_EXPRESSION'],
         []
     ],
@@ -399,16 +399,16 @@ productions = {
         ['IDENTIFIER_SUBROUTINE'],
         ['IDENTIFIER_VARIABLE'],
     ],
-    'OPTIONAL_EXTRACTOR': [
+    'OPTIONAL_EXTRACTOR_EXPRESSION': [
         ['SYMBOL_TILDE', 'IDENTIFIER_VARIABLE', 'OPTIONAL_MEMBER_EXPRESSION'],
         []
     ],
-    'ARRAY_ACCESS': [
-        ['GROUPER_LEFT_BRACKET', 'EXPRESSION', 'OPTIONAL_ARRAY_ACCESS', 'GROUPER_RIGHT_BRACKET', 'OPTIONAL_MEMBER_EXPRESSION']
+    'ARRAY_ACCESS_EXPRESSION': [
+        ['GROUPER_LEFT_BRACKET', 'EXPRESSION_EXPRESSION', 'OPTIONAL_ARRAY_ACCESS_EXPRESSION', 'GROUPER_RIGHT_BRACKET', 'OPTIONAL_MEMBER_EXPRESSION']
     ],
 ################################################################################
-    'OPTIONAL_ARRAY_ACCESS': [
-        ['SYMBOL_COMMA', 'EXPRESSION', 'OPTIONAL_ARRAY_ACCESS'],
+    'OPTIONAL_ARRAY_ACCESS_EXPRESSION': [
+        ['SYMBOL_COMMA', 'EXPRESSION_EXPRESSION', 'OPTIONAL_ARRAY_ACCESS_EXPRESSION'],
         []
     ]
 ################################################################################
@@ -579,18 +579,36 @@ def createcodetreebuilderparserdependencyTokenTypeToCrossTerminalcpp(terminal_se
         file.write(complete)
 
 
-def createprotocolsCrossTerminalToolscpp(terminal_set):
-    template = '''%(license)s#include "CrossTerminalTools.hpp"\n\n%(namespace_head)s\n\n%(enumerations)s\n\n%(namespace_tail)s\n'''
-    is_keyword_function = '''bool CrossTerminalTools::isKeyword(const CrossTerminal &ct_)\n{\n%(switches)s\n}'''
-    switches = '''switch (ct_)\n{\n%(cases)s\n}'''
-    cases = '''case CrossTerminal::%(ctname)s: return true;'''
-    default = '''default: return false;'''
-    namespace_head, namespace_tail = dependency.NamespaceGenerator.toNamespaces('tul', 'protocols')
+def createprotocolsCrossTerminalToolscpp(terminal_set, non_terminal_set):
+    def generateIsKeyword(terminal_set):
+        is_keyword_function = '''bool CrossTerminalTools::isKeyword(const CrossTerminal &ct_)\n{\n%(switches)s\n}'''
+        switches = '''switch (ct_)\n{\n%(cases)s\n}'''
+        cases = '''case CrossTerminal::%(ctname)s: return true;'''
+        default = '''default: return false;'''
 
-    result = [cases % {'ctname': i} for i in sorted(terminal_set) if i.startswith('KEYWORD_')]
-    result = switches % {'cases': dependency.Prepend.prependTabEachLine('\n'.join(result) + '\n' + default)}
-    result = is_keyword_function % {'switches': dependency.Prepend.prependTabEachLine(result)}
-    result = template % {'enumerations': result,'license': LICENSE_STRING, 'namespace_head': namespace_head, 'namespace_tail': namespace_tail}
+        result = [cases % {'ctname': i} for i in sorted(terminal_set) if i.startswith('KEYWORD_')]
+        result = switches % {'cases': dependency.Prepend.prependTabEachLine('\n'.join(result) + '\n' + default)}
+        result = is_keyword_function % {'switches': dependency.Prepend.prependTabEachLine(result)}
+        return result
+
+    def generateIsExpression(non_terminal_set):
+        is_keyword_function = '''bool CrossTerminalTools::isExpression(const CrossTerminal &ct_)\n{\n%(switches)s\n}'''
+        switches = '''switch (ct_)\n{\n%(cases)s\n}'''
+        cases = '''case CrossTerminal::%(ctname)s: return true;'''
+        default = '''default: return false;'''
+
+        result = [cases % {'ctname': i} for i in sorted(non_terminal_set) if i.endswith('_EXPRESSION')]
+        result = switches % {'cases': dependency.Prepend.prependTabEachLine('\n'.join(result) + '\n' + default)}
+        result = is_keyword_function % {'switches': dependency.Prepend.prependTabEachLine(result)}
+        return result
+
+    namespace_head, namespace_tail = dependency.NamespaceGenerator.toNamespaces('tul', 'protocols')
+    template = '''%(license)s#include "CrossTerminalTools.hpp"\n\n%(namespace_head)s\n\n%(enumerations)s\n\n%(namespace_tail)s\n'''
+
+    enumerations = [generateIsKeyword(terminal_set)]
+    enumerations.append(generateIsExpression(non_terminal_set))
+    result = template % {'enumerations': '\n\n'.join(enumerations),'license': LICENSE_STRING, 'namespace_head': namespace_head, 'namespace_tail': namespace_tail}
+
 
     with open('./protocols/CrossTerminalTools.cpp', 'w') as file:
         file.write(result)
@@ -635,7 +653,7 @@ def enterMain():
     createcodetreebuilderparserdependencyCrossTerminalParserinc()
     createcodetreebuilderparserdependencyCrossTerminalToStringcpp(terminal_set, non_terminal_set)
     createcodetreebuilderparserdependencyTokenTypeToCrossTerminalcpp(terminal_set)
-    createprotocolsCrossTerminalToolscpp(terminal_set)
+    createprotocolsCrossTerminalToolscpp(terminal_set, non_terminal_set)
     createprotocolsCrossTerminalhpp(terminal_set, non_terminal_set)
     createprotocolsTokenTypehpp(terminal_set, non_terminal_set)
 

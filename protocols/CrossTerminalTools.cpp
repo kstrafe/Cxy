@@ -47,4 +47,44 @@ bool CrossTerminalTools::isKeyword(const CrossTerminal &ct_)
     }
 }
 
+bool CrossTerminalTools::isExpression(const CrossTerminal &ct_)
+{
+    switch (ct_)
+    {
+        case CrossTerminal::ADDITIVE_EXPRESSION: return true;
+        case CrossTerminal::AND_EXPRESSION: return true;
+        case CrossTerminal::ARRAY_ACCESS_EXPRESSION: return true;
+        case CrossTerminal::ASSIGNMENT_EXPRESSION: return true;
+        case CrossTerminal::BITWISE_AND_EXPRESSION: return true;
+        case CrossTerminal::BITWISE_OR_EXPRESSION: return true;
+        case CrossTerminal::BITWISE_XOR_EXPRESSION: return true;
+        case CrossTerminal::CAST_EXPRESSION: return true;
+        case CrossTerminal::CLASS_MEMBER_EXPRESSION: return true;
+        case CrossTerminal::ENUMERATION_MEMBER_EXPRESSION: return true;
+        case CrossTerminal::EQUALITY_EXPRESSION: return true;
+        case CrossTerminal::EXPRESSION_EXPRESSION: return true;
+        case CrossTerminal::MEMBER_EXPRESSION: return true;
+        case CrossTerminal::MULTIPLICATIVE_EXPRESSION: return true;
+        case CrossTerminal::OPTIONAL_ADDITIVE_EXPRESSION: return true;
+        case CrossTerminal::OPTIONAL_AND_EXPRESSION: return true;
+        case CrossTerminal::OPTIONAL_ARRAY_ACCESS_EXPRESSION: return true;
+        case CrossTerminal::OPTIONAL_ASSIGNMENT_EXPRESSION: return true;
+        case CrossTerminal::OPTIONAL_BITWISE_AND_EXPRESSION: return true;
+        case CrossTerminal::OPTIONAL_BITWISE_OR_EXPRESSION: return true;
+        case CrossTerminal::OPTIONAL_BITWISE_XOR_EXPRESSION: return true;
+        case CrossTerminal::OPTIONAL_CALL_EXPRESSION: return true;
+        case CrossTerminal::OPTIONAL_EQUALITY_EXPRESSION: return true;
+        case CrossTerminal::OPTIONAL_EXTRACTOR_EXPRESSION: return true;
+        case CrossTerminal::OPTIONAL_MEMBER_EXPRESSION: return true;
+        case CrossTerminal::OPTIONAL_MULTIPLICATIVE_EXPRESSION: return true;
+        case CrossTerminal::OPTIONAL_OR_EXPRESSION: return true;
+        case CrossTerminal::OPTIONAL_RELATIONAL_EXPRESSION: return true;
+        case CrossTerminal::OR_EXPRESSION: return true;
+        case CrossTerminal::PACKAGE_MEMBER_EXPRESSION: return true;
+        case CrossTerminal::RELATIONAL_EXPRESSION: return true;
+        case CrossTerminal::UNARY_EXPRESSION: return true;
+        default: return false;
+    }
+}
+
 }}

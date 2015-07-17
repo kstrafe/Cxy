@@ -34,7 +34,7 @@ std::string CrossTerminalToString::convertToString(protocols::CrossTerminal cros
         case protocols::CrossTerminal::ARGUMENT_LIST: return "ARGUMENT_LIST";
         case protocols::CrossTerminal::ARGUMENT_LIST_AFTER_FIRST: return "ARGUMENT_LIST_AFTER_FIRST";
         case protocols::CrossTerminal::ARRAY: return "ARRAY";
-        case protocols::CrossTerminal::ARRAY_ACCESS: return "ARRAY_ACCESS";
+        case protocols::CrossTerminal::ARRAY_ACCESS_EXPRESSION: return "ARRAY_ACCESS_EXPRESSION";
         case protocols::CrossTerminal::ASSEMBLY_STATEMENT: return "ASSEMBLY_STATEMENT";
         case protocols::CrossTerminal::ASSIGNMENT_EXPRESSION: return "ASSIGNMENT_EXPRESSION";
         case protocols::CrossTerminal::ATTRIBUTE_LIST: return "ATTRIBUTE_LIST";
@@ -57,7 +57,7 @@ std::string CrossTerminalToString::convertToString(protocols::CrossTerminal cros
         case protocols::CrossTerminal::ENUMERATION_MEMBER_EXPRESSION: return "ENUMERATION_MEMBER_EXPRESSION";
         case protocols::CrossTerminal::ENUM_END: return "";case protocols::CrossTerminal::EPSILONATE: return "EPSILONATE";
         case protocols::CrossTerminal::EQUALITY_EXPRESSION: return "EQUALITY_EXPRESSION";
-        case protocols::CrossTerminal::EXPRESSION: return "EXPRESSION";
+        case protocols::CrossTerminal::EXPRESSION_EXPRESSION: return "EXPRESSION_EXPRESSION";
         case protocols::CrossTerminal::FOR_STATEMENT: return "FOR_STATEMENT";
         case protocols::CrossTerminal::FUNCTION_DEFINITION: return "FUNCTION_DEFINITION";
         case protocols::CrossTerminal::FUNCTION_LIST: return "FUNCTION_LIST";
@@ -105,17 +105,17 @@ std::string CrossTerminalToString::convertToString(protocols::CrossTerminal cros
         case protocols::CrossTerminal::OPTIONAL_ADDITIVE_EXPRESSION: return "OPTIONAL_ADDITIVE_EXPRESSION";
         case protocols::CrossTerminal::OPTIONAL_AND_EXPRESSION: return "OPTIONAL_AND_EXPRESSION";
         case protocols::CrossTerminal::OPTIONAL_ARGUMENT_LIST: return "OPTIONAL_ARGUMENT_LIST";
-        case protocols::CrossTerminal::OPTIONAL_ARRAY_ACCESS: return "OPTIONAL_ARRAY_ACCESS";
+        case protocols::CrossTerminal::OPTIONAL_ARRAY_ACCESS_EXPRESSION: return "OPTIONAL_ARRAY_ACCESS_EXPRESSION";
         case protocols::CrossTerminal::OPTIONAL_ASSIGNMENT: return "OPTIONAL_ASSIGNMENT";
         case protocols::CrossTerminal::OPTIONAL_ASSIGNMENT_EXPRESSION: return "OPTIONAL_ASSIGNMENT_EXPRESSION";
         case protocols::CrossTerminal::OPTIONAL_ATTRIBUTE_LIST: return "OPTIONAL_ATTRIBUTE_LIST";
         case protocols::CrossTerminal::OPTIONAL_BITWISE_AND_EXPRESSION: return "OPTIONAL_BITWISE_AND_EXPRESSION";
         case protocols::CrossTerminal::OPTIONAL_BITWISE_OR_EXPRESSION: return "OPTIONAL_BITWISE_OR_EXPRESSION";
         case protocols::CrossTerminal::OPTIONAL_BITWISE_XOR_EXPRESSION: return "OPTIONAL_BITWISE_XOR_EXPRESSION";
-        case protocols::CrossTerminal::OPTIONAL_CALL: return "OPTIONAL_CALL";
+        case protocols::CrossTerminal::OPTIONAL_CALL_EXPRESSION: return "OPTIONAL_CALL_EXPRESSION";
         case protocols::CrossTerminal::OPTIONAL_DATA_DECLARATION: return "OPTIONAL_DATA_DECLARATION";
         case protocols::CrossTerminal::OPTIONAL_EQUALITY_EXPRESSION: return "OPTIONAL_EQUALITY_EXPRESSION";
-        case protocols::CrossTerminal::OPTIONAL_EXTRACTOR: return "OPTIONAL_EXTRACTOR";
+        case protocols::CrossTerminal::OPTIONAL_EXTRACTOR_EXPRESSION: return "OPTIONAL_EXTRACTOR_EXPRESSION";
         case protocols::CrossTerminal::OPTIONAL_MEMBER_EXPRESSION: return "OPTIONAL_MEMBER_EXPRESSION";
         case protocols::CrossTerminal::OPTIONAL_MULTIPLICATIVE_EXPRESSION: return "OPTIONAL_MULTIPLICATIVE_EXPRESSION";
         case protocols::CrossTerminal::OPTIONAL_OR_EXPRESSION: return "OPTIONAL_OR_EXPRESSION";
