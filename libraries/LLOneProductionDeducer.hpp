@@ -42,8 +42,8 @@ namespace tul
       A function or class that invokes this class is one that implements
       a stack of tokens.
 
-      A rule should not be added parseSymbol is called. This is because the
-      returned vector is a pointer and may be invalidated.
+      A rule should not be added after parseSymbol is called. This is because
+      the returned vector is a pointer and may be invalidated.
     */
     template <typename SYMBOL>
     class LLOneProductionDeducer
