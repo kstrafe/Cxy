@@ -17,8 +17,8 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "actgen/ActionGenerator.hpp"
+#include "actgen/TokenGenerator.hpp"
 #include "dependency/PositionCounter.hpp"
-#include "dependency/TokenGenerator.hpp"
 #include "protocols/EntryType.hpp"
 #include "protocols/Token.hpp"
 
