@@ -21,22 +21,14 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 #include <string>
 
 
-namespace tul
+namespace tul { namespace dependency {
+
+class KeywordMatcher
 {
-  namespace treebuilder
-  {
-    namespace lexer
-    {
-      namespace dependency
-      {
-        class KeywordMatcher
-        {
-        public:
+public:
 
-          static protocols::TokenType getKeyword(const std::string &lexeme);
+  static protocols::TokenType getKeyword(const std::string &lexeme);
 
-        };
-      }
-    }
-  }
-}
+};
+
+}}

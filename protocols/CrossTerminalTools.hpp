@@ -17,6 +17,9 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "CrossTerminal.hpp"
 
+#include <string>
+
+
 namespace tul { namespace protocols {
 
 class CrossTerminalTools
@@ -25,6 +28,7 @@ public:
 
   static bool isKeyword(const CrossTerminal &ct_);
   static bool isExpression(const CrossTerminal &ct_);
+  static std::string toString(protocols::CrossTerminal cross_terminal);
 
 };
 

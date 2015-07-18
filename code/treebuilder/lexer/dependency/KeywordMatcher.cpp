@@ -18,7 +18,7 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 #include "KeywordMatcher.hpp"
 
 
-namespace tul { namespace treebuilder { namespace lexer { namespace dependency { 
+namespace tul { namespace dependency { 
 
 protocols::TokenType KeywordMatcher::getKeyword(const std::string &lexeme)
 {
@@ -46,4 +46,4 @@ protocols::TokenType KeywordMatcher::getKeyword(const std::string &lexeme)
     else return protocols::TokenType::UNIDENTIFIED;
 }
 
-}}}}
+}}

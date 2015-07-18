@@ -15,17 +15,17 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "TokenGenerator.hpp"
-
 #include "libraries/catch.hpp"
 #include "protocols/Action.hpp"
+#include "TokenGenerator.hpp"
 
 #include <string>
+
 
 TEST_CASE("Test the token generator", "[test-TokenGenerator]")
 {
   using namespace tul::protocols;
-  tul::treebuilder::lexer::dependency::TokenGenerator token_generator;
+  tul::dependency::TokenGenerator token_generator;
   SECTION("No tokens ought to be put on the stack")
   //enum class Action { N, E, P, PTG, TAPTG, TA, TAP, TRP, TR, TRPTG, TSP, TSPTG, TS  };
   {

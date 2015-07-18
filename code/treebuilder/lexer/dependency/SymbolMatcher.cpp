@@ -18,7 +18,7 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 #include "SymbolMatcher.hpp"
 
 
-namespace tul { namespace treebuilder { namespace lexer { namespace dependency { 
+namespace tul { namespace dependency { 
 
 protocols::TokenType SymbolMatcher::getSymbol(const std::string &lexeme)
 {
@@ -58,4 +58,4 @@ protocols::TokenType SymbolMatcher::getSymbol(const std::string &lexeme)
     else return protocols::TokenType::UNIDENTIFIED;
 }
 
-}}}}
+}}

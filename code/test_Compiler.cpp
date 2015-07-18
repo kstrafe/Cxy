@@ -16,13 +16,12 @@ You should have received a copy of the GNU General Public License
 along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "libraries/catch.hpp"
-
 #include "treebuilder/TreeBuilder.hpp"
 #include "treepruner/TreePruner.hpp"
-#include "treebuilder/parser/dependency/CrossTerminalToString.hpp"
 #include "protocols/CrossTerminalTools.hpp"
 
 #include <iostream>
+
 
 std::string printTree(const tul::protocols::ConcreteSyntaxTree *cst_, int indent = 0)
 {
@@ -30,10 +29,10 @@ std::string printTree(const tul::protocols::ConcreteSyntaxTree *cst_, int indent
   {
     std::stringstream str_strm;
     str_strm << std::setfill('0') << std::setw(3) << indent << ':';
-    using namespace tul::treebuilder::parser::dependency;
+    using namespace tul::dependency;
     std::string ind(indent, ' ');
     ind += str_strm.str();
-    ind += CrossTerminalToString::convertToString(cst_->node_type);
+    ind += protocols::CrossTerminalTools::toString(cst_->node_type);
     ind += '(';
     ind += cst_->token_.accompanying_lexeme;
     ind += ')';

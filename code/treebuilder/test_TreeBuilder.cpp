@@ -16,15 +16,12 @@ You should have received a copy of the GNU General Public License
 along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "TreeBuilder.hpp"
-
-#include "parser/dependency/CrossTerminalToString.hpp"
-#include "parser/dependency/TokenTypeToCrossTerminal.hpp"
-
+#include "libraries/catch.hpp"
 #include "protocols/CrossTerminal.hpp"
 #include "protocols/CrossTerminalTools.hpp"
-#include "protocols/ParseReturn.hpp"
 
-#include "libraries/catch.hpp"
+#include "protocols/ParseReturn.hpp"
+#include "protocols/TokenTypeToCrossTerminal.hpp"
 
 #include <cassert>
 #include <iostream>
@@ -33,85 +30,12 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 ////////////////////////////////////////////////////////////////////////////////
 // This is only a small utility validator... if you want to see how
 // TreeBuilder works just go down to "TEST_CASE"
-// How are we going to perform semantic analysis? First we need to convert the
-// CST to an AST. How do we do this. Let's define a few formal rules:
-// 1. Prune all epsilons. These are removed from the tree.
-// 2. Any node having one single child that is a non-terminal: -> C1 -> C2 ->,
-// will become -> C2 ->
-// 3. Prune away all groupers and symbols. These hold no semantic data and
-// Are no longer important.
-//
-// With this in mind, the concrete tree becomes an abstract tree. To process the
-// abstract tree, an action is to be determined for each node and how it will
-// act upon its sub-nodes. Herein lies the first action of validating the
-// semantic data.
 ////////////////////////////////////////////////////////////////////////////////
 namespace
 {
-  int hasButOneEpsilonChild(const tul::protocols::ConcreteSyntaxTree *cst_)
-  {
-    int stored_ = -1, iter_ = 0;
-    std::size_t count_ = 0;
-    for (auto child_ : cst_->children_)
-    {
-      bool is_not_eps = static_cast<std::size_t>(child_->node_type != tul::protocols::CrossTerminal::EPSILONATE);
-      if (is_not_eps)
-      {
-        stored_ = iter_;
-        ++count_;
-      }
-      ++iter_;
-    }
-    if (count_ == 1)
-    {
-      return stored_;
-    }
-    else
-    {
-      return -1;
-    }
-  }
-
-  std::string printTree(const tul::protocols::ConcreteSyntaxTree *cst_, int indent = 0)
-  {
-    // int non_eps_child = hasButOneEpsilonChild(cst_);
-    // if (non_eps_child != -1)
-    // {
-    //   return printTree(cst_->children_[non_eps_child], indent);
-    // }
-    // else
-    {
-      std::stringstream str_strm;
-      str_strm << std::setfill('0') << std::setw(3) << indent << ':';
-      using namespace tul::treebuilder::parser::dependency;
-      std::string ind(indent, ' ');
-      ind += str_strm.str();
-      ind += CrossTerminalToString::convertToString(cst_->node_type);
-      ind += '(';
-      ind += cst_->token_.accompanying_lexeme;
-      ind += ')';
-      ind += '\n';
-      for (auto child_ : cst_->children_)
-      {
-
-        if (
-          child_->node_type != tul::protocols::CrossTerminal::EPSILONATE
-          && child_->token_.entry_type != tul::protocols::EntryType::OTHER_SYMBOL
-          && child_->token_.entry_type != tul::protocols::EntryType::GROUPING_SYMBOL
-          && tul::protocols::CrossTerminalTools::isKeyword(child_->node_type) == false
-        ) {
-          ind += printTree(child_, indent + 2);
-        }
-      }
-      return ind;
-    }
-  }
-
   bool validate(const std::string &string, bool print_error_if_exists = true)
   {
     using namespace tul::treebuilder;
-
-
     TreeBuilder builder_object;
     bool ret_val = true;
     char current_ = '\0';
@@ -133,11 +57,6 @@ namespace
       std::cout << "\nError: expected:\n";
       for (std::string &string : expected)
         std::cout << string << ", " << std::endl;
-    }
-    if (print_error_if_exists == true)
-    {
-      // std::cout << string << std::endl;
-      // std::cout << printTree(builder_object.getConcreteSyntaxTree()) << std::endl;
     }
     return ret_val;
   }

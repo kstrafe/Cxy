@@ -16,16 +16,16 @@ You should have received a copy of the GNU General Public License
 along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "PositionCounter.hpp"
-
 #include "libraries/catch.hpp"
 
 #include <string>
+
 
 TEST_CASE("Test the position counter", "[test-PositionCounter]")
 {
   SECTION("See if the position counter counts normal asci codes correctly.")
   {
-    tul::treebuilder::lexer::dependency::PositionCounter position_counter;
+    tul::dependency::PositionCounter position_counter;
     for (auto &character_ : std::string("This is a (very) normal and expected piece of text\nWorry not\nThe future is green."))
     {
       position_counter.countCharacter(character_);
@@ -36,7 +36,7 @@ TEST_CASE("Test the position counter", "[test-PositionCounter]")
 
   SECTION("Now on some non-ascii stuff...")
   {
-    tul::treebuilder::lexer::dependency::PositionCounter position_counter;
+    tul::dependency::PositionCounter position_counter;
     for (auto &character_ : std::string("Jeg liker å fôre hunden min."))
     {
       position_counter.countCharacter(character_);
@@ -47,7 +47,7 @@ TEST_CASE("Test the position counter", "[test-PositionCounter]")
 
   SECTION("Repeating non-ascii characters must be accounted for")
   {
-    tul::treebuilder::lexer::dependency::PositionCounter position_counter;
+    tul::dependency::PositionCounter position_counter;
     for (auto &character_ : std::string("å"))
     {
       CHECK(static_cast<unsigned char>(character_) >= 128);
@@ -59,7 +59,7 @@ TEST_CASE("Test the position counter", "[test-PositionCounter]")
 
   SECTION("Test counting moonrunes")
   {
-    tul::treebuilder::lexer::dependency::PositionCounter position_counter;
+    tul::dependency::PositionCounter position_counter;
     for (auto &character_ : std::string("ᚠᛇᚻ᛫ᛒᛦᚦ"))
     {
       CHECK(static_cast<unsigned char>(character_) >= 128);
@@ -71,7 +71,7 @@ TEST_CASE("Test the position counter", "[test-PositionCounter]")
 
   SECTION("Some character sets mixed together")
   {
-    tul::treebuilder::lexer::dependency::PositionCounter position_counter;
+    tul::dependency::PositionCounter position_counter;
     for (auto &character_ : std::string("еднᚠᛇᚻῶσσ᛫ᛒმხσსნაᛦHelloᚦ"))
     {
       position_counter.countCharacter(character_);
@@ -82,7 +82,7 @@ TEST_CASE("Test the position counter", "[test-PositionCounter]")
 
   SECTION("Subramaniya Bharathiyar's poem")
   {
-    tul::treebuilder::lexer::dependency::PositionCounter position_counter;
+    tul::dependency::PositionCounter position_counter;
     for (auto &character_ : std::string("யாமறிந்த மொழிகளிலே தமிழ்மொழி போல் இனிதாவது எங்கும் காணோம்"))
     {
       position_counter.countCharacter(character_);
@@ -93,7 +93,7 @@ TEST_CASE("Test the position counter", "[test-PositionCounter]")
 
   SECTION("Some code points that do not follow strict monospace representation")
   {
-    tul::treebuilder::lexer::dependency::PositionCounter position_counter;
+    tul::dependency::PositionCounter position_counter;
     for (auto &character_ : std::string("٩(͡๏̯͡๏)۶   ٩(-̮̮̃•̃)."))
     {
       position_counter.countCharacter(character_);

@@ -16,27 +16,19 @@ You should have received a copy of the GNU General Public License
 along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 */
 #pragma once
-
 #include "protocols/CrossTerminal.hpp"
 #include "protocols/TokenType.hpp"
 
-namespace tul
+
+namespace tul {	namespace dependency {
+
+class TokenTypeToCrossTerminal
 {
-	namespace treebuilder
-  {
-		namespace parser
-		{
-			namespace dependency
-			{
-	      class TokenTypeToCrossTerminal
-	      {
 
-	      public:
+public:
 
-	  			static protocols::CrossTerminal convertToCrossTerminal(protocols::TokenType token_type);
+	static protocols::CrossTerminal convertToCrossTerminal(protocols::TokenType token_type);
 
-	      };
-			}
-		}
-	}
-}
+};
+
+}}

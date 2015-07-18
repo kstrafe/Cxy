@@ -15,21 +15,20 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "Parser.hpp"
-
-#include "protocols/Token.hpp"
-
 #include "libraries/catch.hpp"
+#include "Parser.hpp"
+#include "protocols/Token.hpp"
 
 #include <map>
 #include <vector>
+
 
 TEST_CASE("Test parser", "[test-Parser]")
 {
   SECTION("Try parsing simple a simple expression")
   {
     using namespace tul::protocols;
-    tul::treebuilder::parser::Parser parser_;
+    tul::parser::Parser parser_;
     auto parseSymbol = [&parser_](const TokenType &token_type) -> void {Token token_; token_.token_type = token_type; REQUIRE(parser_.parseSymbol(token_) == true);};
     auto parseFail = [&parser_](const TokenType &token_type) -> void {Token token_; token_.token_type = token_type; REQUIRE(parser_.parseSymbol(token_) == false);};
 

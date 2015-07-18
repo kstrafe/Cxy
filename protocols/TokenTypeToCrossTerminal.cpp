@@ -20,7 +20,7 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 #include "protocols/TokenType.hpp"
 
 
-namespace tul { namespace treebuilder { namespace parser { namespace dependency { 
+namespace tul { namespace dependency { 
 
 protocols::CrossTerminal TokenTypeToCrossTerminal::convertToCrossTerminal(protocols::TokenType token_type)
 {
@@ -99,4 +99,4 @@ protocols::CrossTerminal TokenTypeToCrossTerminal::convertToCrossTerminal(protoc
     }
 }
 
-}}}}
+}}

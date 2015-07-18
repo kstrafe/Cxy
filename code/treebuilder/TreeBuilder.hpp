@@ -17,34 +17,31 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "lexer/Lexer.hpp"
 #include "parser/Parser.hpp"
-
 #include "protocols/ConcreteSyntaxTree.hpp"
 
 #include <string>
 #include <vector>
 
 
-namespace tul
+namespace tul { namespace treebuilder {
+
+class TreeBuilder
 {
-  namespace treebuilder
-  {
-    class TreeBuilder
-    {
-    public:
+public:
 
-      bool buildTree(char character);
+  bool buildTree(char character);
 
-      bool endInput();
+  bool endInput();
 
-      protocols::ConcreteSyntaxTree *getConcreteSyntaxTree();
+  protocols::ConcreteSyntaxTree *getConcreteSyntaxTree();
 
-      std::vector<std::string> getExpectedTokens();
+  std::vector<std::string> getExpectedTokens();
 
-    private:
+private:
 
-      lexer::Lexer lexer_object;
-      parser::Parser parser_object;
+  lexer::Lexer lexer_object;
+  parser::Parser parser_object;
 
-    };
-  }
-}
+};
+
+}}

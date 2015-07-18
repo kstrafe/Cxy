@@ -16,9 +16,8 @@ You should have received a copy of the GNU General Public License
 along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "CrossTerminalParser.hpp"
-#include "CrossTerminalToString.hpp"
-
 #include "libraries/catch.hpp"
+
 
 #include <iostream>
 #include <vector>
@@ -30,7 +29,7 @@ TEST_CASE("Test cross-terminal output", "[test-CrossTerminalParser]")
     Here we test whether the language is accepted.
   */
 
-  using namespace tul::treebuilder::parser::dependency;
+  using namespace tul::dependency;
   using namespace tul::protocols;
   CrossTerminalParser cross_terminal_parser;
 
@@ -76,8 +75,8 @@ TEST_CASE("Test cross-terminal output", "[test-CrossTerminalParser]")
     ParseReturn<CrossTerminal> returned
       = cross_terminal_parser.parseSymbol(parse_stack.front(), input_token_types.front());
     /*std::cout
-      << "top: " << CrossTerminalToString::convertToString(parse_stack.front())
-      << " input: " << CrossTerminalToString::convertToString(input_token_types.front())
+      << "top: " << CrossTerminalTools::toString(parse_stack.front())
+      << " input: " << CrossTerminalTools::toString(input_token_types.front())
       << std::endl;*/
     switch (returned.desired_action)
     {
@@ -106,9 +105,9 @@ TEST_CASE("Test cross-terminal output", "[test-CrossTerminalParser]")
         {
           std::cerr
             << "Error: expected token: '"
-            << CrossTerminalToString::convertToString(parse_stack.front())
+            << CrossTerminalTools::toString(parse_stack.front())
             << "' but got '"
-            << CrossTerminalToString::convertToString(input_token_types.front())
+            << CrossTerminalTools::toString(input_token_types.front())
             << '\'';
         }
         else
@@ -117,17 +116,17 @@ TEST_CASE("Test cross-terminal output", "[test-CrossTerminalParser]")
           {
             std::cerr
               << "Error: expected token: '"
-              << CrossTerminalToString::convertToString(expected_crossterminals[0])
+              << CrossTerminalTools::toString(expected_crossterminals[0])
               << "' but got '"
-              << CrossTerminalToString::convertToString(input_token_types.front())
+              << CrossTerminalTools::toString(input_token_types.front())
               << '\'';
           }
           else
           {
             std::cerr << "Error: expected tokens: '";
             for (int i = 0; i < expected_crossterminals.size() - 1; ++i)
-              std::cerr << CrossTerminalToString::convertToString(expected_crossterminals[i]) << "' , or '";
-            std::cerr << CrossTerminalToString::convertToString(expected_crossterminals.back()) << '\'';
+              std::cerr << CrossTerminalTools::toString(expected_crossterminals[i]) << "' , or '";
+            std::cerr << CrossTerminalTools::toString(expected_crossterminals.back()) << '\'';
           }
         }*/
         REQUIRE(false);

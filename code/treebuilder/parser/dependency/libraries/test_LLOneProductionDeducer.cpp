@@ -15,14 +15,14 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "libraries/LLOneProductionDeducer.hpp"
+#include "LLOneProductionDeducer.hpp"
 #include "libraries/catch.hpp"
 
 #include <iostream>
 #include <stack>
-
 #include <vector>
 #include <map>
+
 
 TEST_CASE("Test the kernel of the LL(1) production transducer", "[test-LL1]")
 {
@@ -46,7 +46,6 @@ TEST_CASE("Test the kernel of the LL(1) production transducer", "[test-LL1]")
     symbol_stack.emplace(GROUPER);
 
     std::vector<Symbols> input_symbols
-    // ((())())
     {LPAREN, LPAREN, LPAREN, RPAREN, RPAREN, LPAREN, RPAREN, RPAREN, END};
 
     for (Symbols input_symbol : input_symbols)

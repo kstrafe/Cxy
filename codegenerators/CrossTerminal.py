@@ -45,7 +45,7 @@ import dependency.Prepend
 # project/code/treebuilder/lexer/dependency/KeywordMatcher.cpp - Matches a lexeme with a TokenType, terminals starting with KEYWORD_ will be put there.
 # project/code/treebuilder/lexer/dependency/SymbolMatcher.cpp - Matches a lexeme with a TokenType, terminals starting with SYMBOL_ will be put there.
 # project/code/treebuilder/parser/dependency/CrossTerminalParser.inc - The full production specification of the language, to be included by the corresponding .cpp file.
-# project/code/treebuilder/parser/dependency/CrossTerminalToString.cpp - A switch converter into std::string
+# project/code/treebuilder/parser/dependency/CrossTerminal.cpp - A switch converter into std::string
 # project/code/treebuilder/parser/dependency/TokenTypeToCrossTerminal.cpp - A switch that converts TokenType enum into CrossTerminal
 # project/protocols/CrossTerminal.hpp - A simple enum containing all our CrossTerminals
 # project/protocols/TokenType.hpp - A simple enum containing only terminals, without any non-terminals
@@ -425,7 +425,7 @@ def createcodetreebuilderlexerdependencyKeywordMatchercpp(terminal_set):
     body = '''using namespace protocols;\nif (lexeme == "%(first)s") return TokenType::%(first_name)s;\n%(elifs)s\nelse return protocols::TokenType::UNIDENTIFIED;'''
     case = '''else if (lexeme == "%(symbol)s") return TokenType::%(symbol_name)s;'''
 
-    namespace_head, namespace_tail = dependency.NamespaceGenerator.toNamespaces('tul', 'treebuilder', 'lexer', 'dependency')
+    namespace_head, namespace_tail = dependency.NamespaceGenerator.toNamespaces('tul', 'dependency')
 
     symbols = []
     for i in sorted(terminal_set):
@@ -500,7 +500,7 @@ def createcodetreebuilderlexerdependencySymbolMatchercpp(terminal_set):
     body = '''using namespace protocols;\nif (lexeme == "%(first)s") return TokenType::%(first_name)s;\n%(elifs)s\nelse return protocols::TokenType::UNIDENTIFIED;'''
     case = '''else if (lexeme == "%(symbol)s") return TokenType::%(symbol_name)s;'''
 
-    namespace_head, namespace_tail = dependency.NamespaceGenerator.toNamespaces('tul', 'treebuilder', 'lexer', 'dependency')
+    namespace_head, namespace_tail = dependency.NamespaceGenerator.toNamespaces('tul', 'dependency')
 
     symbols = []
     for i in sorted(terminal_set):
@@ -528,34 +528,7 @@ def createcodetreebuilderparserdependencyCrossTerminalParserinc():
         file.write(LICENSE_STRING + '\n'.join(lines_))
 
 
-def createcodetreebuilderparserdependencyCrossTerminalToStringcpp(terminal_set, non_terminal_set):
-    template = '''%(license)s%(head)s\n%(namespace_head)s\n\n%(enumerations)s\n\n%(namespace_tail)s\n'''
-    head = '''#include "CrossTerminalToString.hpp"\n#include "protocols/CrossTerminal.hpp"\n#include <string>\n\n'''
-    enumerations = '''%(function_signature)s\n{\n%(body)s\n}'''
-    function_signature = '''std::string CrossTerminalToString::convertToString(protocols::CrossTerminal cross_terminal)'''
-    body = '''switch (cross_terminal)\n{\n%(cases)s\n}'''
-    case = '''case protocols::CrossTerminal::%(type)s: return "%(type)s";\n'''
-
-    namespace_head, namespace_tail = dependency.NamespaceGenerator.toNamespaces('tul', 'treebuilder', 'parser', 'dependency')
-
-    complete = [case % {'type': i} for i in non_terminal_set]
-    complete.extend([case % {'type': i} for i in terminal_set])
-    complete.append('case protocols::CrossTerminal::ENUM_END: return "";')
-    complete.sort()
-    complete.append('default: return "";')
-    complete = body % {'cases': dependency.Prepend.prependTabEachLine(''.join(complete))}
-    complete = enumerations % {'body': dependency.Prepend.prependTabEachLine(complete),'function_signature': function_signature}
-    complete = template % {'enumerations': complete,
-                           'head': head,
-                           'license': LICENSE_STRING,
-                           'namespace_head': namespace_head,
-                           'namespace_tail': namespace_tail}
-
-    with open('./code/treebuilder/parser/dependency/CrossTerminalToString.cpp', 'w') as file:
-        file.write(complete)
-
-
-def createcodetreebuilderparserdependencyTokenTypeToCrossTerminalcpp(terminal_set):
+def createprotocolsTokenTypeToCrossTerminalcpp(terminal_set):
     template = '''%(license)s%(head)s\n%(namespace_head)s\n\n%(enumerations)s\n\n%(namespace_tail)s\n'''
     head = '''#include "TokenTypeToCrossTerminal.hpp"\n#include "protocols/CrossTerminal.hpp"\n#include "protocols/TokenType.hpp"\n\n'''
     enumerations = '''%(function_signature)s\n{\n%(body)s\n}'''
@@ -563,7 +536,7 @@ def createcodetreebuilderparserdependencyTokenTypeToCrossTerminalcpp(terminal_se
     body = '''switch (token_type)\n{\n%(cases)s\n}'''
     case = '''case protocols::TokenType::%(type)s: return protocols::CrossTerminal::%(type)s;\n'''
 
-    namespace_head, namespace_tail = dependency.NamespaceGenerator.toNamespaces('tul', 'treebuilder', 'parser', 'dependency')
+    namespace_head, namespace_tail = dependency.NamespaceGenerator.toNamespaces('tul', 'dependency')
 
     complete = [case % {'type': i} for i in sorted(terminal_set)]
     complete.append('default: return protocols::CrossTerminal::UNIDENTIFIED;')
@@ -575,7 +548,7 @@ def createcodetreebuilderparserdependencyTokenTypeToCrossTerminalcpp(terminal_se
                            'namespace_head': namespace_head,
                            'namespace_tail': namespace_tail}
 
-    with open('./code/treebuilder/parser/dependency/TokenTypeToCrossTerminal.cpp', 'w') as file:
+    with open('./protocols/TokenTypeToCrossTerminal.cpp', 'w') as file:
         file.write(complete)
 
 
@@ -602,13 +575,28 @@ def createprotocolsCrossTerminalToolscpp(terminal_set, non_terminal_set):
         result = is_keyword_function % {'switches': dependency.Prepend.prependTabEachLine(result)}
         return result
 
+    def generateToString(terminal_set, non_terminal_set):
+        enumerations = '''%(function_signature)s\n{\n%(body)s\n}'''
+        function_signature = '''std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal)'''
+        body = '''switch (cross_terminal)\n{\n%(cases)s\n}'''
+        case = '''case protocols::CrossTerminal::%(type)s: return "%(type)s";\n'''
+
+        complete = [case % {'type': i} for i in non_terminal_set]
+        complete.extend([case % {'type': i} for i in terminal_set])
+        complete.append('case protocols::CrossTerminal::ENUM_END: return "";')
+        complete.sort()
+        complete.append('default: return "";')
+        complete = body % {'cases': dependency.Prepend.prependTabEachLine(''.join(complete))}
+        complete = enumerations % {'body': dependency.Prepend.prependTabEachLine(complete),'function_signature': function_signature}
+        return complete
+
     namespace_head, namespace_tail = dependency.NamespaceGenerator.toNamespaces('tul', 'protocols')
-    template = '''%(license)s#include "CrossTerminalTools.hpp"\n\n%(namespace_head)s\n\n%(enumerations)s\n\n%(namespace_tail)s\n'''
+    template = '''%(license)s#include "CrossTerminalTools.hpp"\n\n\n%(namespace_head)s\n\n%(enumerations)s\n\n%(namespace_tail)s\n'''
 
     enumerations = [generateIsKeyword(terminal_set)]
     enumerations.append(generateIsExpression(non_terminal_set))
+    enumerations.append(generateToString(terminal_set, non_terminal_set))
     result = template % {'enumerations': '\n\n'.join(enumerations),'license': LICENSE_STRING, 'namespace_head': namespace_head, 'namespace_tail': namespace_tail}
-
 
     with open('./protocols/CrossTerminalTools.cpp', 'w') as file:
         file.write(result)
@@ -651,8 +639,7 @@ def enterMain():
     createcodetreebuilderlexerdependencyKeywordMatchercpp(terminal_set)
     createcodetreebuilderlexerdependencySymbolMatchercpp(terminal_set)
     createcodetreebuilderparserdependencyCrossTerminalParserinc()
-    createcodetreebuilderparserdependencyCrossTerminalToStringcpp(terminal_set, non_terminal_set)
-    createcodetreebuilderparserdependencyTokenTypeToCrossTerminalcpp(terminal_set)
+    createprotocolsTokenTypeToCrossTerminalcpp(terminal_set)
     createprotocolsCrossTerminalToolscpp(terminal_set, non_terminal_set)
     createprotocolsCrossTerminalhpp(terminal_set, non_terminal_set)
     createprotocolsTokenTypehpp(terminal_set, non_terminal_set)

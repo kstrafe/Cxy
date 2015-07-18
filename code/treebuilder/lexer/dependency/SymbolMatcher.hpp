@@ -16,27 +16,19 @@ You should have received a copy of the GNU General Public License
 along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 */
 #pragma once
-
-
 #include "protocols/TokenType.hpp"
+
 #include <string>
 
-namespace tul
+
+namespace tul { namespace dependency {
+
+class SymbolMatcher
 {
-	namespace treebuilder
-  {
-		namespace lexer
-		{
-			namespace dependency
-			{
-		    class SymbolMatcher
-		    {
-		    public:
+public:
 
-					static protocols::TokenType getSymbol(const std::string &lexeme);
+	static protocols::TokenType getSymbol(const std::string &lexeme);
 
-		    };
-			}
-		}
-	}
-}
+};
+
+}}

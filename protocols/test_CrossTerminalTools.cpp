@@ -15,27 +15,16 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 */
-#pragma once
-#include "protocols/CrossTerminal.hpp"
-#include <string>
+#include "CrossTerminalTools.hpp"
+#include "libraries/catch.hpp"
+
+#include <iostream>
+#include <vector>
 
 
-namespace tul
+TEST_CASE("Cross-terminal to string representation", "[test-CrossTerminal]")
 {
-  namespace treebuilder
-  {
-    namespace parser
-    {
-      namespace dependency
-      {
-        class CrossTerminalToString
-        {
-          public:
-
-            static std::string convertToString(protocols::CrossTerminal cross_terminal);
-
-        };
-      }
-    }
-  }
+  for (int i = 0; i < static_cast<int>(tul::protocols::CrossTerminal::ENUM_END); ++i)
+    REQUIRE(tul::protocols::CrossTerminalTools::toString(static_cast<tul::protocols::CrossTerminal>(i)) != "");
+  REQUIRE(tul::protocols::CrossTerminalTools::toString(tul::protocols::CrossTerminal::ENUM_END) == "");
 }

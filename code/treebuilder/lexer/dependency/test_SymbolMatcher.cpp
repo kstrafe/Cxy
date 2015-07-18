@@ -15,15 +15,15 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 */
+#include "libraries/catch.hpp"
 #include "SymbolMatcher.hpp"
 
-#include "libraries/catch.hpp"
 
 TEST_CASE("Test symbol matcher", "[test-SymbolMatcher]")
 {
   SECTION("Attempting to match a few symbols")
   {
-    using namespace tul::treebuilder::lexer::dependency;
+    using namespace tul::dependency;
     using namespace tul::protocols;
     auto checkReturn = [](const std::string &lexeme) -> bool { return  SymbolMatcher::getSymbol(lexeme) != TokenType::UNIDENTIFIED; };
     REQUIRE(checkReturn("++"));
