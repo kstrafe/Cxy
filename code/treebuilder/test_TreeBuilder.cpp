@@ -21,7 +21,6 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 #include "protocols/CrossTerminalTools.hpp"
 
 #include "protocols/ParseReturn.hpp"
-#include "protocols/TokenTypeToCrossTerminal.hpp"
 
 #include <cassert>
 #include <iostream>

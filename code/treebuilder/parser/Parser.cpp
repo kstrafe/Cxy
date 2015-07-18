@@ -17,7 +17,7 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "Parser.hpp"
 #include "protocols/CrossTerminalTools.hpp"
-#include "protocols/TokenTypeToCrossTerminal.hpp"
+#include "tkcr/TokenTypeToCrossTerminal.hpp"
 
 
 namespace tul { namespace parser {
@@ -61,7 +61,7 @@ protocols::ConcreteSyntaxTree *Parser::getConcreteSyntaxTree()
 bool Parser::parseSymbol(const protocols::Token &input_token)
 {
   using namespace protocols;
-  CrossTerminal cross_terminal = dependency::TokenTypeToCrossTerminal::convertToCrossTerminal(input_token.token_type);
+  CrossTerminal cross_terminal = tkcr::TokenTypeToCrossTerminal::convertToCrossTerminal(input_token.token_type);
   while (symbol_stack.empty() == false)
   {
     ParseReturn<protocols::CrossTerminal> parse_return = cross_parser.parseSymbol(symbol_stack.top()->node_type, cross_terminal);
