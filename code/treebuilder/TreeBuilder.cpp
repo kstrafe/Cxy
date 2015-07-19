@@ -56,7 +56,7 @@ bool TreeBuilder::endInput()
   return parser_object.isEmpty();
 }
 
-protocols::ConcreteSyntaxTree *TreeBuilder::getConcreteSyntaxTree()
+std::unique_ptr<protocols::ConcreteSyntaxTree> TreeBuilder::getConcreteSyntaxTree()
 {
   return parser_object.getConcreteSyntaxTree();
 }

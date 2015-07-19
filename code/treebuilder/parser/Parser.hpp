@@ -21,6 +21,7 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 #include "protocols/CrossTerminal.hpp"
 #include "protocols/Token.hpp"
 
+#include <memory>
 #include <stack>
 #include <string>
 
@@ -51,14 +52,14 @@ public:
   ~Parser();
   bool isEmpty();
   bool parseSymbol(const protocols::Token &input_token);
-  protocols::ConcreteSyntaxTree *getConcreteSyntaxTree();
+  std::unique_ptr<protocols::ConcreteSyntaxTree> getConcreteSyntaxTree();
 
   std::vector<std::string> formulateExpectedTokens();
 
 private:
 
   dependency::CrossTerminalParser cross_parser;
-  protocols::ConcreteSyntaxTree *syntax_tree_root;
+  std::unique_ptr<protocols::ConcreteSyntaxTree> syntax_tree_root;
   std::stack<protocols::ConcreteSyntaxTree *> symbol_stack;
 
 };

@@ -25,16 +25,20 @@ namespace tul { namespace parser {
 Parser::Parser()
 {
   using namespace protocols;
-  symbol_stack.emplace(syntax_tree_root = new ConcreteSyntaxTree);
+  syntax_tree_root.reset(new ConcreteSyntaxTree);
+
+  symbol_stack.emplace(new ConcreteSyntaxTree);
   symbol_stack.top()->node_type = CrossTerminal::END_OF_MODULE;
-  symbol_stack.emplace(syntax_tree_root = new ConcreteSyntaxTree);
+  syntax_tree_root->children_.push_front(symbol_stack.top());
+
+  symbol_stack.emplace(new ConcreteSyntaxTree);
   symbol_stack.top()->node_type = CrossTerminal::ENTER;
+  syntax_tree_root->children_.push_front(symbol_stack.top());
 }
 
 
 Parser::~Parser()
 {
-  delete syntax_tree_root;
 }
 
 bool Parser::isEmpty()
@@ -42,9 +46,9 @@ bool Parser::isEmpty()
   return symbol_stack.empty();
 }
 
-protocols::ConcreteSyntaxTree *Parser::getConcreteSyntaxTree()
+std::unique_ptr<protocols::ConcreteSyntaxTree> Parser::getConcreteSyntaxTree()
 {
-  return syntax_tree_root;
+  return std::move(syntax_tree_root);
 }
 
 

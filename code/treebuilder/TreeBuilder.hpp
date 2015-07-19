@@ -34,7 +34,7 @@ public:
 
   bool endInput();
 
-  protocols::ConcreteSyntaxTree *getConcreteSyntaxTree();
+  std::unique_ptr<protocols::ConcreteSyntaxTree> getConcreteSyntaxTree();
 
   std::vector<std::string> getExpectedTokens();
 

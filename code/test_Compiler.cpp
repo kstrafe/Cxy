@@ -70,8 +70,9 @@ bool validate(std::string string, bool print_error_if_exists = true)
   if (ret_val)
   {
     tul::TreePruner pruner_;
-    pruner_.pruneTree(builder_object.getConcreteSyntaxTree());
-    std::cout << printTree(builder_object.getConcreteSyntaxTree());
+    std::unique_ptr<tul::protocols::ConcreteSyntaxTree> tree_ = builder_object.getConcreteSyntaxTree();
+    pruner_.pruneTree(tree_.get());
+    std::cout << printTree(tree_.get());
   }
   return ret_val;
 }
