@@ -341,7 +341,7 @@ productions = {
 ################################################################################
     'UNARY_EXPRESSION': [
         ['MEMBER_EXPRESSION'],
-        ['UNARY_OPERATOR', 'CAST_EXPRESSION'],
+        ['UNARY_OPERATOR_EXPRESSION', 'CAST_EXPRESSION'],
     ],
     'OPTIONAL_MULTIPLICATIVE_EXPRESSION': [
         ['SYMBOL_FORWARD_SLASH', 'MULTIPLICATIVE_EXPRESSION'],
@@ -356,14 +356,14 @@ productions = {
         ['IDENTIFIER_SUBROUTINE', 'OPTIONAL_CALL_EXPRESSION'],
         ['RESOURCE', 'OPTIONAL_MEMBER_EXPRESSION'],
     ],
-    'UNARY_OPERATOR': [
-        ['SYMBOL_APETAIL'],
-        ['SYMBOL_APETAIL__APETAIL'],
-        ['SYMBOL_DOLLAR'],
-        ['SYMBOL_DOLLAR__DOLLAR'],
-        ['SYMBOL_EXCLAMATION_MARK'],
-        ['SYMBOL_EXCLAMATION_MARK__EXCLAMATION_MARK'],
-        ['SYMBOL_MINUS'],
+    'UNARY_OPERATOR_EXPRESSION': [
+        ['UNARY_APETAIL'],
+        ['UNARY_APETAIL__APETAIL'],
+        ['UNARY_DOLLAR'],
+        ['UNARY_DOLLAR__DOLLAR'],
+        ['UNARY_EXCLAMATION_MARK'],
+        ['UNARY_EXCLAMATION_MARK__EXCLAMATION_MARK'],
+        ['UNARY_MINUS'],
     ],
 ################################################################################
     'CLASS_MEMBER_EXPRESSION': [
@@ -392,6 +392,27 @@ productions = {
         ['GROUPER_LEFT_PARENTHESIS', 'PARAMETER_LIST', 'GROUPER_RIGHT_PARENTHESIS', 'OPTIONAL_EXTRACTOR_EXPRESSION'],
         ['SYMBOL_DOT', 'MEMBER_EXPRESSION'],
         []
+    ],
+    'UNARY_APETAIL': [
+        ['SYMBOL_APETAIL'],
+    ],
+    'UNARY_APETAIL__APETAIL': [
+        ['SYMBOL_APETAIL__APETAIL'],
+    ],
+    'UNARY_DOLLAR': [
+        ['SYMBOL_DOLLAR'],
+    ],
+    'UNARY_DOLLAR__DOLLAR': [
+        ['SYMBOL_DOLLAR__DOLLAR'],
+    ],
+    'UNARY_EXCLAMATION_MARK': [
+        ['SYMBOL_EXCLAMATION_MARK'],
+    ],
+    'UNARY_EXCLAMATION_MARK__EXCLAMATION_MARK': [
+        ['SYMBOL_EXCLAMATION_MARK__EXCLAMATION_MARK'],
+    ],
+    'UNARY_MINUS': [
+        ['SYMBOL_MINUS'],
     ],
 ################################################################################
     'CLASS_MEMBER': [
@@ -633,7 +654,7 @@ def createprotocolsTokenTypehpp(terminal_set, non_terminal_set):
 def enterMain():
     terminal_set, non_terminal_set = ParserTableGenerator.computeTerminals(productions)
     terminal_set |= {'UNIDENTIFIED', 'END_OF_MODULE'}
-    non_terminal_set |= {'EPSILONATE', 'SYNTAX_TREE_ROOT'}
+    non_terminal_set |= {'EPSILONATE'}
 
     createcodetreebuilderlexerdependencyKeywordMatchercpp(terminal_set)
     createcodetreebuilderlexerdependencySymbolMatchercpp(terminal_set)

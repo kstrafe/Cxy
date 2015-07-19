@@ -84,6 +84,7 @@ bool CrossTerminalTools::isExpression(const CrossTerminal &ct_)
         case CrossTerminal::PACKAGE_MEMBER_EXPRESSION: return true;
         case CrossTerminal::RELATIONAL_EXPRESSION: return true;
         case CrossTerminal::UNARY_EXPRESSION: return true;
+        case CrossTerminal::UNARY_OPERATOR_EXPRESSION: return true;
         default: return false;
     }
 }
@@ -235,13 +236,19 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::SYMBOL_STAR: return "SYMBOL_STAR";
         case protocols::CrossTerminal::SYMBOL_STAR__EQUAL: return "SYMBOL_STAR__EQUAL";
         case protocols::CrossTerminal::SYMBOL_TILDE: return "SYMBOL_TILDE";
-        case protocols::CrossTerminal::SYNTAX_TREE_ROOT: return "SYNTAX_TREE_ROOT";
         case protocols::CrossTerminal::TYPE: return "TYPE";
         case protocols::CrossTerminal::TYPE_AFTER_CONST: return "TYPE_AFTER_CONST";
         case protocols::CrossTerminal::TYPE_AFTER_REF: return "TYPE_AFTER_REF";
         case protocols::CrossTerminal::TYPE_AFTER_REF_CONST: return "TYPE_AFTER_REF_CONST";
+        case protocols::CrossTerminal::UNARY_APETAIL: return "UNARY_APETAIL";
+        case protocols::CrossTerminal::UNARY_APETAIL__APETAIL: return "UNARY_APETAIL__APETAIL";
+        case protocols::CrossTerminal::UNARY_DOLLAR: return "UNARY_DOLLAR";
+        case protocols::CrossTerminal::UNARY_DOLLAR__DOLLAR: return "UNARY_DOLLAR__DOLLAR";
+        case protocols::CrossTerminal::UNARY_EXCLAMATION_MARK: return "UNARY_EXCLAMATION_MARK";
+        case protocols::CrossTerminal::UNARY_EXCLAMATION_MARK__EXCLAMATION_MARK: return "UNARY_EXCLAMATION_MARK__EXCLAMATION_MARK";
         case protocols::CrossTerminal::UNARY_EXPRESSION: return "UNARY_EXPRESSION";
-        case protocols::CrossTerminal::UNARY_OPERATOR: return "UNARY_OPERATOR";
+        case protocols::CrossTerminal::UNARY_MINUS: return "UNARY_MINUS";
+        case protocols::CrossTerminal::UNARY_OPERATOR_EXPRESSION: return "UNARY_OPERATOR_EXPRESSION";
         case protocols::CrossTerminal::UNIDENTIFIED: return "UNIDENTIFIED";
         case protocols::CrossTerminal::WHILE_STATEMENT: return "WHILE_STATEMENT";
         default: return "";
