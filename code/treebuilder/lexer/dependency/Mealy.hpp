@@ -19,7 +19,7 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 #include <cstddef>
 
 
-namespace tul { namespace library {
+namespace tul { namespace dependency {
 
 /**
   Implement a table-based mealy machine.

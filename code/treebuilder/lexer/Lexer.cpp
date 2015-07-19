@@ -26,6 +26,7 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 
 
 namespace tul { namespace lexer {
+
 bool Lexer::insertCharacter(char character_)
 {
   protocols::EntryType type_of_character = typify(character_);

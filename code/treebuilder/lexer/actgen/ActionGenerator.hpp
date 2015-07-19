@@ -16,7 +16,6 @@ You should have received a copy of the GNU General Public License
 along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "libraries/Mealy.hpp"
 #include "protocols/Action.hpp"
 #include "protocols/EntryType.hpp"
 
@@ -39,18 +38,53 @@ namespace tul { namespace actgen {
   This class solely concerns itself with providing information about what
   action to take.
 */
+template <typename MACHINE>
 class ActionGenerator
 {
 public:
 
-  ActionGenerator();
-  protocols::Action computeAction(protocols::EntryType with_type);
+  ActionGenerator()
+  {
+    /*
+      n = no action
+      e = error, stray unknown outside a string literal
+      p = push current OTHER_SYMBOL on to the current token
+      tx = transfer something of type x
+      tg = transfer a GROUPING_SYMBOL token
+      tr = transfer a string token
+      ts = transfer a OTHER_SYMBOL token
+      ta = transfer an alnumu token
+      txp = transfer x and then push
+      ptx = push and then transfer
+    */
+    mealy_machine.setTransitionTable(action_table);
+  }
+
+  protocols::Action computeAction(protocols::EntryType with_type)
+  {
+    return mealy_machine.transist(with_type, 6);
+  }
+
+
 
 private:
 
-  tul::library::Mealy<std::size_t, protocols::Action, protocols::EntryType> mealy_machine;
-  static const tul::library::Mealy<std::size_t, protocols::Action, protocols::EntryType>::Compound action_table[];
+  MACHINE mealy_machine;
+  // static const MACHINE<std::size_t, protocols::Action, protocols::EntryType>::Compound action_table[];
+
+  static constexpr const typename  MACHINE::Compound action_table[]
+  { /*    ALPHA_DIGIT_OR_UNDERSCORE  GROUPING_SYMBOL     QUOTE_SYMBOL     OTHER_SYMBOL      UNKNOWN_CODE_POINT  WHITESPACE  */
+    /*0*/ {1, protocols::Action::P},            {0, protocols::Action::PTG},   {2, protocols::Action::N},  {4, protocols::Action::P},   {0, protocols::Action::E},     {0, protocols::Action::N},
+    /*1*/ {1, protocols::Action::P},            {0, protocols::Action::TAPTG}, {2, protocols::Action::TA}, {4, protocols::Action::TAP}, {0, protocols::Action::E},     {0, protocols::Action::TA},
+    /*2*/ {2, protocols::Action::P},            {2, protocols::Action::P},     {3, protocols::Action::N},  {2, protocols::Action::P},   {2, protocols::Action::P},     {2, protocols::Action::P},
+    /*3*/ {1, protocols::Action::TRP},          {0, protocols::Action::TRPTG}, {2, protocols::Action::P},  {4, protocols::Action::TRP}, {0, protocols::Action::E},     {0, protocols::Action::TR},
+    /*4*/ {1, protocols::Action::TSP},          {0, protocols::Action::TSPTG}, {2, protocols::Action::TS}, {4, protocols::Action::P},   {0, protocols::Action::E},     {0, protocols::Action::TS}
+    // Remember to set the transist value in computeprotocols::Action to the amount of columns here.
+  };
 
 };
+
+template <typename MACHINE>
+constexpr const typename MACHINE::Compound ActionGenerator<MACHINE>::action_table[];
 
 }}

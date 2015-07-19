@@ -15,7 +15,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "ActionGenerator.hpp"
+#include "actgen/ActionGenerator.hpp"
+#include "dependency/Mealy.hpp"
 #include "libraries/catch.hpp"
 #include "protocols/EntryType.hpp"
 
@@ -28,7 +29,7 @@ TEST_CASE("Test the action generator", "[test-ActionGenerator]")
   using namespace tul::protocols;
   using ac = tul::protocols::Action;
   // enum class EntryType { ALPHA_DIGIT_OR_UNDERSCORE, GROUPING_SYMBOL, QUOTE_SYMBOL, OTHER_SYMBOL, UNKNOWN_CODE_POINT, WHITESPACE };
-  ActionGenerator action_generator;
+  ActionGenerator<tul::dependency::Mealy<std::size_t, tul::protocols::Action, tul::protocols::EntryType>> action_generator;
   #define al() action_generator.computeAction(EntryType::ALPHA_DIGIT_OR_UNDERSCORE)
   #define gr() action_generator.computeAction(EntryType::GROUPING_SYMBOL)
   #define qu() action_generator.computeAction(EntryType::QUOTE_SYMBOL)
