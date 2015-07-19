@@ -15,6 +15,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 */
+#pragma once
 #include "lexer/Lexer.hpp"
 #include "parser/Parser.hpp"
 #include "protocols/ConcreteSyntaxTree.hpp"

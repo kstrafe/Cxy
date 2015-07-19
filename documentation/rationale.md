@@ -1547,3 +1547,46 @@ and error ought to be emitted.
 
 *Conclusion*: Prioritize children/granted over global module access (override).
 Do not allow children and granted of the same name.
+
+
+
+## Code Generation ##
+*Description*: How will syntax for code generation be defined and what will the
+semantics be?
+*Discussion*: Code generation is a desired ability of this language. Not in the
+C/C++/LISP macro sense, but as <?PHP sense, where code is injected into a
+specific point in the program. To do this cleanly I think it is important to
+force every code generator to its own file, as the code generation has to
+interrupt during lexing to take over the lexing stack temporarily with generated
+code.
+
+    public (:) enterProgram
+    {
+      var [4, 8u] my_array = ['a', 'c', '.', '?'];
+      #GenerateSwitches(sw_arr: my_array);
+    }
+
+The problem with the above code is that we actually need to store contextual
+information in the variables. When the lexer spots a "#" outside a string, bells
+ring, machinery crackles, and the lexer notifies the callee that a generator is
+coming up.
+
+The callee then processes the generator (using a simple lexer and parser). It
+calls the generator, and pushes the resulting string on a stack such that it
+feeds all characters from the top into the previous lexer so that the generated
+code actually gets processed.
+
+This is probably the reason why we can't have C++-like constexpr expressions
+around, being put as arguments to the generator. Instead, any generator must
+fetch data not from where it is called from, but from a file or direct input.
+
+This means that, the codegenerator can open a config file, read it, and decide
+what code to generate based on that configuration. It can also use direct
+arguments.
+
+    #GenerateSwitches(sw_arr: "['a', 'c', '.', '?']");
+
+Allowing constexprs as shown before does not seem to be easy to do. Nor does it
+guarantee the user
+
+- tbc

@@ -41,9 +41,15 @@ import dependency.NamespaceGenerator
 import dependency.Prepend
 
 # Take a list of cross-terminals and create the following files.
-# Search for file writes to find out where they get stored.
-# Note: project is the folder where readme.md is located (the root)
+# Search for the word `file` in this code to find out where the folders get
+# written to..
+# Note: project root is the folder where readme.md is located (the root)
 
+# These are the productions of the grammar.
+# Any 'KEYWORD_' gets turned into an actual keyword recognizer (KeywordMatcher).
+# The same occurs with 'SYMBOL_' (SymbolMatcher).
+# Empty productions '[]' are epsilon productions.
+# Generates a .inc file containing all lookahead rules.
 productions = {
 ################################################################################
     'ENTER': [

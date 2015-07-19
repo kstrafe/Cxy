@@ -28,15 +28,24 @@ I'm also available on Skype as 'macocio'.
 
 The repository for The Unnamed Language compiler. This repository contains the following folders:
 * code - where the code related to the compiler is stored. Tests are also stored here and must start with "test" in their filename.
-* codegenerators - code that generates code. Puts files in the code directory.
+* codegenerators - code that generates code. Useful for generating switch-to-string code.
 * documentation - the documentation of the language and the compiler
 * libraries - here we store external and internal libraries. These are pieces of code that can be run. They are considered independencies.
-* tests - contains input and expected output files with a test_runner script. The script checks if the output is equal to the excepted output.
+* tests - contains input and expected output files with a test_runner script. The script checks if the output is equal to the excepted output. It also runs unit tests.
 
 The makefile contains the instructions to build the project.
 `make` just compiles and puts the executable in binaries/tulc.exe
-`make test` runs the tests in ./tests. You should only run tests this way as the test_runner script is not suited for direct calling.
+`make tdd` runs the tests in ./tests. You should only run tests this way as the test_runner script is not suited for direct calling.
 
+## Clear Overview
+The UL dependency rule is enforced in this compiler. Modules (.cpp and their
+corresponding .hpp files) can ONLY depend/include on:
+
+1. A file in a subdirectory of their current directory.
+2. A file in a subdirectory directly from root.
+3. Be provided information from a parent.
+
+This means that dependencies are kept clean and local. Spaghetti is avoided.
 
 ## Current status!
 The BEST language ever uses simple, consistent lexing and parsing.  
