@@ -17,6 +17,7 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "protocols/ConcreteSyntaxTree.hpp"
 
+
 namespace tul {
 
 class TreePruner

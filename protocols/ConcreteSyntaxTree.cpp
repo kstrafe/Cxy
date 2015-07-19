@@ -18,10 +18,8 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 #include "ConcreteSyntaxTree.hpp"
 
 
-namespace tul
-{
-  namespace protocols
-  {
+namespace tul { namespace protocols {
+
     ConcreteSyntaxTree::ConcreteSyntaxTree()
     {
       token_.entry_type = EntryType::WHITESPACE;
@@ -32,5 +30,5 @@ namespace tul
       for (ConcreteSyntaxTree *child_ : children_)
         delete child_;
     }
-  }
-}
+
+}}

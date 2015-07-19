@@ -19,10 +19,9 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <vector>
 
-namespace tul
-{
-  namespace protocols
-  {
+
+namespace tul { namespace protocols {
+
     /**
       Used as a return structure by LLOneProductionDeducer. The structure contains
       all productions as children as well as the action to take. If the action
@@ -38,5 +37,5 @@ namespace tul
         CONTINUE, EPSILONATE
       } desired_action;
     };
-  }
-}
+
+}}
