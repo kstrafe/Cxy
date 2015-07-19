@@ -32,6 +32,7 @@ namespace tul { namespace protocols {
     struct ConcreteSyntaxTree
     {
       ConcreteSyntaxTree();
+      ConcreteSyntaxTree(CrossTerminal ct_);
       ~ConcreteSyntaxTree();
 
       Token token_;

@@ -58,6 +58,7 @@ public:
 
 private:
 
+  static protocols::ConcreteSyntaxTree end_of_input_tree;
   dependency::CrossTerminalParser cross_parser;
   std::unique_ptr<protocols::ConcreteSyntaxTree> syntax_tree_root;
   std::stack<protocols::ConcreteSyntaxTree *> symbol_stack;

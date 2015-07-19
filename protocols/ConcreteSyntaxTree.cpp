@@ -25,6 +25,11 @@ namespace tul { namespace protocols {
       token_.entry_type = EntryType::WHITESPACE;
     }
 
+    ConcreteSyntaxTree::ConcreteSyntaxTree(CrossTerminal ct_)
+    :
+      node_type(ct_)
+    {}
+
     ConcreteSyntaxTree::~ConcreteSyntaxTree()
     {
       for (ConcreteSyntaxTree *child_ : children_)

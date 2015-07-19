@@ -235,6 +235,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::SYMBOL_STAR: return "SYMBOL_STAR";
         case protocols::CrossTerminal::SYMBOL_STAR__EQUAL: return "SYMBOL_STAR__EQUAL";
         case protocols::CrossTerminal::SYMBOL_TILDE: return "SYMBOL_TILDE";
+        case protocols::CrossTerminal::SYNTAX_TREE_ROOT: return "SYNTAX_TREE_ROOT";
         case protocols::CrossTerminal::TYPE: return "TYPE";
         case protocols::CrossTerminal::TYPE_AFTER_CONST: return "TYPE_AFTER_CONST";
         case protocols::CrossTerminal::TYPE_AFTER_REF: return "TYPE_AFTER_REF";
