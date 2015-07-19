@@ -24,18 +24,17 @@ import re
 
 
 pure_subtrees = {
-    'code/treebuilder/lexer',
+    'code/codegenerator',
+    'code/treebuilder',
     'code/treebuilder/parser',
     'code/treebuilder/parser/Parser.cpp',
-
-    # Libraries
-    'libraries/LLOneProductionDeducer.hpp',
-    'libraries/Mealy.hpp',
+    'code/treepruner',
 
     # Protocols
     'protocols',
     'protocols/Action.hpp',
     'protocols/ConcreteSyntaxTree.hpp',
+    'protocols/ConcreteSyntaxTree.cpp',
     'protocols/CrossTerminal.hpp',
     'protocols/EntryType.hpp',
     'protocols/ParseReturn.hpp',
@@ -56,7 +55,6 @@ impure = 'red'
 def createGraph(graph, parent, directory, purity=subtree_pure):
     for root, directories, files in os.walk(directory, topdown=True):
         graph.add_vertex(name=directory)
-
         if directory in pure_subtrees:
             purity = subtree_pure
             graph.vs[len(graph.vs) - 1]['vertex_color'] = pure
@@ -113,7 +111,7 @@ if __name__ == '__main__':
 
                 graph.add_edge(source=root_node, target=len(graph.vs) - 1)
             for directory in directories:
-                createGraph(graph=graph, parent=root_node, directory=os.path.join(root, directory))
+                createGraph(graph=graph, parent=root_node, directory=os.path.join(root, directory), purity=impure)
             break
 
 
@@ -136,28 +134,3 @@ if __name__ == '__main__':
     igraph.plot(
         graph,
         'documentation/dependency_graph.png', **style)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    # draw_graph(name='project', root, graph_size, type_of_graph, excluded_nodes, highlight)

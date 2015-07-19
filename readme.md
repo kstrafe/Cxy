@@ -62,4 +62,4 @@ functional purity: same input into function -> same output. Always
 modular purity: object creation with same operations -> same object
 ```
 We can only guarantee purity if the object never uses a global.  
-![Dependency Graph](./documentation/dependency_graph.png)
+![Dependency Graph](http://puu.sh/j53Oe/f02ecda62c.png)
