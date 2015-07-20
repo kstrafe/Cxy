@@ -96,6 +96,8 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::ACCESS_SPECIFICATION: return "ACCESS_SPECIFICATION";
         case protocols::CrossTerminal::ACCESS_SPECIFIER: return "ACCESS_SPECIFIER";
         case protocols::CrossTerminal::ADDITIVE_EXPRESSION: return "ADDITIVE_EXPRESSION";
+        case protocols::CrossTerminal::ADDITIVE_MINUS: return "ADDITIVE_MINUS";
+        case protocols::CrossTerminal::ADDITIVE_PLUS: return "ADDITIVE_PLUS";
         case protocols::CrossTerminal::AND_EXPRESSION: return "AND_EXPRESSION";
         case protocols::CrossTerminal::ARGUMENT: return "ARGUMENT";
         case protocols::CrossTerminal::ARGUMENT_LIST: return "ARGUMENT_LIST";

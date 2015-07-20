@@ -323,8 +323,8 @@ productions = {
         ['CAST_EXPRESSION', 'OPTIONAL_MULTIPLICATIVE_EXPRESSION'],
     ],
     'OPTIONAL_ADDITIVE_EXPRESSION': [
-        ['SYMBOL_MINUS', 'ADDITIVE_EXPRESSION'],
-        ['SYMBOL_PLUS', 'ADDITIVE_EXPRESSION'],
+        ['ADDITIVE_PLUS'],
+        ['ADDITIVE_MINUS'],
         []
     ],
     'RELATIONAL_OPERATOR': [
@@ -337,6 +337,12 @@ productions = {
     'CAST_EXPRESSION': [
         ['KEYWORD_CAST', 'GROUPER_LEFT_PARENTHESIS', 'TYPE', 'GROUPER_RIGHT_PARENTHESIS', 'GROUPER_LEFT_BRACE', 'EXPRESSION_EXPRESSION', 'GROUPER_RIGHT_BRACE'],
         ['UNARY_EXPRESSION'],
+    ],
+    'ADDITIVE_PLUS': [
+        ['SYMBOL_PLUS', 'ADDITIVE_EXPRESSION'],
+    ],
+    'ADDITIVE_MINUS': [
+        ['SYMBOL_MINUS', 'ADDITIVE_EXPRESSION'],
     ],
 ################################################################################
     'UNARY_EXPRESSION': [

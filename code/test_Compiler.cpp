@@ -82,7 +82,7 @@ TEST_CASE("Prune a tree", "[test-system]")
   REQUIRE(validate(R"(
     public (:) enterProgram
     {
-      printLine(str_: "Howdy!");
+      printLine(str_: "Howdy!" + 2 - 3);
     }
   )"));
   REQUIRE(validate(R"(
