@@ -18,7 +18,7 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 #include "TreeBuilder.hpp"
 
 
-namespace tul { namespace treebuilder {
+namespace tul { namespace tb {
 
 bool TreeBuilder::buildTree(char character)
 {

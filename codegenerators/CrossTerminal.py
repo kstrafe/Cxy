@@ -416,7 +416,7 @@ productions = {
 }
 
 
-def createcodetreebuilderlexerdependencyKeywordMatchercpp(terminal_set):
+def createcodetblexerdependencyKeywordMatchercpp(terminal_set):
     template = '''%(license)s%(head)s\n\n%(namespace_head)s\n\n%(enumerations)s\n\n%(namespace_tail)s\n'''
     head = '''#include "KeywordMatcher.hpp"\n'''
     enumerations = '''%(function_signature)s\n{\n%(body)s\n}'''
@@ -439,11 +439,11 @@ def createcodetreebuilderlexerdependencyKeywordMatchercpp(terminal_set):
     complete = enumerations % {'body': dependency.Prepend.prependTabEachLine(complete),'function_signature': function_signature}
     complete = template % {'enumerations': complete, 'head': head, 'license': LICENSE_STRING, 'namespace_head': namespace_head, 'namespace_tail': namespace_tail}
 
-    with open('./code/treebuilder/lexer/dependency/KeywordMatcher.cpp', 'w') as file:
+    with open('./code/tb/lexer/dependency/KeywordMatcher.cpp', 'w') as file:
         file.write(complete)
 
 
-def createcodetreebuilderlexerdependencySymbolMatchercpp(terminal_set):
+def createcodetblexerdependencySymbolMatchercpp(terminal_set):
 
     def convertSymbolSet(symbol_set):
         def convertSymbolNameToSymbol(name):
@@ -514,22 +514,22 @@ def createcodetreebuilderlexerdependencySymbolMatchercpp(terminal_set):
     complete = enumerations % {'body': dependency.Prepend.prependTabEachLine(complete),'function_signature': function_signature}
     complete = template % {'enumerations': complete, 'head': head, 'license': LICENSE_STRING, 'namespace_head': namespace_head, 'namespace_tail': namespace_tail}
 
-    with open('./code/treebuilder/lexer/dependency/SymbolMatcher.cpp', 'w') as file:
+    with open('./code/tb/lexer/dependency/SymbolMatcher.cpp', 'w') as file:
         file.write(complete)
 
 
-def createcodetreebuilderparserdependencyCrossTerminalParserinc():
+def createcodetbparserdependencyCrossTerminalParserinc():
     ParserTableGenerator.validateAllFirstSets(productions)
     lines_ = []
     for start_nonterminal in sorted(productions):
         transitions_ = ParserTableGenerator.computeTransitions(start_nonterminal, productions)
         lines_.append(ParserTableGenerator.generateTransitionMapCode(transitions_, productions))
 
-    with open('./code/treebuilder/parser/dependency/CrossTerminalParser.inc', 'w') as file:
+    with open('./code/tb/parser/dependency/CrossTerminalParser.inc', 'w') as file:
         file.write(LICENSE_STRING + '\n'.join(lines_))
 
 
-def createcodetreebuilderparsertkcrTokenTypeToCrossTerminalcpp(terminal_set):
+def createcodetbparsertkcrTokenTypeToCrossTerminalcpp(terminal_set):
     template = '''%(license)s%(head)s\n%(namespace_head)s\n\n%(enumerations)s\n\n%(namespace_tail)s\n'''
     head = '''#include "TokenTypeToCrossTerminal.hpp"\n#include "protocols/CrossTerminal.hpp"\n#include "protocols/TokenType.hpp"\n\n'''
     enumerations = '''%(function_signature)s\n{\n%(body)s\n}'''
@@ -549,7 +549,7 @@ def createcodetreebuilderparsertkcrTokenTypeToCrossTerminalcpp(terminal_set):
                            'namespace_head': namespace_head,
                            'namespace_tail': namespace_tail}
 
-    with open('./code/treebuilder/parser/tkcr/TokenTypeToCrossTerminal.cpp', 'w') as file:
+    with open('./code/tb/parser/tkcr/TokenTypeToCrossTerminal.cpp', 'w') as file:
         file.write(complete)
 
 
@@ -650,10 +650,10 @@ def enterMain():
     terminal_set |= {'UNIDENTIFIED', 'END_OF_MODULE'}
     non_terminal_set |= {'EPSILONATE'}
 
-    createcodetreebuilderlexerdependencyKeywordMatchercpp(terminal_set)
-    createcodetreebuilderlexerdependencySymbolMatchercpp(terminal_set)
-    createcodetreebuilderparserdependencyCrossTerminalParserinc()
-    createcodetreebuilderparsertkcrTokenTypeToCrossTerminalcpp(terminal_set)
+    createcodetblexerdependencyKeywordMatchercpp(terminal_set)
+    createcodetblexerdependencySymbolMatchercpp(terminal_set)
+    createcodetbparserdependencyCrossTerminalParserinc()
+    createcodetbparsertkcrTokenTypeToCrossTerminalcpp(terminal_set)
     createprotocolsCrossTerminalToolscpp(terminal_set, non_terminal_set)
     createprotocolsCrossTerminalhpp(terminal_set, non_terminal_set)
     createprotocolsTokenTypehpp(terminal_set, non_terminal_set)

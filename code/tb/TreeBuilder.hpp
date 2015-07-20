@@ -24,7 +24,7 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 #include <vector>
 
 
-namespace tul { namespace treebuilder {
+namespace tul { namespace tb {
 
 class TreeBuilder
 {

@@ -34,7 +34,7 @@ namespace
 {
   bool validate(const std::string &string, bool print_error_if_exists = true)
   {
-    using namespace tul::treebuilder;
+    using namespace tul::tb;
     TreeBuilder builder_object;
     bool ret_val = true;
     char current_ = '\0';
@@ -68,7 +68,7 @@ namespace
 ////////////////////////////////////////////////////////////////////////////////
 TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 {
-  using namespace tul::treebuilder;
+  using namespace tul::tb;
 
   SECTION("Attempting to validate a small program")
   {
