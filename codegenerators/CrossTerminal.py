@@ -61,7 +61,7 @@ productions = {
         ['ACCESS_SPECIFIER', 'OBJECT_ACCESS_SPECIFIER']
     ],
     'DECL_OR_FUNC': [
-        ['DATA_DECLARATION', 'SYMBOL_SEMICOLON', 'ENTER'],
+        ['DATA_DECLARATION', 'SYMBOL_SEMICOLON__PRUNE', 'ENTER'],
         ['FUNCTION_DEFINITION', 'FUNCTION_LIST'],
     ],
 ################################################################################
@@ -96,11 +96,11 @@ productions = {
         ['KEYWORD_RESTRICTED']
     ],
     'FUNCTION_SIGNATURE': [
-        ['GROUPER_LEFT_PARENTHESIS', 'ARGUMENT_LIST', 'SYMBOL_COLON', 'ARGUMENT_LIST', 'OPTIONAL_ATTRIBUTE_LIST', 'GROUPER_RIGHT_PARENTHESIS'],
+        ['GROUPER_LEFT_PARENTHESIS', 'ARGUMENT_LIST', 'SYMBOL_COLON__PRUNE', 'ARGUMENT_LIST', 'OPTIONAL_ATTRIBUTE_LIST', 'GROUPER_RIGHT_PARENTHESIS'],
     ],
     'STATEMENT_LIST': [
         ['NO_SEMICOLON_STATEMENT', 'STATEMENT_LIST'],
-        ['STATEMENT', 'SYMBOL_SEMICOLON', 'STATEMENT_LIST'],
+        ['STATEMENT', 'SYMBOL_SEMICOLON__PRUNE', 'STATEMENT_LIST'],
         []
     ],
     'TYPE': [
@@ -116,7 +116,7 @@ productions = {
         []
     ],
     'OPTIONAL_DATA_DECLARATION': [
-        ['SYMBOL_COMMA', 'IDENTIFIER_VARIABLE', 'OPTIONAL_ASSIGNMENT', 'OPTIONAL_DATA_DECLARATION'],
+        ['SYMBOL_COMMA__PRUNE', 'IDENTIFIER_VARIABLE', 'OPTIONAL_ASSIGNMENT', 'OPTIONAL_DATA_DECLARATION'],
         [],
     ],
 ################################################################################
@@ -125,7 +125,7 @@ productions = {
         [],
     ],
     'OPTIONAL_ATTRIBUTE_LIST': [
-        ['SYMBOL_COLON', 'ATTRIBUTE_LIST'],
+        ['SYMBOL_COLON__PRUNE', 'ATTRIBUTE_LIST'],
         []
     ],
     'NO_SEMICOLON_STATEMENT': [
@@ -145,11 +145,11 @@ productions = {
         ['RETURN_STATEMENT'],
     ],
     'ARRAY': [
-        ['GROUPER_LEFT_BRACKET', 'INTEGER_LITERAL', 'SYMBOL_COMMA', 'TYPE', 'GROUPER_RIGHT_BRACKET']
+        ['GROUPER_LEFT_BRACKET', 'INTEGER_LITERAL', 'SYMBOL_COMMA__PRUNE', 'TYPE', 'GROUPER_RIGHT_BRACKET']
     ],
     'BASIC_TYPE': [
         ['IDENTIFIER_CLASS'],
-        ['IDENTIFIER_PACKAGE', 'SYMBOL_DOT', 'IDENTIFIER_CLASS'],
+        ['IDENTIFIER_PACKAGE', 'SYMBOL_DOT__PRUNE', 'IDENTIFIER_CLASS'],
         ['PRIMITIVE_SIGNED'],
         ['PRIMITIVE_UNSIGNED'],
     ],
@@ -163,7 +163,7 @@ productions = {
         ['KEYWORD_PTR', 'TYPE'],
     ],
     'PARAMETER_LIST': [
-        ['IDENTIFIER_VARIABLE', 'SYMBOL_COLON', 'EXPRESSION_EXPRESSION', 'OPTIONAL_PARAMETER_LIST'],
+        ['IDENTIFIER_VARIABLE', 'SYMBOL_COLON__PRUNE', 'EXPRESSION_EXPRESSION', 'OPTIONAL_PARAMETER_LIST'],
         []
     ],
     'EXPRESSION_EXPRESSION': [
@@ -174,7 +174,7 @@ productions = {
         ['TYPE', 'IDENTIFIER_VARIABLE', 'OPTIONAL_ASSIGNMENT'],
     ],
     'OPTIONAL_ARGUMENT_LIST': [
-        ['SYMBOL_COMMA', 'ARGUMENT_LIST_AFTER_FIRST'],
+        ['SYMBOL_COMMA__PRUNE', 'ARGUMENT_LIST_AFTER_FIRST'],
         []
     ],
     'ATTRIBUTE_LIST': [
@@ -189,7 +189,7 @@ productions = {
         ['KEYWORD_DO', 'GROUPER_LEFT_PARENTHESIS', 'EXPRESSION_EXPRESSION', 'GROUPER_RIGHT_PARENTHESIS', 'SINGLE_STATEMENT_OR_CODE_BLOCK']
     ],
     'FOR_STATEMENT': [
-        ['KEYWORD_FOR', 'GROUPER_LEFT_PARENTHESIS', 'DATA_DECLARATION', 'SYMBOL_SEMICOLON', 'EXPRESSION_EXPRESSION', 'SYMBOL_SEMICOLON', 'STATEMENT_LIST', 'GROUPER_RIGHT_PARENTHESIS', 'SINGLE_STATEMENT_OR_CODE_BLOCK']
+        ['KEYWORD_FOR', 'GROUPER_LEFT_PARENTHESIS', 'DATA_DECLARATION', 'SYMBOL_SEMICOLON__PRUNE', 'EXPRESSION_EXPRESSION', 'SYMBOL_SEMICOLON__PRUNE', 'STATEMENT_LIST', 'GROUPER_RIGHT_PARENTHESIS', 'SINGLE_STATEMENT_OR_CODE_BLOCK']
     ],
     'IF_STATEMENT': [
         ['KEYWORD_IF', 'GROUPER_LEFT_PARENTHESIS', 'EXPRESSION_EXPRESSION', 'GROUPER_RIGHT_PARENTHESIS', 'SINGLE_STATEMENT_OR_CODE_BLOCK', 'ELSE_STATEMENT']
@@ -221,7 +221,7 @@ productions = {
         ['KEYWORD_PTR', 'TYPE'],
     ],
     'OPTIONAL_PARAMETER_LIST': [
-        ['SYMBOL_COMMA', 'PARAMETER_LIST'],
+        ['SYMBOL_COMMA__PRUNE', 'PARAMETER_LIST'],
         []
     ],
     'ASSIGNMENT_EXPRESSION': [
@@ -238,7 +238,7 @@ productions = {
         []
     ],
     'SINGLE_STATEMENT_OR_CODE_BLOCK': [
-        ['STATEMENT', 'SYMBOL_SEMICOLON'],
+        ['STATEMENT', 'SYMBOL_SEMICOLON__PRUNE'],
         ['NO_SEMICOLON_STATEMENT'],
     ],
     'ELSE_STATEMENT': [
@@ -323,8 +323,8 @@ productions = {
         ['CAST_EXPRESSION', 'OPTIONAL_MULTIPLICATIVE_EXPRESSION'],
     ],
     'OPTIONAL_ADDITIVE_EXPRESSION': [
-        ['ADDITIVE_PLUS'],
-        ['ADDITIVE_MINUS'],
+        ['SYMBOL_MINUS', 'ADDITIVE_EXPRESSION'],
+        ['SYMBOL_PLUS', 'ADDITIVE_EXPRESSION'],
         []
     ],
     'RELATIONAL_OPERATOR': [
@@ -338,16 +338,10 @@ productions = {
         ['KEYWORD_CAST', 'GROUPER_LEFT_PARENTHESIS', 'TYPE', 'GROUPER_RIGHT_PARENTHESIS', 'GROUPER_LEFT_BRACE', 'EXPRESSION_EXPRESSION', 'GROUPER_RIGHT_BRACE'],
         ['UNARY_EXPRESSION'],
     ],
-    'ADDITIVE_PLUS': [
-        ['SYMBOL_PLUS', 'ADDITIVE_EXPRESSION'],
-    ],
-    'ADDITIVE_MINUS': [
-        ['SYMBOL_MINUS', 'ADDITIVE_EXPRESSION'],
-    ],
 ################################################################################
     'UNARY_EXPRESSION': [
         ['MEMBER_EXPRESSION'],
-        ['UNARY_OPERATOR_EXPRESSION', 'CAST_EXPRESSION'],
+        ['UNARY_OPERATOR', 'CAST_EXPRESSION'],
     ],
     'OPTIONAL_MULTIPLICATIVE_EXPRESSION': [
         ['SYMBOL_FORWARD_SLASH', 'MULTIPLICATIVE_EXPRESSION'],
@@ -362,26 +356,26 @@ productions = {
         ['IDENTIFIER_SUBROUTINE', 'OPTIONAL_CALL_EXPRESSION'],
         ['RESOURCE', 'OPTIONAL_MEMBER_EXPRESSION'],
     ],
-    'UNARY_OPERATOR_EXPRESSION': [
-        ['UNARY_APETAIL'],
-        ['UNARY_APETAIL__APETAIL'],
-        ['UNARY_DOLLAR'],
-        ['UNARY_DOLLAR__DOLLAR'],
-        ['UNARY_EXCLAMATION_MARK'],
-        ['UNARY_EXCLAMATION_MARK__EXCLAMATION_MARK'],
-        ['UNARY_MINUS'],
+    'UNARY_OPERATOR': [
+        ['SYMBOL_APETAIL'],
+        ['SYMBOL_APETAIL__APETAIL'],
+        ['SYMBOL_DOLLAR'],
+        ['SYMBOL_DOLLAR__DOLLAR'],
+        ['SYMBOL_EXCLAMATION_MARK'],
+        ['SYMBOL_EXCLAMATION_MARK__EXCLAMATION_MARK'],
+        ['SYMBOL_MINUS'],
     ],
 ################################################################################
     'CLASS_MEMBER_EXPRESSION': [
         ['GROUPER_LEFT_PARENTHESIS', 'PARAMETER_LIST', 'GROUPER_RIGHT_PARENTHESIS'],
-        ['SYMBOL_DOT', 'CLASS_MEMBER', 'OPTIONAL_MEMBER_EXPRESSION'],
+        ['SYMBOL_DOT__PRUNE', 'CLASS_MEMBER', 'OPTIONAL_MEMBER_EXPRESSION'],
     ],
     'ENUMERATION_MEMBER_EXPRESSION': [
-        ['SYMBOL_DOT', 'IDENTIFIER_VARIABLE'],
+        ['SYMBOL_DOT__PRUNE', 'IDENTIFIER_VARIABLE'],
         []
     ],
     'PACKAGE_MEMBER_EXPRESSION': [
-        ['SYMBOL_DOT', 'IDENTIFIER_CLASS', 'CLASS_MEMBER_EXPRESSION']
+        ['SYMBOL_DOT__PRUNE', 'IDENTIFIER_CLASS', 'CLASS_MEMBER_EXPRESSION']
     ],
     'OPTIONAL_CALL_EXPRESSION': [
         ['GROUPER_LEFT_PARENTHESIS', 'PARAMETER_LIST', 'GROUPER_RIGHT_PARENTHESIS', 'OPTIONAL_EXTRACTOR_EXPRESSION'],
@@ -396,29 +390,8 @@ productions = {
     'OPTIONAL_MEMBER_EXPRESSION': [
         ['ARRAY_ACCESS_EXPRESSION'],
         ['GROUPER_LEFT_PARENTHESIS', 'PARAMETER_LIST', 'GROUPER_RIGHT_PARENTHESIS', 'OPTIONAL_EXTRACTOR_EXPRESSION'],
-        ['SYMBOL_DOT', 'MEMBER_EXPRESSION'],
+        ['SYMBOL_DOT__PRUNE', 'MEMBER_EXPRESSION'],
         []
-    ],
-    'UNARY_APETAIL': [
-        ['SYMBOL_APETAIL'],
-    ],
-    'UNARY_APETAIL__APETAIL': [
-        ['SYMBOL_APETAIL__APETAIL'],
-    ],
-    'UNARY_DOLLAR': [
-        ['SYMBOL_DOLLAR'],
-    ],
-    'UNARY_DOLLAR__DOLLAR': [
-        ['SYMBOL_DOLLAR__DOLLAR'],
-    ],
-    'UNARY_EXCLAMATION_MARK': [
-        ['SYMBOL_EXCLAMATION_MARK'],
-    ],
-    'UNARY_EXCLAMATION_MARK__EXCLAMATION_MARK': [
-        ['SYMBOL_EXCLAMATION_MARK__EXCLAMATION_MARK'],
-    ],
-    'UNARY_MINUS': [
-        ['SYMBOL_MINUS'],
     ],
 ################################################################################
     'CLASS_MEMBER': [
@@ -426,7 +399,7 @@ productions = {
         ['IDENTIFIER_VARIABLE'],
     ],
     'OPTIONAL_EXTRACTOR_EXPRESSION': [
-        ['SYMBOL_TILDE', 'IDENTIFIER_VARIABLE', 'OPTIONAL_MEMBER_EXPRESSION'],
+        ['SYMBOL_TILDE__PRUNE', 'IDENTIFIER_VARIABLE', 'OPTIONAL_MEMBER_EXPRESSION'],
         []
     ],
     'ARRAY_ACCESS_EXPRESSION': [
@@ -434,7 +407,7 @@ productions = {
     ],
 ################################################################################
     'OPTIONAL_ARRAY_ACCESS_EXPRESSION': [
-        ['SYMBOL_COMMA', 'EXPRESSION_EXPRESSION', 'OPTIONAL_ARRAY_ACCESS_EXPRESSION'],
+        ['SYMBOL_COMMA__PRUNE', 'EXPRESSION_EXPRESSION', 'OPTIONAL_ARRAY_ACCESS_EXPRESSION'],
         []
     ]
 ################################################################################
@@ -512,6 +485,8 @@ def createcodetreebuilderlexerdependencySymbolMatchercpp(terminal_set):
                 return '='
             elif name == 'TILDE':
                 return '~'
+            elif name == 'PRUNE':
+                return ''
             else:
                 return "SYMBOL_NOT_FOUND_" + name
         set = []
@@ -579,6 +554,18 @@ def createcodetreebuilderparsertkcrTokenTypeToCrossTerminalcpp(terminal_set):
 
 
 def createprotocolsCrossTerminalToolscpp(terminal_set, non_terminal_set):
+
+    def generateIsExpression(non_terminal_set):
+        is_keyword_function = '''bool CrossTerminalTools::isExpression(const CrossTerminal &ct_)\n{\n%(switches)s\n}'''
+        switches = '''switch (ct_)\n{\n%(cases)s\n}'''
+        cases = '''case CrossTerminal::%(ctname)s: return true;'''
+        default = '''default: return false;'''
+
+        result = [cases % {'ctname': i} for i in sorted(non_terminal_set) if i.endswith('_EXPRESSION')]
+        result = switches % {'cases': dependency.Prepend.prependTabEachLine('\n'.join(result) + '\n' + default)}
+        result = is_keyword_function % {'switches': dependency.Prepend.prependTabEachLine(result)}
+        return result
+
     def generateIsKeyword(terminal_set):
         is_keyword_function = '''bool CrossTerminalTools::isKeyword(const CrossTerminal &ct_)\n{\n%(switches)s\n}'''
         switches = '''switch (ct_)\n{\n%(cases)s\n}'''
@@ -590,13 +577,13 @@ def createprotocolsCrossTerminalToolscpp(terminal_set, non_terminal_set):
         result = is_keyword_function % {'switches': dependency.Prepend.prependTabEachLine(result)}
         return result
 
-    def generateIsExpression(non_terminal_set):
-        is_keyword_function = '''bool CrossTerminalTools::isExpression(const CrossTerminal &ct_)\n{\n%(switches)s\n}'''
+    def isUselessSymbol(terminal_set):
+        is_keyword_function = '''bool CrossTerminalTools::isUselessSymbol(const CrossTerminal &ct_)\n{\n%(switches)s\n}'''
         switches = '''switch (ct_)\n{\n%(cases)s\n}'''
         cases = '''case CrossTerminal::%(ctname)s: return true;'''
         default = '''default: return false;'''
 
-        result = [cases % {'ctname': i} for i in sorted(non_terminal_set) if i.endswith('_EXPRESSION')]
+        result = [cases % {'ctname': i} for i in sorted(terminal_set) if i.startswith('SYMBOL_') and i.endswith('__PRUNE')]
         result = switches % {'cases': dependency.Prepend.prependTabEachLine('\n'.join(result) + '\n' + default)}
         result = is_keyword_function % {'switches': dependency.Prepend.prependTabEachLine(result)}
         return result
@@ -619,8 +606,9 @@ def createprotocolsCrossTerminalToolscpp(terminal_set, non_terminal_set):
     namespace_head, namespace_tail = dependency.NamespaceGenerator.toNamespaces('tul', 'protocols')
     template = '''%(license)s#include "CrossTerminalTools.hpp"\n\n\n%(namespace_head)s\n\n%(enumerations)s\n\n%(namespace_tail)s\n'''
 
-    enumerations = [generateIsKeyword(terminal_set)]
-    enumerations.append(generateIsExpression(non_terminal_set))
+    enumerations = [generateIsExpression(non_terminal_set)]
+    enumerations.append(generateIsKeyword(terminal_set))
+    enumerations.append(isUselessSymbol(terminal_set))
     enumerations.append(generateToString(terminal_set, non_terminal_set))
     result = template % {'enumerations': '\n\n'.join(enumerations),'license': LICENSE_STRING, 'namespace_head': namespace_head, 'namespace_tail': namespace_tail}
 

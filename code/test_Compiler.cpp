@@ -91,7 +91,13 @@ TEST_CASE("Prune a tree", "[test-system]")
       if (sys.Out.getStatus()~is_available)
         sys.Out.printLine(line_: "A line");
       else
-        @sys.Control.abortProgram;
+        @sys.Control.abortProgram > 5;
     }
+  )"));
+  REQUIRE(validate(R"(
+        public (:) enterProgram
+        {
+          var 32u a_;
+        }
   )"));
 }

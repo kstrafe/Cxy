@@ -26,7 +26,10 @@ protocols::TokenType SymbolMatcher::getSymbol(const std::string &lexeme)
     if (lexeme == "&&") return TokenType::SYMBOL_AMPERSAND__AMPERSAND;
     else if (lexeme == "@@") return TokenType::SYMBOL_APETAIL__APETAIL;
     else if (lexeme == "||") return TokenType::SYMBOL_BAR__BAR;
+    else if (lexeme == ":") return TokenType::SYMBOL_COLON__PRUNE;
+    else if (lexeme == ",") return TokenType::SYMBOL_COMMA__PRUNE;
     else if (lexeme == "$$") return TokenType::SYMBOL_DOLLAR__DOLLAR;
+    else if (lexeme == ".") return TokenType::SYMBOL_DOT__PRUNE;
     else if (lexeme == "==") return TokenType::SYMBOL_EQUAL__EQUAL;
     else if (lexeme == "!!") return TokenType::SYMBOL_EXCLAMATION_MARK__EXCLAMATION_MARK;
     else if (lexeme == "/=") return TokenType::SYMBOL_FORWARD_SLASH__EQUAL;
@@ -36,15 +39,14 @@ protocols::TokenType SymbolMatcher::getSymbol(const std::string &lexeme)
     else if (lexeme == "--") return TokenType::SYMBOL_MINUS__MINUS;
     else if (lexeme == "+=") return TokenType::SYMBOL_PLUS__EQUAL;
     else if (lexeme == "++") return TokenType::SYMBOL_PLUS__PLUS;
+    else if (lexeme == ";") return TokenType::SYMBOL_SEMICOLON__PRUNE;
     else if (lexeme == "*=") return TokenType::SYMBOL_STAR__EQUAL;
+    else if (lexeme == "~") return TokenType::SYMBOL_TILDE__PRUNE;
     else if (lexeme == "&") return TokenType::SYMBOL_AMPERSAND;
     else if (lexeme == "@") return TokenType::SYMBOL_APETAIL;
     else if (lexeme == "|") return TokenType::SYMBOL_BAR;
     else if (lexeme == "^") return TokenType::SYMBOL_CARET;
-    else if (lexeme == ":") return TokenType::SYMBOL_COLON;
-    else if (lexeme == ",") return TokenType::SYMBOL_COMMA;
     else if (lexeme == "$") return TokenType::SYMBOL_DOLLAR;
-    else if (lexeme == ".") return TokenType::SYMBOL_DOT;
     else if (lexeme == "=") return TokenType::SYMBOL_EQUAL;
     else if (lexeme == "!") return TokenType::SYMBOL_EXCLAMATION_MARK;
     else if (lexeme == "/") return TokenType::SYMBOL_FORWARD_SLASH;
@@ -52,9 +54,7 @@ protocols::TokenType SymbolMatcher::getSymbol(const std::string &lexeme)
     else if (lexeme == "<") return TokenType::SYMBOL_LESS_THAN;
     else if (lexeme == "-") return TokenType::SYMBOL_MINUS;
     else if (lexeme == "+") return TokenType::SYMBOL_PLUS;
-    else if (lexeme == ";") return TokenType::SYMBOL_SEMICOLON;
     else if (lexeme == "*") return TokenType::SYMBOL_STAR;
-    else if (lexeme == "~") return TokenType::SYMBOL_TILDE;
     else return protocols::TokenType::UNIDENTIFIED;
 }
 

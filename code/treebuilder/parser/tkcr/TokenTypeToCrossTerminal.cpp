@@ -69,11 +69,11 @@ protocols::CrossTerminal TokenTypeToCrossTerminal::convertToCrossTerminal(protoc
         case protocols::TokenType::SYMBOL_BAR: return protocols::CrossTerminal::SYMBOL_BAR;
         case protocols::TokenType::SYMBOL_BAR__BAR: return protocols::CrossTerminal::SYMBOL_BAR__BAR;
         case protocols::TokenType::SYMBOL_CARET: return protocols::CrossTerminal::SYMBOL_CARET;
-        case protocols::TokenType::SYMBOL_COLON: return protocols::CrossTerminal::SYMBOL_COLON;
-        case protocols::TokenType::SYMBOL_COMMA: return protocols::CrossTerminal::SYMBOL_COMMA;
+        case protocols::TokenType::SYMBOL_COLON__PRUNE: return protocols::CrossTerminal::SYMBOL_COLON__PRUNE;
+        case protocols::TokenType::SYMBOL_COMMA__PRUNE: return protocols::CrossTerminal::SYMBOL_COMMA__PRUNE;
         case protocols::TokenType::SYMBOL_DOLLAR: return protocols::CrossTerminal::SYMBOL_DOLLAR;
         case protocols::TokenType::SYMBOL_DOLLAR__DOLLAR: return protocols::CrossTerminal::SYMBOL_DOLLAR__DOLLAR;
-        case protocols::TokenType::SYMBOL_DOT: return protocols::CrossTerminal::SYMBOL_DOT;
+        case protocols::TokenType::SYMBOL_DOT__PRUNE: return protocols::CrossTerminal::SYMBOL_DOT__PRUNE;
         case protocols::TokenType::SYMBOL_EQUAL: return protocols::CrossTerminal::SYMBOL_EQUAL;
         case protocols::TokenType::SYMBOL_EQUAL__EQUAL: return protocols::CrossTerminal::SYMBOL_EQUAL__EQUAL;
         case protocols::TokenType::SYMBOL_EXCLAMATION_MARK: return protocols::CrossTerminal::SYMBOL_EXCLAMATION_MARK;
@@ -90,10 +90,10 @@ protocols::CrossTerminal TokenTypeToCrossTerminal::convertToCrossTerminal(protoc
         case protocols::TokenType::SYMBOL_PLUS: return protocols::CrossTerminal::SYMBOL_PLUS;
         case protocols::TokenType::SYMBOL_PLUS__EQUAL: return protocols::CrossTerminal::SYMBOL_PLUS__EQUAL;
         case protocols::TokenType::SYMBOL_PLUS__PLUS: return protocols::CrossTerminal::SYMBOL_PLUS__PLUS;
-        case protocols::TokenType::SYMBOL_SEMICOLON: return protocols::CrossTerminal::SYMBOL_SEMICOLON;
+        case protocols::TokenType::SYMBOL_SEMICOLON__PRUNE: return protocols::CrossTerminal::SYMBOL_SEMICOLON__PRUNE;
         case protocols::TokenType::SYMBOL_STAR: return protocols::CrossTerminal::SYMBOL_STAR;
         case protocols::TokenType::SYMBOL_STAR__EQUAL: return protocols::CrossTerminal::SYMBOL_STAR__EQUAL;
-        case protocols::TokenType::SYMBOL_TILDE: return protocols::CrossTerminal::SYMBOL_TILDE;
+        case protocols::TokenType::SYMBOL_TILDE__PRUNE: return protocols::CrossTerminal::SYMBOL_TILDE__PRUNE;
         case protocols::TokenType::UNIDENTIFIED: return protocols::CrossTerminal::UNIDENTIFIED;
         default: return protocols::CrossTerminal::UNIDENTIFIED;
     }

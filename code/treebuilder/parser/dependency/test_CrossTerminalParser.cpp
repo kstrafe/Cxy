@@ -42,32 +42,32 @@ TEST_CASE("Test cross-terminal output", "[test-CrossTerminalParser]")
     addT(KEYWORD_PRIVATE);
     addT(IDENTIFIER_CLASS);
     addT(IDENTIFIER_VARIABLE);
-    addT(SYMBOL_SEMICOLON);
+    addT(SYMBOL_SEMICOLON__PRUNE);
 
     addT(KEYWORD_PRIVATE);
     addT(IDENTIFIER_CLASS);
     addT(IDENTIFIER_VARIABLE);
-    addT(SYMBOL_SEMICOLON);
+    addT(SYMBOL_SEMICOLON__PRUNE);
 
     addT(KEYWORD_PRIVATE);
     addT(IDENTIFIER_CLASS);
     addT(IDENTIFIER_VARIABLE);
-    addT(SYMBOL_SEMICOLON);
+    addT(SYMBOL_SEMICOLON__PRUNE);
 
     addT(KEYWORD_PRIVATE);
     addT(IDENTIFIER_CLASS);
     addT(IDENTIFIER_VARIABLE);
-    addT(SYMBOL_SEMICOLON);
+    addT(SYMBOL_SEMICOLON__PRUNE);
 
     addT(KEYWORD_RESTRICTED);
     addT(IDENTIFIER_CLASS);
     addT(IDENTIFIER_VARIABLE);
-    addT(SYMBOL_SEMICOLON);
+    addT(SYMBOL_SEMICOLON__PRUNE);
 
     addT(KEYWORD_PUBLIC);
     addT(IDENTIFIER_CLASS);
     addT(IDENTIFIER_VARIABLE);
-    addT(SYMBOL_SEMICOLON);
+    addT(SYMBOL_SEMICOLON__PRUNE);
   #undef addT
 
   while (parse_stack.empty() == false && input_token_types.empty() == false)

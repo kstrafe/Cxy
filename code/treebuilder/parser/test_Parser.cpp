@@ -41,11 +41,11 @@ TEST_CASE("Test parser", "[test-Parser]")
     parseSymbol(TokenType::KEYWORD_PUBLIC);
     parseSymbol(TokenType::IDENTIFIER_CLASS);
     parseSymbol(TokenType::IDENTIFIER_VARIABLE);
-    parseSymbol(TokenType::SYMBOL_SEMICOLON);
+    parseSymbol(TokenType::SYMBOL_SEMICOLON__PRUNE);
 
     SECTION("See if we handle an empty stack correctly")
     {
-      parseFail(TokenType::SYMBOL_SEMICOLON);
+      parseFail(TokenType::SYMBOL_SEMICOLON__PRUNE);
     }
   }
 }

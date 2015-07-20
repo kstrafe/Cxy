@@ -20,34 +20,6 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace tul { namespace protocols { 
 
-bool CrossTerminalTools::isKeyword(const CrossTerminal &ct_)
-{
-    switch (ct_)
-    {
-        case CrossTerminal::KEYWORD_ASSEMBLY: return true;
-        case CrossTerminal::KEYWORD_CAST: return true;
-        case CrossTerminal::KEYWORD_CONST: return true;
-        case CrossTerminal::KEYWORD_DO: return true;
-        case CrossTerminal::KEYWORD_ELSE: return true;
-        case CrossTerminal::KEYWORD_FOR: return true;
-        case CrossTerminal::KEYWORD_GLOBAL: return true;
-        case CrossTerminal::KEYWORD_GLOCAL: return true;
-        case CrossTerminal::KEYWORD_GOTO: return true;
-        case CrossTerminal::KEYWORD_IF: return true;
-        case CrossTerminal::KEYWORD_LABEL: return true;
-        case CrossTerminal::KEYWORD_PRIVATE: return true;
-        case CrossTerminal::KEYWORD_PTR: return true;
-        case CrossTerminal::KEYWORD_PUBLIC: return true;
-        case CrossTerminal::KEYWORD_PURE: return true;
-        case CrossTerminal::KEYWORD_REF: return true;
-        case CrossTerminal::KEYWORD_RESTRICTED: return true;
-        case CrossTerminal::KEYWORD_RETURN: return true;
-        case CrossTerminal::KEYWORD_VAR: return true;
-        case CrossTerminal::KEYWORD_WHILE: return true;
-        default: return false;
-    }
-}
-
 bool CrossTerminalTools::isExpression(const CrossTerminal &ct_)
 {
     switch (ct_)
@@ -84,7 +56,47 @@ bool CrossTerminalTools::isExpression(const CrossTerminal &ct_)
         case CrossTerminal::PACKAGE_MEMBER_EXPRESSION: return true;
         case CrossTerminal::RELATIONAL_EXPRESSION: return true;
         case CrossTerminal::UNARY_EXPRESSION: return true;
-        case CrossTerminal::UNARY_OPERATOR_EXPRESSION: return true;
+        default: return false;
+    }
+}
+
+bool CrossTerminalTools::isKeyword(const CrossTerminal &ct_)
+{
+    switch (ct_)
+    {
+        case CrossTerminal::KEYWORD_ASSEMBLY: return true;
+        case CrossTerminal::KEYWORD_CAST: return true;
+        case CrossTerminal::KEYWORD_CONST: return true;
+        case CrossTerminal::KEYWORD_DO: return true;
+        case CrossTerminal::KEYWORD_ELSE: return true;
+        case CrossTerminal::KEYWORD_FOR: return true;
+        case CrossTerminal::KEYWORD_GLOBAL: return true;
+        case CrossTerminal::KEYWORD_GLOCAL: return true;
+        case CrossTerminal::KEYWORD_GOTO: return true;
+        case CrossTerminal::KEYWORD_IF: return true;
+        case CrossTerminal::KEYWORD_LABEL: return true;
+        case CrossTerminal::KEYWORD_PRIVATE: return true;
+        case CrossTerminal::KEYWORD_PTR: return true;
+        case CrossTerminal::KEYWORD_PUBLIC: return true;
+        case CrossTerminal::KEYWORD_PURE: return true;
+        case CrossTerminal::KEYWORD_REF: return true;
+        case CrossTerminal::KEYWORD_RESTRICTED: return true;
+        case CrossTerminal::KEYWORD_RETURN: return true;
+        case CrossTerminal::KEYWORD_VAR: return true;
+        case CrossTerminal::KEYWORD_WHILE: return true;
+        default: return false;
+    }
+}
+
+bool CrossTerminalTools::isUselessSymbol(const CrossTerminal &ct_)
+{
+    switch (ct_)
+    {
+        case CrossTerminal::SYMBOL_COLON__PRUNE: return true;
+        case CrossTerminal::SYMBOL_COMMA__PRUNE: return true;
+        case CrossTerminal::SYMBOL_DOT__PRUNE: return true;
+        case CrossTerminal::SYMBOL_SEMICOLON__PRUNE: return true;
+        case CrossTerminal::SYMBOL_TILDE__PRUNE: return true;
         default: return false;
     }
 }
@@ -96,8 +108,6 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::ACCESS_SPECIFICATION: return "ACCESS_SPECIFICATION";
         case protocols::CrossTerminal::ACCESS_SPECIFIER: return "ACCESS_SPECIFIER";
         case protocols::CrossTerminal::ADDITIVE_EXPRESSION: return "ADDITIVE_EXPRESSION";
-        case protocols::CrossTerminal::ADDITIVE_MINUS: return "ADDITIVE_MINUS";
-        case protocols::CrossTerminal::ADDITIVE_PLUS: return "ADDITIVE_PLUS";
         case protocols::CrossTerminal::AND_EXPRESSION: return "AND_EXPRESSION";
         case protocols::CrossTerminal::ARGUMENT: return "ARGUMENT";
         case protocols::CrossTerminal::ARGUMENT_LIST: return "ARGUMENT_LIST";
@@ -213,11 +223,11 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::SYMBOL_BAR: return "SYMBOL_BAR";
         case protocols::CrossTerminal::SYMBOL_BAR__BAR: return "SYMBOL_BAR__BAR";
         case protocols::CrossTerminal::SYMBOL_CARET: return "SYMBOL_CARET";
-        case protocols::CrossTerminal::SYMBOL_COLON: return "SYMBOL_COLON";
-        case protocols::CrossTerminal::SYMBOL_COMMA: return "SYMBOL_COMMA";
+        case protocols::CrossTerminal::SYMBOL_COLON__PRUNE: return "SYMBOL_COLON__PRUNE";
+        case protocols::CrossTerminal::SYMBOL_COMMA__PRUNE: return "SYMBOL_COMMA__PRUNE";
         case protocols::CrossTerminal::SYMBOL_DOLLAR: return "SYMBOL_DOLLAR";
         case protocols::CrossTerminal::SYMBOL_DOLLAR__DOLLAR: return "SYMBOL_DOLLAR__DOLLAR";
-        case protocols::CrossTerminal::SYMBOL_DOT: return "SYMBOL_DOT";
+        case protocols::CrossTerminal::SYMBOL_DOT__PRUNE: return "SYMBOL_DOT__PRUNE";
         case protocols::CrossTerminal::SYMBOL_EQUAL: return "SYMBOL_EQUAL";
         case protocols::CrossTerminal::SYMBOL_EQUAL__EQUAL: return "SYMBOL_EQUAL__EQUAL";
         case protocols::CrossTerminal::SYMBOL_EXCLAMATION_MARK: return "SYMBOL_EXCLAMATION_MARK";
@@ -234,23 +244,16 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::SYMBOL_PLUS: return "SYMBOL_PLUS";
         case protocols::CrossTerminal::SYMBOL_PLUS__EQUAL: return "SYMBOL_PLUS__EQUAL";
         case protocols::CrossTerminal::SYMBOL_PLUS__PLUS: return "SYMBOL_PLUS__PLUS";
-        case protocols::CrossTerminal::SYMBOL_SEMICOLON: return "SYMBOL_SEMICOLON";
+        case protocols::CrossTerminal::SYMBOL_SEMICOLON__PRUNE: return "SYMBOL_SEMICOLON__PRUNE";
         case protocols::CrossTerminal::SYMBOL_STAR: return "SYMBOL_STAR";
         case protocols::CrossTerminal::SYMBOL_STAR__EQUAL: return "SYMBOL_STAR__EQUAL";
-        case protocols::CrossTerminal::SYMBOL_TILDE: return "SYMBOL_TILDE";
+        case protocols::CrossTerminal::SYMBOL_TILDE__PRUNE: return "SYMBOL_TILDE__PRUNE";
         case protocols::CrossTerminal::TYPE: return "TYPE";
         case protocols::CrossTerminal::TYPE_AFTER_CONST: return "TYPE_AFTER_CONST";
         case protocols::CrossTerminal::TYPE_AFTER_REF: return "TYPE_AFTER_REF";
         case protocols::CrossTerminal::TYPE_AFTER_REF_CONST: return "TYPE_AFTER_REF_CONST";
-        case protocols::CrossTerminal::UNARY_APETAIL: return "UNARY_APETAIL";
-        case protocols::CrossTerminal::UNARY_APETAIL__APETAIL: return "UNARY_APETAIL__APETAIL";
-        case protocols::CrossTerminal::UNARY_DOLLAR: return "UNARY_DOLLAR";
-        case protocols::CrossTerminal::UNARY_DOLLAR__DOLLAR: return "UNARY_DOLLAR__DOLLAR";
-        case protocols::CrossTerminal::UNARY_EXCLAMATION_MARK: return "UNARY_EXCLAMATION_MARK";
-        case protocols::CrossTerminal::UNARY_EXCLAMATION_MARK__EXCLAMATION_MARK: return "UNARY_EXCLAMATION_MARK__EXCLAMATION_MARK";
         case protocols::CrossTerminal::UNARY_EXPRESSION: return "UNARY_EXPRESSION";
-        case protocols::CrossTerminal::UNARY_MINUS: return "UNARY_MINUS";
-        case protocols::CrossTerminal::UNARY_OPERATOR_EXPRESSION: return "UNARY_OPERATOR_EXPRESSION";
+        case protocols::CrossTerminal::UNARY_OPERATOR: return "UNARY_OPERATOR";
         case protocols::CrossTerminal::UNIDENTIFIED: return "UNIDENTIFIED";
         case protocols::CrossTerminal::WHILE_STATEMENT: return "WHILE_STATEMENT";
         default: return "";

@@ -28,8 +28,8 @@ public:
 
   static bool isKeyword(const CrossTerminal &ct_);
   static bool isExpression(const CrossTerminal &ct_);
+  static bool isUselessSymbol(const CrossTerminal &ct_);
   static std::string toString(protocols::CrossTerminal cross_terminal);
-
 };
 
 }}
