@@ -43,7 +43,7 @@ namespace tul { namespace ast {
   {
     std::unique_ptr<protocols::ConcreteSyntaxTree> tree_ = tree_builder.getConcreteSyntaxTree();
     tp::TreePruner::pruneTree(tree_.get());
-    
+    semantic_analyzer.runOn(tree_.get());
     std::cout << tree_.get()->toString() << std::endl;
     return true;
   }

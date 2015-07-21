@@ -30,4 +30,9 @@ SemanticAnalyzer::~SemanticAnalyzer()
 
 }
 
+bool SemanticAnalyzer::runOn(protocols::ConcreteSyntaxTree *ct_root)
+{
+  return false;
+}
+
 }}

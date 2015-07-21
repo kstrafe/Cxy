@@ -18,6 +18,7 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 #include "sym/SymbolTable.hpp"
+#include "protocols/ConcreteSyntaxTree.hpp"
 
 
 namespace tul { namespace sma {
@@ -28,6 +29,8 @@ namespace tul { namespace sma {
 
     SemanticAnalyzer();
     ~SemanticAnalyzer();
+
+    bool runOn(protocols::ConcreteSyntaxTree *ct_root);
 
   private:
 
