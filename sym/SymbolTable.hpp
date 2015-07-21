@@ -15,12 +15,21 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 */
-namespace tul { namespace protocols {
+#pragma once
 
+#include "sym/ModuleTable.hpp"
+
+#include <set>
+
+
+namespace tul { namespace sym {
+
+/*
+  The global table of symbols, for the entire program.
+*/
 struct SymbolTable
 {
-  ConcreteSyntaxTree *associated_tree;
-  
+  std::set<ModuleTable> program_symtab;
 };
 
 }}

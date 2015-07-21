@@ -15,19 +15,20 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "SemanticAnalyzer.hpp"
+#pragma once
+
+#include "MethodTable.hpp"
+
+#include <set>
+#include <string>
 
 
-namespace tul { namespace sma {
+namespace tul { namespace sym {
 
-SemanticAnalyzer::SemanticAnalyzer()
+struct ModuleTable
 {
-
-}
-
-SemanticAnalyzer::~SemanticAnalyzer()
-{
-
-}
+  std::set<MethodTable> method_symtab;
+  std::string qualified_name;
+};
 
 }}

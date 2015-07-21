@@ -17,6 +17,7 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 */
 #pragma once
 
+#include "sma/SemanticAnalyzer.hpp"
 #include "tb/TreeBuilder.hpp"
 
 
@@ -34,6 +35,7 @@ public:
 private:
 
   tb::TreeBuilder tree_builder;
+  sma::SemanticAnalyzer semantic_analyzer;
 
 };
 

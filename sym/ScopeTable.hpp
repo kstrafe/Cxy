@@ -15,19 +15,20 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "SemanticAnalyzer.hpp"
+#pragma once
 
 
-namespace tul { namespace sma {
+namespace tul { namespace sym {
 
-SemanticAnalyzer::SemanticAnalyzer()
+/*
+  A single scope is a block of declarations inside a method.
+  This can be idealized as anything between {}, in case of
+  an if, while, or another such statement that allows not
+  using the {}, the same rule applies.
+*/
+struct ScopeTable
 {
-
-}
-
-SemanticAnalyzer::~SemanticAnalyzer()
-{
-
-}
+  std::string method_name;
+};
 
 }}
