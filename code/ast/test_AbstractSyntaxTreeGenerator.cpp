@@ -46,6 +46,8 @@ namespace
     }
     if (ret_val)
       ret_val = builder_object.endInput();
+    if (ret_val)
+      builder_object.generateSemantics();
     return ret_val;
   }
 }
@@ -63,6 +65,11 @@ TEST_CASE("AbstractSyntaxTreeGenerator must validate the grammar.", "[test-Abstr
       sys.Std.printOut(str_: "Hello World!");
       sys.Std.printErr(str_: "Hello Error!");
       sys.Std.printOut(str_: sys.Std.readString()~string_);
+    }
+
+    private (32u a_ : 32u b_) someFunction
+    {
+      return a_: b_;
     }
   )"));
 }

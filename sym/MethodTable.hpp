@@ -24,6 +24,15 @@ namespace tul { namespace sym {
 
 struct MethodTable
 {
+  bool operator< (const MethodTable &m_table) const
+  {
+    return method_name < m_table.method_name;
+  }
+
+  bool operator< (const MethodTable &m_table)
+  {
+    return method_name < m_table.method_name;
+  }
   std::string method_name;
 };
 
