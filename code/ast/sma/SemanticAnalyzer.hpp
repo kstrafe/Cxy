@@ -15,7 +15,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 */
-namespace tul { namespace tp {
+namespace tul { namespace sma {
 
   class SemanticAnalyzer
   {

@@ -22,7 +22,7 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 #include <cassert>
 
 
-namespace tul {
+namespace tul { namespace tp {
 
 void TreePruner::pruneTree(protocols::ConcreteSyntaxTree *ct_)
 {
@@ -33,7 +33,6 @@ void TreePruner::pruneTree(protocols::ConcreteSyntaxTree *ct_)
   {
     pruneTree(child_);
   }
-
   ct_->children_.erase
   (
     std::remove_if
@@ -55,7 +54,6 @@ void TreePruner::pruneTree(protocols::ConcreteSyntaxTree *ct_)
     ),
     ct_->children_.end()
   );
-
   // if this node now has one child, and this node is an expression, turn this node into its child?
   // How about: if any child of mine has 1 child that is an expression, make it that expression?
   // return;
@@ -77,7 +75,6 @@ void TreePruner::pruneTree(protocols::ConcreteSyntaxTree *ct_)
       child_ = transitive_child;
     }
   }
-
 }
 
-}
+}}

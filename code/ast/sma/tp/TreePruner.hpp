@@ -18,7 +18,7 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 #include "protocols/ConcreteSyntaxTree.hpp"
 
 
-namespace tul {
+namespace tul { namespace tp {
 
 class TreePruner
 {
@@ -27,4 +27,4 @@ public:
   static void pruneTree(protocols::ConcreteSyntaxTree *ct_);
 };
 
-}
+}}

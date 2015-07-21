@@ -95,7 +95,7 @@ bool validate(std::string string, bool print_error_if_exists = true)
   std::unique_ptr<tul::protocols::ConcreteSyntaxTree> tree_;
   if (ret_val)
   {
-    tul::TreePruner pruner_;
+    tul::tp::TreePruner pruner_;
     tree_ = builder_object.getConcreteSyntaxTree();
     pruner_.pruneTree(tree_.get());
     std::cout << printTree(tree_.get());
@@ -137,7 +137,13 @@ TEST_CASE("Prune a tree", "[test-system]")
         public (:) enterProgram
         {
           var 32u a_ = 100;
-          a_ = when (a_ > 100 || doNothing()~k_) 50 else when (control_val > 100) 0 else -1;
+          a_ = sys.Bits.bit_bus +
+            when (a_ > 100 || doNothing()~k_)
+              50
+            else when (control_val > 100)
+              0
+            else
+              -1;
         }
   )"));
 }

@@ -400,7 +400,7 @@ productions = {
         ['IDENTIFIER_VARIABLE'],
     ],
     'WHEN_EXPRESSION': [
-        ['KEYWORD_WHEN', 'GROUPER_LEFT_PARENTHESIS', 'OR_EXPRESSION', 'GROUPER_RIGHT_PARENTHESIS', 'OR_EXPRESSION', 'KEYWORD_ELSE', 'OR_EXPRESSION'],    
+        ['KEYWORD_WHEN', 'GROUPER_LEFT_PARENTHESIS', 'OR_EXPRESSION', 'GROUPER_RIGHT_PARENTHESIS', 'OR_EXPRESSION', 'KEYWORD_ELSE', 'OR_EXPRESSION'],
     ],
     'OPTIONAL_EXTRACTOR_EXPRESSION': [
         ['SYMBOL_TILDE__PRUNE', 'IDENTIFIER_VARIABLE', 'OPTIONAL_MEMBER_EXPRESSION'],
@@ -443,7 +443,7 @@ def createcodetblexerdependencyKeywordMatchercpp(terminal_set):
     complete = enumerations % {'body': dependency.Prepend.prependTabEachLine(complete),'function_signature': function_signature}
     complete = template % {'enumerations': complete, 'head': head, 'license': LICENSE_STRING, 'namespace_head': namespace_head, 'namespace_tail': namespace_tail}
 
-    with open('./code/tb/lexer/dependency/KeywordMatcher.cpp', 'w') as file:
+    with open('./code/ast/tb/lexer/dependency/KeywordMatcher.cpp', 'w') as file:
         file.write(complete)
 
 
@@ -518,7 +518,7 @@ def createcodetblexerdependencySymbolMatchercpp(terminal_set):
     complete = enumerations % {'body': dependency.Prepend.prependTabEachLine(complete),'function_signature': function_signature}
     complete = template % {'enumerations': complete, 'head': head, 'license': LICENSE_STRING, 'namespace_head': namespace_head, 'namespace_tail': namespace_tail}
 
-    with open('./code/tb/lexer/dependency/SymbolMatcher.cpp', 'w') as file:
+    with open('./code/ast/tb/lexer/dependency/SymbolMatcher.cpp', 'w') as file:
         file.write(complete)
 
 
@@ -529,7 +529,7 @@ def createcodetbparserdependencyCrossTerminalParserinc():
         transitions_ = ParserTableGenerator.computeTransitions(start_nonterminal, productions)
         lines_.append(ParserTableGenerator.generateTransitionMapCode(transitions_, productions))
 
-    with open('./code/tb/parser/dependency/CrossTerminalParser.inc', 'w') as file:
+    with open('./code/ast/tb/parser/dependency/CrossTerminalParser.inc', 'w') as file:
         file.write(LICENSE_STRING + '\n'.join(lines_))
 
 
@@ -553,7 +553,7 @@ def createcodetbparsertkcrTokenTypeToCrossTerminalcpp(terminal_set):
                            'namespace_head': namespace_head,
                            'namespace_tail': namespace_tail}
 
-    with open('./code/tb/parser/tkcr/TokenTypeToCrossTerminal.cpp', 'w') as file:
+    with open('./code/ast/tb/parser/tkcr/TokenTypeToCrossTerminal.cpp', 'w') as file:
         file.write(complete)
 
 
