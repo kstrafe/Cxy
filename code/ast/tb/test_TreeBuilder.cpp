@@ -54,8 +54,8 @@ namespace
       std::cout << "last char: " << current_ << std::endl;
       std::vector<std::string> expected = builder_object.getExpectedTokens();
       std::cout << "\nError: expected:\n";
-      for (std::string &string : expected)
-        std::cout << string << ", " << std::endl;
+      // for (std::string &string : expected)
+      //   std::cout << string << ", " << std::endl;
     }
     return ret_val;
   }
