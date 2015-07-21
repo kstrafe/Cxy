@@ -56,6 +56,7 @@ bool CrossTerminalTools::isExpression(const CrossTerminal &ct_)
         case CrossTerminal::PACKAGE_MEMBER_EXPRESSION: return true;
         case CrossTerminal::RELATIONAL_EXPRESSION: return true;
         case CrossTerminal::UNARY_EXPRESSION: return true;
+        case CrossTerminal::WHEN_EXPRESSION: return true;
         default: return false;
     }
 }
@@ -83,6 +84,7 @@ bool CrossTerminalTools::isKeyword(const CrossTerminal &ct_)
         case CrossTerminal::KEYWORD_RESTRICTED: return true;
         case CrossTerminal::KEYWORD_RETURN: return true;
         case CrossTerminal::KEYWORD_VAR: return true;
+        case CrossTerminal::KEYWORD_WHEN: return true;
         case CrossTerminal::KEYWORD_WHILE: return true;
         default: return false;
     }
@@ -175,6 +177,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::KEYWORD_RESTRICTED: return "KEYWORD_RESTRICTED";
         case protocols::CrossTerminal::KEYWORD_RETURN: return "KEYWORD_RETURN";
         case protocols::CrossTerminal::KEYWORD_VAR: return "KEYWORD_VAR";
+        case protocols::CrossTerminal::KEYWORD_WHEN: return "KEYWORD_WHEN";
         case protocols::CrossTerminal::KEYWORD_WHILE: return "KEYWORD_WHILE";
         case protocols::CrossTerminal::LABEL_STATEMENT: return "LABEL_STATEMENT";
         case protocols::CrossTerminal::MEMBER_EXPRESSION: return "MEMBER_EXPRESSION";
@@ -255,6 +258,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::UNARY_EXPRESSION: return "UNARY_EXPRESSION";
         case protocols::CrossTerminal::UNARY_OPERATOR: return "UNARY_OPERATOR";
         case protocols::CrossTerminal::UNIDENTIFIED: return "UNIDENTIFIED";
+        case protocols::CrossTerminal::WHEN_EXPRESSION: return "WHEN_EXPRESSION";
         case protocols::CrossTerminal::WHILE_STATEMENT: return "WHILE_STATEMENT";
         default: return "";
     }

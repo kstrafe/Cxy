@@ -15,6 +15,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 */
+#include "../../tb/TreeBuilder.hpp"
 #include "libraries/catch.hpp"
 #include "TreePruner.hpp"
 #include "protocols/CrossTerminalTools.hpp"
@@ -68,39 +69,39 @@ bool checkSemantics(tul::protocols::ConcreteSyntaxTree *tree_)
 
 bool validate(std::string string, bool print_error_if_exists = true)
 {
-  return true;
-  // tul::treebuilder::TreeBuilder builder_object;
-  // bool ret_val = true;
-  // char current_ = '\0';
-  // for (auto input_character : string)
-  // {
-  //   if (builder_object.buildTree(input_character) == false)
-  //   {
-  //     ret_val = false;
-  //     break;
-  //   }
-  //   current_ = input_character;
-  // }
-  // if (ret_val)
-  //   ret_val = builder_object.endInput();
-  // if (ret_val == false && print_error_if_exists)
-  // {
-  //   std::cout << "last char: " << current_ << std::endl;
-  //   std::vector<std::string> expected = builder_object.getExpectedTokens();
-  //   std::cout << "\nError: expected:\n";
-  //   for (std::string &string : expected)
-  //     std::cout << string << ", " << std::endl;
-  // }
-  // std::unique_ptr<tul::protocols::ConcreteSyntaxTree> tree_;
-  // if (ret_val)
-  // {
-  //   tul::TreePruner pruner_;
-  //   tree_ = builder_object.getConcreteSyntaxTree();
-  //   pruner_.pruneTree(tree_.get());
-  //   std::cout << printTree(tree_.get());
-  // }
-  // checkSemantics(tree_.get());
-  // return ret_val;
+  // return true;
+  tul::tb::TreeBuilder builder_object;
+  bool ret_val = true;
+  char current_ = '\0';
+  for (auto input_character : string)
+  {
+    if (builder_object.buildTree(input_character) == false)
+    {
+      ret_val = false;
+      break;
+    }
+    current_ = input_character;
+  }
+  if (ret_val)
+    ret_val = builder_object.endInput();
+  if (ret_val == false && print_error_if_exists)
+  {
+    std::cout << "last char: " << current_ << std::endl;
+    std::vector<std::string> expected = builder_object.getExpectedTokens();
+    std::cout << "\nError: expected:\n";
+    for (std::string &string : expected)
+      std::cout << string << ", " << std::endl;
+  }
+  std::unique_ptr<tul::protocols::ConcreteSyntaxTree> tree_;
+  if (ret_val)
+  {
+    tul::TreePruner pruner_;
+    tree_ = builder_object.getConcreteSyntaxTree();
+    pruner_.pruneTree(tree_.get());
+    std::cout << printTree(tree_.get());
+    checkSemantics(tree_.get());
+  }
+  return ret_val;
 }
 
 TEST_CASE("Prune a tree", "[test-system]")
@@ -131,5 +132,12 @@ TEST_CASE("Prune a tree", "[test-system]")
         }
         public (32u zak_: ) eDboii
         { zak_; }
+  )"));
+  REQUIRE(validate(R"(
+        public (:) enterProgram
+        {
+          var 32u a_ = 100;
+          a_ = when (a_ > 100 || doNothing()~k_) 50 else 10;
+        }
   )"));
 }

@@ -37,6 +37,7 @@ protocols::TokenType KeywordMatcher::getKeyword(const std::string &lexeme)
     else if (lexeme == "else") return TokenType::KEYWORD_ELSE;
     else if (lexeme == "goto") return TokenType::KEYWORD_GOTO;
     else if (lexeme == "pure") return TokenType::KEYWORD_PURE;
+    else if (lexeme == "when") return TokenType::KEYWORD_WHEN;
     else if (lexeme == "for") return TokenType::KEYWORD_FOR;
     else if (lexeme == "ptr") return TokenType::KEYWORD_PTR;
     else if (lexeme == "ref") return TokenType::KEYWORD_REF;
