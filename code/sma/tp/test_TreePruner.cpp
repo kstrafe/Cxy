@@ -137,7 +137,7 @@ TEST_CASE("Prune a tree", "[test-system]")
         public (:) enterProgram
         {
           var 32u a_ = 100;
-          a_ = when (a_ > 100 || doNothing()~k_) 50 else 10;
+          a_ = when (a_ > 100 || doNothing()~k_) 50 else when (control_val > 100) 0 else -1;
         }
   )"));
 }
