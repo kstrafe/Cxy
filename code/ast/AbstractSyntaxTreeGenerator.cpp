@@ -16,6 +16,10 @@ You should have received a copy of the GNU General Public License
 along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "AbstractSyntaxTreeGenerator.hpp"
+#include "tp/TreePruner.hpp"
+#include "protocols/ConcreteSyntaxTree.hpp"
+
+#include <iostream>
 
 
 namespace tul { namespace ast {
@@ -28,6 +32,19 @@ namespace tul { namespace ast {
   bool AbstractSyntaxTreeGenerator::endInput()
   {
     return tree_builder.endInput();
+  }
+
+  std::vector<std::string> AbstractSyntaxTreeGenerator::getExpectedTokens()
+  {
+    return std::move(tree_builder.getExpectedTokens());
+  }
+
+  bool AbstractSyntaxTreeGenerator::generateSemantics()
+  {
+    std::unique_ptr<protocols::ConcreteSyntaxTree> tree_ = tree_builder.getConcreteSyntaxTree();
+    tp::TreePruner::pruneTree(tree_.get());
+    std::cout << tree_.get()->toString() << std::endl;
+    return true;
   }
 
 }}

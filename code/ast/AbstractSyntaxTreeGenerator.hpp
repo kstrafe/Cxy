@@ -29,6 +29,7 @@ public:
   bool buildTree(char next_character);
   bool endInput();
   std::vector<std::string> getExpectedTokens();
+  bool generateSemantics();
 
 private:
 

@@ -54,8 +54,6 @@ namespace
       std::cout << "last char: " << current_ << std::endl;
       std::vector<std::string> expected = builder_object.getExpectedTokens();
       std::cout << "\nError: expected:\n";
-      // for (std::string &string : expected)
-      //   std::cout << string << ", " << std::endl;
     }
     return ret_val;
   }
@@ -162,6 +160,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
             var 800u b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction()~a_ ^sampleFunction()~a_ - another_identifier | "Cool m8";
             var 8s b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction()~a_ ^sampleFunction()~a_ - another_identifier | "Cool m8";
             var AnotherClassName b_a_ = 100 > 5 && 10 * b_ + 5 / 3 * sampleFunction()~a_ ^sampleFunction()~a_ - another_identifier | "Cool m8";
+            var AnotherClassName b_a_ = when (a_) b_ else c_;
           }
     )"));
     REQUIRE(false == validate("public (:) enterProgram { var const ClassName ", false));

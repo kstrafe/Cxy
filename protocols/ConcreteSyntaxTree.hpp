@@ -17,9 +17,11 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "CrossTerminal.hpp"
+#include "CrossTerminalTools.hpp"
 #include "Token.hpp"
 
 #include <deque>
+#include <string>
 
 
 namespace tul { namespace protocols {
@@ -34,6 +36,7 @@ namespace tul { namespace protocols {
       ConcreteSyntaxTree();
       ConcreteSyntaxTree(CrossTerminal ct_);
       ~ConcreteSyntaxTree();
+      std::string toString(int indent = 0);
 
       Token token_;
       CrossTerminal node_type;
