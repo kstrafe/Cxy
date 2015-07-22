@@ -34,6 +34,9 @@ namespace tul { namespace sma {
 
   private:
 
+    bool collectFunctionInformation(protocols::ConcreteSyntaxTree *ct_root);
+    bool collectFunctionSignature(protocols::ConcreteSyntaxTree *ct_root, sym::MethodTable &mod_tab);
+    bool collectScopeInformation(protocols::ConcreteSyntaxTree *ct_root);
     sym::SymbolTable module_symtab;
   };
 

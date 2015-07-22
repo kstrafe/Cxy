@@ -17,6 +17,7 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "SemanticAnalyzer.hpp"
 
+#include <cassert>
 #include <iostream>
 
 
@@ -37,10 +38,19 @@ SemanticAnalyzer::~SemanticAnalyzer()
   for (const sym::MethodTable &method_tab : it->method_symtab)
   {
     std::cout << "Registered function: " << method_tab.method_name << std::endl;
+    for (auto it : method_tab.return_params)
+    {
+      std::cout << it.first << " and " << it.second << std::endl;
+    }
   }
 }
 
 bool SemanticAnalyzer::runOn(protocols::ConcreteSyntaxTree *ct_root)
+{
+  return collectFunctionInformation(ct_root);
+}
+
+bool SemanticAnalyzer::collectFunctionInformation(protocols::ConcreteSyntaxTree *ct_root)
 {
   if
   (
@@ -60,11 +70,45 @@ bool SemanticAnalyzer::runOn(protocols::ConcreteSyntaxTree *ct_root)
     mod_tab.qualified_name = "root.Main";
     std::set<sym::ModuleTable>::iterator it = module_symtab.program_symtab.find(mod_tab);
     sym::MethodTable met_tab;
+    collectFunctionSignature(ct_root->children_.at(0), met_tab);
     met_tab.method_name = ct_root->children_.at(1)->token_.accompanying_lexeme;
     std::set<sym::MethodTable> &m_tab = const_cast<std::set<sym::MethodTable> &> (it->method_symtab);
     m_tab.insert(met_tab);
   }
-  return false;
+  return true;
 }
+
+bool SemanticAnalyzer::collectFunctionSignature(protocols::ConcreteSyntaxTree *ct_root, sym::MethodTable &mod_tab)
+{
+  assert(ct_root != nullptr);
+  switch (ct_root->node_type)
+  {
+    case protocols::CrossTerminal::FUNCTION_SIGNATURE:
+    case protocols::CrossTerminal::ARGUMENT_LIST:
+      for (protocols::ConcreteSyntaxTree *child_ : ct_root->children_)
+        collectFunctionSignature(child_, mod_tab);
+      break;
+    case protocols::CrossTerminal::ARGUMENT:
+    {
+      std::vector<std::pair<std::string, std::string>> &rets = mod_tab.return_params;
+      std::string type_ = ct_root->children_.at(0)->token_.accompanying_lexeme;
+      std::string name_ = ct_root->children_.at(1)->token_.accompanying_lexeme;
+      rets.emplace_back(type_, name_);
+    }
+    break;
+    default:
+      assert(false);
+    break;
+  }
+  return true;
+}
+
+bool collectScopeInformation(protocols::ConcreteSyntaxTree *ct_root)
+{
+  // This one finds out the different data inside
+  // the function.
+  return true;
+}
+
 
 }}
