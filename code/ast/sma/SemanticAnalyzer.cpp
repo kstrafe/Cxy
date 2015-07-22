@@ -15,6 +15,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 */
+#include "protocols/CrossTerminalTools.hpp"
 #include "SemanticAnalyzer.hpp"
 
 #include <cassert>
@@ -50,6 +51,7 @@ bool SemanticAnalyzer::runOn(protocols::ConcreteSyntaxTree *ct_root)
   return collectFunctionInformation(ct_root);
 }
 
+
 bool SemanticAnalyzer::collectFunctionInformation(protocols::ConcreteSyntaxTree *ct_root)
 {
   if
@@ -78,11 +80,62 @@ bool SemanticAnalyzer::collectFunctionInformation(protocols::ConcreteSyntaxTree 
   return true;
 }
 
+std::string getArgumentType(protocols::ConcreteSyntaxTree *ct_root)
+{
+  switch (ct_root->node_type)
+  {
+    case protocols::CrossTerminal::PRIMITIVE_UNSIGNED:
+    case protocols::CrossTerminal::PRIMITIVE_SIGNED:
+      return ct_root->token_.accompanying_lexeme;
+    case protocols::CrossTerminal::TYPE:
+    case protocols::CrossTerminal::BASIC_TYPE:
+      return getArgumentType(ct_root->children_.at(0));
+    break;
+    default:
+      return "";
+    break;
+  }
+}
+
+std::string getArgumentName(protocols::ConcreteSyntaxTree *ct_root)
+{
+  switch (ct_root->node_type)
+  {
+    case protocols::CrossTerminal::BASIC_TYPE:
+      return
+        ct_root->children_.at(0)->token_.accompanying_lexeme
+        + '.' + ct_root->children_.at(1)->token_.accompanying_lexeme;
+    case protocols::CrossTerminal::IDENTIFIER_VARIABLE:
+    case protocols::CrossTerminal::IDENTIFIER_PACKAGE:
+      return ct_root->token_.accompanying_lexeme;
+    default:
+      if (ct_root->children_.size() == 0) {
+        return protocols::CrossTerminalTools::toString(ct_root->node_type);
+      }
+      return getArgumentName(ct_root->children_.at(0));
+  }
+}
+
 bool SemanticAnalyzer::collectFunctionSignature(protocols::ConcreteSyntaxTree *ct_root, sym::MethodTable &mod_tab)
 {
   assert(ct_root != nullptr);
   switch (ct_root->node_type)
   {
+    case protocols::CrossTerminal::ARGUMENT_LIST_AFTER_FIRST:
+    {
+      if (ct_root->children_.size() == 1) {
+        std::vector<std::pair<std::string, std::string>> &rets = mod_tab.return_params;
+        std::string name_ = getArgumentName(ct_root->children_.at(0));
+        rets.emplace_back("NoType", name_);
+      } else {
+        std::vector<std::pair<std::string, std::string>> &rets = mod_tab.return_params;
+        std::string type_ = getArgumentType(ct_root->children_.at(0));
+        std::string name_ = getArgumentName(ct_root->children_.at(1));
+        rets.emplace_back(type_, name_);
+      }
+    }
+    break;
+    case protocols::CrossTerminal::OPTIONAL_ARGUMENT_LIST:
     case protocols::CrossTerminal::FUNCTION_SIGNATURE:
     case protocols::CrossTerminal::ARGUMENT_LIST:
       for (protocols::ConcreteSyntaxTree *child_ : ct_root->children_)
@@ -91,12 +144,16 @@ bool SemanticAnalyzer::collectFunctionSignature(protocols::ConcreteSyntaxTree *c
     case protocols::CrossTerminal::ARGUMENT:
     {
       std::vector<std::pair<std::string, std::string>> &rets = mod_tab.return_params;
-      std::string type_ = ct_root->children_.at(0)->token_.accompanying_lexeme;
-      std::string name_ = ct_root->children_.at(1)->token_.accompanying_lexeme;
+      std::string type_ = getArgumentType(ct_root->children_.at(0));
+      std::string name_ = getArgumentName(ct_root->children_.at(1));
       rets.emplace_back(type_, name_);
     }
     break;
     default:
+      std::cout
+        << "Encountered unexpected signature element: "
+        << protocols::CrossTerminalTools::toString(ct_root->node_type)
+        << std::endl;
       assert(false);
     break;
   }

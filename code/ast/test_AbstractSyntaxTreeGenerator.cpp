@@ -79,7 +79,7 @@ TEST_CASE("AbstractSyntaxTreeGenerator must validate the grammar.", "[test-Abstr
       var sml.String some_string;
     }
 
-    private (32u a_ : 32u b_) someFunction
+    private (32u a_, d_, my.Class x_: 32u b_, 64s c_, y_) someFunction
     {
       var 64s some_64s;
       var sml.String some_string;
