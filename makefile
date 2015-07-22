@@ -18,3 +18,7 @@ test:
 tdd:
 	$(MAKE) cg
 	$(MAKE) test
+
+
+count:
+	cloc `find | grep -Pv "catch.hpp|test_" | grep -P "\.inc|\.hpp|\.cpp"`
