@@ -15,19 +15,21 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 */
-#pragma once
+#include "MethodTable.hpp"
 
 #include <string>
 
 
 namespace tul { namespace sym {
 
-struct MethodTable
+bool MethodTable::operator< (const MethodTable &m_table) const
 {
-  bool operator< (const MethodTable &m_table) const;
+  return method_name < m_table.method_name;
+}
 
-  bool operator< (const MethodTable &m_table);
-  std::string method_name;
-};
+bool MethodTable::operator< (const MethodTable &m_table)
+{
+  return method_name < m_table.method_name;
+}
 
 }}

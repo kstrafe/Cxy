@@ -72,4 +72,17 @@ TEST_CASE("AbstractSyntaxTreeGenerator must validate the grammar.", "[test-Abstr
       return a_: b_;
     }
   )"));
+  REQUIRE(validate(R"(
+    public (:) enterProgram
+    {
+      var 64s some_64s;
+      var sml.String some_string;
+    }
+
+    private (32u a_ : 32u b_) someFunction
+    {
+      var 64s some_64s;
+      var sml.String some_string;
+    }
+  )"));
 }
