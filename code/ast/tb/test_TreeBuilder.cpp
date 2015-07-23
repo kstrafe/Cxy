@@ -549,5 +549,11 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
             }
           }
     )"));
+    REQUIRE(validate(R"(
+          public (:) enterProgram
+          {
+            defer a_ * 4 + someStuff()~a_;
+          }
+    )"));
   }
 }
