@@ -83,6 +83,7 @@ bool CrossTerminalTools::isKeyword(const CrossTerminal &ct_)
         case CrossTerminal::KEYWORD_REF: return true;
         case CrossTerminal::KEYWORD_RESTRICTED: return true;
         case CrossTerminal::KEYWORD_RETURN: return true;
+        case CrossTerminal::KEYWORD_STATIC: return true;
         case CrossTerminal::KEYWORD_VAR: return true;
         case CrossTerminal::KEYWORD_WHEN: return true;
         case CrossTerminal::KEYWORD_WHILE: return true;
@@ -176,6 +177,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::KEYWORD_REF: return "KEYWORD_REF";
         case protocols::CrossTerminal::KEYWORD_RESTRICTED: return "KEYWORD_RESTRICTED";
         case protocols::CrossTerminal::KEYWORD_RETURN: return "KEYWORD_RETURN";
+        case protocols::CrossTerminal::KEYWORD_STATIC: return "KEYWORD_STATIC";
         case protocols::CrossTerminal::KEYWORD_VAR: return "KEYWORD_VAR";
         case protocols::CrossTerminal::KEYWORD_WHEN: return "KEYWORD_WHEN";
         case protocols::CrossTerminal::KEYWORD_WHILE: return "KEYWORD_WHILE";
@@ -218,6 +220,8 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::SINGLE_STATEMENT_OR_CODE_BLOCK: return "SINGLE_STATEMENT_OR_CODE_BLOCK";
         case protocols::CrossTerminal::STATEMENT: return "STATEMENT";
         case protocols::CrossTerminal::STATEMENT_LIST: return "STATEMENT_LIST";
+        case protocols::CrossTerminal::STATIC_ELSE_STATEMENT: return "STATIC_ELSE_STATEMENT";
+        case protocols::CrossTerminal::STATIC_IF_STATEMENT: return "STATIC_IF_STATEMENT";
         case protocols::CrossTerminal::STRING: return "STRING";
         case protocols::CrossTerminal::SYMBOL_AMPERSAND: return "SYMBOL_AMPERSAND";
         case protocols::CrossTerminal::SYMBOL_AMPERSAND__AMPERSAND: return "SYMBOL_AMPERSAND__AMPERSAND";

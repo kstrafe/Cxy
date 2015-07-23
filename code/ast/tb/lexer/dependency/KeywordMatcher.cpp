@@ -30,6 +30,7 @@ protocols::TokenType KeywordMatcher::getKeyword(const std::string &lexeme)
     else if (lexeme == "glocal") return TokenType::KEYWORD_GLOCAL;
     else if (lexeme == "public") return TokenType::KEYWORD_PUBLIC;
     else if (lexeme == "return") return TokenType::KEYWORD_RETURN;
+    else if (lexeme == "static") return TokenType::KEYWORD_STATIC;
     else if (lexeme == "const") return TokenType::KEYWORD_CONST;
     else if (lexeme == "label") return TokenType::KEYWORD_LABEL;
     else if (lexeme == "while") return TokenType::KEYWORD_WHILE;

@@ -511,5 +511,43 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
                   inside_while;
           }
     )"));
+    REQUIRE(validate(R"(
+          public (:) enterProgram
+          {
+            assembly
+            {
+              "mov %eax, %ebx"
+            }
+          }
+    )"));
+    REQUIRE(validate(R"(
+          public (:) enterProgram
+          {
+            static if (3)
+            {
+              a_ + b_;
+            }
+          }
+    )"));
+    REQUIRE(validate(R"(
+          public (:) enterProgram
+          {
+            static if (sys.Machine.memory_size)
+            {
+              a_ + b_;
+            }
+            static else
+            {
+              static if (sys.Machine.processor_type)
+              {
+                a_ - b_;
+              }
+              static else
+              {
+                a_ * b_;
+              }
+            }
+          }
+    )"));
   }
 }
