@@ -561,5 +561,22 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
             }
           }
     )"));
+    REQUIRE(validate(R"(
+          public (:) enterProgram
+          {
+
+          }
+
+          private (32u value_ : 64s in_, sec_ : const pure) computeSomething
+          {
+            var SomeClass object_(arg_: in_);
+            if (sec_ > 100)
+            {
+              defer object_.doAbove();
+              object_.doSense();
+            }
+            return value_: object_.getVariable()~gotten_;
+          }
+    )"));
   }
 }
