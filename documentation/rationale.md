@@ -51,7 +51,7 @@ So the programmer adds a tonne of functionality to the code-generator and it
 becomes a grand mix of spaghetti and unrecognizable sauce with chunks so small
 that they're difficult to study.
 
-Having code-generation would be nice. Actual injected code, that is.  
+Having code-generation would be nice. Actual injected code, that is.
 
 Code generation is not the only thing to consider. An interesting  programming
 language is "Haskell". Haskell has this fantastic system where we
@@ -259,7 +259,7 @@ Aa can also declare a UTF8String global, however, B, Basename, and Cool can
 still create new instances of UTF8String as they see fit.
 
 This hardcore practice enforced by the compiler can make designs better, more
-reliable, easier to manage, and above all: easier to understand.  
+reliable, easier to manage, and above all: easier to understand.
 
 To summarize (TL;DR):
 
@@ -399,7 +399,7 @@ Let's look at what appears practical
 Why use arrows when typing is cheaper using ':'? The function declaration will
 have to start with a '('. What if we want a variable of - say - a class to be
 assigned functions? Use function pointers. This means declarations starting with
-`(` are static functions that are nonassignable.  
+`(` are static functions that are nonassignable.
 Having a collected signature of functions is very clean and useful. It makes the
 language terser and is also easily parsable. Not to mention more easily
 understandable due to the nature of nested functions:
@@ -427,7 +427,7 @@ An example of this.
 
 
 ## Variable/Type Declaration ##
-*Tangent*: See `Plain Old Data (POD) Types` for declaring PODs.  
+*Tangent*: See `Plain Old Data (POD) Types` for declaring PODs.
 *Tangent*: See `Naming Scheme`.
 
 *Description*: The style that is desired must be easy to parse. For consistency,
@@ -435,13 +435,13 @@ types must avoid `cdecl`. Type declarations declare an object of a type.
 
 *Discussions*:
 
-Type reads from left-to-right.  
+Type reads from left-to-right.
 
 1. `const int *const variable_;`
-2. `variable_ is const ptr const int`  
-3. `const ptr const int variable_`  
-4. `variable_: const ptr const int`  
-5. `variable_: int = 100`  
+2. `variable_ is const ptr const int`
+3. `const ptr const int variable_`
+4. `variable_: const ptr const int`
+5. `variable_: int = 100`
 
 Number four and five are a little more tricky to parse. Note that variable_ will
 be an identifier. The problem with this statement is that we can allow arbitrary
@@ -452,7 +452,7 @@ until he gets to the ":". Only then will he understand that it is a declaration.
 
 Number one and three are also interesting. I'd like to avoid the star in one
 because it can be ambiguous with the multiplication operator. The last option is
-number three (note that option two is removed along four and five).  
+number three (note that option two is removed along four and five).
 This is LL(1) parsable (a predictive parser). The FIRST(statement) is different
 for each production. Reads easily from left-to-right.
 
@@ -521,7 +521,7 @@ Let's look at a current proposal for POD types:
     47s
 
 
-Specifying an unsigned integer:  
+Specifying an unsigned integer:
 `<:denary:>u`:
 
     32u
@@ -565,7 +565,7 @@ ref <type>
 
 I'd like these references and pointer types to avoid the nastiness that cdecl
 has given us. cdecl is difficult (and ugly) to parse whereas a keyword like ref
-and ptr are easy and unambiguous.  
+and ptr are easy and unambiguous.
 A nice thing about ref is that it can be considered a true reference to the
 compiler, and hence be optimized. ref can even be used to alias local variables
 without any overhead during run-time (refs can not be reassigned).
@@ -731,14 +731,14 @@ be improved by restricting the name (a subset of all possible strings) to
 specific distinct entities.
 
 *Conclusion*:
-package: `abc1`. Only alpha and numbers allowed, lowercase, no underscore.  
+package: `abc1`. Only alpha and numbers allowed, lowercase, no underscore.
 variable: `abc1_`. Only alphanumerics allowed, lower/upper -case, underscore
-mandatory.  
+mandatory.
 function: `doSomething`. Only alphanumerics allowed, lower/upper -case.
-Mandatory beginning and ending lowercase and at least one uppercase character.  
+Mandatory beginning and ending lowercase and at least one uppercase character.
 class: `ClassName`. Only alphanumerics allowed, lower/upper -case. Mandatory
-first upper case character. Mandatory ending lower case.  
-constant: `END_OF_LINE`. Only uppercase alphanumerics. Optional underscores.  
+first upper case character. Mandatory ending lower case.
+constant: `END_OF_LINE`. Only uppercase alphanumerics. Optional underscores.
 keywords: same as package names. These are reserved. No packages can have these
 names.
 
@@ -755,10 +755,10 @@ names.
 Liberal: can define any new operator. This is essentially a function declaration
 with a group of symbols like `:?*=|` as a valid function name.
 Conservative (C++): can overload any operator that is already well-defined on
-plain-old-data types.  
-Restricted (Java): no operator overloading/creation at all.  
+plain-old-data types.
+Restricted (Java): no operator overloading/creation at all.
 
-So what shall we choose?  
+So what shall we choose?
 Let's look at some common operators.
 
     1 + 2;
@@ -781,7 +781,7 @@ have well-defined semantics over addition, multiplication, etc.:
     var Vector vec4_ = vec1_.add(vec2_);
     var Vector vec5_ = vec1_.+(vec2_);
 
-The plus can be considered a member function of the Vector class.  
+The plus can be considered a member function of the Vector class.
 Seems like a strong case for allowing at least conservative operator overloading
 , right? I remember using the GLM library in C++. Its operator overloading made
 code very understandable. Later I tried doing BigNum operations in Java and the
@@ -1666,3 +1666,103 @@ be a problem as it mimics how our dependency structure is put into place already
 *Conclusion*: Codegenerators use information given as a string, and can never
 refer to information outside of the `()`. To allow multiple arguments is more
 consistent and useful when trying to avoid splitting in the code.
+
+## Static Conditionals ##
+*Description*: Conditions that are evaluated at compile time.
+*Discussion*: Static conditionals are statements with the same
+grammar as the if conditional. This conditional is evaluated during
+compile-time. This means that it incurs no overhead of if-testing
+during run-time.
+
+    static if (a_conditional_value)
+    {
+      // do something
+    }
+
+The statements contained in the static if are not semantically
+evaluated when the conditional value evaluates to false.
+This allows the use of code that refers to non-existing
+modules or libraries when these do not exist.
+
+This can be useful for different reasons. In addition, it's
+cleaner than a macro expression:
+
+    #IfConditional(arg_: /*do something*/);
+
+It conveys more information about the actual code. As it is
+visible directly when using the static if statement.
+
+Does this justify adding the keyword static? Why not add
+a keyword like the "when" keyword instead? I think static
+conveys the meaning more. In addition, static is not used
+inside a function anyhow. What about outside? Can static
+ifs be used there? What about the collision with static
+variables?
+
+Suppose there's another statement like `staticif`. That
+looks incredibly ugly. I'd rather not. Any other ideas? What's left? Suppose we
+use another word. I already use "when" for expressions to denote that this
+counts for just an expression and not a statement. The same is needed here.
+Although static conforms with the LL(1) requirement, it will clash with
+static declarations of data. Essentially, the entire statement is actually
+
+    #PasteAssemblyIf(arg_: "Put your code here");
+
+The problem with this is that it just doesn't look nice at all. You put
+the code inside a string. In a way, it's very clean as a string is never
+parsed nor semantically analyzed if it's just not inserted. Doing
+else-if-else... chains with these is going to be somewhat more difficult.
+It will require running them inside another code generator that made sure
+that only one returned. It's just incredibly powerful and ensures that
+the expression is to be evaluated during compile time...
+
+How does it mix with codegenerators though? Suppose we have the following
+
+    static if (expression_)
+    {
+      #GenerateSomeCode();
+    }
+    static else
+    {
+      #GenerateOtherCode();
+    }
+
+Note that this is counter-intuitive. static ifs allow a single statement to be
+listed (without the {}). In this case, if a # statement returns multiple
+statements, this would erroneously look like:
+
+    static if (something_)
+      #Generate();
+
+This also counts for normal ifs. I suppose we can force the code generators to
+always encapsulate code with { } blocks. Will this damage anything? Yes, as it
+will be impossible to put code in function signatures or generate anything
+else than statement lists. Well, it could be a simple warning to any developer.
+
+*Conclusion*: Use static if.
+
+
+## Deferred Statements ##
+*Description*: Allowing any collection of statements to be executed at all exit
+points.
+*Discussion*: It is rather useful when objects have destructors. Whenever a
+scope is exited, the destructors from that object in that scope need to run.
+These deallocate data and ensure that all field destructors are all destructed.
+
+This is incredibly useful, however, sometimes, we need some custom code to run
+at the end of all possible exit points. Meet the defer statement.
+
+    {
+      mutex_.lock();
+      defer mutex_.unlock();
+      // Do something, may throw an error, may prematurely return
+    } // Always run the unlock().
+
+Some languages use a sentry object that has a destructor that performs the
+unlock as shown above. There are some problems with that. First of all, it's
+not intuitive and not made to do that. Secondly, it requires an actual named
+object to be instantiated. It's also not practical to have to create a new
+class for your special action. The defer statement works better.
+
+*Conclusion*: The defer statement guarantees to run its contents at the scope's
+exit.
