@@ -564,7 +564,11 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
     REQUIRE(validate(R"(
           public (:) enterProgram
           {
-
+            static if (sys.Sys.argv_[1])
+            {
+              var 32u x_ = computeSomething(in_: 100, sec_: 100 * 3)~value_;
+              sys.Out.printLn(val_: x_);
+            }
           }
 
           private (32u value_ : 64s in_, sec_ : const pure) computeSomething
