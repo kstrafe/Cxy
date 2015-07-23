@@ -553,6 +553,12 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
           public (:) enterProgram
           {
             defer a_ * 4 + someStuff()~a_;
+            var Object object_;
+            object_.initObject();
+            defer
+            {
+              object_.destroyObject();
+            }
           }
     )"));
   }
