@@ -18,6 +18,7 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 #include "actgen/ActionGenerator.hpp"
 #include "actgen/TokenGenerator.hpp"
+#include "dependency/CommentIgnorer.hpp"
 #include "dependency/Mealy.hpp"
 #include "dependency/PositionCounter.hpp"
 #include "protocols/EntryType.hpp"
@@ -73,7 +74,7 @@ private:
   actgen::ActionGenerator<dependency::Mealy<std::size_t, protocols::Action, protocols::EntryType>> action_generator;
   dependency::PositionCounter position_counter;
   dependency::TokenGenerator token_generator;
-
+  dependency::CommentIgnorer comment_ignorer;
 };
 
 }}

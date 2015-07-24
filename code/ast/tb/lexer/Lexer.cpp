@@ -29,6 +29,7 @@ namespace tul { namespace lexer {
 
 bool Lexer::insertCharacter(char character_)
 {
+  comment_ignorer.putOnStack(character_);
   protocols::EntryType type_of_character = typify(character_);
   protocols::Action action_to_perform = action_generator.computeAction(type_of_character);
   {
