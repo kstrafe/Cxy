@@ -16,7 +16,6 @@ You should have received a copy of the GNU General Public License
 along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "utilities/RingNumber.hpp"
 
 #include <cstddef>
 #include <cstdint>
@@ -36,16 +35,8 @@ class CommentIgnorer
 {
 public:
 
-  struct ReturnCharacters
-  {
-    char
-      first_char,
-      sec_char;
-  };
-
   CommentIgnorer();
   uint8_t putOnStack(char character_);
-  ReturnCharacters getCharacters() const;
 
 private:
 
@@ -53,14 +44,13 @@ private:
   {
     BLOCK_COMMENT,
     LINE_COMMENT,
+    ONE_SLASH,
+    ONE_STAR,
     NO_COMMENT,
     INSIDE_QUOTE,
   }
   comment_state;
-  static constexpr const char ring_size = 3;
-  char char_stack[ring_size];
   std::size_t block_nest = 0;
-  utilities::RingNumber<char> char_at;
 
 };
 

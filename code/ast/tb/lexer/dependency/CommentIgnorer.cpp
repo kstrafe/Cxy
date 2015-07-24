@@ -17,53 +17,38 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "CommentIgnorer.hpp"
 
+#include <iostream>
+
 
 namespace tul { namespace dependency {
 
 CommentIgnorer::CommentIgnorer()
 :
-  comment_state(State::NO_COMMENT),
-  char_at(ring_size)
-{
-  char_stack[static_cast<std::size_t>(char_at.getNumber())] = '\0';
-}
+  comment_state(State::NO_COMMENT)
+{}
 
 
 uint8_t CommentIgnorer::putOnStack(char character_)
 {
-  char previous_character = char_stack[static_cast<std::size_t>(char_at.getNumber())];
-  char_stack[static_cast<std::size_t>(++char_at)] = character_;
-
+  // std::cout << "State: " << static_cast<int>(comment_state) << std::endl;
   switch (comment_state)
   {
     case State::NO_COMMENT:
     {
       switch (character_)
       {
-        case '/':
-          switch (previous_character)
-          {
-            case '/': comment_state = State::LINE_COMMENT; break;
-            case '*': comment_state = --block_nest == 0 ? State::NO_COMMENT : State::BLOCK_COMMENT; break;
-            default: break;
-          }
-        break;
-        case '*':
-          switch (previous_character)
-          {
-            case '/': comment_state = State::BLOCK_COMMENT; ++block_nest; break;
-            default: break;
-          }
-        break;
-        case '"':
-          switch (comment_state)
-          {
-            case State::INSIDE_QUOTE: comment_state = State::NO_COMMENT; break;
-            case State::NO_COMMENT: comment_state = State::INSIDE_QUOTE; break;
-            default: break;
-          }
-        break;
+        case '/': comment_state = State::ONE_SLASH; break;
         default: return 1; break;
+      }
+    }
+    break;
+    case State::ONE_SLASH:
+    {
+      switch (character_)
+      {
+        case '/': comment_state = State::LINE_COMMENT; break;
+        case '*': comment_state = State::BLOCK_COMMENT; ++block_nest; break;
+        default: return 2; break;
       }
     }
     break;
@@ -73,22 +58,28 @@ uint8_t CommentIgnorer::putOnStack(char character_)
         case '\n': comment_state = State::NO_COMMENT; break;
         default: break;
       }
-
+    break;
+		case State::BLOCK_COMMENT:
+			switch (character_)
+			{
+				case '*': comment_state = State::ONE_STAR; break;
+				default: break;	
+			}
+    break;
+    case State::ONE_STAR:
+      // std::cout << "ONE STAR" << std::endl;
+      switch (character_)
+      {
+        case '/': comment_state = --block_nest == 0 ? State::NO_COMMENT : State::BLOCK_COMMENT;
+        break;
+        case '*': break;
+        default: comment_state = State::BLOCK_COMMENT; break;
+      }
     break;
     default: break;
   }
 
   return 0;
-}
-
-CommentIgnorer::ReturnCharacters CommentIgnorer::getCharacters() const
-{
-  char previous_character = char_stack[static_cast<std::size_t>(char_at.getPrevious())];
-  char curr_character = char_stack[static_cast<std::size_t>(char_at.getNumber())];
-  ReturnCharacters ret_ch;
-  ret_ch.sec_char = previous_character;
-  ret_ch.first_char = curr_character;
-  return ret_ch;
 }
 
 }}
