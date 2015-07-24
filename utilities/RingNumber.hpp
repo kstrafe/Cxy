@@ -47,6 +47,13 @@ public:
     return current_value;
   }
 
+  COUNTER getPrevious() const
+  {
+    if (current_value == 0)
+      return maximum_value - 1;
+    return current_value - 1;
+  }
+
   COUNTER &operator ++ ()
   {
     current_value += 1;

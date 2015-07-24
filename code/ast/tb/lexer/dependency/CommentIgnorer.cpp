@@ -25,47 +25,70 @@ CommentIgnorer::CommentIgnorer()
   comment_state(State::NO_COMMENT),
   char_at(ring_size)
 {
-  char_stack[char_at.getNumber()] = '\0';
+  char_stack[static_cast<std::size_t>(char_at.getNumber())] = '\0';
 }
 
 
-int CommentIgnorer::putOnStack(char character_)
+uint8_t CommentIgnorer::putOnStack(char character_)
 {
-  char previous_character = char_stack[char_at.getNumber()];
-  char_stack[++char_at] = character_;
-  switch (character_)
+  char previous_character = char_stack[static_cast<std::size_t>(char_at.getNumber())];
+  char_stack[static_cast<std::size_t>(++char_at)] = character_;
+
+  switch (comment_state)
   {
-    case '/':
-      switch (previous_character)
+    case State::NO_COMMENT:
+    {
+      switch (character_)
       {
-        case '/': comment_state = State::LINE_COMMENT; break;
-        case '*': comment_state = State::UNBLOCK_COMMENT; break;
+        case '/':
+          switch (previous_character)
+          {
+            case '/': comment_state = State::LINE_COMMENT; break;
+            case '*': comment_state = --block_nest == 0 ? State::NO_COMMENT : State::BLOCK_COMMENT; break;
+            default: break;
+          }
+        break;
+        case '*':
+          switch (previous_character)
+          {
+            case '/': comment_state = State::BLOCK_COMMENT; ++block_nest; break;
+            default: break;
+          }
+        break;
+        case '"':
+          switch (comment_state)
+          {
+            case State::INSIDE_QUOTE: comment_state = State::NO_COMMENT; break;
+            case State::NO_COMMENT: comment_state = State::INSIDE_QUOTE; break;
+            default: break;
+          }
+        break;
+        default: return 1; break;
+      }
+    }
+    break;
+    case State::LINE_COMMENT:
+      switch (character_)
+      {
+        case '\n': comment_state = State::NO_COMMENT; break;
         default: break;
       }
+
     break;
-    case '*':
-      switch (previous_character)
-      {
-        case '/': comment_state = State::BLOCK_COMMENT; break;
-        default: break;
-      }
-    break;
-    case '"':
-      switch (comment_state)
-      {
-        case State::INSIDE_QUOTE: comment_state = State::NO_COMMENT; break;
-        case State::NO_COMMENT: comment_state = State::INSIDE_QUOTE; break;
-        default: break;
-      }
-    break;
+    default: break;
   }
+
   return 0;
 }
 
-
-const char *CommentIgnorer::getCharacterStack() const
+CommentIgnorer::ReturnCharacters CommentIgnorer::getCharacters() const
 {
-  return &char_stack[0];
+  char previous_character = char_stack[static_cast<std::size_t>(char_at.getPrevious())];
+  char curr_character = char_stack[static_cast<std::size_t>(char_at.getNumber())];
+  ReturnCharacters ret_ch;
+  ret_ch.sec_char = previous_character;
+  ret_ch.first_char = curr_character;
+  return ret_ch;
 }
 
 }}

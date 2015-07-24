@@ -16,19 +16,36 @@ You should have received a copy of the GNU General Public License
 along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 */
 #pragma once
-
 #include "utilities/RingNumber.hpp"
+
+#include <cstddef>
+#include <cstdint>
 
 
 namespace tul { namespace dependency {
 
+/*
+  How does this class work?
+
+  Feed it characters. For every character that you put
+  into it using putOnStack, you will get a number of
+  characters that you may validly extract from
+  getCharacterStack();
+*/
 class CommentIgnorer
 {
 public:
 
+  struct ReturnCharacters
+  {
+    char
+      first_char,
+      sec_char;
+  };
+
   CommentIgnorer();
-  int putOnStack(char character_);
-  const char *getCharacterStack() const;
+  uint8_t putOnStack(char character_);
+  ReturnCharacters getCharacters() const;
 
 private:
 
@@ -38,11 +55,11 @@ private:
     LINE_COMMENT,
     NO_COMMENT,
     INSIDE_QUOTE,
-    UNBLOCK_COMMENT,
   }
   comment_state;
   static constexpr const char ring_size = 3;
   char char_stack[ring_size];
+  std::size_t block_nest = 0;
   utilities::RingNumber<char> char_at;
 
 };
