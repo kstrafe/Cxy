@@ -48,6 +48,7 @@ private:
     ONE_STAR,
     NO_COMMENT,
     INSIDE_QUOTE,
+    MAYBE_OUTQUOTE,
   }
   comment_state;
   std::size_t block_nest = 0;

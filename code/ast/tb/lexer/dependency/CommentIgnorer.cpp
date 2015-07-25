@@ -30,7 +30,6 @@ CommentIgnorer::CommentIgnorer()
 
 uint8_t CommentIgnorer::putOnStack(char character_)
 {
-  // std::cout << "State: " << static_cast<int>(comment_state) << std::endl;
   switch (comment_state)
   {
     case State::NO_COMMENT:
@@ -38,20 +37,30 @@ uint8_t CommentIgnorer::putOnStack(char character_)
       switch (character_)
       {
         case '/': comment_state = State::ONE_SLASH; break;
+        case '"': comment_state = State::INSIDE_QUOTE; return 1; break;
         default: return 1; break;
       }
     }
     break;
+
     case State::ONE_SLASH:
     {
       switch (character_)
       {
         case '/': comment_state = State::LINE_COMMENT; break;
         case '*': comment_state = State::BLOCK_COMMENT; ++block_nest; break;
-        default: return 2; break;
+        default: comment_state = State::NO_COMMENT; return 2; break;
       }
     }
     break;
+    case State::INSIDE_QUOTE:
+      switch (character_)
+      {
+        case '"': comment_state = State::MAYBE_OUTQUOTE; return 1; break;
+        default: return 1; break;
+      }
+    break;
+
     case State::LINE_COMMENT:
       switch (character_)
       {
@@ -66,8 +75,15 @@ uint8_t CommentIgnorer::putOnStack(char character_)
 				default: break;	
 			}
     break;
+    case State::MAYBE_OUTQUOTE:
+      switch (character_)
+      {
+        case '"': comment_state = State::INSIDE_QUOTE; return 1; break;
+        default: comment_state = State::NO_COMMENT; return 1; break;
+      }
+    break;
+
     case State::ONE_STAR:
-      // std::cout << "ONE STAR" << std::endl;
       switch (character_)
       {
         case '/': comment_state = --block_nest == 0 ? State::NO_COMMENT : State::BLOCK_COMMENT;
