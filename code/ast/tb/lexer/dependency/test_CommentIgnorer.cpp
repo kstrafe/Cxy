@@ -67,6 +67,12 @@ TEST_CASE("Ignore comments correctly", "[test-CommentIgnorer]")
     "a_.callSome(); // Make sure the call works\na_.makeValue(x_: a_.getValue()~val_ + b_);//This comment has no spaces around \"//\"!",
     "a_.callSome(); \na_.makeValue(x_: a_.getValue()~val_ + b_);"
   );
+  expectFrom("/**/A", "A");
+  expectFrom("//\nA", "\nA");
+  expectFrom("\"//A\"", "\"//A\"");
+  expectFrom("\"/*A\"", "\"/*A\"");
+  expectFrom("\"/*A*/\"", "\"/*A*/\"");
+  expectFrom("/*A*/", "");
 
 
 

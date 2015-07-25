@@ -36,6 +36,7 @@ class CommentIgnorer
 public:
 
   CommentIgnorer();
+  uint8_t endInput();
   uint8_t putOnStack(char character_);
 
 private:

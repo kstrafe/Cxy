@@ -18,6 +18,7 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 #include "actgen/ActionGenerator.hpp"
 #include "actgen/TokenGenerator.hpp"
+#include "dependency/CommentBuffer.hpp"
 #include "dependency/CommentIgnorer.hpp"
 #include "dependency/Mealy.hpp"
 #include "dependency/PositionCounter.hpp"
@@ -46,10 +47,12 @@ class Lexer
 {
 public:
 
-  bool insertCharacter(char in_character);
+  bool insertCharacter(char character_);
   std::vector<protocols::Token> &getTokenStack();
 
 private:
+
+  bool insertCharacterAfterComments(char character_);
 
   template <typename F>
   bool isAnyOf(char a_, F f_)
@@ -75,6 +78,7 @@ private:
   dependency::PositionCounter position_counter;
   dependency::TokenGenerator token_generator;
   dependency::CommentIgnorer comment_ignorer;
+  dependency::CommentBuffer comment_buffer;
 };
 
 }}

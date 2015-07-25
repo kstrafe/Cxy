@@ -29,7 +29,18 @@ namespace tul { namespace lexer {
 
 bool Lexer::insertCharacter(char character_)
 {
-  comment_ignorer.putOnStack(character_);
+  comment_buffer.putCharInto(character_);
+  uint8_t take_characters = comment_ignorer.putOnStack(character_);
+  for (; take_characters > 0; --take_characters)
+    if (insertCharacterAfterComments(comment_buffer.getCharFrom(take_characters)))
+      continue;
+    else
+      return false;
+  return true;
+}
+
+bool Lexer::insertCharacterAfterComments(char character_)
+{
   protocols::EntryType type_of_character = typify(character_);
   protocols::Action action_to_perform = action_generator.computeAction(type_of_character);
   {

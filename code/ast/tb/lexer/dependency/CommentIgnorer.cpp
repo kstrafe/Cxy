@@ -28,6 +28,17 @@ CommentIgnorer::CommentIgnorer()
 {}
 
 
+uint8_t CommentIgnorer::endInput()
+{
+  switch (comment_state)
+  {
+    case State::ONE_SLASH: return 1;
+    default: break;
+  }
+  return 0;
+}
+
+
 uint8_t CommentIgnorer::putOnStack(char character_)
 {
   switch (comment_state)
