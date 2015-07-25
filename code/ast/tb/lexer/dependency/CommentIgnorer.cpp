@@ -64,7 +64,7 @@ uint8_t CommentIgnorer::putOnStack(char character_)
     case State::LINE_COMMENT:
       switch (character_)
       {
-        case '\n': comment_state = State::NO_COMMENT; break;
+        case '\n': comment_state = State::NO_COMMENT; return 1; break;
         default: break;
       }
     break;

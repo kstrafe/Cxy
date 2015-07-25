@@ -59,7 +59,15 @@ void expectFrom(std::string from_, std::string to_)
 TEST_CASE("Ignore comments correctly", "[test-CommentIgnorer]")
 {
   expectFrom("Hi! /* wow */ there", "Hi!  there");
-  expectFrom("Hi! // wow */ there\nyou", "Hi! you");
-  expectFrom("Hi! // /*wow */ there\nyou", "Hi! you");
+  expectFrom("Hi! // wow */ there\nyou", "Hi! \nyou");
+  expectFrom("Hi! // /*wow */ there\nyou", "Hi! \nyou");
   expectFrom("Hi! \"// /*wow \"*/ there\nyou", "Hi! \"// /*wow \"*/ there\nyou");
+  expectFrom
+  (
+    "a_.callSome(); // Make sure the call works\na_.makeValue(x_: a_.getValue()~val_ + b_);//This comment has no spaces around \"//\"!",
+    "a_.callSome(); \na_.makeValue(x_: a_.getValue()~val_ + b_);"
+  );
+
+
+
 }
