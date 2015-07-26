@@ -24,6 +24,118 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace tul { namespace sma {
 
+/* Implementation thoughts.
+ * 
+ * What this class will get in is a simple concrete
+ * syntax tree. This comes from the parser. The question is, how do we semantically
+ * analyze tree. Oh, note that, the tree will be pruned by the TreePruner before
+ * it gets here. That's pretty nice. The treepruner removes the data that we absolutely
+ * do not need.
+ *
+ * How do we process the tree correctly? Firstly, we need the function definitions.
+ * What will they be used for? Suppose we take each function, and put it in a map.
+ * Now, this map is of the form <string, ptr Tree>. So we can access the map, and
+ * get any function. The string is to be the complete function signature. Is this
+ * a good idea? Let's look at it from a use-point of view.
+ *
+ * Whenever we access a function or call a function, we will have to look it up in
+ * the map. So say we have the code
+ *
+ *    sml.FunClass.doStuff();
+ *
+ * This will be separated into a small subtree of an expression. It will be easiest
+ * if we could segment the string into something else (like a collection of namespace
+ * , class-names, and function names. Now, due to the rules of the language, we
+ * have to put the absolute path-name of a module in there. This must be calculated
+ * from the root. Now, how do we actually scan the entire module?
+ *
+ * This needs to be thought out and planned. The current model is to first recognize
+ * the elements needed, break them up into minimal modules, and utilize them. This
+ * allows for easy refactoring since each module does a small thing. Cohesion is
+ * high, coupling extremely low.
+ *
+ * So we need to iterate directories? That may be provided by boost::directory_iterator.
+ * Suppose we have a root folder (the working directory from which the compiler is
+ * invoked. Then we also have a single target file (let's call it target).
+ *
+ * This gives us two paths.
+ *
+ * root/
+ * root/target
+ *
+ * target can be any combination of directories like `code/subs/Main.tul`, or just
+ * `Main.tul`. Both respectively give us:
+ *
+ * `root/code/subs/Main.tul`
+ * `root/Main.tul`
+ *
+ * So how do we go about? Certainly, it would be most beneficial for semantic analysis
+ * to have access to all submodules and provided modules, as well as glocal or global
+ * data. The need for this arises during typechecking and other semantic checking.
+ * Let's look at how the current model can support that.
+ *
+ * Up until now, we've been concerned only with the compilation of a single file.
+ * Lexing, parsing, tree pruning, and finally semantic analysis. The reason to start
+ * looking at other files is simply because we need the information. The downside
+ * of this is that we may need to make that information "locally global". Another
+ * way of doing things is to go back to the semantic primitive defined previously.
+ *
+ * The semantic primitive is the <string, ptr Tree> map. This can be made into a
+ * <string, <ptr Tree, Map>>. This means that each entry has a module, and each map
+ * entry has a list of submodules (folders directly below. How does this work with
+ * global (root-accessible) parts though? And how does it work with provided parts?
+ *
+ * Perhaps we need to delay actual semantic analysis until later. You see, we're
+ * currently still in the selection phase. The AST generator could just do the following:
+ * 
+ * 1. Collect all function signatures from a module.
+ * 2. Collect every statement under that module (just the subtree).
+ * 3. Collect the dependency module names.
+ *
+ * This makes sense as that's all we can really do. A big part will be another class
+ * that will handle actual dependencies. Suppose you perform the above actions on
+ * 100 different modules, of various nestings. You will get back a collection of
+ * maps containing necessary data. Now, once this data is collected, can we check
+ * the entire program for correctness... right? I like the idea. Because we've already
+ * written everything, now we need to read everything. This will allow seamless multithreading.
+ * 
+ * That sounds like a good idea. This will mean a collection phase before any compilation
+ * thought. I would however like the collection to occur based on the modules that
+ * are actually in use. Perhaps both can be done to ensure that a directory tree
+ * is being used, and warning the user that certain modules are unused. Say we use
+ * the user's invocation as a starting point. Now all that's needed is to put the
+ * file's contents through the semantic analyzer. We get back a bunch of function
+ * names containing statements. I think the semantic analyzer can also perform statement
+ * analysis to determine dependent classes. Then we can start truly multithreading.
+ * Now we've gotten a list of - say - eight other classes. We again call the semantic
+ * analyzer for each of them (from multiple threads). Merge the resulting dependencies,
+ * and run again.
+ * 
+ * This model appeals. It's simple. Can true semantic analysis (checking correctness)
+ * be performed directly after the first dependency fetching? I think so. Consider
+ * that ALL _true_ dependencies of the first file into the compiler will in fact
+ * be fully satisfied. This allows us to perform a complete semantic analysis of
+ * the first file after having collected information from immediate dependencies.
+ * 
+ * That is a very appealing model. It forces the errors to come up (the errors that
+ * programmers make) as early as possible, thus saving time. Ugh,.. I'm probably
+ * prematurely optimizing here. Anyways, it seems like a solid model. One that is
+ * easy to refactor and break up. That's the most important thing! Diagrams help.
+ *
+ * (A): Code --> Semant --> Table/Map structure
+ * (B): Dependencies --> Semant --> Table/Map structure
+ * analyze(A, B)
+ * (C): B --> Semant --> Table/Map structure
+ * analyze(B, C)
+ *
+ * So as can be observed, we start by creating tables for the first module and its
+ * direct dependencies. We analyze the first module. Then we create tables for all
+ * dependencies' dependencies. Then we analyze all dependencies with the dependencies
+ * of the dependencies, and so on.
+ *
+ * So far so good. How far will the analysis go? It's been stated to just create
+ * a table of statements. That seems simple enough. What about branches?
+*/
 SemanticAnalyzer::SemanticAnalyzer()
 {
   sym::ModuleTable mod_tab;

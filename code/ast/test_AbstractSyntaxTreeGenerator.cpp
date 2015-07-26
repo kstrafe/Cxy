@@ -75,7 +75,7 @@ TEST_CASE("AbstractSyntaxTreeGenerator must validate the grammar.", "[test-Abstr
   REQUIRE(validate(R"(
     public (:) enterProgram
     {
-      var 64s some_64s;
+      var 64s some_64s; // Allocate on the stack
       var sml.String some_string;
     }
 
