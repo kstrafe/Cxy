@@ -135,6 +135,25 @@ namespace tul { namespace sma {
  *
  * So far so good. How far will the analysis go? It's been stated to just create
  * a table of statements. That seems simple enough. What about branches?
+ *
+ * Perhaps it's best to keep the structure as-is. Just put the function subtree in
+ * that table and be done with it. Then analyze the contents of each function. How?
+ * Well, suppose you have the entry:
+ *
+ * <qualifier, Map>
+ *
+ * This is not enough to allow for easy addressing. We need to be able to go through
+ * a map that has both other submaps (dependencies) and module names. We get a map
+ * of the form
+ *
+ * <qualifier, ModuleMap, Submap>
+ * 
+ * An example of this map:
+ *
+ * <"internal", ["Amod", "Bmod"], "dependency">
+ *
+ * Seems quite fair. I wonder, should the lexer be able to tell when a new class 
+ * ought to be checked for? That probably muddles concerns a lot more than necessary.
 */
 SemanticAnalyzer::SemanticAnalyzer()
 {
