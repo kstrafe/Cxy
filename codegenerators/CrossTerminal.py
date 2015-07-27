@@ -66,8 +66,8 @@ productions = {
     ],
 ################################################################################
     'ACCESS_SPECIFIER': [
-        ['KEYWORD_GLOBAL'],
-        ['KEYWORD_GLOCAL'],
+        ['GLOBAL'],
+        ['GLOCAL'],
         []
     ],
     'OBJECT_ACCESS_SPECIFIER': [
@@ -86,6 +86,12 @@ productions = {
         []
     ],
 ################################################################################
+    'GLOBAL': [
+        ['KEYWORD_GLOBAL']
+    ],
+    'GLOCAL': [
+      ['KEYWORD_GLOCAL']
+    ],
     'PRIVATE': [
         ['KEYWORD_PRIVATE']
     ],
