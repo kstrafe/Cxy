@@ -25,7 +25,7 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 namespace tul { namespace sma {
 
 /* Implementation thoughts.
- * 
+ *
  * What this class will get in is a simple concrete
  * syntax tree. This comes from the parser. The question is, how do we semantically
  * analyze tree. Oh, note that, the tree will be pruned by the TreePruner before
@@ -87,7 +87,7 @@ namespace tul { namespace sma {
  *
  * Perhaps we need to delay actual semantic analysis until later. You see, we're
  * currently still in the selection phase. The AST generator could just do the following:
- * 
+ *
  * 1. Collect all function signatures from a module.
  * 2. Collect every statement under that module (just the subtree).
  * 3. Collect the dependency module names.
@@ -98,7 +98,7 @@ namespace tul { namespace sma {
  * maps containing necessary data. Now, once this data is collected, can we check
  * the entire program for correctness... right? I like the idea. Because we've already
  * written everything, now we need to read everything. This will allow seamless multithreading.
- * 
+ *
  * That sounds like a good idea. This will mean a collection phase before any compilation
  * thought. I would however like the collection to occur based on the modules that
  * are actually in use. Perhaps both can be done to ensure that a directory tree
@@ -110,13 +110,13 @@ namespace tul { namespace sma {
  * Now we've gotten a list of - say - eight other classes. We again call the semantic
  * analyzer for each of them (from multiple threads). Merge the resulting dependencies,
  * and run again.
- * 
+ *
  * This model appeals. It's simple. Can true semantic analysis (checking correctness)
  * be performed directly after the first dependency fetching? I think so. Consider
  * that ALL _true_ dependencies of the first file into the compiler will in fact
  * be fully satisfied. This allows us to perform a complete semantic analysis of
  * the first file after having collected information from immediate dependencies.
- * 
+ *
  * That is a very appealing model. It forces the errors to come up (the errors that
  * programmers make) as early as possible, thus saving time. Ugh,.. I'm probably
  * prematurely optimizing here. Anyways, it seems like a solid model. One that is
@@ -147,13 +147,27 @@ namespace tul { namespace sma {
  * of the form
  *
  * <qualifier, ModuleMap, Submap>
- * 
+ *
  * An example of this map:
  *
  * <"internal", ["Amod", "Bmod"], "dependency">
  *
- * Seems quite fair. I wonder, should the lexer be able to tell when a new class 
+ * Seems quite fair. I wonder, should the lexer be able to tell when a new class
  * ought to be checked for? That probably muddles concerns a lot more than necessary.
+ * One thing that leaves me so in doubt is that we remove empty nodes in the tree
+ * pruner. Maybe the cst should be kept completely. After all, it has a familiar
+ * form that is easy to work with. See, when I remove  - say - epsiloned nodes like
+ * a node in an function signature, then I need to manually check the node count.
+ *
+ * By using the CST directly, the parser has ensured us that each node will have
+ * any of the productions. That's something rather appealing. Then, for every nest
+ * we dive into, we can let those handler functions check if they are on an epsiloned
+ * node. If they are, they return something appropriate. I think this is what has
+ * had progress stopped for a little while. Of course, other things can in fact be
+ * safely pruned. I was pruning the wrong thing!
+ *
+ * Currently, removing epsilonation does not prune the expressions. There are a
+ * lot of those. I notice that the tree does look clearer.
 */
 SemanticAnalyzer::SemanticAnalyzer()
 {
@@ -185,6 +199,32 @@ bool SemanticAnalyzer::runOn(protocols::ConcreteSyntaxTree *ct_root)
 
 bool SemanticAnalyzer::collectFunctionInformation(protocols::ConcreteSyntaxTree *ct_root)
 {
+  return true;
+  using namespace protocols;
+  switch (ct_root->node_type)
+  {
+    case CrossTerminal::ENTER:
+      collectFunctionInformationAfterEnter(ct_root);
+    break;
+    default: assert(false && "Collect function information must begin at the root of a module."); break;
+  }
+  return true;
+}
+
+bool SemanticAnalyzer::collectFunctionInformationAfterEnter(protocols::ConcreteSyntaxTree *ct_root)
+{
+  return true;
+  using namespace protocols;
+  switch (ct_root->node_type)
+  {
+    default: assert(false && "Collect function information must begin at the root of a module."); break;
+  }
+  return false;
+}
+
+/*
+bool SemanticAnalyzer::collectOld()
+{
   if
   (
     ct_root->node_type == protocols::CrossTerminal::ENTER
@@ -209,7 +249,7 @@ bool SemanticAnalyzer::collectFunctionInformation(protocols::ConcreteSyntaxTree 
     m_tab.insert(met_tab);
   }
   return true;
-}
+}*/
 
 std::string getArgumentType(protocols::ConcreteSyntaxTree *ct_root)
 {

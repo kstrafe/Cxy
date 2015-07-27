@@ -73,6 +73,8 @@ TEST_CASE("AbstractSyntaxTreeGenerator must validate the grammar.", "[test-Abstr
     }
   )"));
   REQUIRE(validate(R"(
+    global public 32u a_, b_;
+
     public (:) enterProgram
     {
       var 64s some_64s; // Allocate on the stack
@@ -85,4 +87,5 @@ TEST_CASE("AbstractSyntaxTreeGenerator must validate the grammar.", "[test-Abstr
       var sml.String some_string;
     }
   )"));
+  REQUIRE(validate(R"()"));
 }

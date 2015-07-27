@@ -42,8 +42,8 @@ void TreePruner::pruneTree(protocols::ConcreteSyntaxTree *ct_)
       {
         assert(child_ != nullptr);
         bool predicate_ =
-          child_->node_type == tul::protocols::CrossTerminal::EPSILONATE
-          || (child_->token_.entry_type == tul::protocols::EntryType::OTHER_SYMBOL
+          // child_->node_type == tul::protocols::CrossTerminal::EPSILONATE
+          /* || */  (child_->token_.entry_type == tul::protocols::EntryType::OTHER_SYMBOL
           && tul::protocols::CrossTerminalTools::isUselessSymbol(child_->node_type) == true)
           || child_->token_.entry_type == tul::protocols::EntryType::GROUPING_SYMBOL
           || tul::protocols::CrossTerminalTools::isKeyword(child_->node_type) == true;
