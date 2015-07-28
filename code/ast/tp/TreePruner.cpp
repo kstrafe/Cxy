@@ -59,7 +59,12 @@ void TreePruner::pruneTree(protocols::ConcreteSyntaxTree *ct_)
   // return;
   for (protocols::ConcreteSyntaxTree *&child_ : ct_->children_)
   {
-    if (child_->children_.size() == 1 && tul::protocols::CrossTerminalTools::isExpression(child_->node_type))
+    if
+    (
+      child_->children_.size() == 2
+      && tul::protocols::CrossTerminalTools::isExpression(child_->node_type)
+      && child_->children_[1]->node_type == protocols::CrossTerminal::EPSILONATE
+    )
     {
       // How do we bring that child up? We must make it a proper child of this node. How do we do this?
       // Detach it from the child:
