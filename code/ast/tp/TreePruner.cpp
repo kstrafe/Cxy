@@ -64,28 +64,29 @@ void TreePruner::pruneTree(protocols::ConcreteSyntaxTree *ct_)
     ++i_
   )
   {
+    protocols::ConcreteSyntaxTree *&child_ = ct_->children_[i_];
     if
     (
-      ct_->children_[i_]->children_.size() == 2
-      && tul::protocols::CrossTerminalTools::isExpression(ct_->children_[i_]->node_type)
-      && ct_->children_[i_]->children_[1]->node_type == protocols::CrossTerminal::EPSILONATE
+      child_->children_.size() == 2
+      && tul::protocols::CrossTerminalTools::isExpression(child_->node_type)
+      && child_->children_[1]->node_type == protocols::CrossTerminal::EPSILONATE
     )
     {
-      assert(ct_->children_[i_]->children_[0]->node_type != protocols::CrossTerminal::EPSILONATE);
+      assert(child_->children_[0]->node_type != protocols::CrossTerminal::EPSILONATE);
       // How do we bring that child up? We must make it a proper child of this node. How do we do this?
       // Detach it from the child:
-      protocols::ConcreteSyntaxTree *transitive_child = ct_->children_[i_]->children_[0];
-      ct_->children_[i_]->children_.erase(ct_->children_[i_]->children_.begin());
+      protocols::ConcreteSyntaxTree *transitive_child = child_->children_[0];
+      child_->children_.erase(child_->children_.begin());
       // Now make sure that that child doesn't get deleted
-      for (std::size_t j_ = 0; j_ < ct_->children_[i_]->children_.size(); ++j_)
-        delete ct_->children_[i_]->children_[j_];
-      ct_->children_[i_]->children_.clear();
+      for (std::size_t j_ = 0; j_ < child_->children_.size(); ++j_)
+        delete child_->children_[j_];
+      child_->children_.clear();
 
       // delete your own child
-      delete ct_->children_[i_];
+      delete child_;
 
       // Now assign the transitive child to this child.
-      ct_->children_[i_] = transitive_child;
+      child_ = transitive_child;
     }
   }
 }
