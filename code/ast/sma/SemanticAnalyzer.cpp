@@ -171,171 +171,171 @@ namespace tul { namespace sma {
 */
 SemanticAnalyzer::SemanticAnalyzer()
 {
-  sym::ModuleTable mod_tab;
-  mod_tab.qualified_name = "root.Main";
-  module_symtab.program_symtab.insert(mod_tab);
+	sym::ModuleTable mod_tab;
+	mod_tab.qualified_name = "root.Main";
+	module_symtab.program_symtab.insert(mod_tab);
 }
 
 SemanticAnalyzer::~SemanticAnalyzer()
 {
-  sym::ModuleTable mod_tab;
-  mod_tab.qualified_name = "root.Main";
-  std::set<sym::ModuleTable>::iterator it = module_symtab.program_symtab.find(mod_tab);
-  for (const sym::MethodTable &method_tab : it->method_symtab)
-  {
-    std::cout << "Registered function: " << method_tab.method_name << std::endl;
-    for (auto it : method_tab.return_params)
-    {
-      std::cout << it.first << " and " << it.second << std::endl;
-    }
-  }
+	sym::ModuleTable mod_tab;
+	mod_tab.qualified_name = "root.Main";
+	std::set<sym::ModuleTable>::iterator it = module_symtab.program_symtab.find(mod_tab);
+	for (const sym::MethodTable &method_tab : it->method_symtab)
+	{
+		std::cout << "Registered function: " << method_tab.method_name << std::endl;
+		for (auto it : method_tab.return_params)
+		{
+			std::cout << it.first << " and " << it.second << std::endl;
+		}
+	}
 }
 
 bool SemanticAnalyzer::runOn(protocols::ConcreteSyntaxTree *ct_root)
 {
-  return collectFunctionInformation(ct_root);
+	return collectFunctionInformation(ct_root);
 }
 
 
 bool SemanticAnalyzer::collectFunctionInformation(protocols::ConcreteSyntaxTree *ct_root)
 {
-  return true;
-  using namespace protocols;
-  switch (ct_root->node_type)
-  {
-    case CrossTerminal::ENTER:
-      collectFunctionInformationAfterEnter(ct_root);
-    break;
-    default: assert(false && "Collect function information must begin at the root of a module."); break;
-  }
-  return true;
+	return true;
+	using namespace protocols;
+	switch (ct_root->node_type)
+	{
+		case CrossTerminal::ENTER:
+			collectFunctionInformationAfterEnter(ct_root);
+		break;
+		default: assert(false && "Collect function information must begin at the root of a module."); break;
+	}
+	return true;
 }
 
 bool SemanticAnalyzer::collectFunctionInformationAfterEnter(protocols::ConcreteSyntaxTree *ct_root)
 {
-  return true;
-  using namespace protocols;
-  switch (ct_root->node_type)
-  {
-    default: assert(false && "Collect function information must begin at the root of a module."); break;
-  }
-  return false;
+	return true;
+	using namespace protocols;
+	switch (ct_root->node_type)
+	{
+		default: assert(false && "Collect function information must begin at the root of a module."); break;
+	}
+	return false;
 }
 
 /*
 bool SemanticAnalyzer::collectOld()
 {
-  if
-  (
-    ct_root->node_type == protocols::CrossTerminal::ENTER
-    || ct_root->node_type == protocols::CrossTerminal::DECL_OR_FUNC
-    || ct_root->node_type == protocols::CrossTerminal::FUNCTION_LIST
-  )
-  {
-    for (protocols::ConcreteSyntaxTree *ct_child : ct_root->children_)
-    {
-      runOn(ct_child);
-    }
-  }
-  else if (ct_root->node_type == protocols::CrossTerminal::FUNCTION_DEFINITION)
-  {
-    sym::ModuleTable mod_tab;
-    mod_tab.qualified_name = "root.Main";
-    std::set<sym::ModuleTable>::iterator it = module_symtab.program_symtab.find(mod_tab);
-    sym::MethodTable met_tab;
-    collectFunctionSignature(ct_root->children_.at(0), met_tab);
-    met_tab.method_name = ct_root->children_.at(1)->token_.accompanying_lexeme;
-    std::set<sym::MethodTable> &m_tab = const_cast<std::set<sym::MethodTable> &> (it->method_symtab);
-    m_tab.insert(met_tab);
-  }
-  return true;
+	if
+	(
+		ct_root->node_type == protocols::CrossTerminal::ENTER
+		|| ct_root->node_type == protocols::CrossTerminal::DECL_OR_FUNC
+		|| ct_root->node_type == protocols::CrossTerminal::FUNCTION_LIST
+	)
+	{
+		for (protocols::ConcreteSyntaxTree *ct_child : ct_root->children_)
+		{
+			runOn(ct_child);
+		}
+	}
+	else if (ct_root->node_type == protocols::CrossTerminal::FUNCTION_DEFINITION)
+	{
+		sym::ModuleTable mod_tab;
+		mod_tab.qualified_name = "root.Main";
+		std::set<sym::ModuleTable>::iterator it = module_symtab.program_symtab.find(mod_tab);
+		sym::MethodTable met_tab;
+		collectFunctionSignature(ct_root->children_.at(0), met_tab);
+		met_tab.method_name = ct_root->children_.at(1)->token_.accompanying_lexeme;
+		std::set<sym::MethodTable> &m_tab = const_cast<std::set<sym::MethodTable> &> (it->method_symtab);
+		m_tab.insert(met_tab);
+	}
+	return true;
 }*/
 
 std::string getArgumentType(protocols::ConcreteSyntaxTree *ct_root)
 {
-  switch (ct_root->node_type)
-  {
-    case protocols::CrossTerminal::PRIMITIVE_UNSIGNED:
-    case protocols::CrossTerminal::PRIMITIVE_SIGNED:
-      return ct_root->token_.accompanying_lexeme;
-    case protocols::CrossTerminal::TYPE:
-    case protocols::CrossTerminal::BASIC_TYPE:
-      return getArgumentType(ct_root->children_.at(0));
-    break;
-    default:
-      return "";
-    break;
-  }
+	switch (ct_root->node_type)
+	{
+		case protocols::CrossTerminal::PRIMITIVE_UNSIGNED:
+		case protocols::CrossTerminal::PRIMITIVE_SIGNED:
+			return ct_root->token_.accompanying_lexeme;
+		case protocols::CrossTerminal::TYPE:
+		case protocols::CrossTerminal::BASIC_TYPE:
+			return getArgumentType(ct_root->children_.at(0));
+		break;
+		default:
+			return "";
+		break;
+	}
 }
 
 std::string getArgumentName(protocols::ConcreteSyntaxTree *ct_root)
 {
-  switch (ct_root->node_type)
-  {
-    case protocols::CrossTerminal::BASIC_TYPE:
-      return
-        ct_root->children_.at(0)->token_.accompanying_lexeme
-        + '.' + ct_root->children_.at(1)->token_.accompanying_lexeme;
-    case protocols::CrossTerminal::IDENTIFIER_VARIABLE:
-    case protocols::CrossTerminal::IDENTIFIER_PACKAGE:
-      return ct_root->token_.accompanying_lexeme;
-    default:
-      if (ct_root->children_.size() == 0) {
-        return protocols::CrossTerminalTools::toString(ct_root->node_type);
-      }
-      return getArgumentName(ct_root->children_.at(0));
-  }
+	switch (ct_root->node_type)
+	{
+		case protocols::CrossTerminal::BASIC_TYPE:
+			return
+				ct_root->children_.at(0)->token_.accompanying_lexeme
+				+ '.' + ct_root->children_.at(1)->token_.accompanying_lexeme;
+		case protocols::CrossTerminal::IDENTIFIER_VARIABLE:
+		case protocols::CrossTerminal::IDENTIFIER_PACKAGE:
+			return ct_root->token_.accompanying_lexeme;
+		default:
+			if (ct_root->children_.size() == 0) {
+				return protocols::CrossTerminalTools::toString(ct_root->node_type);
+			}
+			return getArgumentName(ct_root->children_.at(0));
+	}
 }
 
 bool SemanticAnalyzer::collectFunctionSignature(protocols::ConcreteSyntaxTree *ct_root, sym::MethodTable &mod_tab)
 {
-  assert(ct_root != nullptr);
-  switch (ct_root->node_type)
-  {
-    case protocols::CrossTerminal::ARGUMENT_LIST_AFTER_FIRST:
-    {
-      if (ct_root->children_.size() == 1) {
-        std::vector<std::pair<std::string, std::string>> &rets = mod_tab.return_params;
-        std::string name_ = getArgumentName(ct_root->children_.at(0));
-        rets.emplace_back("NoType", name_);
-      } else {
-        std::vector<std::pair<std::string, std::string>> &rets = mod_tab.return_params;
-        std::string type_ = getArgumentType(ct_root->children_.at(0));
-        std::string name_ = getArgumentName(ct_root->children_.at(1));
-        rets.emplace_back(type_, name_);
-      }
-    }
-    break;
-    case protocols::CrossTerminal::OPTIONAL_ARGUMENT_LIST:
-    case protocols::CrossTerminal::FUNCTION_SIGNATURE:
-    case protocols::CrossTerminal::ARGUMENT_LIST:
-      for (protocols::ConcreteSyntaxTree *child_ : ct_root->children_)
-        collectFunctionSignature(child_, mod_tab);
-      break;
-    case protocols::CrossTerminal::ARGUMENT:
-    {
-      std::vector<std::pair<std::string, std::string>> &rets = mod_tab.return_params;
-      std::string type_ = getArgumentType(ct_root->children_.at(0));
-      std::string name_ = getArgumentName(ct_root->children_.at(1));
-      rets.emplace_back(type_, name_);
-    }
-    break;
-    default:
-      std::cout
-        << "Encountered unexpected signature element: "
-        << protocols::CrossTerminalTools::toString(ct_root->node_type)
-        << std::endl;
-      assert(false);
-    break;
-  }
-  return true;
+	assert(ct_root != nullptr);
+	switch (ct_root->node_type)
+	{
+		case protocols::CrossTerminal::ARGUMENT_LIST_AFTER_FIRST:
+		{
+			if (ct_root->children_.size() == 1) {
+				std::vector<std::pair<std::string, std::string>> &rets = mod_tab.return_params;
+				std::string name_ = getArgumentName(ct_root->children_.at(0));
+				rets.emplace_back("NoType", name_);
+			} else {
+				std::vector<std::pair<std::string, std::string>> &rets = mod_tab.return_params;
+				std::string type_ = getArgumentType(ct_root->children_.at(0));
+				std::string name_ = getArgumentName(ct_root->children_.at(1));
+				rets.emplace_back(type_, name_);
+			}
+		}
+		break;
+		case protocols::CrossTerminal::OPTIONAL_ARGUMENT_LIST:
+		case protocols::CrossTerminal::FUNCTION_SIGNATURE:
+		case protocols::CrossTerminal::ARGUMENT_LIST:
+			for (protocols::ConcreteSyntaxTree *child_ : ct_root->children_)
+				collectFunctionSignature(child_, mod_tab);
+			break;
+		case protocols::CrossTerminal::ARGUMENT:
+		{
+			std::vector<std::pair<std::string, std::string>> &rets = mod_tab.return_params;
+			std::string type_ = getArgumentType(ct_root->children_.at(0));
+			std::string name_ = getArgumentName(ct_root->children_.at(1));
+			rets.emplace_back(type_, name_);
+		}
+		break;
+		default:
+			std::cout
+				<< "Encountered unexpected signature element: "
+				<< protocols::CrossTerminalTools::toString(ct_root->node_type)
+				<< std::endl;
+			assert(false);
+		break;
+	}
+	return true;
 }
 
 bool collectScopeInformation(protocols::ConcreteSyntaxTree *ct_root)
 {
-  // This one finds out the different data inside
-  // the function.
-  return true;
+	// This one finds out the different data inside
+	// the function.
+	return true;
 }
 
 

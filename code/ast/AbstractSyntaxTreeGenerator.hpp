@@ -27,15 +27,15 @@ class AbstractSyntaxTreeGenerator
 {
 public:
 
-  bool buildTree(char next_character);
-  bool endInput();
-  std::vector<std::string> getExpectedTokens();
-  bool generateSemantics();
+	bool buildTree(char next_character);
+	bool endInput();
+	std::vector<std::string> getExpectedTokens();
+	bool generateSemantics();
 
 private:
 
-  tb::TreeBuilder tree_builder;
-  sma::SemanticAnalyzer semantic_analyzer;
+	tb::TreeBuilder tree_builder;
+	sma::SemanticAnalyzer semantic_analyzer;
 
 };
 

@@ -22,48 +22,48 @@ namespace tul { namespace tb {
 
 bool TreeBuilder::buildTree(char character)
 {
-  if (lexer_object.insertCharacter(character))
-  {
-    std::vector<protocols::Token> &token_stack = lexer_object.getTokenStack();
-    for (std::size_t i = 0; i < token_stack.size(); ++i)
-    {
-      if (false == parser_object.parseSymbol(token_stack[i]))
-      {
-        return false;
-      }
-    }
-    token_stack.clear();
-    return true;
-  }
-  else
-  {
-    return false;
-  }
-  return false;
+	if (lexer_object.insertCharacter(character))
+	{
+		std::vector<protocols::Token> &token_stack = lexer_object.getTokenStack();
+		for (std::size_t i = 0; i < token_stack.size(); ++i)
+		{
+			if (false == parser_object.parseSymbol(token_stack[i]))
+			{
+				return false;
+			}
+		}
+		token_stack.clear();
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+	return false;
 }
 
 bool TreeBuilder::endInput()
 {
-  buildTree(' '); // Use a space to clear out the last symbol
+	buildTree(' '); // Use a space to clear out the last symbol
 
-  protocols::Token token_;
-  token_.token_type = protocols::TokenType::END_OF_MODULE;
+	protocols::Token token_;
+	token_.token_type = protocols::TokenType::END_OF_MODULE;
 
-  if (false == parser_object.parseSymbol(token_))
-  {
-    return false;
-  }
-  return parser_object.isEmpty();
+	if (false == parser_object.parseSymbol(token_))
+	{
+		return false;
+	}
+	return parser_object.isEmpty();
 }
 
 std::unique_ptr<protocols::ConcreteSyntaxTree> TreeBuilder::getConcreteSyntaxTree()
 {
-  return parser_object.getConcreteSyntaxTree();
+	return parser_object.getConcreteSyntaxTree();
 }
 
 std::vector<std::string> TreeBuilder::getExpectedTokens()
 {
-  return parser_object.formulateExpectedTokens();
+	return parser_object.formulateExpectedTokens();
 }
 
 }}

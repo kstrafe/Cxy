@@ -30,18 +30,18 @@ class TreeBuilder
 {
 public:
 
-  bool buildTree(char character);
+	bool buildTree(char character);
 
-  bool endInput();
+	bool endInput();
 
-  std::unique_ptr<protocols::ConcreteSyntaxTree> getConcreteSyntaxTree();
+	std::unique_ptr<protocols::ConcreteSyntaxTree> getConcreteSyntaxTree();
 
-  std::vector<std::string> getExpectedTokens();
+	std::vector<std::string> getExpectedTokens();
 
 private:
 
-  lexer::Lexer lexer_object;
-  parser::Parser parser_object;
+	lexer::Lexer lexer_object;
+	parser::Parser parser_object;
 
 };
 

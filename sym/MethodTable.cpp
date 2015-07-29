@@ -24,12 +24,12 @@ namespace tul { namespace sym {
 
 bool MethodTable::operator< (const MethodTable &m_table) const
 {
-  return method_name < m_table.method_name;
+	return method_name < m_table.method_name;
 }
 
 bool MethodTable::operator< (const MethodTable &m_table)
 {
-  return method_name < m_table.method_name;
+	return method_name < m_table.method_name;
 }
 
 }}

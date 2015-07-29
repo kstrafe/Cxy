@@ -21,5 +21,5 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 
 TEST_CASE("Prune a tree", "[test-system]")
 {
-  // Not implemented, we'll need to manually build a tree here.
+	// Not implemented, we'll need to manually build a tree here.
 }

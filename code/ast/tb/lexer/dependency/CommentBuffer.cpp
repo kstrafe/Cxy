@@ -24,24 +24,24 @@ namespace tul { namespace dependency {
 
 CommentBuffer::CommentBuffer()
 :
-  cycle_buffer(CYCLE_BUFFER_SIZE)
+	cycle_buffer(CYCLE_BUFFER_SIZE)
 {}
 
 
 void CommentBuffer::putCharInto(char char_)
 {
-  cycle_array[++cycle_buffer] = char_;
+	cycle_array[++cycle_buffer] = char_;
 }
 
 
 char CommentBuffer::getCharFrom(uint8_t location_)
 {
-  switch (location_)
-  {
-    case 1: return cycle_array[cycle_buffer.getNumber()];
-    case 2: return cycle_array[cycle_buffer.getPrevious()];
-    case 0: default: assert(false);
-  }
+	switch (location_)
+	{
+		case 1: return cycle_array[cycle_buffer.getNumber()];
+		case 2: return cycle_array[cycle_buffer.getPrevious()];
+		case 0: default: assert(false);
+	}
 }
 
 }}

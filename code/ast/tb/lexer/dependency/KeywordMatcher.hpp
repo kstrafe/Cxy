@@ -27,7 +27,7 @@ class KeywordMatcher
 {
 public:
 
-  static protocols::TokenType getKeyword(const std::string &lexeme);
+	static protocols::TokenType getKeyword(const std::string &lexeme);
 
 };
 

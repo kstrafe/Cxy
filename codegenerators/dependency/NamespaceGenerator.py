@@ -18,12 +18,12 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 def toNamespaces(*namespaces_):
-    head = ''
-    tail = ''
+	head = ''
+	tail = ''
 
-    for namespace_ in namespaces_:
-        head += 'namespace ' + namespace_ + ' { '
+	for namespace_ in namespaces_:
+		head += 'namespace ' + namespace_ + ' { '
 
-    tail = len(namespaces_) * '}'
+	tail = len(namespaces_) * '}'
 
-    return head, tail
+	return head, tail

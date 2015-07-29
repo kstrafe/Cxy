@@ -21,13 +21,13 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 
 TEST_CASE("Test keyword matcher", "[test-KeywordMatcher]")
 {
-  SECTION("Attempting to match a few keywords")
-  {
-    using namespace tul::dependency;
-    using namespace tul::protocols;
-    auto checkReturn = [](const std::string &lexeme) -> bool { return  KeywordMatcher::getKeyword(lexeme) != TokenType::UNIDENTIFIED; };
-    REQUIRE(checkReturn("if"));
-    REQUIRE(checkReturn("while"));
-    REQUIRE(checkReturn("do"));
-  }
+	SECTION("Attempting to match a few keywords")
+	{
+		using namespace tul::dependency;
+		using namespace tul::protocols;
+		auto checkReturn = [](const std::string &lexeme) -> bool { return  KeywordMatcher::getKeyword(lexeme) != TokenType::UNIDENTIFIED; };
+		REQUIRE(checkReturn("if"));
+		REQUIRE(checkReturn("while"));
+		REQUIRE(checkReturn("do"));
+	}
 }

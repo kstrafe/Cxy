@@ -26,10 +26,10 @@ namespace tul { namespace sym {
 
 struct MethodTable
 {
-  bool operator< (const MethodTable &m_table) const;
-  bool operator< (const MethodTable &m_table);
-  std::string method_name;
-  std::vector<std::pair<std::string, std::string>> return_params, arg_params;
+	bool operator< (const MethodTable &m_table) const;
+	bool operator< (const MethodTable &m_table);
+	std::string method_name;
+	std::vector<std::pair<std::string, std::string>> return_params, arg_params;
 };
 
 }}

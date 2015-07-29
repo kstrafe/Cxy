@@ -24,7 +24,7 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 
 TEST_CASE("Cross-terminal to string representation", "[test-CrossTerminal]")
 {
-  for (int i = 0; i < static_cast<int>(tul::protocols::CrossTerminal::ENUM_END); ++i)
-    REQUIRE(tul::protocols::CrossTerminalTools::toString(static_cast<tul::protocols::CrossTerminal>(i)) != "");
-  REQUIRE(tul::protocols::CrossTerminalTools::toString(tul::protocols::CrossTerminal::ENUM_END) == "");
+	for (int i = 0; i < static_cast<int>(tul::protocols::CrossTerminal::ENUM_END); ++i)
+		REQUIRE(tul::protocols::CrossTerminalTools::toString(static_cast<tul::protocols::CrossTerminal>(i)) != "");
+	REQUIRE(tul::protocols::CrossTerminalTools::toString(tul::protocols::CrossTerminal::ENUM_END) == "");
 }

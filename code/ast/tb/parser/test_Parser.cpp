@@ -25,27 +25,27 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 
 TEST_CASE("Test parser", "[test-Parser]")
 {
-  SECTION("Make sure that the root object has ENTER as type")
-  {
-    tul::parser::Parser parser_;
-    std::unique_ptr<tul::protocols::ConcreteSyntaxTree> tree_ = parser_.getConcreteSyntaxTree();
-    REQUIRE(tree_->node_type == tul::protocols::CrossTerminal::ENTER);
-  }
-  SECTION("Try parsing simple a simple expression")
-  {
-    using namespace tul::protocols;
-    tul::parser::Parser parser_;
-    auto parseSymbol = [&parser_](const TokenType &token_type) -> void {Token token_; token_.token_type = token_type; REQUIRE(parser_.parseSymbol(token_) == true);};
-    auto parseFail = [&parser_](const TokenType &token_type) -> void {Token token_; token_.token_type = token_type; REQUIRE(parser_.parseSymbol(token_) == false);};
+	SECTION("Make sure that the root object has ENTER as type")
+	{
+		tul::parser::Parser parser_;
+		std::unique_ptr<tul::protocols::ConcreteSyntaxTree> tree_ = parser_.getConcreteSyntaxTree();
+		REQUIRE(tree_->node_type == tul::protocols::CrossTerminal::ENTER);
+	}
+	SECTION("Try parsing simple a simple expression")
+	{
+		using namespace tul::protocols;
+		tul::parser::Parser parser_;
+		auto parseSymbol = [&parser_](const TokenType &token_type) -> void {Token token_; token_.token_type = token_type; REQUIRE(parser_.parseSymbol(token_) == true);};
+		auto parseFail = [&parser_](const TokenType &token_type) -> void {Token token_; token_.token_type = token_type; REQUIRE(parser_.parseSymbol(token_) == false);};
 
-    parseSymbol(TokenType::KEYWORD_PUBLIC);
-    parseSymbol(TokenType::IDENTIFIER_CLASS);
-    parseSymbol(TokenType::IDENTIFIER_VARIABLE);
-    parseSymbol(TokenType::SYMBOL_SEMICOLON__PRUNE);
+		parseSymbol(TokenType::KEYWORD_PUBLIC);
+		parseSymbol(TokenType::IDENTIFIER_CLASS);
+		parseSymbol(TokenType::IDENTIFIER_VARIABLE);
+		parseSymbol(TokenType::SYMBOL_SEMICOLON__PRUNE);
 
-    SECTION("See if we handle an empty stack correctly")
-    {
-      parseFail(TokenType::SYMBOL_SEMICOLON__PRUNE);
-    }
-  }
+		SECTION("See if we handle an empty stack correctly")
+		{
+			parseFail(TokenType::SYMBOL_SEMICOLON__PRUNE);
+		}
+	}
 }

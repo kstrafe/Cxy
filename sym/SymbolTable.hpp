@@ -25,11 +25,11 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 namespace tul { namespace sym {
 
 /*
-  The global table of symbols, for the entire program.
+	The global table of symbols, for the entire program.
 */
 struct SymbolTable
 {
-  std::set<ModuleTable> program_symtab;
+	std::set<ModuleTable> program_symtab;
 };
 
 }}

@@ -21,14 +21,14 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 
 TEST_CASE("Test symbol matcher", "[test-SymbolMatcher]")
 {
-  SECTION("Attempting to match a few symbols")
-  {
-    using namespace tul::dependency;
-    using namespace tul::protocols;
-    auto checkReturn = [](const std::string &lexeme) -> bool { return  SymbolMatcher::getSymbol(lexeme) != TokenType::UNIDENTIFIED; };
-    REQUIRE(checkReturn("++"));
-    REQUIRE(checkReturn("-"));
-    REQUIRE(checkReturn("^"));
-    REQUIRE(!checkReturn("if"));
-  }
+	SECTION("Attempting to match a few symbols")
+	{
+		using namespace tul::dependency;
+		using namespace tul::protocols;
+		auto checkReturn = [](const std::string &lexeme) -> bool { return  SymbolMatcher::getSymbol(lexeme) != TokenType::UNIDENTIFIED; };
+		REQUIRE(checkReturn("++"));
+		REQUIRE(checkReturn("-"));
+		REQUIRE(checkReturn("^"));
+		REQUIRE(!checkReturn("if"));
+	}
 }

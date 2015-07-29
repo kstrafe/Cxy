@@ -25,53 +25,53 @@ class RingNumber
 {
 public:
 
-  RingNumber()
-  :
-    current_value(0),
-    maximum_value(1)
-  {}
+	RingNumber()
+	:
+		current_value(0),
+		maximum_value(1)
+	{}
 
-  RingNumber(COUNTER max_val)
-  :
-    current_value(0),
-    maximum_value(max_val)
-  {}
+	RingNumber(COUNTER max_val)
+	:
+		current_value(0),
+		maximum_value(max_val)
+	{}
 
-  const COUNTER &getNumber() const
-  {
-    return current_value;
-  }
+	const COUNTER &getNumber() const
+	{
+		return current_value;
+	}
 
-  COUNTER &getNumber()
-  {
-    return current_value;
-  }
+	COUNTER &getNumber()
+	{
+		return current_value;
+	}
 
-  COUNTER getPrevious() const
-  {
-    if (current_value == 0)
-      return maximum_value - 1;
-    return current_value - 1;
-  }
+	COUNTER getPrevious() const
+	{
+		if (current_value == 0)
+			return maximum_value - 1;
+		return current_value - 1;
+	}
 
-  COUNTER &operator ++ ()
-  {
-    current_value += 1;
-    if (!(current_value < maximum_value))
-      current_value = 0;
-    return current_value;
-  }
+	COUNTER &operator ++ ()
+	{
+		current_value += 1;
+		if (!(current_value < maximum_value))
+			current_value = 0;
+		return current_value;
+	}
 
-  COUNTER &operator -- ()
-  {
-    if (current_value == 0)
-      current_value = maximum_value - 1;
-    return current_value;
-  }
+	COUNTER &operator -- ()
+	{
+		if (current_value == 0)
+			current_value = maximum_value - 1;
+		return current_value;
+	}
 
 private:
 
-  COUNTER current_value, maximum_value;
+	COUNTER current_value, maximum_value;
 };
 
 }}

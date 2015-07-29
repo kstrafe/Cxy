@@ -28,16 +28,16 @@ class CommentBuffer
 {
 public:
 
-  CommentBuffer();
+	CommentBuffer();
 
-  void putCharInto(char char_);
-  char getCharFrom(uint8_t location_);
+	void putCharInto(char char_);
+	char getCharFrom(uint8_t location_);
 
 private:
 
-  static constexpr const std::size_t CYCLE_BUFFER_SIZE = 2;
-  utilities::RingNumber<uint8_t> cycle_buffer;
-  char cycle_array[CYCLE_BUFFER_SIZE];
+	static constexpr const std::size_t CYCLE_BUFFER_SIZE = 2;
+	utilities::RingNumber<uint8_t> cycle_buffer;
+	char cycle_array[CYCLE_BUFFER_SIZE];
 
 };
 

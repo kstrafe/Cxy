@@ -22,31 +22,31 @@ namespace tul { namespace dependency {
 
 CrossTerminalParser::CrossTerminalParser()
 {
-  // Set up parse table
-  using namespace protocols;
-  #define cT(name) CrossTerminal::name
-  #define eps(left) ll_parser.addEpsilon(CrossTerminal::left)
-  #define add(left, middle) \
-    if (ll_parser.doesRuleExist(CrossTerminal::left, CrossTerminal::middle)) throw std::string(#left) + " already has transition " + std::string(#middle); \
-    ll_parser.addRule(CrossTerminal::left, CrossTerminal::middle,
+	// Set up parse table
+	using namespace protocols;
+	#define cT(name) CrossTerminal::name
+	#define eps(left) ll_parser.addEpsilon(CrossTerminal::left)
+	#define add(left, middle) \
+		if (ll_parser.doesRuleExist(CrossTerminal::left, CrossTerminal::middle)) throw std::string(#left) + " already has transition " + std::string(#middle); \
+		ll_parser.addRule(CrossTerminal::left, CrossTerminal::middle,
 
-    #include "CrossTerminalParser.inc"
+		#include "CrossTerminalParser.inc"
 
-  #undef add
-  #undef eps
-  #undef cT
+	#undef add
+	#undef eps
+	#undef cT
 }
 
 std::vector<protocols::CrossTerminal> CrossTerminalParser::calculateExpectedTokens(const protocols::CrossTerminal stack_top)
 {
-  return ll_parser.getTransitionTokens(stack_top);
+	return ll_parser.getTransitionTokens(stack_top);
 }
 
 protocols::ParseReturn<protocols::CrossTerminal> CrossTerminalParser::parseSymbol
 (const protocols::CrossTerminal stack_top, const protocols::CrossTerminal &input_element)
 {
-  using namespace protocols;
-  return ll_parser.parseSymbol(input_element, stack_top);
+	using namespace protocols;
+	return ll_parser.parseSymbol(input_element, stack_top);
 }
 
 }}

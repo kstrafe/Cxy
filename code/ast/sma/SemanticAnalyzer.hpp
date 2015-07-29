@@ -23,23 +23,23 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace tul { namespace sma {
 
-  class SemanticAnalyzer
-  {
-  public:
+	class SemanticAnalyzer
+	{
+	public:
 
-    SemanticAnalyzer();
-    ~SemanticAnalyzer();
+		SemanticAnalyzer();
+		~SemanticAnalyzer();
 
-    bool runOn(protocols::ConcreteSyntaxTree *ct_root);
+		bool runOn(protocols::ConcreteSyntaxTree *ct_root);
 
-  private:
+	private:
 
-    bool collectFunctionInformation(protocols::ConcreteSyntaxTree *ct_root);
-    bool collectFunctionInformationAfterEnter(protocols::ConcreteSyntaxTree *ct_root);
-    bool collectFunctionSignature(protocols::ConcreteSyntaxTree *ct_root, sym::MethodTable &mod_tab);
-    bool collectScopeInformation(protocols::ConcreteSyntaxTree *ct_root);
+		bool collectFunctionInformation(protocols::ConcreteSyntaxTree *ct_root);
+		bool collectFunctionInformationAfterEnter(protocols::ConcreteSyntaxTree *ct_root);
+		bool collectFunctionSignature(protocols::ConcreteSyntaxTree *ct_root, sym::MethodTable &mod_tab);
+		bool collectScopeInformation(protocols::ConcreteSyntaxTree *ct_root);
 
-    sym::SymbolTable module_symtab;
-  };
+		sym::SymbolTable module_symtab;
+	};
 
 }}

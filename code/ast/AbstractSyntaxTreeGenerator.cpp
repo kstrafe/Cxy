@@ -24,28 +24,28 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace tul { namespace ast {
 
-  bool AbstractSyntaxTreeGenerator::buildTree(char next_character)
-  {
-    return tree_builder.buildTree(next_character);
-  }
+	bool AbstractSyntaxTreeGenerator::buildTree(char next_character)
+	{
+		return tree_builder.buildTree(next_character);
+	}
 
-  bool AbstractSyntaxTreeGenerator::endInput()
-  {
-    return tree_builder.endInput();
-  }
+	bool AbstractSyntaxTreeGenerator::endInput()
+	{
+		return tree_builder.endInput();
+	}
 
-  std::vector<std::string> AbstractSyntaxTreeGenerator::getExpectedTokens()
-  {
-    return std::move(tree_builder.getExpectedTokens());
-  }
+	std::vector<std::string> AbstractSyntaxTreeGenerator::getExpectedTokens()
+	{
+		return std::move(tree_builder.getExpectedTokens());
+	}
 
-  bool AbstractSyntaxTreeGenerator::generateSemantics()
-  {
-    std::unique_ptr<protocols::ConcreteSyntaxTree> tree_ = tree_builder.getConcreteSyntaxTree();
-    tp::TreePruner::pruneTree(tree_.get());
-    semantic_analyzer.runOn(tree_.get());
-    std::cout << tree_.get()->toString() << std::endl;
-    return true;
-  }
+	bool AbstractSyntaxTreeGenerator::generateSemantics()
+	{
+		std::unique_ptr<protocols::ConcreteSyntaxTree> tree_ = tree_builder.getConcreteSyntaxTree();
+		tp::TreePruner::pruneTree(tree_.get());
+		semantic_analyzer.runOn(tree_.get());
+		std::cout << tree_.get()->toString() << std::endl;
+		return true;
+	}
 
 }}

@@ -21,14 +21,14 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 namespace tul { namespace sym {
 
 /*
-  A single scope is a block of declarations inside a method.
-  This can be idealized as anything between {}, in case of
-  an if, while, or another such statement that allows not
-  using the {}, the same rule applies.
+	A single scope is a block of declarations inside a method.
+	This can be idealized as anything between {}, in case of
+	an if, while, or another such statement that allows not
+	using the {}, the same rule applies.
 */
 struct ScopeTable
 {
-  std::string method_name;
+	std::string method_name;
 };
 
 }}

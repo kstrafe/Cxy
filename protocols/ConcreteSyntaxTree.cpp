@@ -23,36 +23,36 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace tul { namespace protocols {
 
-    ConcreteSyntaxTree::ConcreteSyntaxTree()
-    {
-      token_.entry_type = EntryType::WHITESPACE;
-    }
+		ConcreteSyntaxTree::ConcreteSyntaxTree()
+		{
+			token_.entry_type = EntryType::WHITESPACE;
+		}
 
-    ConcreteSyntaxTree::ConcreteSyntaxTree(CrossTerminal ct_)
-    :
-      node_type(ct_)
-    {}
+		ConcreteSyntaxTree::ConcreteSyntaxTree(CrossTerminal ct_)
+		:
+			node_type(ct_)
+		{}
 
-    ConcreteSyntaxTree::~ConcreteSyntaxTree()
-    {
-      for (ConcreteSyntaxTree *child_ : children_)
-        delete child_;
-    }
+		ConcreteSyntaxTree::~ConcreteSyntaxTree()
+		{
+			for (ConcreteSyntaxTree *child_ : children_)
+				delete child_;
+		}
 
-    std::string ConcreteSyntaxTree::toString(int indent)
-    {
-      std::stringstream str_strm;
-      str_strm << std::setfill('0') << std::setw(3) << indent << ':';
-      std::string ind(indent, ' ');
-      ind += str_strm.str();
-      ind += protocols::CrossTerminalTools::toString(node_type);
-      ind += '(';
-      ind += token_.accompanying_lexeme;
-      ind += ')';
-      ind += '\n';
-      for (auto child_ : children_)
-          ind += child_->toString(indent + 2);
-      return ind;
-    }
+		std::string ConcreteSyntaxTree::toString(int indent)
+		{
+			std::stringstream str_strm;
+			str_strm << std::setfill('0') << std::setw(3) << indent << ':';
+			std::string ind(indent, ' ');
+			ind += str_strm.str();
+			ind += protocols::CrossTerminalTools::toString(node_type);
+			ind += '(';
+			ind += token_.accompanying_lexeme;
+			ind += ')';
+			ind += '\n';
+			for (auto child_ : children_)
+					ind += child_->toString(indent + 2);
+			return ind;
+		}
 
 }}

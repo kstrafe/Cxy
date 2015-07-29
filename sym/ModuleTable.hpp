@@ -27,11 +27,11 @@ namespace tul { namespace sym {
 
 struct ModuleTable
 {
-  bool operator< (const ModuleTable &m_table) const;
-  std::string toString() const;
+	bool operator< (const ModuleTable &m_table) const;
+	std::string toString() const;
 
-  std::set<MethodTable> method_symtab;
-  std::string qualified_name;
+	std::set<MethodTable> method_symtab;
+	std::string qualified_name;
 };
 
 }}

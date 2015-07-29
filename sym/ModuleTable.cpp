@@ -22,7 +22,7 @@ namespace tul { namespace sym {
 
 bool ModuleTable::operator< (const ModuleTable &m_table) const
 {
-  return qualified_name < m_table.qualified_name;
+	return qualified_name < m_table.qualified_name;
 }
 
 }}

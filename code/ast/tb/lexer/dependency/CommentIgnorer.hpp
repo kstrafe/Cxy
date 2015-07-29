@@ -24,35 +24,35 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 namespace tul { namespace dependency {
 
 /*
-  How does this class work?
+	How does this class work?
 
-  Feed it characters. For every character that you put
-  into it using putOnStack, you will get a number of
-  characters that you may validly extract from
-  getCharacterStack();
+	Feed it characters. For every character that you put
+	into it using putOnStack, you will get a number of
+	characters that you may validly extract from
+	getCharacterStack();
 */
 class CommentIgnorer
 {
 public:
 
-  CommentIgnorer();
-  uint8_t endInput();
-  uint8_t putOnStack(char character_);
+	CommentIgnorer();
+	uint8_t endInput();
+	uint8_t putOnStack(char character_);
 
 private:
 
-  enum class State
-  {
-    BLOCK_COMMENT,
-    LINE_COMMENT,
-    ONE_SLASH,
-    ONE_STAR,
-    NO_COMMENT,
-    INSIDE_QUOTE,
-    MAYBE_OUTQUOTE,
-  }
-  comment_state;
-  std::size_t block_nest = 0;
+	enum class State
+	{
+		BLOCK_COMMENT,
+		LINE_COMMENT,
+		ONE_SLASH,
+		ONE_STAR,
+		NO_COMMENT,
+		INSIDE_QUOTE,
+		MAYBE_OUTQUOTE,
+	}
+	comment_state;
+	std::size_t block_nest = 0;
 
 };
 

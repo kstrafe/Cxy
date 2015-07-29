@@ -20,5 +20,5 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 
 TEST_CASE("Test system operational", "[test-system]")
 {
-  REQUIRE(true);
+	REQUIRE(true);
 }
