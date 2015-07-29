@@ -68,9 +68,15 @@ void TreePruner::pruneTree(protocols::ConcreteSyntaxTree *ct_)
 	{
 		if
 		(
-			ct_->children_[i_]->children_.size() == 2
-			&& tul::protocols::CrossTerminalTools::isExpression(ct_->children_[i_]->node_type)
-			&& ct_->children_[i_]->children_[1]->node_type == protocols::CrossTerminal::EPSILONATE
+			(
+				ct_->children_[i_]->children_.size() == 1
+				&& tul::protocols::CrossTerminalTools::isExpression(ct_->children_[i_]->node_type)
+			)
+			||
+			(
+				ct_->children_[i_]->children_.size() == 2
+				&& ct_->children_[i_]->children_[1]->node_type == protocols::CrossTerminal::EPSILONATE
+			)
 		)
 		{
 			assert(ct_->children_[i_]->children_[0]->node_type != protocols::CrossTerminal::EPSILONATE);
@@ -86,7 +92,6 @@ void TreePruner::pruneTree(protocols::ConcreteSyntaxTree *ct_)
 				delete ct_->children_[i_]->children_[j_];
 			}
 			ct_->children_[i_]->children_.clear();
-
 			// delete your own child
 			delete ct_->children_[i_];
 
