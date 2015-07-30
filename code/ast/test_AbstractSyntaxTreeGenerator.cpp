@@ -75,7 +75,7 @@ TEST_CASE("AbstractSyntaxTreeGenerator must validate the grammar.", "[test-Abstr
 	)"));
 
 	REQUIRE(validate(R"(
-		global public 32u a_, b_;
+		global public 32u a_ = 3, b_ = 100;
 
 		public (:) enterProgram
 		{

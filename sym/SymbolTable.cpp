@@ -18,28 +18,23 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 #include "sym/SymbolTable.hpp"
-#include "protocols/ConcreteSyntaxTree.hpp"
 
 
-namespace tul { namespace sma {
+namespace tul { namespace sym {
 
-	class SemanticAnalyzer
-	{
-	public:
+ModuleTable *SymbolTable::findModule(const std::string &qualified_name) const
+{
+	std::map<std::string, ModuleTable *>::const_iterator mod_it
+		= module_entries.find(qualified_name);
+	if (mod_it == module_entries.cend())
+		return nullptr;
+	else
+		return mod_it->second;
+}
 
-		SemanticAnalyzer();
-		~SemanticAnalyzer();
-
-		bool runOn(protocols::ConcreteSyntaxTree *ct_root);
-
-	private:
-
-		bool collectFunctionInformation(protocols::ConcreteSyntaxTree *ct_root);
-		bool collectFunctionInformationAfterEnter(protocols::ConcreteSyntaxTree *ct_root);
-		bool collectFunctionSignature(protocols::ConcreteSyntaxTree *ct_root, sym::MethodTable &mod_tab);
-		bool collectScopeInformation(protocols::ConcreteSyntaxTree *ct_root);
-
-		sym::SymbolTable module_symtab;
-	};
+bool SymbolTable::registerModule(const std::string &qualified_name)
+{
+	return false;
+}
 
 }}

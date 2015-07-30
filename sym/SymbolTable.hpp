@@ -19,7 +19,7 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "sym/ModuleTable.hpp"
 
-#include <set>
+#include <map>
 
 
 namespace tul { namespace sym {
@@ -27,9 +27,16 @@ namespace tul { namespace sym {
 /*
 	The global table of symbols, for the entire program.
 */
-struct SymbolTable
+class SymbolTable
 {
-	std::set<ModuleTable> program_symtab;
+public:
+
+	ModuleTable *findModule(const std::string &qualified_name) const;
+	bool registerModule(const std::string &qualified_name);
+
+private:
+
+	std::map<std::string, ModuleTable *> module_entries;
 };
 
 }}

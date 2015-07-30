@@ -16,13 +16,13 @@ You should have received a copy of the GNU General Public License
 along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "protocols/CrossTerminalTools.hpp"
-#include "SemanticAnalyzer.hpp"
+#include "TableBuilder.hpp"
 
 #include <cassert>
 #include <iostream>
 
 
-namespace tul { namespace sma {
+namespace tul { namespace tbl {
 
 /* Implementation thoughts.
  *
@@ -169,29 +169,18 @@ namespace tul { namespace sma {
  * Currently, removing epsilonation does not prune the expressions. There are a
  * lot of those. I notice that the tree does look clearer.
 */
-SemanticAnalyzer::SemanticAnalyzer()
+TableBuilder::TableBuilder()
 {
 	sym::ModuleTable mod_tab;
 	mod_tab.qualified_name = "root.Main";
-	module_symtab.program_symtab.insert(mod_tab);
 }
 
-SemanticAnalyzer::~SemanticAnalyzer()
+TableBuilder::~TableBuilder()
 {
-	sym::ModuleTable mod_tab;
-	mod_tab.qualified_name = "root.Main";
-	std::set<sym::ModuleTable>::iterator it = module_symtab.program_symtab.find(mod_tab);
-	for (const sym::MethodTable &method_tab : it->method_symtab)
-	{
-		std::cout << "Registered function: " << method_tab.method_name << std::endl;
-		for (auto it : method_tab.return_params)
-		{
-			std::cout << it.first << " and " << it.second << std::endl;
-		}
-	}
+
 }
 
-bool SemanticAnalyzer::runOn(protocols::ConcreteSyntaxTree *ct_root)
+bool TableBuilder::runOn(protocols::ConcreteSyntaxTree *ct_root)
 {
 	return collectFunctionInformation(ct_root);
 }
@@ -204,7 +193,7 @@ void getAccessSpecification(protocols::ConcreteSyntaxTree *ct_root)
 	std::cout << f(ct_root->children_.at(0)->node_type) << std::endl;
 }
 
-bool SemanticAnalyzer::collectFunctionInformation(protocols::ConcreteSyntaxTree *ct_root)
+bool TableBuilder::collectFunctionInformation(protocols::ConcreteSyntaxTree *ct_root)
 {
 	using namespace protocols;
 	switch (ct_root->node_type)
@@ -222,7 +211,7 @@ bool SemanticAnalyzer::collectFunctionInformation(protocols::ConcreteSyntaxTree 
 	return true;
 }
 
-bool SemanticAnalyzer::collectFunctionInformationAfterEnter(protocols::ConcreteSyntaxTree *ct_root)
+bool TableBuilder::collectFunctionInformationAfterEnter(protocols::ConcreteSyntaxTree *ct_root)
 {
 	return true;
 	using namespace protocols;
@@ -234,7 +223,7 @@ bool SemanticAnalyzer::collectFunctionInformationAfterEnter(protocols::ConcreteS
 }
 
 /*
-bool SemanticAnalyzer::collectOld()
+bool TableBuilder::collectOld()
 {
 	if
 	(
@@ -298,7 +287,7 @@ std::string getArgumentName(protocols::ConcreteSyntaxTree *ct_root)
 	}
 }
 
-bool SemanticAnalyzer::collectFunctionSignature(protocols::ConcreteSyntaxTree *ct_root, sym::MethodTable &mod_tab)
+bool TableBuilder::collectFunctionSignature(protocols::ConcreteSyntaxTree *ct_root, sym::MethodTable &mod_tab)
 {
 	assert(ct_root != nullptr);
 	switch (ct_root->node_type)

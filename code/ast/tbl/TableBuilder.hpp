@@ -17,26 +17,29 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 */
 #pragma once
 
-#include "tbl/TableBuilder.hpp"
-#include "tb/TreeBuilder.hpp"
+#include "sym/SymbolTable.hpp"
+#include "protocols/ConcreteSyntaxTree.hpp"
 
 
-namespace tul { namespace ast {
+namespace tul { namespace tbl {
 
-class AbstractSyntaxTreeGenerator
-{
-public:
+	class TableBuilder
+	{
+	public:
 
-	bool buildTree(char next_character);
-	bool endInput();
-	std::vector<std::string> getExpectedTokens();
-	bool generateSemantics();
+		TableBuilder();
+		~TableBuilder();
 
-private:
+		bool runOn(protocols::ConcreteSyntaxTree *ct_root);
 
-	tb::TreeBuilder tree_builder;
-	tbl::TableBuilder table_builder;
+	private:
 
-};
+		bool collectFunctionInformation(protocols::ConcreteSyntaxTree *ct_root);
+		bool collectFunctionInformationAfterEnter(protocols::ConcreteSyntaxTree *ct_root);
+		bool collectFunctionSignature(protocols::ConcreteSyntaxTree *ct_root, sym::MethodTable &mod_tab);
+		bool collectScopeInformation(protocols::ConcreteSyntaxTree *ct_root);
+
+		sym::SymbolTable module_symtab;
+	};
 
 }}
