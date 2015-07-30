@@ -31,6 +31,19 @@ bool TableBuilder::runOn
 )
 {
 	sym::Module *mod_entry = new sym::Module;
+	bool err_ = extractEntries(ct_root);
+	if (err_) return err_;
+	return false;
+}
+
+bool TableBuilder::extractEntries(protocols::ConcreteSyntaxTree *ct_root)
+{
+	assert(ct_root != nullptr);
+	switch (ct_root->node_type)
+	{
+		case protocols::CrossTerminal::ENTER:
+		default: break;
+	}
 	return false;
 }
 

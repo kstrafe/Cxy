@@ -28,6 +28,7 @@ class Module
 {
 public:
 
+	bool addEntry(const std::string &qualified_name, Entry *val_entry);
 	Entry *findEntry(const std::string &qualified_name);
 
 private:

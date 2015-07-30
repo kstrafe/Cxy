@@ -30,6 +30,12 @@ class Entry
 {
 private:
 
+	protocols::CrossTerminal
+		access_specifier, object_access_specifier;
+	std::vector<std::pair<std::string, std::string>>
+		method_returns, method_arguments;
+	std::string method_identifier;
+
 	protocols::ConcreteSyntaxTree *sub_tree; // May contain statements if this entry is a
 	// function
 

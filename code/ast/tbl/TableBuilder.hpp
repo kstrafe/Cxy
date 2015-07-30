@@ -35,6 +35,7 @@ namespace tul { namespace tbl {
 
 	private:
 
+		bool extractEntries(protocols::ConcreteSyntaxTree *ct_root);
 		sym::SymbolTable module_symtab;
 
 	};

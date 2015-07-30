@@ -20,7 +20,11 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace tul { namespace sym {
 
-bool SymbolTable::addModule(const std::string &qualified_name, Module *mod_entry)
+bool SymbolTable::addModule
+(
+	const std::string &qualified_name,
+	Module *mod_entry
+)
 {
 	Module *mod_ = findModule(qualified_name);
 	if (mod_) return true;
