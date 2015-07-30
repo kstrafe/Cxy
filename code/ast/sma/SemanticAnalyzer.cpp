@@ -196,16 +196,27 @@ bool SemanticAnalyzer::runOn(protocols::ConcreteSyntaxTree *ct_root)
 	return collectFunctionInformation(ct_root);
 }
 
+void getAccessSpecification(protocols::ConcreteSyntaxTree *ct_root)
+{
+	assert(ct_root->node_type == protocols::CrossTerminal::ACCESS_SPECIFICATION);
+	std::cout << "Getting access specification" << std::endl;
+	auto f = protocols::CrossTerminalTools::toString;
+	std::cout << f(ct_root->children_.at(0)->node_type) << std::endl;
+}
 
 bool SemanticAnalyzer::collectFunctionInformation(protocols::ConcreteSyntaxTree *ct_root)
 {
-	return true;
 	using namespace protocols;
 	switch (ct_root->node_type)
 	{
 		case CrossTerminal::ENTER:
-			collectFunctionInformationAfterEnter(ct_root);
-		break;
+			if (ct_root->children_.empty())
+				return true;
+			getAccessSpecification(ct_root->children_.at(0));
+			//getSymbolSignature(ct_root->children_.at(1));
+			break;
+		case CrossTerminal::EPSILONATE:
+			return true;
 		default: assert(false && "Collect function information must begin at the root of a module."); break;
 	}
 	return true;
