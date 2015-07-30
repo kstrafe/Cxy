@@ -24,17 +24,14 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace tul { namespace tbl {
 
-TableBuilder::TableBuilder()
+bool TableBuilder::runOn
+(
+	protocols::ConcreteSyntaxTree *ct_root,
+	const std::string &qualified_name
+)
 {
-}
-
-TableBuilder::~TableBuilder()
-{
-}
-
-bool TableBuilder::runOn(protocols::ConcreteSyntaxTree *ct_root)
-{
-	return true;
+	sym::Module *mod_entry = new sym::Module;
+	return false;
 }
 
 }}

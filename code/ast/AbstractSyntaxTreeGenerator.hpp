@@ -30,7 +30,7 @@ public:
 	bool buildTree(char next_character);
 	bool endInput();
 	std::vector<std::string> getExpectedTokens();
-	bool generateSemantics();
+	bool generateSemantics(const std::string &qualified_name);
 
 private:
 

@@ -28,9 +28,9 @@ class SymbolTable
 {
 public:
 
+	bool addModule(const std::string &qualified_name, Module *mod_entry);
 	Entry *findEntry(const std::string &qualified_name);
 	Module *findModule(const std::string &qualified_name);
-	bool registerModule(const std::string &qualified_name);
 
 private:
 

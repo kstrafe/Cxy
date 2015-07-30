@@ -27,10 +27,11 @@ namespace tul { namespace tbl {
 	{
 	public:
 
-		TableBuilder();
-		~TableBuilder();
-
-		bool runOn(protocols::ConcreteSyntaxTree *ct_root);
+		bool runOn
+		(
+			protocols::ConcreteSyntaxTree *ct_root,
+			const std::string &qualified_name
+		);
 
 	private:
 

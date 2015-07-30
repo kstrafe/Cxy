@@ -47,7 +47,7 @@ namespace
 		if (ret_val)
 			ret_val = builder_object.endInput();
 		if (ret_val)
-			builder_object.generateSemantics();
+			builder_object.generateSemantics("root.Main");
 		return ret_val;
 	}
 }
