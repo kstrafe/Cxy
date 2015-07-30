@@ -18,23 +18,21 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 #include "sym/Entry.hpp"
-#include "sym/Module.hpp"
 
 #include <map>
 
 
 namespace tul { namespace sym {
 
-/*
-	The global table of symbols, for the entire program.
-*/
 class Module
 {
+public:
 
+	Entry *findEntry(const std::string &qualified_name);
 
 private:
 
-	std::map<std::string, Entry *> module_entries;
+	std::map<std::string, Entry *> entry_map;
 };
 
 }}

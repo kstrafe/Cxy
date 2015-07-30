@@ -24,19 +24,17 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace tul { namespace sym {
 
-/*
-	The global table of symbols, for the entire program.
-*/
 class SymbolTable
 {
 public:
 
-	Module *findModule(const std::string &qualified_name) const;
+	Entry *findEntry(const std::string &qualified_name);
+	Module *findModule(const std::string &qualified_name);
 	bool registerModule(const std::string &qualified_name);
 
 private:
 
-	std::map<std::string, Module *> module_entries;
+	std::map<std::string, Module *> module_map;
 };
 
 }}

@@ -17,6 +17,8 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 */
 #pragma once
 
+#include "protocols/ConcreteSyntaxTree.hpp"
+
 #include <string>
 #include <utility>
 #include <vector>
@@ -26,6 +28,11 @@ namespace tul { namespace sym {
 
 class Entry
 {
+private:
+
+	protocols::ConcreteSyntaxTree *sub_tree; // May contain statements if this entry is a
+	// function
+
 };
 
 }}

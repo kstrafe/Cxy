@@ -20,11 +20,17 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace tul { namespace sym {
 
-Module *SymbolTable::findModule(const std::string &qualified_name) const
+Entry *SymbolTable::findEntry(const std::string &qualified_name)
+{
+	Module *module_ = findModule(qualified_name);
+	return module_->findEntry(qualified_name);
+}
+
+Module *SymbolTable::findModule(const std::string &qualified_name)
 {
 	std::map<std::string, Module *>::const_iterator mod_it
-		= module_entries.find(qualified_name);
-	if (mod_it == module_entries.cend())
+		= module_map.find(qualified_name);
+	if (mod_it == module_map.cend())
 		return nullptr;
 	else
 		return mod_it->second;

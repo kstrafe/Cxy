@@ -20,4 +20,14 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace tul { namespace sym {
 
+Entry *Module::findEntry(const std::string &qualified_name)
+{
+	std::map<std::string, Entry *>::const_iterator mod_it
+		= entry_map.find(qualified_name);
+	if (mod_it == entry_map.cend())
+		return nullptr;
+	else
+		return mod_it->second;
+}
+
 }}
