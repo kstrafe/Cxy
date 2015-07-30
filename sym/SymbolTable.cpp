@@ -15,16 +15,14 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 */
-#pragma once
-
-#include "sym/SymbolTable.hpp"
+#include "SymbolTable.hpp"
 
 
 namespace tul { namespace sym {
 
-ModuleTable *SymbolTable::findModule(const std::string &qualified_name) const
+Module *SymbolTable::findModule(const std::string &qualified_name) const
 {
-	std::map<std::string, ModuleTable *>::const_iterator mod_it
+	std::map<std::string, Module *>::const_iterator mod_it
 		= module_entries.find(qualified_name);
 	if (mod_it == module_entries.cend())
 		return nullptr;

@@ -17,18 +17,24 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 */
 #pragma once
 
+#include "sym/Entry.hpp"
+#include "sym/Module.hpp"
+
+#include <map>
+
 
 namespace tul { namespace sym {
 
 /*
-	A single scope is a block of declarations inside a method.
-	This can be idealized as anything between {}, in case of
-	an if, while, or another such statement that allows not
-	using the {}, the same rule applies.
+	The global table of symbols, for the entire program.
 */
-struct ScopeTable
+class Module
 {
-	std::string method_name;
+
+
+private:
+
+	std::map<std::string, Entry *> module_entries;
 };
 
 }}

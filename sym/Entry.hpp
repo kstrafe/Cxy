@@ -15,14 +15,17 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "ModuleTable.hpp"
+#pragma once
+
+#include <string>
+#include <utility>
+#include <vector>
 
 
 namespace tul { namespace sym {
 
-bool ModuleTable::operator< (const ModuleTable &m_table) const
+class Entry
 {
-	return qualified_name < m_table.qualified_name;
-}
+};
 
 }}

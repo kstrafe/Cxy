@@ -17,7 +17,7 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 */
 #pragma once
 
-#include "sym/ModuleTable.hpp"
+#include "sym/Module.hpp"
 
 #include <map>
 
@@ -31,12 +31,12 @@ class SymbolTable
 {
 public:
 
-	ModuleTable *findModule(const std::string &qualified_name) const;
+	Module *findModule(const std::string &qualified_name) const;
 	bool registerModule(const std::string &qualified_name);
 
 private:
 
-	std::map<std::string, ModuleTable *> module_entries;
+	std::map<std::string, Module *> module_entries;
 };
 
 }}
