@@ -22,4 +22,20 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace tul { namespace sym {
 
+Entry::Entry()
+:
+	access_specifier(protocols::CrossTerminal::EPSILONATE),
+	object_access_specifier(protocols::CrossTerminal::EPSILONATE)
+{}
+
+std::string Entry::toString()
+{
+	using namespace protocols;
+	std::string str_rep;
+	str_rep += CrossTerminalTools::toString(access_specifier);
+	str_rep += ':';
+	str_rep += CrossTerminalTools::toString(object_access_specifier);
+	return str_rep;
+}
+
 }}

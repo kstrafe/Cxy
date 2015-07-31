@@ -28,7 +28,10 @@ namespace tul { namespace sym {
 
 class Entry
 {
-private:
+public:
+
+	Entry();
+	std::string toString();
 
 	protocols::CrossTerminal
 		access_specifier, object_access_specifier;
