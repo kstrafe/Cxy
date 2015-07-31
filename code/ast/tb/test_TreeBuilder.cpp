@@ -514,10 +514,10 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 		REQUIRE(validate(R"(
 					public (:) enterProgram
 					{
-						assembly
-						{
-							"mov %eax, %ebx"
-						}
+					        hack
+						(
+						      assembly_: "mov %eax, %ebx"
+						);
 					}
 		)"));
 		REQUIRE(validate(R"(

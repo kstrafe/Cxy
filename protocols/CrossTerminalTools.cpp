@@ -65,7 +65,6 @@ bool CrossTerminalTools::isKeyword(const CrossTerminal &ct_)
 {
     switch (ct_)
     {
-        case CrossTerminal::KEYWORD_ASSEMBLY: return true;
         case CrossTerminal::KEYWORD_CAST: return true;
         case CrossTerminal::KEYWORD_CONST: return true;
         case CrossTerminal::KEYWORD_DEFER: return true;
@@ -75,6 +74,7 @@ bool CrossTerminalTools::isKeyword(const CrossTerminal &ct_)
         case CrossTerminal::KEYWORD_GLOBAL: return true;
         case CrossTerminal::KEYWORD_GLOCAL: return true;
         case CrossTerminal::KEYWORD_GOTO: return true;
+        case CrossTerminal::KEYWORD_HACK: return true;
         case CrossTerminal::KEYWORD_IF: return true;
         case CrossTerminal::KEYWORD_LABEL: return true;
         case CrossTerminal::KEYWORD_PRIVATE: return true;
@@ -118,7 +118,6 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::ARGUMENT_LIST_AFTER_FIRST: return "ARGUMENT_LIST_AFTER_FIRST";
         case protocols::CrossTerminal::ARRAY: return "ARRAY";
         case protocols::CrossTerminal::ARRAY_ACCESS_EXPRESSION: return "ARRAY_ACCESS_EXPRESSION";
-        case protocols::CrossTerminal::ASSEMBLY_STATEMENT: return "ASSEMBLY_STATEMENT";
         case protocols::CrossTerminal::ASSIGNMENT_EXPRESSION: return "ASSIGNMENT_EXPRESSION";
         case protocols::CrossTerminal::ATTRIBUTE_LIST: return "ATTRIBUTE_LIST";
         case protocols::CrossTerminal::ATTRIBUTE_LIST_AFTER_CONST: return "ATTRIBUTE_LIST_AFTER_CONST";
@@ -155,6 +154,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::GROUPER_RIGHT_BRACE: return "GROUPER_RIGHT_BRACE";
         case protocols::CrossTerminal::GROUPER_RIGHT_BRACKET: return "GROUPER_RIGHT_BRACKET";
         case protocols::CrossTerminal::GROUPER_RIGHT_PARENTHESIS: return "GROUPER_RIGHT_PARENTHESIS";
+        case protocols::CrossTerminal::HACK_STATEMENT: return "HACK_STATEMENT";
         case protocols::CrossTerminal::IDENTIFIER_CLASS: return "IDENTIFIER_CLASS";
         case protocols::CrossTerminal::IDENTIFIER_ENUMERATION: return "IDENTIFIER_ENUMERATION";
         case protocols::CrossTerminal::IDENTIFIER_PACKAGE: return "IDENTIFIER_PACKAGE";
@@ -163,7 +163,6 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::IF_STATEMENT: return "IF_STATEMENT";
         case protocols::CrossTerminal::INTEGER_LITERAL: return "INTEGER_LITERAL";
         case protocols::CrossTerminal::ITER_STATEMENT: return "ITER_STATEMENT";
-        case protocols::CrossTerminal::KEYWORD_ASSEMBLY: return "KEYWORD_ASSEMBLY";
         case protocols::CrossTerminal::KEYWORD_CAST: return "KEYWORD_CAST";
         case protocols::CrossTerminal::KEYWORD_CONST: return "KEYWORD_CONST";
         case protocols::CrossTerminal::KEYWORD_DEFER: return "KEYWORD_DEFER";
@@ -173,6 +172,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::KEYWORD_GLOBAL: return "KEYWORD_GLOBAL";
         case protocols::CrossTerminal::KEYWORD_GLOCAL: return "KEYWORD_GLOCAL";
         case protocols::CrossTerminal::KEYWORD_GOTO: return "KEYWORD_GOTO";
+        case protocols::CrossTerminal::KEYWORD_HACK: return "KEYWORD_HACK";
         case protocols::CrossTerminal::KEYWORD_IF: return "KEYWORD_IF";
         case protocols::CrossTerminal::KEYWORD_LABEL: return "KEYWORD_LABEL";
         case protocols::CrossTerminal::KEYWORD_PRIVATE: return "KEYWORD_PRIVATE";

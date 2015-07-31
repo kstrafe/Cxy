@@ -202,7 +202,7 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
 	SECTION("Are keywords detected?")
 	{
 		tul::lexer::Lexer lexing_engine;
-		for (char character_ : std::string("Muh * if()while() assembly{} + sym ++bols/\\"))
+		for (char character_ : std::string("Muh * if()while() hack() + sym ++bols/\\"))
 			lexing_engine.insertCharacter(/*character_ :*/ character_);
 
 		std::vector<tul::protocols::Token> &token_stack = lexing_engine.getTokenStack();
@@ -219,9 +219,9 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
 			caze(KEYWORD_WHILE);
 			caze(GROUPER_LEFT_PARENTHESIS);
 			caze(GROUPER_RIGHT_PARENTHESIS);
-			caze(KEYWORD_ASSEMBLY);
-			caze(GROUPER_LEFT_BRACE);
-			caze(GROUPER_RIGHT_BRACE);
+			caze(KEYWORD_HACK);
+			caze(GROUPER_LEFT_PARENTHESIS);
+			caze(GROUPER_RIGHT_PARENTHESIS);
 			caze(SYMBOL_PLUS);
 			caze(IDENTIFIER_PACKAGE);
 			caze(SYMBOL_PLUS__PLUS);

@@ -24,7 +24,6 @@ protocols::TokenType KeywordMatcher::getKeyword(const std::string &lexeme)
 {
     using namespace protocols;
     if (lexeme == "restricted") return TokenType::KEYWORD_RESTRICTED;
-    else if (lexeme == "assembly") return TokenType::KEYWORD_ASSEMBLY;
     else if (lexeme == "private") return TokenType::KEYWORD_PRIVATE;
     else if (lexeme == "global") return TokenType::KEYWORD_GLOBAL;
     else if (lexeme == "glocal") return TokenType::KEYWORD_GLOCAL;
@@ -38,6 +37,7 @@ protocols::TokenType KeywordMatcher::getKeyword(const std::string &lexeme)
     else if (lexeme == "cast") return TokenType::KEYWORD_CAST;
     else if (lexeme == "else") return TokenType::KEYWORD_ELSE;
     else if (lexeme == "goto") return TokenType::KEYWORD_GOTO;
+    else if (lexeme == "hack") return TokenType::KEYWORD_HACK;
     else if (lexeme == "pure") return TokenType::KEYWORD_PURE;
     else if (lexeme == "when") return TokenType::KEYWORD_WHEN;
     else if (lexeme == "for") return TokenType::KEYWORD_FOR;
