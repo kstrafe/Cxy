@@ -35,8 +35,11 @@ public:
 
 	protocols::CrossTerminal
 		access_specifier, object_access_specifier;
+
 	std::vector<protocols::CrossTerminal>
 		type_prefixes; // Stuff like const ref ptr
+	std::string module_identifier, class_identifier;
+
 	std::vector<std::pair<std::string, std::string>>
 		method_returns, method_arguments;
 	std::string method_identifier;

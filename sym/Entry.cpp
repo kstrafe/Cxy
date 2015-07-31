@@ -31,11 +31,23 @@ Entry::Entry()
 std::string Entry::toString()
 {
 	using namespace protocols;
-	std::string str_rep;
+	std::string str_rep = "============================\n";
 	str_rep += CrossTerminalTools::toString(access_specifier);
 	str_rep += ':';
 	str_rep += CrossTerminalTools::toString(object_access_specifier);
-	return str_rep;
+
+	std::string str_type_prefixes = "\n";
+	for (CrossTerminal ct_ : type_prefixes)
+	{
+		str_type_prefixes += CrossTerminalTools::toString(ct_);
+		str_type_prefixes += "\n";
+	}
+
+	return
+		str_rep + "\n" +
+		method_identifier + "\n" +
+		str_type_prefixes + "\n" +
+		"============================\n";
 }
 
 }}

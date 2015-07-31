@@ -64,6 +64,68 @@ protocols::CrossTerminal getObjectSpecifier
 	}
 }
 
+void assignSignature
+(
+	const protocols::ConcreteSyntaxTree *ct_root,
+	sym::Entry &entry_
+)
+{
+	using namespace protocols;
+	switch (ct_root->node_type)
+	{
+		case CrossTerminal::ENTER:
+			assignSignature(ct_root->children_.at(1), entry_);
+			break;
+
+		case CrossTerminal::DECL_OR_FUNC:
+			assignSignature(ct_root->children_.at(0), entry_);
+			break;
+
+		case CrossTerminal::DATA_DECLARATION:
+			assignSignature(ct_root->children_.at(0), entry_);
+			assignSignature(ct_root->children_.at(1), entry_);
+			break;
+
+		case CrossTerminal::IDENTIFIER_VARIABLE:
+			entry_.method_identifier = ct_root->token_.accompanying_lexeme;
+			break;
+
+		case CrossTerminal::TYPE:
+			assignSignature(ct_root->children_.at(0), entry_);
+			if (ct_root->children_.size() == 2)
+				assignSignature(ct_root->children_.at(1), entry_);
+			break;
+
+		case CrossTerminal::ARRAY:
+			assignSignature(ct_root->children_.at(1), entry_);
+			break;
+
+		case CrossTerminal::BASIC_TYPE:
+			switch (ct_root->children_.at(0)->node_type)
+			{
+				case CrossTerminal::IDENTIFIER_CLASS:
+					entry_.class_identifier = ct_root->children_.at(0)->token_.accompanying_lexeme;
+					break;
+				case CrossTerminal::IDENTIFIER_PACKAGE:
+					entry_.module_identifier = ct_root->children_.at(0)->token_.accompanying_lexeme;
+					entry_.class_identifier = ct_root->children_.at(1)->token_.accompanying_lexeme;
+					break;
+				case CrossTerminal::PRIMITIVE_SIGNED:
+				case CrossTerminal::PRIMITIVE_UNSIGNED:
+					entry_.class_identifier = ct_root->children_.at(0)->token_.accompanying_lexeme;
+					break;
+				default:
+					break;
+			}
+		case CrossTerminal::KEYWORD_CONST:
+		case CrossTerminal::KEYWORD_PTR:
+		case CrossTerminal::KEYWORD_REF:
+			entry_.type_prefixes.emplace_back(ct_root->node_type);
+		default:
+			break;
+	}
+}
+
 }
 
 bool TableBuilder::runOn
@@ -90,8 +152,14 @@ bool TableBuilder::extractEntries
 	switch (ct_root->node_type)
 	{
 		case protocols::CrossTerminal::ENTER:
+		{
 			sym_entry->access_specifier = getAccessSpecifier(ct_root);
 			sym_entry->object_access_specifier = getObjectSpecifier(ct_root);
+			assignSignature(ct_root, *sym_entry);
+
+			protocols::ConcreteSyntaxTree *ct_new = ct_root->children_.at(1)->children_.at(1);
+			extractEntries(ct_new, mod_entry);
+		}
 		break;
 		default:
 		break;
