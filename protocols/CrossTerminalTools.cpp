@@ -262,6 +262,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::SYMBOL_TILDE__PRUNE: return "SYMBOL_TILDE__PRUNE";
         case protocols::CrossTerminal::TYPE: return "TYPE";
         case protocols::CrossTerminal::TYPE_AFTER_CONST: return "TYPE_AFTER_CONST";
+        case protocols::CrossTerminal::TYPE_AFTER_PTR: return "TYPE_AFTER_PTR";
         case protocols::CrossTerminal::TYPE_AFTER_REF: return "TYPE_AFTER_REF";
         case protocols::CrossTerminal::TYPE_AFTER_REF_CONST: return "TYPE_AFTER_REF_CONST";
         case protocols::CrossTerminal::UNARY_EXPRESSION: return "UNARY_EXPRESSION";

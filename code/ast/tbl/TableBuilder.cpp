@@ -72,7 +72,7 @@ bool TableBuilder::runOn
 	const std::string &qualified_name
 )
 {
-	// std::cout << ct_root->toString();
+	std::cout << ct_root->toString();
 	sym::Module *mod_entry = new sym::Module;
 	bool err_ = extractEntries(ct_root, *mod_entry);
 	if (err_) return err_;

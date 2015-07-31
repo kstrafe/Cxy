@@ -76,6 +76,7 @@ TEST_CASE("AbstractSyntaxTreeGenerator must validate the grammar.", "[test-Abstr
 
 	REQUIRE(validate(R"(
 		global public 32u a_ = 3, b_ = 100;
+		public ptr (sml.String ret_ : sml.String inp_) ptr_2_fun;
 
 		public (:) enterProgram
 		{
