@@ -90,5 +90,10 @@ TEST_CASE("AbstractSyntaxTreeGenerator must validate the grammar.", "[test-Abstr
 			var sml.String some_string;
 		}
 	)"));
-	REQUIRE(validate(R"()"));
+	REQUIRE(validate(R"(
+		public (:(:) a_) doStuff
+		{
+
+		}
+	)"));
 }

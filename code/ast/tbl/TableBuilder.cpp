@@ -121,6 +121,7 @@ void assignSignature
 		case CrossTerminal::KEYWORD_PTR:
 		case CrossTerminal::KEYWORD_REF:
 			entry_.type_prefixes.emplace_back(ct_root->node_type);
+			assignSignature(ct_root->children_.at(0), entry_);
 		default:
 			break;
 	}
