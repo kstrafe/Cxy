@@ -191,6 +191,7 @@ productions = {
 ################################################################################
 	'ARGUMENT': [
 		['TYPE', 'IDENTIFIER_VARIABLE', 'OPTIONAL_ASSIGNMENT'],
+		['FUNCTION_SIGNATURE', 'IDENTIFIER_VARIABLE', 'OPTIONAL_ASSIGNMENT'],
 	],
 	'OPTIONAL_ARGUMENT_LIST': [
 		['SYMBOL_COMMA__PRUNE', 'ARGUMENT_LIST_AFTER_FIRST'],
