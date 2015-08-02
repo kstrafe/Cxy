@@ -2103,6 +2103,21 @@ allowed, this will just override the original declaration.
 to ignore const fields. Normally we'd need to create a function or constructor to
 construct a non-const version, return it, and set it. This just obfuscates stuff.
 
+Example:
+
+	var {
+		32u _my_number;
+		8s __max_size;
+	}
+
+	(: this ) doStuff
+	{
+		var {
+			_my_number = 100;
+			__max_size = 0;
+		}
+	}
+
 
 ## Concepts ##
 *Description*: How can templates ensure that correct types are given?
