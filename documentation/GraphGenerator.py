@@ -24,11 +24,13 @@ import re
 
 
 pure_subtrees = {
-		'code/codegenerator',
-		'code/treebuilder',
-		'code/treebuilder/parser',
-		'code/treebuilder/parser/Parser.cpp',
-		'code/treepruner',
+		'code/ast',
+		'code/ast/tb/lexer',
+		'code/ast/tb',
+		'code/ast/tb/parser',
+		'code/ast/tb/parser/Parser.cpp',
+		'code/ast/tbl',
+		'code/ast/tp',
 
 		# Protocols
 		'protocols',
@@ -40,8 +42,15 @@ pure_subtrees = {
 		'protocols/ParseReturn.hpp',
 		'protocols/Token.hpp',
 		'protocols/TokenType.hpp',
-}
 
+		# Symbols
+		'sym/Entry.cpp',
+		'sym/Entry.hpp',
+		'sym/Module.cpp',
+		'sym/Module.hpp',
+		'sym/SymbolTable.cpp',
+		'sym/SymbolTable.hpp',
+}
 
 uses_global = {
 
@@ -84,7 +93,7 @@ if __name__ == '__main__':
 		graph.add_vertex(name='Unnamed-Language')
 
 		purity = impure
-		directories = ['code', 'libraries', 'protocols']
+		directories = ['code', 'libraries', 'protocols', 'sym']
 
 		for directory in directories:
 
