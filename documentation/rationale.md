@@ -492,6 +492,20 @@ The nice thing about this is that we (humans) can quickly scout the code for
 declarations. Especially when var is highlighted with some semi-obnoxious color.
 
 ===
+=== Kevin R. Stravers -- 02/08/2015
+
+The newly added concepts conflict somewhat with field declarations in that the first
+token is the ClassName. To rememdy this, var will also be used for fields.
+
+A simplifcation can be made. Instead of redundantly specifying var, we can allow
+
+	var {
+		MyType my_type(arg_: 10);
+		32u a_number;
+		sml.String uri_string;
+	}
+
+===
 
 *Conclusion*:
 var <:type:> <:identifier:> <:optional_initialization:> ;
