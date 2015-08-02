@@ -1969,3 +1969,37 @@ First, let's write some code in UL that we port from the C++ SFML library.
 
 I'm not sure about the syntax of where and how the type is specified. Will have
 to think about that.
+Think about type-inference.
+
+	var x_ = sml.String;
+
+This is the declaration form that was discarded at first. What's nice is that it
+also works on non-type declarations as type names:
+
+	var x_ = y_.y.Obj.getString()~str_.sml.String;
+
+You can infer from the right side what the type of x_ will be just by looking at
+the type assertion.
+
+Okay so, there is a distinction to be made. Variables declared locally can easily
+be found and haven't shown that much of a pain in other languages. What's not easy
+to find out are the input or return parameter types.
+
+You know, it's 7 AM and I've been sitting here all night thinking about this bullshit.
+I've gotta tell ya, honestly, from my own experience, this isn't actually a problem.
+The core of any problem is in the dependencies. In C++ there may be typedefs,
+shadowing, and define shenanigans at work. That causes ambiguous names to pop up.
+The reason types are hard to track is just that. They're hard to even find.
+In UL they're easy to find. Check the function scope, is it defined somewhere? No?
+Check the functions' arguments. No? Check the class declaration or the class that
+is referred to.
+
+	sml.String // Okay, inside sml/String.tul
+	a_ // Must be locally defined somewhere in the method
+	this.a_ // A field of the current class
+	Class.a_ // Defined as a global/glocal inside Class (granted)
+
+Yeah, so finding the type is going to be a non-issue. Even if it is an issue you're
+probably having a function that's too big. Break it up.
+
+
