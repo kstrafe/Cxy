@@ -2002,4 +2002,111 @@ is referred to.
 Yeah, so finding the type is going to be a non-issue. Even if it is an issue you're
 probably having a function that's too big. Break it up.
 
+*Conclusion*: This entry is rejected for being detrimental and obfuscating.
+
+
+## Access Specifiers ##
+*Description*: How is data in a class object hidden?
+*Discussion*: Many languages use the public/private/protected idiom. This document
+has been using them for a while, but I think it can now be replaced by a lexer rule.
+The rule can be simple:
+
+	any_name // is public
+	_any_name // is restricted
+	__any_name // is private
+
+	anyName // is public
+	_anyName // is restricted
+	__anyName // is private
+
+The same lexing rules apply for the rest of the lexeme. What is considered special
+are the starting underscores. This is in line with common conventions in languages
+without data hiding methods. Instead of introducting verbose keyword, we can store
+the data along the name. The following was previously utilized
+
+	public any_name
+	restricted any_name
+	private any_name
+
+What's interesting is that we can question whether restricted is really needed...
+Imagine the following class.
+
+	32u __my_number;
+	const ptr const 32u my_num;
+
+	(: this ) ClassName
+	{
+		this.my_num = $$this.__my_number;
+	}
+
+The above forced my_num to be public, referring to __my_number by pointer. The weakness
+of that is that we need to assign a pointer. Pointers aren't nice to work with here.
+It's probably okay to allow restricted variables to avoid the horrible boilerplate.
+
+*Conclusion*: Use leading underscores to declare access mode.
+
+
+## Constructor Initialization ##
+*Description*: The constructor needs to initialize variables. Some of the class's variables may
+be const. This does not allow any modification. How is this solved?
+*Discussion*: Some languages decided to remove const (java), others use a separate
+mechanism for invoking variables
+
+	// C++
+	ClassName::ClassName()
+	:
+		member1(),
+		member2()
+	{
+		// code
+	}
+
+I think C++'s way of doing it is ugly. It works very well, but it's just too ugly.
+You know what? Why not go a little flexible here? Why not state that the constructor
+has a special privilege of being able to assign to const fields? The problem is that
+composing classes may invoke the standard constructor. Then, a new entity is assigned.
+This is rather useless. It wastes resources and is ugly. Here is an example.
+
+	const cl.MyClass my_class;
+
+	(: this ) CurrentClass
+	{
+		this.my_class = cl.MyClass(arg_: 300);
+	}
+
+This causes two instantiations of the object my_class. That's raher annoying. How
+is this avoided? As stated before, the C++-like syntax is to be avoided due to cleanliness
+reasons. I don't want to introduce an "init" keyword just to initialize a field.
+The above example can easily be optimized, but I suppose it feels hacky to anyone
+writing this way. The nice thing about the above is that it does not require any
+more language constructs.
+
+As long as the module (class) is pure, the first initialization can be optimized
+out. You know what, var declarations can be used! Since variable shadowing is not
+allowed, this will just override the original declaration.
+
+*Conclusion*: Use `var` to override constructors of fields. Allow the constructor
+to ignore const fields. Normally we'd need to create a function or constructor to
+construct a non-const version, return it, and set it. This just obfuscates stuff.
+
+
+## Concepts ##
+*Description*: How can templates ensure that correct types are given?
+*Discussion*: An initial idea is to let the compiler catch any errors. The requirements
+are not immediately apparent to the programmer using a class. Imagine a vector class
+The programmer can see the top of it, but it will be difficult to infer what is required.
+
+Suppose we allow concepts to exist. A proposal is very simple. Given we have granted
+classes, we can simply add concepts to the top of the class file.
+
+	Type has (1u is_less : this, ref Type cmp_to) <;
+
+There is something very appealing about this. It essentially forces var in the outer
+scope as well (it used to be inside the function only). In addition, when a programmer
+sees this, he will know the requirements of Type. Don't forget that the compiler
+can do some important type checking as well. That is really useful. Finally, the
+information given in the concepts give us all the required template parameters.
+
+*Conclusion*: Concepts are to be forced for templates. They are of the form
+	<type> has <signature> <name>;
 
