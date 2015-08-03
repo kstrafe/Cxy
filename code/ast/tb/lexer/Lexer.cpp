@@ -137,6 +137,53 @@ void Lexer::identifyToken(protocols::Token &input_token)
 	if (has_trailing_underscores())
 		if (input_token.token_type == TokenType::IDENTIFIER_PACKAGE)
 			input_token.token_type = TokenType::IDENTIFIER_VARIABLE;
+
+	/*
+	switch (left_underscores)
+	{
+		default: break;
+		case 1:
+			switch (input_token.token_type)
+			{
+				case TokenType::IDENTIFIER_VARIABLE: input_token.token_type = TokenType::IDENTIFIER_VARIABLE_RESTRICTED;
+				case TokenType::IDENTIFIER_SUBROUTINE: input_token.token_type = TokenType::IDENTIFIER_SUBROUTINE_RESTRICTED;
+				default: break;
+			}
+		case 2:
+			switch (input_token.token_type)
+			{
+				case TokenType::IDENTIFIER_VARIABLE: input_token.token_type = TokenType::IDENTIFIER_VARIABLE_PRIVATE;
+				case TokenType::IDENTIFIER_SUBROUTINE: input_token.token_type = TokenType::IDENTIFIER_SUBROUTINE_PRIVATE;
+				default: break;
+			}
+	}
+	switch (right_underscores)
+	{
+		default: break;
+		case 1:
+			switch (input_token.token_type)
+			{
+				case TokenType::IDENTIFIER_VARIABLE: input_token.token_type = TokenType::IDENTIFIER_VARIABLE_GLOCAL;
+				case TokenType::IDENTIFIER_SUBROUTINE: input_token.token_type = TokenType::IDENTIFIER_SUBROUTINE_GLOCAL;
+				case TokenType::IDENTIFIER_VARIABLE_RESTRICTED: input_token.token_type = TokenType::IDENTIFIER_VARIABLE_RESTRICTED_GLOCAL;
+				case TokenType::IDENTIFIER_SUBROUTINE_RESTRICTED: input_token.token_type = TokenType::IDENTIFIER_SUBROUTINE_RESTRICTED_GLOCAL;
+				case TokenType::IDENTIFIER_VARIABLE_PRIVATE: input_token.token_type = TokenType::IDENTIFIER_VARIABLE_PRIVATE_GLOCAL;
+				case TokenType::IDENTIFIER_SUBROUTINE_PRIVATE: input_token.token_type = TokenType::IDENTIFIER_SUBROUTINE_PRIVATE_GLOCAL;
+				default: break;
+			}
+		case 2:
+			switch (input_token.token_type)
+			{
+				case TokenType::IDENTIFIER_VARIABLE: input_token.token_type = TokenType::IDENTIFIER_VARIABLE_GLOBAL;
+				case TokenType::IDENTIFIER_SUBROUTINE: input_token.token_type = TokenType::IDENTIFIER_SUBROUTINE_GLOBAL;
+				case TokenType::IDENTIFIER_VARIABLE_RESTRICTED: input_token.token_type = TokenType::IDENTIFIER_VARIABLE_RESTRICTED_GLOBAL;
+				case TokenType::IDENTIFIER_SUBROUTINE_RESTRICTED: input_token.token_type = TokenType::IDENTIFIER_SUBROUTINE_RESTRICTED_GLOBAL;
+				case TokenType::IDENTIFIER_VARIABLE_PRIVATE: input_token.token_type = TokenType::IDENTIFIER_VARIABLE_PRIVATE_GLOBAL;
+				case TokenType::IDENTIFIER_SUBROUTINE_PRIVATE: input_token.token_type = TokenType::IDENTIFIER_SUBROUTINE_PRIVATE_GLOBAL;
+				default: break;
+			}
+	}
+	*/
 }
 
 
