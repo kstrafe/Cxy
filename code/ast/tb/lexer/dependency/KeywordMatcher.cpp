@@ -23,12 +23,7 @@ namespace tul { namespace dependency {
 protocols::TokenType KeywordMatcher::getKeyword(const std::string &lexeme)
 {
     using namespace protocols;
-    if (lexeme == "restricted") return TokenType::KEYWORD_RESTRICTED;
-    else if (lexeme == "private") return TokenType::KEYWORD_PRIVATE;
-    else if (lexeme == "global") return TokenType::KEYWORD_GLOBAL;
-    else if (lexeme == "glocal") return TokenType::KEYWORD_GLOCAL;
-    else if (lexeme == "public") return TokenType::KEYWORD_PUBLIC;
-    else if (lexeme == "return") return TokenType::KEYWORD_RETURN;
+    if (lexeme == "return") return TokenType::KEYWORD_RETURN;
     else if (lexeme == "static") return TokenType::KEYWORD_STATIC;
     else if (lexeme == "const") return TokenType::KEYWORD_CONST;
     else if (lexeme == "defer") return TokenType::KEYWORD_DEFER;

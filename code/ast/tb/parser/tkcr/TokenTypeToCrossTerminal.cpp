@@ -45,18 +45,13 @@ protocols::CrossTerminal TokenTypeToCrossTerminal::convertToCrossTerminal(protoc
         case protocols::TokenType::KEYWORD_DO: return protocols::CrossTerminal::KEYWORD_DO;
         case protocols::TokenType::KEYWORD_ELSE: return protocols::CrossTerminal::KEYWORD_ELSE;
         case protocols::TokenType::KEYWORD_FOR: return protocols::CrossTerminal::KEYWORD_FOR;
-        case protocols::TokenType::KEYWORD_GLOBAL: return protocols::CrossTerminal::KEYWORD_GLOBAL;
-        case protocols::TokenType::KEYWORD_GLOCAL: return protocols::CrossTerminal::KEYWORD_GLOCAL;
         case protocols::TokenType::KEYWORD_GOTO: return protocols::CrossTerminal::KEYWORD_GOTO;
         case protocols::TokenType::KEYWORD_HACK: return protocols::CrossTerminal::KEYWORD_HACK;
         case protocols::TokenType::KEYWORD_IF: return protocols::CrossTerminal::KEYWORD_IF;
         case protocols::TokenType::KEYWORD_LABEL: return protocols::CrossTerminal::KEYWORD_LABEL;
-        case protocols::TokenType::KEYWORD_PRIVATE: return protocols::CrossTerminal::KEYWORD_PRIVATE;
         case protocols::TokenType::KEYWORD_PTR: return protocols::CrossTerminal::KEYWORD_PTR;
-        case protocols::TokenType::KEYWORD_PUBLIC: return protocols::CrossTerminal::KEYWORD_PUBLIC;
         case protocols::TokenType::KEYWORD_PURE: return protocols::CrossTerminal::KEYWORD_PURE;
         case protocols::TokenType::KEYWORD_REF: return protocols::CrossTerminal::KEYWORD_REF;
-        case protocols::TokenType::KEYWORD_RESTRICTED: return protocols::CrossTerminal::KEYWORD_RESTRICTED;
         case protocols::TokenType::KEYWORD_RETURN: return protocols::CrossTerminal::KEYWORD_RETURN;
         case protocols::TokenType::KEYWORD_STATIC: return protocols::CrossTerminal::KEYWORD_STATIC;
         case protocols::TokenType::KEYWORD_VAR: return protocols::CrossTerminal::KEYWORD_VAR;

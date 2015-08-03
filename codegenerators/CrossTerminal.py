@@ -53,28 +53,11 @@ import dependency.Prepend
 productions = {
 ################################################################################
 	'ENTER': [
-		['ACCESS_SPECIFICATION', 'DECL_OR_FUNC'],
-		[],
-	],
-################################################################################
-	'ACCESS_SPECIFICATION': [
-		['ACCESS_SPECIFIER', 'OBJECT_ACCESS_SPECIFIER']
-	],
-	'DECL_OR_FUNC': [
 		['DATA_DECLARATION', 'SYMBOL_SEMICOLON__PRUNE', 'ENTER'],
 		['FUNCTION_DEFINITION', 'FUNCTION_LIST'],
-	],
-################################################################################
-	'ACCESS_SPECIFIER': [
-		['GLOBAL'],
-		['GLOCAL'],
 		[]
 	],
-	'OBJECT_ACCESS_SPECIFIER': [
-		['PRIVATE'],
-		['PUBLIC'],
-		['RESTRICTED'],
-	],
+################################################################################
 	'DATA_DECLARATION': [
 		['TYPE', 'IDENTIFIER_VARIABLE', 'OPTIONAL_ASSIGNMENT', 'OPTIONAL_DATA_DECLARATION'],
 	],
@@ -82,28 +65,13 @@ productions = {
 		['FUNCTION_SIGNATURE', 'IDENTIFIER_SUBROUTINE', 'GROUPER_LEFT_BRACE', 'STATEMENT_LIST', 'GROUPER_RIGHT_BRACE']
 	],
 	'FUNCTION_LIST': [
-		['ACCESS_SPECIFICATION', 'FUNCTION_DEFINITION', 'FUNCTION_LIST'],
+		['FUNCTION_DEFINITION', 'FUNCTION_LIST'],
 		[]
 	],
 ################################################################################
-	'GLOBAL': [
-		['KEYWORD_GLOBAL']
-	],
-	'GLOCAL': [
-		['KEYWORD_GLOCAL']
-	],
-	'PRIVATE': [
-		['KEYWORD_PRIVATE']
-	],
-	'PUBLIC': [
-		['KEYWORD_PUBLIC']
-	],
-	'RESTRICTED': [
-		['KEYWORD_RESTRICTED']
-	],
 	'FUNCTION_SIGNATURE': [
 		['GROUPER_LEFT_PARENTHESIS', 'ARGUMENT_LIST', 'SYMBOL_COLON__PRUNE', 'ARGUMENT_LIST', 'OPTIONAL_ATTRIBUTE_LIST', 'GROUPER_RIGHT_PARENTHESIS'],
-	],
+		],
 	'STATEMENT_LIST': [
 		['NO_SEMICOLON_STATEMENT', 'STATEMENT_LIST'],
 		['STATEMENT', 'SYMBOL_SEMICOLON__PRUNE', 'STATEMENT_LIST'],

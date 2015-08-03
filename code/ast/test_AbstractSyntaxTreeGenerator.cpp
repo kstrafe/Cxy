@@ -61,39 +61,42 @@ TEST_CASE("AbstractSyntaxTreeGenerator must validate the grammar.", "[test-Abstr
 {
 
 	REQUIRE(validate(R"(
-		public (:) enterProgram
+		(:) enterProgram
 		{
 			sys.Std.printOut(str_: "Hello World!");
 			sys.Std.printErr(str_: "Hello Error!");
 			sys.Std.printOut(str_: sys.Std.readString()~string_);
 		}
 
-		private (32u a_ : 32u b_) someFunction
+		(32u a_ : 32u b_) someFunction
 		{
 			return a_: b_;
 		}
 	)"));
 
 	REQUIRE(validate(R"(
-		global public 32u a_ = 3, b_ = 100;
-		public ptr (sml.String ret_ : sml.String inp_) ptr_2_fun;
+		32u a_ = 3, b_ = 100;
+		ptr (sml.String ret_ : sml.String inp_) ptr_2_fun;
 
-		public (:) enterProgram
+		(:) enterProgram
 		{
 			var 64s some_64s; // Allocate on the stack
 			var sml.String some_string;
 		}
 
-		private (32u a_, d_, my.Class x_: 32u b_, 64s c_, y_) someFunction
+		(32u a_, d_, my.Class x_: 32u b_, 64s c_, y_) someFunction
 		{
 			var 64s some_64s;
 			var sml.String some_string;
 		}
 	)"));
 	REQUIRE(validate(R"(
-		public (:(:) a_) doStuff
-		{
-
-		}
+		(: ((:) b_ :) a_) doStuff
+		{}
 	)"));
+	REQUIRE(validate(R"(
+		(:) doStuff
+		{}
+	)"));
+
 }

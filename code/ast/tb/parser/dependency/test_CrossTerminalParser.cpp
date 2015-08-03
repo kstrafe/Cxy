@@ -39,32 +39,26 @@ TEST_CASE("Test cross-terminal output", "[test-CrossTerminalParser]")
 	std::vector<CrossTerminal> input_token_types;
 
 	#define addT(name) input_token_types.emplace_back(CrossTerminal::name)
-		addT(KEYWORD_PRIVATE);
 		addT(IDENTIFIER_CLASS);
 		addT(IDENTIFIER_VARIABLE);
 		addT(SYMBOL_SEMICOLON__PRUNE);
 
-		addT(KEYWORD_PRIVATE);
 		addT(IDENTIFIER_CLASS);
 		addT(IDENTIFIER_VARIABLE);
 		addT(SYMBOL_SEMICOLON__PRUNE);
 
-		addT(KEYWORD_PRIVATE);
 		addT(IDENTIFIER_CLASS);
 		addT(IDENTIFIER_VARIABLE);
 		addT(SYMBOL_SEMICOLON__PRUNE);
 
-		addT(KEYWORD_PRIVATE);
 		addT(IDENTIFIER_CLASS);
 		addT(IDENTIFIER_VARIABLE);
 		addT(SYMBOL_SEMICOLON__PRUNE);
 
-		addT(KEYWORD_RESTRICTED);
 		addT(IDENTIFIER_CLASS);
 		addT(IDENTIFIER_VARIABLE);
 		addT(SYMBOL_SEMICOLON__PRUNE);
 
-		addT(KEYWORD_PUBLIC);
 		addT(IDENTIFIER_CLASS);
 		addT(IDENTIFIER_VARIABLE);
 		addT(SYMBOL_SEMICOLON__PRUNE);
