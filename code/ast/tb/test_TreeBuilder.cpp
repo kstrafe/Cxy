@@ -150,18 +150,18 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 		REQUIRE(validate("(:) enterProgram { b_a_ = sampleFunction()~a_; }"));
 		REQUIRE(validate("(:) enterProgram { b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction()~a_ - another_identifier | \"Cool m8\"; }"));
 		REQUIRE(validate(R"(
-					(:) enterProgram
-					{
-						b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction()~a_ - another_identifier | "Cool m8";
-						q_a_d = 100 && 10 * b_ + 5 / 3 * sampleFunction()~a_ - another_identifier | "Cool m8";
-						b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction()~a_ - another_identifier | "Cool m8";
-						b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction()~a_ ^sampleFunction()~a_ - another_identifier | "Cool m8";
-						var Type b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction()~a_ ^sampleFunction()~a_ - another_identifier | "Cool m8";
-						var 800u b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction()~a_ ^sampleFunction()~a_ - another_identifier | "Cool m8";
-						var 8s b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction()~a_ ^sampleFunction()~a_ - another_identifier | "Cool m8";
-						var AnotherClassName b_a_ = 100 > 5 && 10 * b_ + 5 / 3 * sampleFunction()~a_ ^sampleFunction()~a_ - another_identifier | "Cool m8";
-						var AnotherClassName b_a_ = when (a_) b_ else c_;
-					}
+			(:) enterProgram
+			{
+				b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction()~a_ - another_identifier | "Cool m8";
+				q_a_d = 100 && 10 * b_ + 5 / 3 * sampleFunction()~a_ - another_identifier | "Cool m8";
+				b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction()~a_ - another_identifier | "Cool m8";
+				b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction()~a_ ^sampleFunction()~a_ - another_identifier | "Cool m8";
+				var Type b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction()~a_ ^sampleFunction()~a_ - another_identifier | "Cool m8";
+				var 800u b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction()~a_ ^sampleFunction()~a_ - another_identifier | "Cool m8";
+				var 8s b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction()~a_ ^sampleFunction()~a_ - another_identifier | "Cool m8";
+				var AnotherClassName b_a_ = 100 > 5 && 10 * b_ + 5 / 3 * sampleFunction()~a_ ^sampleFunction()~a_ - another_identifier | "Cool m8";
+				var AnotherClassName b_a_ = when (a_) b_ else c_;
+			}
 		)"));
 		REQUIRE(false == validate("(:) enterProgram { var const ClassName ", false));
 		REQUIRE(validate("(:) enterProgram { var const ptr ClassName alpha_; }"));
@@ -172,20 +172,20 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 	SECTION("A class using different statement types")
 	{
 		REQUIRE(validate(R"(
-					(:) enterProgram
+			(:) _enterProgram
+			{
+				var 32u max_ = 1000;
+				var 32u counter_ = 0;
+				while (counter_ < 1000)
+				{
+					if (counter_ > 500 + 20)
+					{ printSomething(); }
+					for (const 33s cuda_ = 10; cuda_ < 20; ++cuda_; --cuda_;)
 					{
-						var 32u max_ = 1000;
-						var 32u counter_ = 0;
-						while (counter_ < 1000)
-						{
-							if (counter_ > 500 + 20)
-							{ printSomething(); }
-							for (const 33s cuda_ = 10; cuda_ < 20; ++cuda_; --cuda_;)
-							{
-								++global_var;
-							}
-						}
+						++global_var;
 					}
+				}
+			}
 		)"));
 	}
 	////////////////////////////////////////////////////////////////////////////////
@@ -193,32 +193,32 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 	{
 		////////////////////////////////////////////////////////////
 		REQUIRE(validate(R"(
-					32u variable_ = 0;
+			32u variable_ = 0;
 
-					(:) enterProgram
-					{
-						++variable_;
-					}
+			(:) enterProgram
+			{
+				++variable_;
+			}
 
-					(:) performCalculation
-					{
-						--variable_;
-					}
+			(:) performCalculation
+			{
+				--variable_;
+			}
 		)"));
 		////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////
 		REQUIRE(validate(R"(
-						32u variable_ = 0;
+			32u variable_ = 0;
 
-						(:) enterProgram
-						{
-							++variable_;
-						}
+			(:) enterProgram
+			{
+				++variable_;
+			}
 
-						(:) performCalculation
-						{
-							--variable_;
-						}
+			(:) performCalculation
+			{
+				--variable_;
+			}
 		)"));
 		////////////////////////////////////////////////////////////
 	}
@@ -226,161 +226,161 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 	SECTION("Unary operators")
 	{
 		REQUIRE(validate(R"(
-						(:) enterProgram
-						{
-							var 32u a_ = 1000;
-							var ptr 32u b_ = $a_;
-						}
+			(:) enterProgram
+			{
+				var 32u a_ = 1000;
+				var ptr 32u b_ = $a_;
+			}
 		)"));
 		REQUIRE(validate(R"(
-						(:) enterProgram
-						{
-							var 32u a_ = 1000;
-							var ptr 32u b_ = $a_;
-							++@b_;
-						}
+			(:) enterProgram
+			{
+				var 32u a_ = 1000;
+				var ptr 32u b_ = $a_;
+				++@b_;
+			}
 		)"));
 		REQUIRE(validate(R"(
-						(:) enterProgram
-						{
-							var 32u a_ = 1000;
-							var ptr 32u b_ = $$a_;
-						}
+			(:) enterProgram
+			{
+				var 32u a_ = 1000;
+				var ptr 32u b_ = $$a_;
+			}
 		)"));
 		REQUIRE(validate(R"(
-						(:) enterProgram
-						{
-							var 32u a_ = 1000;
-							var ptr const 32u b_ = $$a_;
-						}
+			(:) enterProgram
+			{
+				var 32u a_ = 1000;
+				var ptr const 32u b_ = $$a_;
+			}
 		)"));
 		REQUIRE(validate(R"(
-						(:) enterProgram
-						{
-							var 32u a_ = 1000;
-							var ptr const 32u b_ = $$a_;
-							var 32u c_ = @@b_;
-						}
+			(:) enterProgram
+			{
+				var 32u a_ = 1000;
+				var ptr const 32u b_ = $$a_;
+				var 32u c_ = @@b_;
+			}
 		)"));
 		REQUIRE(validate(R"(
-						(:) enterProgram
-						{
-							var 32u a_ = 1000;
-							var ptr 32u b_ = $a_;
-							++ @b_;
-						}
+			(:) enterProgram
+			{
+				var 32u a_ = 1000;
+				var ptr 32u b_ = $a_;
+				++ @b_;
+			}
 		)"));
 		REQUIRE(validate(R"(
-						(:) enterProgram
-						{
-							var 32u a_ = 1000;
-							var ptr 32u b_ = $a_;
-							if (!! (@b_ > 100))
-							{
+			(:) enterProgram
+			{
+				var 32u a_ = 1000;
+				var ptr 32u b_ = $a_;
+				if (!! (@b_ > 100))
+				{
 
-							}
-						}
+				}
+			}
 		)"));
 		REQUIRE(validate(R"(
-						(:) enterProgram
-						{
-							var 32u a_ = 1000;
-							var ptr 32u b_ = $a_;
-							if (!! (@b_ > 100))
-							{
+			(:) enterProgram
+			{
+				var 32u a_ = 1000;
+				var ptr 32u b_ = $a_;
+				if (!! (@b_ > 100))
+				{
 
-							}
-						}
+				}
+			}
 
-						(: : pure) funcTion
-						{
+			(: : pure) funcTion
+			{
 
-						}
+			}
 		)"));
 		REQUIRE(validate(R"(
-						(:) enterProgram
-						{
-							var 32u a_ = 1000;
-							var ptr 32u b_ = $a_;
-							if (!! (@b_ > 100))
-							{
+			(:) enterProgram
+			{
+				var 32u a_ = 1000;
+				var ptr 32u b_ = $a_;
+				if (!! (@b_ > 100))
+				{
 
-							}
-						}
+				}
+			}
 
-						(: : const) strToInt
-						{}
+			(: : const) strToInt
+			{}
 
-						(: : const pure) funcTion
-						{}
+			(: : const pure) funcTion
+			{}
 
 
-						(:: const) strToInte
-						{}
+			(:: const) strToInte
+			{}
 
-						(:: const pure) funcTione
-						{}
+			(:: const pure) funcTione
+			{}
 		)"));
 	}
 	////////////////////////////////////////////////////////////
 	SECTION("Argument Lists")
 	{
 		REQUIRE(validate(R"(
-						(32u a_:32u b_) myFunction
-						{}
+			(32u a_:32u b_) myFunction
+			{}
 		)"));
 		REQUIRE(validate(R"(
-						(32u a_, Class b_:32u c_) myFunction
-						{}
+			(32u a_, Class b_:32u c_) myFunction
+			{}
 		)"));
 		REQUIRE(validate(R"(
-						(32u a_, Class b_ : Class c_, 32u d_) myFunction
-						{}
+			(32u a_, Class b_ : Class c_, 32u d_) myFunction
+			{}
 		)"));
 		REQUIRE(validate(R"(
-						(32u a_, b_ : Class c_, c2_, 32u d_, e_) myFunction
-						{}
+			(32u a_, b_ : Class c_, c2_, 32u d_, e_) myFunction
+			{}
 		)"));
 		REQUIRE(validate(R"(
-						([10, 32u] a_, b_ : Class c_, c2_, 32u d_, e_) myFunction
-						{}
+			([10, 32u] a_, b_ : Class c_, c2_, 32u d_, e_) myFunction
+			{}
 		)"));
 	}
 	////////////////////////////////////////////////////////////
 	SECTION("Array types")
 	{
 		REQUIRE(validate(R"(
-						(:) enterProgram
-						{
-							var [3, 32u] arr_;
-							arr_[1] = 200;
-						}
+			(:) enterProgram
+			{
+				var [3, 32u] arr_;
+				arr_[1] = 200;
+			}
 
-						(:) anotherFunction
-						{
-							var [2, [3, [4, [5, 8u]]]] szt_;
-						}
+			(:) anotherFunction
+			{
+				var [2, [3, [4, [5, 8u]]]] szt_;
+			}
 		)"));
 	}
 	////////////////////////////////////////////////////////////
 	SECTION("Putting variables in the middle is not allowed")
 	{
 		REQUIRE(false == validate(R"(
-						(:) enterProgram
-						{}
+			(:) enterProgram
+			{}
 
-						32u var_;
+			32u var_;
 		)", false));
 	}
 	////////////////////////////////////////////////////////////
 	SECTION("Type casting")
 	{
 		REQUIRE(validate(R"(
-					(:) enterProgram
-					{
-						var 32u a_ = 100;
-						var 16u b_ = cast(16u) { a_ } * 5;
-					}
+			(:) enterProgram
+			{
+				var 32u a_ = 100;
+				var 16u b_ = cast(16u) { a_ } * 5;
+			}
 		)"));
 	}
 	////////////////////////////////////////////////////////////

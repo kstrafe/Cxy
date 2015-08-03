@@ -59,7 +59,6 @@ namespace
 ////////////////////////////////////////////////////////////////////////////////
 TEST_CASE("AbstractSyntaxTreeGenerator must validate the grammar.", "[test-AbstractSyntaxTreeGenerator]")
 {
-
 	REQUIRE(validate(R"(
 		(:) enterProgram
 		{
@@ -90,10 +89,12 @@ TEST_CASE("AbstractSyntaxTreeGenerator must validate the grammar.", "[test-Abstr
 			var sml.String some_string;
 		}
 	)"));
+
 	REQUIRE(validate(R"(
 		(: ((:) b_ :) a_) doStuff
 		{}
 	)"));
+
 	REQUIRE(validate(R"(
 		(:) doStuff
 		{}
