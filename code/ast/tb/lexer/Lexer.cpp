@@ -21,6 +21,8 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 #include "protocols/Token.hpp"
 
 #include <algorithm>
+#include <cassert>
+#include <iostream>
 #include <limits>
 #include <vector>
 
@@ -101,14 +103,52 @@ protocols::TokenType Lexer::getKeyword(const std::string &test_lexeme) const
 	return dependency::KeywordMatcher::getKeyword(test_lexeme);
 }
 
+
 void Lexer::identifyToken(protocols::Token &input_token)
+{
+	using namespace protocols;
+	const std::string &a_lexeme = input_token.accompanying_lexeme;
+
+	std::size_t left_underscores = 0, right_underscores = 0;
+	for (char lex_char : a_lexeme)
+		if (lex_char == '_')
+			++left_underscores;
+		else
+			break;
+
+	for (std::size_t back_it = a_lexeme.size() - 1; back_it > 0; --back_it)
+		if (a_lexeme.at(back_it) == '_')
+			++right_underscores;
+		else
+			break;
+
+	auto has_trailing_underscores = [&]() -> bool { return left_underscores + right_underscores > 0; };
+	// Ensure there are at least +1 characters, the string can NOT be ____, or ____, or __, or _, _a__ is allowed
+	assert(a_lexeme.size() > left_underscores + right_underscores);
+	// Strip the trailing underscores
+	std::string substitution_lexeme = a_lexeme.substr(left_underscores, a_lexeme.size() - right_underscores - left_underscores);
+	protocols::Token dummy_token = input_token;
+	dummy_token.accompanying_lexeme = substitution_lexeme;
+	const std::string backup_string = a_lexeme;
+	identifyTokenAfterStrippingUnderscores(dummy_token);
+	input_token = dummy_token;
+	input_token.accompanying_lexeme = backup_string;
+
+	if (has_trailing_underscores())
+		if (input_token.token_type == TokenType::IDENTIFIER_PACKAGE)
+			input_token.token_type = TokenType::IDENTIFIER_VARIABLE;
+}
+
+
+void Lexer::identifyTokenAfterStrippingUnderscores(protocols::Token &input_token)
 {
 	using namespace protocols;
 
 	auto all_digit = [&input_token]() -> bool {return std::all_of(input_token.accompanying_lexeme.cbegin(), input_token.accompanying_lexeme.cend(), [](char in_character) -> bool {return std::isdigit(in_character);});};
-	auto all_lower = [&input_token]() -> bool {return std::all_of(input_token.accompanying_lexeme.cbegin(), input_token.accompanying_lexeme.cend(), [](char in_character) -> bool {return std::islower(in_character);});};
+	// auto all_lower = [&input_token]() -> bool {return std::all_of(input_token.accompanying_lexeme.cbegin(), input_token.accompanying_lexeme.cend(), [](char in_character) -> bool {return std::islower(in_character);});};
 	auto all_upper = [&input_token]() -> bool {return std::all_of(input_token.accompanying_lexeme.cbegin(), input_token.accompanying_lexeme.cend(), [](char in_character) -> bool {return std::isupper(in_character);});};
 
+	auto any_digit = [&input_token]() -> bool {return std::any_of(input_token.accompanying_lexeme.cbegin(), input_token.accompanying_lexeme.cend(), [](char in_character) -> bool {return std::isdigit(in_character);});};
 	auto any_lower = [&input_token]() -> bool {return std::any_of(input_token.accompanying_lexeme.cbegin(), input_token.accompanying_lexeme.cend(), [](char in_character) -> bool {return std::islower(in_character);});};
 	auto any_underscore = [&input_token]() -> bool {return std::any_of(input_token.accompanying_lexeme.cbegin(), input_token.accompanying_lexeme.cend(), [](char in_character) -> bool {return in_character == '_'; });};
 	auto any_upper = [&input_token]() -> bool {return std::any_of(input_token.accompanying_lexeme.cbegin(), input_token.accompanying_lexeme.cend(), [](char in_character) -> bool {return std::isupper(in_character);});};
@@ -123,7 +163,7 @@ void Lexer::identifyToken(protocols::Token &input_token)
 	auto is_function_identifier = [&]() -> bool {return begins_with_lowercase() && any_underscore() == false && ends_with_lowercase() && any_upper();};
 	auto is_keyword = [&]() -> bool {return getKeyword(input_token.accompanying_lexeme) != TokenType::UNIDENTIFIED;};
 	auto is_number_literal = [&]() -> bool {return all_digit();};
-	auto is_package_identifier = [&]() -> bool {return all_lower();};
+	auto is_package_identifier = [&]() -> bool {return any_underscore() == false && any_upper() == false && any_lower() && begins_with_lowercase();};
 	auto is_primitive_signed = [&]() -> bool {return input_token.accompanying_lexeme.back() == 's' && std::all_of(input_token.accompanying_lexeme.cbegin(), input_token.accompanying_lexeme.cend() - 1, [](char in_character) -> bool {return std::isdigit(in_character);});};
 	auto is_primitive_unsigned = [&]() -> bool {return input_token.accompanying_lexeme.back() == 'u' && std::all_of(input_token.accompanying_lexeme.cbegin(), input_token.accompanying_lexeme.cend() - 1, [](char in_character) -> bool {return std::isdigit(in_character);});};
 	auto is_variable_identifier = [&]() -> bool {return any_underscore() && any_upper() == false && any_lower();};

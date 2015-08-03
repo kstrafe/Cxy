@@ -294,4 +294,20 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
 		REQUIRE(token_stack.size() == iterator_);
 	}
 
+	SECTION("Ensure the correct identification of access specifiers")
+	{
+		using namespace tul::lexer;
+		Lexer lex_eng;
+		for (auto char_ : std::string("inp_a "))
+			lex_eng.insertCharacter(char_);
+
+		std::vector<tul::protocols::Token> &token_stack = lex_eng.getTokenStack();
+		REQUIRE(token_stack.size() == 1);
+		unsigned iterator_ = 0;
+		using namespace tul::protocols;
+		#define caze(type_name) REQUIRE(token_stack.at(iterator_++).token_type == TokenType::type_name)
+			caze(IDENTIFIER_VARIABLE);
+		#undef caze
+	}
+
 }

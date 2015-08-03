@@ -69,6 +69,7 @@ private:
 	protocols::TokenType getKeyword(const std::string &test_lexeme) const;
 
 	void identifyToken(protocols::Token &token);
+	void identifyTokenAfterStrippingUnderscores(protocols::Token &token);
 
 	protocols::EntryType typify (char val_);
 
