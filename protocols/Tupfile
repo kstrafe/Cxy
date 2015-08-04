@@ -1,0 +1,2 @@
+: foreach ConcreteSyntaxTree.cpp CrossTerminalTools.cpp |> gcc -std=c++11 -c %f -o %o |> %B.o {obj_files}
+: {obj_files} |> ar crs %o %f |> libprotocols.a
