@@ -1,3 +1,2 @@
 include_rules
-: TokenGenerator.cpp |> !ca |>
-: *.o |> !ar  |> liblocal.a
+: foreach *.cpp |> !ca |>
