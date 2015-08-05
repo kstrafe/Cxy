@@ -1,0 +1,15 @@
+find -name *.cpp | sed 's/\.\/\(.*\)\/\([^\/]*\)\.cpp/preload \1\//' | uniq > Tupfile
+
+(
+	printf ': foreach '
+	for i in $(find -name *.cpp); do
+		printf '%s ' $i
+	done
+	printf '%s' '|> g++ -std=c++11 -I . -c %f -o %o |> temp/%B.o'
+	echo
+	echo ': temp/* |> g++ %f -o %o |> binaries/test.elf'
+	echo ': binaries/test.elf |> ./%f |> '
+) >> Tupfile
+
+
+

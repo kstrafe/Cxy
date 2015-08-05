@@ -1,0 +1,19 @@
+preload code/ast/tp/
+preload code/ast/
+preload code/ast/tbl/
+preload code/ast/
+preload code/ast/tb/
+preload code/ast/tb/lexer/dependency/
+preload code/ast/tb/lexer/actgen/
+preload code/ast/tb/lexer/
+preload code/ast/tb/parser/dependency/
+preload code/ast/tb/parser/dependency/libraries/
+preload code/ast/tb/parser/
+preload code/ast/tb/parser/tkcr/
+preload code/ast/tb/parser/
+preload code/
+preload protocols/
+preload sym/
+: foreach ./code/ast/tp/TreePruner.cpp ./code/ast/tp/test_TreePruner.cpp ./code/ast/test_AbstractSyntaxTreeGenerator.cpp ./code/ast/tbl/TableBuilder.cpp ./code/ast/AbstractSyntaxTreeGenerator.cpp ./code/ast/tb/test_TreeBuilder.cpp ./code/ast/tb/TreeBuilder.cpp ./code/ast/tb/lexer/dependency/test_CommentIgnorer.cpp ./code/ast/tb/lexer/dependency/test_SymbolMatcher.cpp ./code/ast/tb/lexer/dependency/CommentBuffer.cpp ./code/ast/tb/lexer/dependency/test_PositionCounter.cpp ./code/ast/tb/lexer/dependency/PositionCounter.cpp ./code/ast/tb/lexer/dependency/test_KeywordMatcher.cpp ./code/ast/tb/lexer/dependency/KeywordMatcher.cpp ./code/ast/tb/lexer/dependency/CommentIgnorer.cpp ./code/ast/tb/lexer/dependency/SymbolMatcher.cpp ./code/ast/tb/lexer/actgen/test_TokenGenerator.cpp ./code/ast/tb/lexer/actgen/TokenGenerator.cpp ./code/ast/tb/lexer/Lexer.cpp ./code/ast/tb/lexer/test_ActionGenerator.cpp ./code/ast/tb/lexer/test_Lexer.cpp ./code/ast/tb/parser/dependency/test_CrossTerminalParser.cpp ./code/ast/tb/parser/dependency/CrossTerminalParser.cpp ./code/ast/tb/parser/dependency/libraries/test_LLOneProductionDeducer.cpp ./code/ast/tb/parser/test_Parser.cpp ./code/ast/tb/parser/tkcr/TokenTypeToCrossTerminal.cpp ./code/ast/tb/parser/Parser.cpp ./code/test.cpp ./protocols/ConcreteSyntaxTree.cpp ./protocols/CrossTerminalTools.cpp ./protocols/test_CrossTerminalTools.cpp ./sym/Entry.cpp ./sym/SymbolTable.cpp ./sym/Module.cpp |> g++ -std=c++11 -I . -c %f -o %o |> temp/%B.o
+: temp/* |> g++ %f -o %o |> binaries/test.elf
+: binaries/test.elf |> ./%f |> 
