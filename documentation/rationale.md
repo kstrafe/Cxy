@@ -2139,3 +2139,148 @@ information given in the concepts give us all the required template parameters.
 *Conclusion*: Concepts are to be forced for templates. They are of the form
 	<type> has <signature> <name>;
 
+
+## Namespaces and Variables ##
+*Description*: How are namespaces (packages) and variables separated?
+*Discussion*: This has always been an irk to me. Forcing the _ on variables
+just seems so scary. I've never really user that a lot. Although I think
+being clear in code, I think that maybe that is going too far.
+
+In any case, how can we distinguish between a package and a variable without
+distinguishing between their lexemes?
+
+lexeme.Lexeme will always make lexeme a package, since we can not access
+a class of a variable.
+lexeme.something will always make lexeme a variable, since we can not access
+a field of a package.
+lexeme.doSomething(), will also make lexeme a variable.
+
+Is there an ambiguous case? Function arguments will always be variables, and
+so we're left with variable declarations. In that case, it will always be a
+package name. There is, however, one ambiguity..
+
+	var sml.String a = sml.getString()~string;
+
+The question is: is "sml" after the '=' a package or a variable? Oh I guess I
+tricked myself! that sml is obviously a variable since the subsequent token is
+a method! Hmm... this seems to be a good case for allowing non _ variable names.
+
+Can we dynamically assign stuff or in any way or shape _use_ a package? As far
+as I know, a package can only be used as a prefix to a class. So in essense,
+we can make x.Yname a complete lexeme, instead of having three different lexemes...
+
+This change makes functions a LOT cleaner imho:
+
+	(:) enterProgram
+	{
+		sys.Out.printLine(string: "Hello world!");
+	}
+
+instead of:
+
+	(:) enterProgram
+	{
+		sys.Out.printLine(input_string: "Hello world!");
+	}
+
+In any case, the name is unambiguous. I also suspect that any input arguments can
+easily be looked up or remembered, such that it is up to the API provider to
+name the variables correctly, without forcing underscores. In fact, enough information
+comes from "printLine" and "string" to deduce that "We print this string as a line".
+
+Let's look at a few examples of the code getting cleaner:
+
+	(32u out : 32u in : pure) computeFibonacci
+	{
+		return out: if (in <= 1) in else computeFibonacci(in: in - 1)~out + computeFibonacci(in: in - 2)~out;
+	}
+
+	(300u out : 5u in : pure) computeFactorial
+	{
+		out = in;
+		--in;
+		while (in > 1)
+			out *= in;
+	}
+
+	(sml.String canonical_path : sml.String path : pure) foldRelativePaths
+	{
+		// Imagine we get the path "../abc/../qwerty/xyz"
+		// The second comment contains the state of the special-case path "../../"
+		var ref sml.String cap = $canonical_path;
+		var 64u start_at = 1;
+		loop
+		{
+			// Let '|' denote from, ".|./abc/../qwerty/xyz"
+			// ".|./../"
+			var 64u index: index, 1u found: found = cap.findString(from: start_at, substring: "../");
+
+			// We have the index as follows, "../abc/|../qwerty/xyz"
+			// "../|../"
+			if (found)
+			{
+				// We search backwards from, "../abc|/../qwerty/xyz"
+				// "..|/../"
+				var 64u parent_index, 1u parent_found = cap.findStringReverse(from: index - 1, character: '/');
+
+				if (parent_found == false)
+					// "|../../", we haven't found a '/', so we a set the start_at to "../.|./"
+					start_at = index + 1;
+				else
+					// Now the parent_index is given as "..|/abc|/qwerty/xyz", together with index - 1
+					cap.eraseIndex(from: parent_index, to: index - 1)
+			}
+			else
+				break;
+		}
+	}
+
+	// Without comments
+	(sml.String canonical_path : sml.String path : pure) foldRelativePaths
+	{
+		var ref sml.String cap = $canonical_path;
+		var 64u start_at = 1;
+		loop
+		{
+			var 64u index: index, 1u found: found = cap.findString(from: start_at, substring: "../");
+			if (found)
+			{
+				var 64u parent_index, 1u parent_found = cap.findStringReverse(from: index - 1, character: '/');
+				if (parent_found == false)
+					start_at = index + 1;
+				else
+					cap.eraseIndex(from: parent_index, to: index - 1)
+			}
+			else
+				break;
+		}
+	}
+
+
+
+Let's also allow automatic up-casting (from less information to more). Any non-existing information
+can be 0 bits.
+
+I really like the factorial code above. Notice there is no return variable? Yeah... that's planned.
+
+So whilst writing some code, I also got the idea of adding the "ifs" statement. It's really simple,
+but allows any expression to be added. It's just like a case, but does not use constant
+expressions. Hmm, why not then just allow a case with any expression?
+
+	switch (something)
+	{
+		case a + b * c: statements;
+		case u - d: statements;
+		...
+	}
+
+It's an interesting idea. It's shorthand for
+
+	if (something == a + b * c)
+		statements;
+	else if (something == u - d)
+		statements;
+
+That's a lot less typing and redundancy. I like it. In addition, if there are only constant
+values in the switch, we can optimize it to be a true switch... I like the idea. It makes
+coding a lot less tedious.
