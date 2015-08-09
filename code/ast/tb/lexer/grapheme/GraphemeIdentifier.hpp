@@ -17,6 +17,7 @@ along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include <cstdint>
 
+
 namespace tul { namespace grapheme {
 
 class GraphemeIdentifier
