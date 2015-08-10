@@ -15,8 +15,40 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
 */
+#include "../dependency/PositionCounter.hpp"
 #include "GraphemeIdentifier.hpp"
 #include <libraries/catch.hpp>
+
+
+namespace {
+
+tul::dependency::PositionCounter counter;
+std::size_t last_column = 1;
+std::size_t last_index = 0;
+union Codepoint
+{
+	char characters[4];
+	uint32_t code_point;
+} code_pt;
+
+uint32_t getCodepoint(char byte)
+{
+	counter.countCharacter(byte);
+	if (last_column != counter.getCurrentColumnNumber())
+	{
+		last_column = counter.getCurrentColumnNumber();
+		last_index = 0;
+		return code_pt.code_point;
+	}
+	else
+	{
+		code_pt.characters[last_index] = byte;
+		++last_index;
+	}
+	return 0;
+}
+
+}
 
 
 TEST_CASE("Ensure the correct function of the grapheme identifier")
