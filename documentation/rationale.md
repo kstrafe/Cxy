@@ -2329,4 +2329,9 @@ as if a is the return parameter. Even if there is a space.
 	g()~a;
 
 Where can void functions occur? Well, they can certainly not be in expressions.
-To be continued.
+The question is whether there is any ambiguity at all. There does not appear to
+be one. In C and C++, the ~ is the bitwise NOT operator. That is a useful operator,
+so it need a replacement operator in UL.
+
+*Conclusion*: Use any function name, as long as it does not collide with class
+names.
