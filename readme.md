@@ -1,13 +1,14 @@
 ## Unnamed Language ##
 
+
 [![Join the chat at https://gitter.im/BourgondAries/Unnamed-Language](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/BourgondAries/Unnamed-Language?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 # The Best. Language. Ever.
->We want to make _the best_ language, ever.  
-The cleanest. The nicest. The fastest. The most consistent. Language. Ever.  
-We want raw control with assembly, and ease of coding with scripting.  
-We want EXTREME power... with EXTREME templates.  
-This language will be. The best. When it is done, all other languages will disappear.  
+>We want to make _the best_ language, ever.
+The cleanest. The nicest. The fastest. The most consistent. Language. Ever.
+We want raw control with assembly, and ease of coding with scripting.
+We want EXTREME power... with EXTREME templates.
+This language will be. The best. When it is done, all other languages will disappear.
 It is: The Final Programming Language
 
 ## Why another language?
@@ -21,8 +22,8 @@ totally new project with ease!
 
 ## Have *AWESOME* ideas? Want to contribute?
 
-Send a pull request or send me an email at macocio [at] gmail [dot] com.  
-I'm also available on Skype as 'macocio'.  
+Send a pull request or send me an email at macocio [at] gmail [dot] com.
+I'm also available on Skype as 'macocio'.
 
 # How this project is organized
 
@@ -48,18 +49,18 @@ corresponding .hpp files) can ONLY depend/include on:
 This means that dependencies are kept clean and local. Spaghetti is avoided.
 
 ## Current status!
-The BEST language ever uses simple, consistent lexing and parsing.  
-Hand-written of course for crisp minimalism!  
+The BEST language ever uses simple, consistent lexing and parsing.
+Hand-written of course for crisp minimalism!
 Visual tools:
 What on earth DOES IT MEAN?!
-The green nodes are verified to be completely PURE subtrees.  
+The green nodes are verified to be completely PURE subtrees.
 Blue nodes are part of a pure subtree, and can later be verified or
-cleaned to be pure.  
-Red nodes are not pure.  
-Purity primer:  
+cleaned to be pure.
+Red nodes are not pure.
+Purity primer:
 ```
-functional purity: same input into function -> same output. Always  
+functional purity: same input into function -> same output. Always
 modular purity: object creation with same operations -> same object
 ```
-We can only guarantee purity if the object never uses a global.  
+We can only guarantee purity if the object never uses a global.
 ![Dependency Graph](http://puu.sh/j53Oe/f02ecda62c.png)
