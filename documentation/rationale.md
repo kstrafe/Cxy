@@ -2286,6 +2286,137 @@ values in the switch, we can optimize it to be a true switch... I like the idea.
 coding a lot less tedious.
 
 I'm digressing.
+
+== Fri 14 Aug 2015 03:47:34 AM CEST - Kevin Robert Stravers
+One thing that may be important to distinguish are enumeration constants. We know
+that the compiler changes these into numbers during compile time; however, are they
+fundamentally different from variables at all?
+
+For now, the following rules are established:
+
+	Class names: [A-Z][A-Za-z0-9]*
+	Variables: [a-z][a-z0-9]
+	Enumerations: [A-Z]+
+
+What if enumerations are implicit inside the class? I'll provide an example.
+
+	// MyClass.ul
+	var 32u SOME_NUMBER, ANOTHER, NUMBER, DECLARED, HERE;
+	var sml.String my_string;
+	var 8u MY, NICE, ENUMS;
+
+Now the `my_string` and other declarations should not affect the enumeration in the
+slightest. In fact, the enumeration will continue... or should the enumeration be
+limited to a single number that limits the enumerations? That's probably better...
+
+	// MyClass.ul
+	var 32u SOME_NUMBER, ANOTHER, NUMBER, DECLARED, HERE, MY, NICE, ENUMS;
+	var sml.String my_string;
+
+We can then align the enums to look like an enum declaration in other languages:
+
+	// MyClass.ul
+	var 32u
+		SOME_NUMBER,
+		ANOTHER,
+		NUMBER,
+		DECLARED,
+		HERE,
+		MY,
+		NICE,
+		ENUMS;
+
+The type of the enum is dependent on class here. How can we assure that an enum is
+correctly given to methods in their signatures? We could use 32u, but that would
+forgo type checking. What can be done is the following:
+
+	// MyClass.ul
+	var 32u
+		SOME_NUMBER;
+
+	(: MyClass.32u enum_variable) doSomething
+	{
+		doSomething(enum_variable: SOME_NUMBER);
+	}
+
+This could work, but only if we allow single enums per class... What about constants?
+It would be nice to have constants be recognizable by some upper case or special
+characterization, but it's probably not that important.
+
+One problem with this enum is that it uses 32 bits,... Maybe this is a good thing.
+It allows the user to tweak the type manually. What if we want to use this type,
+but we want to make it a different size on different platforms? Suppose some platforms
+just are more efficient processing a 16 bit value, and others more efficient with
+32 bit values? What about signedness? For this, a code generator can be used to
+substitute the type...
+
+	// MyClass.ul
+	var #EnumSize~
+		// Many more enums here
+		SOME_NUMBER;
+
+	(: MyClass.#EnumSize~ enum_variable) doSomething
+	{
+		doSomething(enum_variable: SOME_NUMBER);
+	}
+
+I really seem to enjoy this. For what reason? Well it's flexible, you know where
+EnumSize is located. In addition, wherever you pepper it in, it can easily be changed.
+
+	// EnumSize.ul
+	( sml.String ~ :)
+	{
+		return ~: "32u";
+	}
+
+That reminds me, the 'standard' return parameter ~, without a name. In fact, that
+is the name. It's a standard name. I like the idea. It also requires a standard input
+though. Why? Because it's cleaner. We don't need to guess simple functions' argument
+names. Functions such as computeFactorial, or computeFibonacci, or cos, sin, tan,..
+
+Imagine:
+
+	cos(0.3)~
+
+Should this extract the standard argument, or just
+
+	cos(0.3)
+
+?
+The latter looks cleaner. But it may confuse us about void returning functions. The
+latter is more consistent when it comes to "not naming stuff". We can allow a single
+unnamed parameter and return that we have to call ~. What if we don't call it anything?
+
+	( sml.String : sml.String ) normalizeString
+	{
+		// ... do some string operations
+		return :
+
+Ah, see the problem? There's no way to reference the input parameter! We can use a
+standard name instead, but would not that muddy the language? Calling it a symbol
+like ~ seems to be more productive. This way, the function implementation can actually
+access the in and out variables.
+
+Just had a shower thought.. the issue with ~ is that the current lexer doesn't really
+enjoy it, neither does it allow a clear separation between input and output. Instead,
+we can opt for something that's easier to recognize as well as more consistent:
+
+	(128u out : 32u in) fib
+	{
+		//...
+	}
+
+	(:) enter
+	{
+		sys.Out.print(fib(50));
+	}
+
+This solves the previous conundrum of allowing a single unnamed parameter! It still
+forces all parameters to be named, but allows a single unnamed parameter for convenience.
+This unnamed parameter binds to in as an argument, and out on the output argument!
+
+==
+
 *Conclusion*: Allow variables to have the same name form as packages.
 
 
