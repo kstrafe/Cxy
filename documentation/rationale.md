@@ -2256,8 +2256,6 @@ Let's look at a few examples of the code getting cleaner:
 		}
 	}
 
-
-
 Let's also allow automatic up-casting (from less information to more). Any non-existing information
 can be 0 bits.
 
