@@ -41,6 +41,7 @@ bool Lexer::insertCharacter(char character_)
 	return true;
 }
 
+
 bool Lexer::insertCharacterAfterComments(char character_)
 {
 	protocols::EntryType type_of_character = typify(character_);
@@ -93,10 +94,12 @@ bool Lexer::insertCharacterAfterComments(char character_)
 	return true;
 }
 
+
 std::vector<protocols::Token> &Lexer::getTokenStack()
 {
 	return token_generator.getTokenStack();
 }
+
 
 protocols::TokenType Lexer::getKeyword(const std::string &test_lexeme) const
 {
@@ -295,6 +298,7 @@ void Lexer::identifyTokenAfterStrippingUnderscores(protocols::Token &input_token
 		input_token.token_type = TokenType::UNIDENTIFIED;
 	}
 }
+
 
 protocols::EntryType Lexer::typify (char val_)
 {
