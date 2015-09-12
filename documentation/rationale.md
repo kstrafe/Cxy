@@ -2756,4 +2756,23 @@ This forces the programmer to always assign the returned variable to somethnig l
 	var type(x) z = x + " hello";
 
 I like this idea. It allows types to be somewhat transparent, but not fully. It also
-keeps everything readable.
+keeps everything readable. Not allowing expressions, but only simple names seems to
+be the way to go!
+
+Good, that's in order. What's next? Ah, casting! Let's give it a try. It'd rather
+be consistent...
+
+	var 43u a = 8796093022207;
+	var 32u b = cast[type(b)](a);
+	var 32u b = cast(type(b), a);
+
+	var type[a] copy = a;
+
+Hmm,... type[] seems better than (). Considering that appending it to a keyword is
+something that is evaluated during compile-time, whereas () is during run-time.
+
+	(::) enter
+	{
+		var 32u x = -1;
+		var 64u y = cast[type[x]](x);
+	}
