@@ -220,10 +220,9 @@ void Lexer::identifyTokenAfterStrippingUnderscores(protocols::Token &input_token
 
 	/*
 		ClassNamesAreLikeThisNoUnderScoreEndWithSmallCharacter
-		variable_names_are_like_this_must_have_underscore, _cool
-		functionNamesMustAlwaysHaveAtLeastOneSmallBeginningCharacter
-		ENUMERATIVENAMESLIKETHIS, THEY_ALLOW_UNDERSCORES
-		packagenamesarefullylowercasewithoutunderscore
+		ClassName.ENUMERATIVENAMESLIKETHIS, THEY_ALLOW_UNDERSCORES
+		Make enums be anonymous
+		Package vs object clashes in names? Shouldn't be a prob.
 	*/
 
 	if (input_token.entry_type == EntryType::ALPHA_DIGIT_OR_UNDERSCORE)
