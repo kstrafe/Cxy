@@ -2776,3 +2776,172 @@ something that is evaluated during compile-time, whereas () is during run-time.
 		var 32u x = -1;
 		var 64u y = cast[type[x]](x);
 	}
+
+
+## Lambda ##
+*Description*: Introduce the popular lambda functionality
+*Discussion*:
+Lambdas are incredibly useful to the programmer, hence their popularity.
+A lambda is a simple, inline function that can be assigned to a variable or
+used as an argument to a function. The current grammar does not appear to support
+this feature. Let's explore this.
+
+	(: (32u anything:) in :) fun
+	{
+	}
+
+	(::) enter
+	{
+		fun((32u anything:) { return 329; });
+	}
+
+The problem here is that it's impossible to discern the () from an expression or a
+function definition in the call to function. This requires a small change to the
+grammar.
+
+	def (: (32u anything:) in :) fun {
+		sys.Out.print(in());
+	}
+
+	def (::) enter {
+		fun(def (32u anything:) { return 329; });
+	}
+
+I admit it to not be the prettiest sight in programming. Especially the argument
+list not containing a def. Why is that? The idea for the def keyword is to accept
+a subtree of the form:
+
+	RunnableCode ::= def ( Returns : Arguments [: Modifiers] ) \{ Code \}
+
+In that case, def acts as a head for the runnable code definition. Whenever a ( is
+found after a "var", the ( will act as function type. Maybe var can be generalised
+in this specific case. I think this needs some more work...
+Maybe [] as in C++ will work. I like it. It's short and to the point, and even allows
+variable capturing. That's neato.
+
+Still, capturing stuff should not be required. Keeping the language somewhat simple
+is nice. Let's decide on a how to parse a type. For now, all "types" are parsed in
+the classical manner, where a ( denotes a function. A [ denotes an array. The grammar
+becomes
+
+	def Type name \{ Code \}
+
+What about "defining" types that are not functions?
+
+	def 32u name \{ 32553 \};
+
+That just seems retarded, we already have `var 32u name = 32553;`. Why not just use
+`var` instead?
+
+	var (::) myFunction = \{ Code \}
+
+I think this has been discussed previously. var is for variables. Names that change
+what they contain. It's equally valid though,.. except for one part. Code can't be
+assigned like this.
+
+	def (::) myFunction = \{ Code \}
+
+Could be the standard way of defining a piece of code. Even so, def without a function
+name can be used in an expression to signify lambdas. Anything better than def? Python
+uses it to define methods and free functions. `fun` is also possible. fnc fcn, dec,..
+I'm not sure what should be appropriate.
+
+	private {
+		var {
+			32u my_var = 3219;
+			() doNothing = def () {};
+		}
+	}
+
+	public {
+		def {
+			() enter {
+				sys.Out.print("Hello World");
+				doNothing = def () { sys.Out.print("Cool stuff!"); };
+				doNothing();
+			}
+		}
+	}
+
+Matlab with its "end x" comes to mind. This is something I've actually been thinking
+about due to the nature of C++. In C++, I often end up not really knowing which }
+ends which corresponding opening {. I might be tempted to try and use the "end" syntax.
+Not only does this make the program easier to read, but it prevents potentially nasty
+bugs as well.
+
+	private
+		var
+			32u my_var = 3219;
+			() doNothing = def () {};
+		end var
+	end private
+
+	public
+		def
+			() enter {
+				sys.Out.print("Hello World");
+				doNothing = def () { sys.Out.print("Cool stuff!"); };
+				doNothing();
+			}
+		end def
+	end public
+
+Ugh, this clashes with the niceties of the {}, because we can deduce whether a statement
+is a raw declaration or definition, or a set thereof:
+
+	var 32u x = 353489;
+	var { 32u y = 499049; 32s z = -42384; } // Ending semicolon superfluous
+
+So,.. ideally, the following is made:
+
+	granted String has {
+		def (1u out : String left, String right) > { return ...; }
+		var {
+			64s wow;
+		}
+	}
+
+	private { var {
+		32u control_number = 100300;
+	} }
+
+	public { def {
+		(::) enter {
+			sys.Out.print("Heey!");
+		}
+	} }
+
+The java rationale is against this, as the public/private... specifiers are hard to
+follow when there are wades of code between them. Then again, var is often short and
+very compact
+
+	var {
+		32u my_name_is = 942;
+		32u my_name_is = 942;
+		32u my_name_is = 942;
+		32u my_name_is = 942;
+		32u my_name_is = 942;
+		32u my_name_is = 942;
+		32u my_name_is = 942;
+		32u my_name_is = 942;
+		32u my_name_is = 942;
+		32u my_name_is = 942;
+		32u my_name_is = 942;
+		32u my_name_is = 942;
+		32u my_name_is = 942;
+		32u my_name_is = 942;
+		32u my_name_is = 942;
+		32u my_name_is = 942;
+		32u my_name_is = 942;
+		32u my_name_is = 942;
+		32u my_name_is = 942;
+		32u my_name_is = 942;
+		32u my_name_is = 942;
+	}
+
+This is manageable. So let's drop the def {} as well as the access specifiers. Seems
+like it would not be productive to use them.
+
+	public var type(name) some = case[type(name)](othername);
+
+	def
