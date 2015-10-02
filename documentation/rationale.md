@@ -3330,12 +3330,12 @@ uses other macros and/or builtins. So what are the builtins?
 	(bits number)                # Create a type of information of number bits.
 	(cast type object)           # Cast an object into a new one.
 	(const name)                 # Returns a const pointer of name.
+	(expand function args ...)   # Create a macro, returns code.
 	(function out name in code)  # Create a function.
 	(goto label-name)            # Jump to a label.
 	(hack code)                  # Insert compiler-specific code.
 	(if condition code)          # Conditional evaluation of code.
 	(label name)                 # Creates a label to jump to. Part of a scope, else nested while ambiguity.
-	(macro name in check code)   # Create a macro, returns code.
 	(scope code)                 # Scoping the code. This means that the end of the scope invokes destructors.
 	(var type name ...)          # Declare a scope-local variable.
 	[element ...]                # Array.
@@ -3439,4 +3439,21 @@ Common Lisp just uses () without a problem... Maybe I need to do so as well...
 
 	(my-macro (a > b is good) (derp herp))
 
+No macros need to be more powerful and generate arbitrary code, not just be vapid
+templates!
 
+	(macro my-macro grammar (
+		...
+	))
+
+Hold on... why not just use functions and invoke them specially?!
+
+	(function (string out) createParser (Grammar grammar) (
+		...  # Code to generate the code for a parser
+		(= out generated)
+	))
+
+	(@ createParser my-grammar)
+
+This also solves the issue of not being able to distinguish a function with a macro
+call! That's absolutely awesome. Though, @ is too cryptic, let's change it to "expand".
