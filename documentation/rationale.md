@@ -2945,3 +2945,498 @@ like it would not be productive to use them.
 	public var type(name) some = case[type(name)](othername);
 
 	def
+
+## As A Lisp ##
+*Description*: Why not make the language super simple? Like LISP.
+*Discussion*: It has crossed my mind multiple times to make the language be a lisp.
+After all, all that's really needed is basic text editing functionality. Once that's
+in place, one can issue commands to any compiler to compile object files if they do
+not already exist. The idea is to make the language simple and interpreted. This allows
+a lot more freedom, as well as being able to take dynamic control over the environment.
+
+	(scope (
+		(array (bits 32) 100 my_array)
+		(array (array (bits 64) 10) 20 name)
+		(var (bits 100) cool)
+		(++ cool)
+		(bits 32 name)
+		(set name 2034)
+		(++ name)
+		(for name (+ name 100) 1
+			{
+				(array.at my_array 23)
+			}
+		)
+	))
+
+Wow slow down. So far this looks neat and all, but what about reference semantics?
+In any case, should reference semantics be defined properly? Or should full referential
+transparency be put in place? For me - the C++ programmer - it seems natural to want
+some kind of reference system. Certainly, declaring a variable merely puts it in its
+scope's store. This means that the name solely refers to a location in the store.
+When we call a function, should we just pass the entire scope as a reference, and
+say that the parameters are the parts of the store that are accessible to the function,
+being aliased of course. Then, any name can just be an alias for another name.
+
+	(function [[array (Bits 32) string]] doSomething [[Bits 32 counter]] (
+		(= string (sml.Bits.toString counter))
+	))
+
+	(scope (
+		(var (bits 32) counter)
+		(set counter 0)
+		(doSomething counter)
+	))
+
+This is starting to look like something. Let [] denote array. It is shorthand for
+	(array '(a b c d))
+
+I don't really like the ' notation. It's ugly.
+
+The first array defines the returns, the second the inputs. The function registers
+these as simple elements of the array. So it adds 'doSomething' to the global scope.
+
+	doSomething
+		out: array (Bits 32) string
+		in: Bits 32 counter
+		code: ...
+
+Whenever doSomething is invoked, the global lookup can find it and actually invoke
+it. Now what's left is to make this concrete and consistent. Ideally, we have a turing
+machine with a global store. However, we still love demeter's law. So how is that
+put to use? Suppose we have the same folder structure as in the many previous examples.
+What does an actual class type return?
+
+	(@ sml String)
+
+is the type sml.String. I suppose a shorthand notation can be used such as: (sml-String)
+What is this object? Well, it can refer to the entire class. It just is the class.
+
+	(var (@ sml String) my_string)
+	(var sml-String my_string)
+
+Both are equivalent. The virtual machine can just see if sml/String is loaded. If
+it is not, it gets loaded. Else an ID is returned. What kind of ID? Well it has to
+refer to the appropriate type class. Whenever a manipulation is performed, the type
+is checked to be of the correct class.
+
+	(var sml-String my)
+	(sml-String-length my) // Returns a Bits 64 type
+
+Of course, a type constructor is useful
+
+	(var (Bits 50) integer)
+	(set integer 0)
+	(++ integer)
+
+Bits is just a class that takes an argument. That argument is also part of its type.
+How is its argument stored?
+
+I can't answer that. In order to do so, we need to look at an individual class and
+its instantiation.
+
+	(class MyClass [Bits 40 bitcount] [
+
+		(function [[]] addLots [[]] [
+
+		])
+		# Definition here
+	])
+
+On one hand, types are a nuisance, on the other, they're nice. The use for types is
+to make it unambiguous what input a function takes. Maybe it should be made optional.
+
+	(class MyClass [
+		((Bits 32) sum)
+		(= sum 0)
+		(function addStuff [
+			(+= sum (arg 0))
+		])
+	])
+
+	(MyClass myobject)
+	(addStruff myobject 100)
+	(addStruff myobject 50)
+	(print (myobject sum))
+
+This is equivalent to the following in C++:
+
+	class MyClass
+	{
+	public:
+		int sum = 0;
+		void addStuff(int arg)
+		{
+			sum += arg;
+		}
+	}
+
+	int main()
+	{
+		MyClass myobject;
+		myobject.addStuff(100);
+		myobject.addStuff(50);
+		std::cout << myobject.sum;
+	}
+
+What the lisp-like class contains is a name and an array of something. Every parenthesis
+evaluates into a single object, and hence a single element in the array. The first
+element is a variable declaration of sum.
+
+	(Type name) # Declaration of data
+	(Function ...) # Function invocation
+	(method object ...) # Method invocation
+
+Eh, not really a fan of the method one, seems like magic.
+
+	((. object method) ...)
+
+Seems somewhat more appropriate, but do we really bind the object to the method?
+Maybe (object method ...) is more appropriate, as the object acts like a function
+taking in any amount of arguments. The first argument is then returned.
+
+	((object method) 100)
+
+This seems to be able to scale very well, considering its simplicity.
+
+	(function . [
+		((object method) arg)
+	])
+
+I'm still uncertain about the semantics. It's nice to think of a class merely as a
+map that returns the argument's name. That seems very... clean. I like that. Now to
+look at pointers, references, etc... But wait, what about arguments and their declaration?
+
+Designing the store to be a hash-map could be interesting. Alas, things must be efficient.
+Efficiency is important. It always is. Ideally, the language should have the ability
+to be compiled into efficient platform specific binary code. This basically forces
+the explicit reference to types. Integers are important types. The initial idea is
+to introduce simple types that can easily be optimized as cpu registers. Types such
+as (bits 32) or (bits 64), even (bits n) where n is <= 64 would work, since we can
+allocate the smallest possible count of bytes (and use the smallest possible register
+to store the value). I'm still quite afraid that this will make the language more
+verbose and perhaps even ugly...
+
+	(function [[]] enter [[]] [
+
+	])
+
+Let's define a function. It's just a function. It returns something, and it gets something.
+Is it pure? Is it a method? Does it make sense to take in arrays of arrays as arguments?
+Well, multiple return values can exist. That is just practical. The same goes for
+multiple input variables. How will this look? Well first we need to look at how to
+declare a type. The simplest type is just a set of bits. They can act like any integer.
+
+	(function [(bits 32) (bits 64)] split [(bits 96)] [
+		# This function splits a 96 bit value into upper and lower parts.
+	])
+
+What's lacking are the names.
+
+	(function [(bits 32) lower (bits 64) upper] split [(bits 96) in] [
+		# This function splits a 96 bit value into upper and lower parts.
+	])
+
+Now, when bits are evaluated, all the compiler really sees is an array of [32 lower 64 upper].
+Of course, it has a different value for those 32 and 64, those merely denote a type.
+So now types are added. Good. So what about named parameters and returns?
+
+	(split 31209) # What does this return?
+
+The above can return the actual array. That however is quite inefficient. It would
+be better suited to be able to select which return you would like to extract.
+
+	(extract (split 31209) upper) # Here we extract the return argument.
+
+How do we extract both arguments?
+
+	(bits 32 my)
+	(bits 64 name)
+	(= my name (split 31209))
+
+We can just let = act as a pairwise assignment operator. This fits the model well.
+One thing I miss about this is that there are no named arguments. That really helps
+readability. Maybe the language can somehow support them. Ah! Let's try the following:
+
+	(split {in 31209} {otherarg 1328})
+
+By simply returning a tuple, the function split is able to identify the correct variables.
+Does {} create a tuple then? I'd rather avoid doing (tuple otherarg 1328), that's too
+verbose imho. I think we need to clear up how the function then interprets the array of
+code.
+
+	(= {lower my} {upper name} (split {in 3218}))
+
+Damn, that looks smooth! In essense: {} - tuple, [] - array, () - call. What about
+the tuple semantics? The variable names, will they just be put in there or what? My
+idea is to make the first lexeme never refer to another variable, but just be a string
+in and of itself.
+
+	{lower my}
+
+Really just means a tuple of {"lower" (reference my)}. So when the function = sees
+this tuple, it will make sure to assign the return variable "lower" to the reference
+given.
+
+	(function [(bits 108) out] factorial [(bits 5) in] [
+		(= out (coerce (type out) in))
+		(-- in)
+		(for in 1 (-1) it [
+			(*= out it)
+		])
+	])
+
+That's a basic factorial function. It computes the factorial recursively. It can be
+called by:
+
+	(factorial 32)
+
+Where "in" always allows one single unnamed argument. Otherwise:
+
+	(factorial {in 32})
+
+Also works.
+
+	(bits 108 myvar)
+	(= {out myvar} (factorial {in 32}))
+
+In this case, the following is equivalent.
+
+	(bits 108 myvar)
+	(= myvar (factorial 32))
+
+The for loop is just another function, taking in a few arguments, and then it's done!
+However, it's important to note that the for function takes in the current scope as
+well. For can thusly not be defined by any other function. It must be builtin.
+
+	(while (> out in) [
+		# Do something
+	])
+
+The while statement is a little more tricky. The major problem with it is that the
+boolean predicate is something that must be given and be re-evaluated at each iteration.
+To do this, we introduce lambdas.
+
+	(while ($ > out in) [
+		# Do something
+	])
+
+Lambdas are basically the following identity:
+
+	(($ op)) = (op)
+	op = ($ op)
+
+The lambda operator, $, creates returns a function. This way, while can just take
+in a function with already-bound variables to use. Maybe the entire array needs to
+be a lambda as well? You know, to avoid having to reference the same scope.
+
+	(function [(bits 108) out] factorial [(bits 5) in] [
+		(= out (coerce (type out) in))
+		(-- in)
+		(for in 1 -1 it ($
+			(*= out it)
+		))
+	])
+
+I'm not entirely sure about this. It would be nice to just clear up the connection
+to the scope. I need to take a walk... maybe that'll clear my head. Alright I'm back.
+I've thought about the problem and it appears to boil down to the fact that operators
+as ++ are in fact methods of the variable. Hence, they are able to edit the value.
+However, the method also takes in a reference to the value it is going to edit, thus
+ending in a loop of references. That train of thought doesn't hold very well.. So
+what's the deal?
+
+A name is just a name. It refers to a variable. `(var (bits 32) xy)`. `xy -> val`.
+xy is simply a pointer to a value. Writing `(print xy)` basically sends the pointer
+to val into print. The question is, should this be a ptr const? If it were, then we'd
+be safe to assume a casting in the following:
+
+	(-- (unconst xy))
+
+But this does not make sense, casting from const to non-const should be illegal.
+Hence, it should be the other way around. `xy` is a pointer, and that's all.
+
+	(var (bits 32) xy)
+	(= xy 100)
+	(-- xy)
+
+Sending it to a function taking in a const would be to cast the pointer:
+
+	(var (bits 32) xy)
+	(= xy 100)
+	(mycall {argname (const xy)})
+	(mycall2 (const xy))
+
+This will have to be forced, to make it obvious that a function does not modify the reference.
+What about implicit scope insertion? The for function should be able to handle it...
+Or is for really a construct rather than a function? The same would be applied to
+while. They're not functions, they're constructs. A function can not be applied to
+these entities. So how do we add these constructs into the language? Should they be
+in the language? Many functional languages have no such constructs. I think they [
+such constructs] can be incredibly useful. Make it a built-in function. Make it so
+that it takes the entire scope implicitly. What about lambda captures?
+($ op), will need to capture the actual operation and the pointers to the variables.
+
+	($ > value 100)
+
+can be considered the same as ($ > @0x33ff 100). It returns a function with preset
+arguments.
+
+	(var (bits 32) xy)
+	(= xy 0)
+	(for 0 100 1 it [
+
+	])
+
+In the same way, the class and function functions are also not really functions. They
+are... constructs. Theses 'functions' can access the global store. They can interact
+with the internals of the language itself. I don't think they can be emulated in the
+host language. The same can be said of defun in LISP, unless I know too little.
+
+	(while boolean-test code)
+
+	(label a)
+	(doSomething)
+	(if (predicate) (goto a))
+
+How can while be written as an if and a goto? In this case, we'd like the while to
+transform this code:
+
+	(function [] while [x y] [
+		(label x)
+		# Code here
+		(if y (goto x))
+	])
+
+Ideally, this would be what we call a macro. When called, it returns verbatim code.
+Its arguments are not evaluated. This avoids a lot of trouble.
+
+	(macro while condition code [
+		(scope
+			(label z)
+			(x)
+			(if y (goto z))
+		)
+	])
+
+Nice. This is our code generation. Well.. It's not runnable code. As in, the macro
+can't really run anything in a manner that's practical. To make that possible, I think
+it may be necessary to add a block of code to any macro that is able to check the
+input variables for validity. The good news about this stuff is that while does not
+need to concern itself with the global scope or the internal store. Instead, it only
+uses other macros and/or builtins. So what are the builtins?
+
+	# Operations
+	(bits number)                # Create a type of information of number bits.
+	(cast type object)           # Cast an object into a new one.
+	(const name)                 # Returns a const pointer of name.
+	(function out name in code)  # Create a function.
+	(goto label-name)            # Jump to a label.
+	(hack code)                  # Insert compiler-specific code.
+	(if condition code)          # Conditional evaluation of code.
+	(label name)                 # Creates a label to jump to. Part of a scope, else nested while ambiguity.
+	(macro name in check code)   # Create a macro, returns code.
+	(scope code)                 # Scoping the code. This means that the end of the scope invokes destructors.
+	(var type name ...)          # Declare a scope-local variable.
+	[element ...]                # Array.
+	{name reference}             # Single tuple declaration.
+
+	# Unary Operators
+	(++ object ...)              # Increment objects.
+	(- object)                   # Negate an object.
+	(-- object ...)              # Decrement an object.
+	(! object)                   # NOT an object.
+	(| object)                   # Absolute value of object.
+
+	# Binary operators
+	## Comparison
+	(== left right)              # Check left and right for equality.
+	(!= left right)              # Check left and right for equality.
+	(>= left right)              # Check if left is >= right.
+	(> left right)               # Check if left is > right.
+	(<= left right)              # Check if left is <= right.
+	(< left right)               # Check if left is < right.
+
+	## Computation
+	(= pair ...)                 # Copy an object to another.
+	(+ left right ...)           # Add two or more objects.
+	(+= object add ...)          # Add to an object.
+	(- left right ...)           # Subtract two or more objects.
+	(-= object subtract ...)     # Subtract from an object.
+	(* left right ...)           # Multiply objects.
+	(*= left right ...)          # Multiply and assign.
+	(/ left right ...)           # Divide objects.
+	(/= left right ...)          # Divide and assign.
+	(\ left right ...)           # Integer divide objects.
+	(\= left right ...)          # Integer divide and assign.
+	(% left right ...)           # Remainder.
+	(%= left right ...)          # Remainder and assign.
+	(^ base exponent ...)        # Exponentiate.
+	(^= base exponent ...)       # Exponentiate.
+
+Does a unary + make sense? I'm not sure. C++ has it. What I like about LISP is that
+you can have many items in the parameter list.
+
+	(-- a b c d)  # Decrement a, b, c, and d by one.
+
+That's incredibly helpful and shortens the code significantly:
+
+	(-- a)(-- b)(-- c)(-- d)
+
+I suppose operator \\ and // isn't very useful either. Dividing by oneself or by the
+unit of division (be it one or something). The same goes for operator `**`. This operator
+becomes ambiguous when contrasted with ++ and --. That's why I prefer the operator
+to be avoided. What about exponentiation? I like the idea to be able to write
+
+	(^ 2 3 2)
+
+This will evaluate to 512 due to the order of operations.
+Another difference from conventional languages is that the comparison operators >=
+and <= are swapped out for => and =<. The reason for this is because "Op=" is already
+used to assign a value. No let me put that back. We have == anyways. It's not a problem.
+
+For any =, and compound assignment operator, we return a reference to the left hand
+side:
+
+	(var (bits 32) name)
+	(= name 0)
+	(-- (+= name 1 2 3))
+
+This evaluates to (-- name), with name = 6, so we decrement name, and get 5. Sounds
+good. What about invoking macros? I'd prefer to use a different notation than () like
+is used for all functions and builtins. A question comes up: "What is code?". Can
+we denote code as ((?
+
+	(scope
+		(var (bits 32) counter max sum)
+		(= counter max sum 0 100 0)  # Assign 0 to counter, 100 to max
+		(label begin)
+		(+= sum counter)
+		(++ counter)
+		(if (< counter max) (goto begin))
+	)
+
+Scope can fill that role! That is really neat actually. What about verbatim strings?
+I mean, how does this work with macros?
+
+	(macro my-macro (a b c) (scope (if (> b c) (goto error)))
+		(a b c)
+	)
+
+Maybe it's appropriate to say that the macro keyword affects the way stuff is evaluated
+within. This makes sense, still, I'd like to see how I can make lists and all that.
+Common Lisp just uses () without a problem... Maybe I need to do so as well...
+
+	(macro my-macro (fragment code)
+		(if (< (length fragment) 30)
+			(fail "The length of the fragment should be bigger than 30")
+		)
+		(
+			(fragment)
+			(code)
+		)
+	)
+
+	(my-macro (a > b is good) (derp herp))
+
+
