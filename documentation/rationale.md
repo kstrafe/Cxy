@@ -3387,6 +3387,8 @@ uses other macros and/or builtins. So what are the builtins?
 	(^= base exponent ...)       # Exponentiate.
 	(<< shift bits)              # Shift left.
 	(>> shift bits)              # Shift right.
+	(&& bits ...)                # AND operator.
+	(|| bits ...)                # OR operator.
 
 Does a unary + make sense? I'm not sure. C++ has it. What I like about LISP is that
 you can have many items in the parameter list.
@@ -3870,3 +3872,38 @@ idea is to just use `(bits 8)` as a character.
 
 This means "" is just (array (bits 8)), which we can denote as (ptr (bits 8)) which
 is the same as 'string'. So we can just start callin' em strings instead!
+
+	(function [] setbit [(ptr (bits 256)) vec (bits 8) bitnum (bits 1) value)] (
+		(template intype [name] ((type (deref vec))))
+
+		(var (intype vec) razor)
+		(= razor 1)
+		(<<= razor bitnum)
+		(if value (
+			(|= (deref vec) razor)
+		) (
+			(var (intype vec) full)
+			(= full (intype vec) max))
+			(xor= razor full)
+			(&= (deref vec) razor)
+		)
+	))
+
+	(var (bits 256) mybits)
+	(= mybits 4328472398479)
+	(setbit (address mybits) 20 1)
+
+How can the above bit setter be turned into a generic template? Well, type is definitely
+a useful construct. Is it possible to make everything a template/macro using the hack
+statement? Imagine
+
+	(template if [condition code else] (
+		(hack (condition))
+		(hack (code))
+		(hack (else))
+	))
+
+Of course, hack needs to be able to parse stuff like (> x y), so I'm not sure how
+useful this is. I suppose new could be a hack. It doesn't really matter that much.
+
+
