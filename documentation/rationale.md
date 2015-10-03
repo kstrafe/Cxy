@@ -3905,5 +3905,75 @@ statement? Imagine
 
 Of course, hack needs to be able to parse stuff like (> x y), so I'm not sure how
 useful this is. I suppose new could be a hack. It doesn't really matter that much.
+Stuff like the following can however easily be defined:
 
+	(template print [item] (
+		(hack (+ "std::cout << """ (item) """;"))
+	))
 
+	(var (bits 64) mybits)
+	(= mybits 319231842378)
+
+	# The following are equivalent:
+	(hack (+ "std::cout << """ mybits """;"))
+	(print mybits)
+
+The problem with hack is knowing how the compiler works internally. To be able to
+generate correct code everywhere, we need to know the name and version of the compiler.
+This requires another primitive. (version) and (compiler). Version returning a x.y.z
+version string, and version returning a simple name. This allows your template to
+become a macro invocation:
+
+	(function [string out] 'print [string version string compiler string to_print] (
+		(if (&& (= version "1.2.7") (= compiler "ULC")) (
+			(= out
+				(+ "(hack ""std::cout << """ to_print """.toString();""")"  # std::cout << to_print.toString();
+			)
+		))
+	))
+
+	(template print [item] (
+		('print {version (version)} {compiler (compiler)} {to_print (item)})
+	))
+
+Note that (to_print) is evaluated as a string, such that the resuling C++ code may
+be like `std::cout << my_variable.toString();`. This is only valid if the compiler
+has specified all objects to be directly mapped into C++ with the same name. If the
+code is interpreted, then the (compiler) variable will be "ULCi", denoting that the
+print function ought to use another hack (or compiler builtin). Do we need any more
+primitives? It's like. I think we've gotten most of it out of the way. Templates,
+macros, variables, turing completeness, pointers. Should be fine right? Oh wait! Something
+important! Classes. These are always useful. How do we invoke a constructor and create
+a class?
+
+	(class MyClass [(bits 100) bitcount] (
+		(var (bits (bitcount)) counter)
+
+		(method [] addOne [] (
+			(++ counter)
+		))
+	))
+
+	(var (MyClass 20) myobj)
+	(myobj addOne)
+	(print (myobj counter))
+
+This is a rough draft. I like the idea of templating classes with a []. This stuff
+should be compile-time information that basically defines a subtype of a class. Any
+class can have as many of these arguments as possible. Another thing is the potential
+for a constructor. A constructor is really useful. I suppose the last arguments of
+the class's var invocation can be the arguments to a constructor.
+
+	(class MyClass [(bits 100) bitcount] (
+		(var (bits (bitcount)) counter)
+
+		(method [] MyClass [(type bitcount) start] (
+			(= counter start)
+		))
+
+		(method [] addOne [] (
+			(++ counter)
+		))
+	))
+
+	(var (MyClass 20 {start 5}) myobj)
