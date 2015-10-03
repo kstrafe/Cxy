@@ -3331,15 +3331,20 @@ uses other macros and/or builtins. So what are the builtins?
 	(bits number)                # Create a type of information of number bits.
 	""                           # Create a string of characters.
 	## Fundamental Constructs
+	(address object)             # Take the address of an object.
 	(cast type object)           # Cast an object into a new one.
+	(code)                       # Scoping the code. This means that the end of the scope invokes destructors.
 	(const name)                 # Returns a const pointer of name.
+	(del pointer)                # Delete (deallocate) a pointer's contents.
+	(deref pointer)              # Dereference a pointer.
 	(expand function ...)        # Invoke a macro, returns code.
 	(function out name in code)  # Create a function.
 	(goto label-name)            # Jump to a label.
 	(hack code)                  # Insert compiler-specific code.
-	(if condition code)          # Conditional evaluation of code.
+	(if condition code else)     # Conditional evaluation of code.
 	(label name)                 # Creates a label to jump to. Part of a scope, else nested while ambiguity.
-	(code)                       # Scoping the code. This means that the end of the scope invokes destructors.
+	(new type [elems])           # Returns a ptr to type.
+	(ptr type)                   # Returns a type of pointer to type.
 	(template name in code)      # Create a template.
 	(val type name code)         # Declare a constant expression variable. code is run to initialize the type.
 	(var type name ...)          # Declare a scope-local variable.
@@ -3596,5 +3601,132 @@ create 'lists' of operations
 	))
 
 I really like this idea. It seems neat. So any ( followed by a non-word evaluates
-to a scope.
+to a scope. I really like this. This fits really well with the current models.
 
+	(if (> 3 a) ((print "error") (exit 1)))
+	(hack asm "mov eax, ebx")
+	(function [TypeA a TypeB b] myFunction [TypeC c typeD d] (
+		(= a (cast (type a) c))
+		(= b (cast (type b) d))
+	))
+
+	(var TypeA mya)
+	(var TypeB myb)
+	(var TypeC myc)
+	(var TypeD myd)
+	(= {a mya} {b myb} (myFunction {c myc} {d myd}))
+
+Seems like it's going somewhere. Let's have a small challenge: write a small program
+that processes a number by taking the factorial of the Nth fibonacci number, squares
+it, and then divides it by 100.
+
+	(function [(bits 108) out] factorial [(bits 5) in] (
+		(= out (cast (type out) in))
+		(-- in)
+		(while in 1 -1 (*= out (cast (type out) in)))
+	))
+
+	(function [(bits 5) out] recFib [(bits 5) in] (
+		(if (>= 2 in)
+			(= out (+ (recFib (- in 1)) (recFib (- in 2))))  # If true clause
+			(= out 1)  # If false clause
+		)
+	))
+
+	(function [] enter [] (
+		(var (bits 5) n)  # Maximum size of 2^5-1, is about 31.
+		(= n 4)  # Assign some number to it.
+		(= n (recFib n))
+		(var (bits 108) fact)
+		(= fact (factorial n))
+		(var (bits 216) square)
+		(= square (^ (cast (type square) fact) 2))  # When you square, you can double the bit size (at most).
+		(/= square 100)
+		(sml-print square)
+	))
+
+That was easy enough. The fibonacci sum should however be taken care of, as it could
+overflow the 5 bits. Five bits are chosen because the amount of bits for the biggest
+factorial is only 108. How can the language be improved? Pointers are important. They
+should somehow play a role. Already now, pointers are simply names. Names that refer
+to a location in memory. Dynamic memory management should be possible as well, for
+full control of the machine! `(new type)` comes to mind. It just returns a reference
+to that new type. That seems too simple. Remember, a name always results in a reference.
+Unless the type is a pointer:
+
+	(var (ptr (bits 32)) x)
+	(= x (new (bits 32))
+	(= (deref x) 3000)
+	(del x)  # A good practice to always deallocate it. Else memory leaks may occur.
+
+The deref basically turns the pointer into the reference that the = operator can work
+with. If not, we'd get a type-error because we're assigning a number to a ptr type.
+I would need to consider the name for the deref function though. It needs to be clean
+like most other elemental keywords. Deref sounds fine, actually. What about dynamic
+arrays?
+
+	# Put numbers from the command line into an array, then sort it. Inline.
+
+	(function [] bubbleSort [(ptr (bits 32)) in size length] (
+		(for 1 length 1 at (
+			(var size local)
+			(= local at)
+			(while
+				(and
+					(< (deref (+ ptr (* 4 local))) (deref (+ ptr (- (* 4 local)))))
+					(> local 0)) (
+						(swap (deref (+ ptr (* 4 local))) (deref (+ ptr (- (* 4 local) 4))))
+						(-- local)
+			))
+		))
+	))
+
+The above function sorts the integers of an contiguous array of length "length". The
+way it does so is that it starts at location 1. Check if the previous element is bigger.
+If it is bigger, swap the element. It looks kinda difficult, but that's nothing for
+a template!
+
+	(function [] bubbleSort [(ptr (bits 32)) in size length] (
+		(for 1 length 1 at (
+			(var size local)
+			(= local at)
+			(template current [] (deref (+ ptr (* 4 local))) )
+			(template previous [] (deref (+ ptr (* 4 (- local 1)))) )
+
+			(while
+				(and
+					(< (current) (previous))
+					(> local 0))
+				(
+					(swap (current) (previous))
+					(-- local)
+				)
+			)
+		))
+	))
+
+Taking an address of an object is necessary when a function or method expects a ptr.
+It is sufficient to state that the builtins can just take the address implicitly for
+usability reasons. Otherwise, the above sort can be invoked only by the following:
+
+	(var (Array 10) x)
+	(= x [0 1 2 3 4 9 5 8 7 6])
+	(bubbleSort x)  # Since an array essentially IS a pointer.
+
+	(var (bits 100) y)
+	(= y 10000)
+	(doSomethingAndModifyMyData (address y))  # Will not work with just 'y'.
+
+The latter also gives us important information about the call. We know for example
+that the call may modify y in-place, so we must be cautious. If the 'address' was
+not there, then it may still be modified in-place if y is a pointer type. If doSomething
+is a function that takes a const ptr, then there will be no modification:
+
+	(doSomething (address (const y)))
+
+A template can be created for this:
+
+	(template aco [name] ((address (const (name)))))
+	(doSomething (aco y))
+
+Which is much shorter to type and much more elegant.
