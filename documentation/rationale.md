@@ -3327,16 +3327,21 @@ need to concern itself with the global scope or the internal store. Instead, it 
 uses other macros and/or builtins. So what are the builtins?
 
 	# Operations
+	## Types
 	(bits number)                # Create a type of information of number bits.
+	""                           # Create a string of characters.
+	## Fundamental Constructs
 	(cast type object)           # Cast an object into a new one.
 	(const name)                 # Returns a const pointer of name.
-	(expand function args ...)   # Create a macro, returns code.
+	(expand function ...)        # Invoke a macro, returns code.
 	(function out name in code)  # Create a function.
 	(goto label-name)            # Jump to a label.
 	(hack code)                  # Insert compiler-specific code.
 	(if condition code)          # Conditional evaluation of code.
 	(label name)                 # Creates a label to jump to. Part of a scope, else nested while ambiguity.
-	(scope code)                 # Scoping the code. This means that the end of the scope invokes destructors.
+	(code)                       # Scoping the code. This means that the end of the scope invokes destructors.
+	(template name in code)      # Create a template.
+	(val type name code)         # Declare a constant expression variable. code is run to initialize the type.
 	(var type name ...)          # Declare a scope-local variable.
 	[element ...]                # Array.
 	{name reference}             # Single tuple declaration.
@@ -3457,3 +3462,139 @@ Hold on... why not just use functions and invoke them specially?!
 
 This also solves the issue of not being able to distinguish a function with a macro
 call! That's absolutely awesome. Though, @ is too cryptic, let's change it to "expand".
+I think I'm beginning to like this.
+
+Perhaps even make the base language a little simpler, like only two elements for stuff
+like + and * . Shouldn't really matter that much though. Anyhow, I like the idea of
+just using "expand". It fits really well... anyways, are there any more things to
+consider? Well of course! Strings. Let's look at strings. I currently like verbatim
+strings. They're simple, small, and elegant. With "" as an escape for itself. A simple
+mealy machine can take care of this. So what about strings anyways? And how are functions
+invoked via expand in any way valid? Well, we know that their input parameters ought
+to be some constant expression. It must not take anything from any surrounding context.
+This is important, as it keeps the generators relatively pure. So what's the big idea?
+Well, perhaps we need a way to declare constexpr data. Data that could be referenced
+during macro expansion phase. That would be a clean way to keep the data organised.
+The thing is, what if we have data that is used both in the macro expansion phase
+as well as in the running code? A problem arises. If we embed the data into the specific
+function, then the runtime can not access it. If we make the data a variable, the
+expansion can not access it. A compromise has to be made. Perhaps a "variable" declaration
+that is also considered by the expansion phase. (expand var ... comes to mind, but
+I think that would clash with the current definition of var, which doesn't quite fit
+the bill. `(val ...` could be used instead. Val is just that: a value. A constant
+expression. To be used both during runtime and macro time. What about while, for,...?
+
+	(expand while 1 10 1 it (...))
+
+This seems rather verbose, ugly, and unnecessary. I'd prefer it to be just "while".
+Perhaps it is thus useful to have a true macro,... a template. The template can be
+the simplest of substitutions, merely substituting the code for something else.
+Certainly, a template can use expand functions as well, but the template itself can
+not do much except for putting stuff in. It can't compare. It just "puts stuff".
+
+	(template while from to jump itname code (
+		(expand While from to jump itname code)
+	))
+
+Just syntactic sugar for the expand of While. While can also check the incoming bounds
+to see if these may be invalid and issue warnings, say, if the jump count is zero.
+My programming senses always told me it's natural to evaluate the inner most parentheses
+first. It feels as if the language violates that. I mean, what is even a list of runnable
+code like?
+
+	[
+		(+= a b)
+		(= a b)
+		(while a 1000 b [
+			(print (+ "I like this idea of using []" "It's nice"))
+		])
+	]
+
+One can think of the `(print ...)` as an expression that gets evaluated into a runnable
+object. Yes... yes,.. that seems to be a nice abstraction! If the runnable object
+is at a local scope,.. or I should say at the top of the hierarchy and not nested,
+then I suppose it can simply be executed. Otherwise it's not executed and instead
+passed on into the function. This fails on addition or similar operations though.
+Luckily, while is a template, it will expand in something different.
+
+	[
+		(+= a b)
+		(= a b)
+		(scope [
+			(label x)
+			(print (+ "I like this idea of using []" "It's nice"))
+			(+= a b)
+			(if (< a 1000) (goto x))
+		])
+	]
+
+I can see the idea, but it doesn't feel quite natural. As if it should be different.
+So how do we go about? Do we just state that any nested () is at the mercy of its
+respective enclosure? That seems quite fair actually. This would do away with the
+[ and ] in scope, as well as the while and other such functions. Though, it would
+be nice to have a list over all arguments put in.
+
+	(+= a b)
+	(= a b)
+	(scope
+		(label x)
+		(print (+ "I like this idea of using []" "It's nice"))
+		(+= a b)
+		(if (< a 1000) (goto x))
+	)
+
+Is now the equivalent code. I suppose scope is of the form (scope list). This seems
+quite elegant. What about functions taking in functions? Maybe just let too many arguments
+collapse into a single list automatically. That would be an elegant solution,.. I
+think...
+
+	(function out1 out2 out3 name in1 in2 in3 code)
+
+In the case of a function, it's a little different, there are multiple lists here.
+
+	(function (bits 32) out1 (bits 64) out2 (bits 100) out3 name (bits 10) que
+		()
+	)
+
+Maybe the function declaration needs to use a delimiter of some kind. That's the problem
+here. I can either use a delimiter or just put a list into the thing. Idealize "function"
+as some hyper complex macro or template, what would it do? Well its arguments would
+just be turned into some code right? That makes arrays pretty much perfect for the
+job. What about scope then? Does scope need it? I'm not sure. What would be most clean?
+I like the idea of the array though. It seems neat. So suppose we have the array,
+as well as standard invocations via (), then what are we really dealing with?
+
+	(scope
+		(var (bits 10) cnt)
+		(= cnt 0)
+		...
+	)
+
+	(scope [
+		(var (bits 10) cnt)
+		(= cnt 0)
+		...
+	])
+
+I like both ideas. I need something consistent. If scope were a macro, it would probably
+just scan each element in the list and use it to determine destruction etc. On the
+other hand, using an implicit list (via elipsis), the invocation looks much cleaner,
+but it does make the language less consistent. The reason for being less consistent
+is that the idea fails for the function keyword. What if we make the keyword scope
+implicit? This means that () would be accepted as a scope. It also allows us to easily
+create 'lists' of operations
+
+	(while 1 10 1 (print "hey!"))
+	(while 1 10 1 (
+		(print "hey")
+		(print "what's going on?")
+	))
+	(function [(bits 32) a (bits 64) b] name [] (
+		(= a 301495)
+		(= b 38175)
+		# Do some cool stuff here.
+	))
+
+I really like this idea. It seems neat. So any ( followed by a non-word evaluates
+to a scope.
+
