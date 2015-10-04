@@ -3977,3 +3977,71 @@ the class's var invocation can be the arguments to a constructor.
 	))
 
 	(var (MyClass 20 {start 5}) myobj)
+
+So we let's do something different for var.
+
+	(var (MyClass 20) myobj {start 5})
+	(MyClass 20 {start 5})
+
+The first line is a constructor call during initialization. The second is an object
+creation.
+There's something about this declaration that I can't seem to like very much. Still,
+we need an actual initializer (constructor). That's very useful.
+
+So how do we make this consistent? One thing that bothers me somewhat is how the (())
+stack up so much. What can be done to improve it? So far it's actually not that bad,
+it's just a little thing that is bothersome. What about taking some hints from python?
+An idea that has been lingering in my mind is to use indentation for the (). This makes
+the code easier to read and work with.
+
+	class Name [(bits 32) x]:
+		method x:
+			bits 32 a
+			= a x
+			++ a
+			return a
+
+That looks kinda weird... There's something elegant to it though.
+
+	(class name [(bits 10) name] (
+		(method [] cool [] (
+			(for 1 10 1 (
+				(print (name))
+			))
+		))
+	))
+
+Actually it looks fine. One thing I wish were more explicit is if we can distinguish
+templates from function calls. Distinguishing them should be useful to the programmer.
+The thing about this is that LISP like grammar is simple and easy to work with. It's
+a language that's extremely easy to bootstrap. That's why it's so great. Maybe it
+needs to be simplified somewhat. The semantics of the templates and macros seem somewhat
+ambiguous. Currently, it's assumed that a macro invocation simply doesn't evaluate
+its input at all. However, it looks like a single function call. I'm considering trying
+to make the grammar actually  be so simple that only hack and template are in the
+language. This way, the entire base language is extremely small. Although I'm not
+sure how efficient the resulting opcode would be. Perhaps to compile to some lower
+level form that takes care of it. A truly generic compiler compiler compiler ... recursive.
+
+	(hack)
+	(generator)
+
+A simple language. The only two elements can be the generator and the hack statement.
+This should be an interesting challenge. The only concern is that the language may
+not be able to generate code for all other languages. The reason being that it loses
+its coherence. That's kinda boring.
+
+	(hack "code here is just inserted")
+	(macro name code)
+
+It's an interesting idea. So what's left for the original implementation to conform
+to? Well, it has to lex, which is parenthesis-whitespace separated. Easy enough. What
+about parsing? What about semantic rules? I think those would be a lot more difficult to
+implement. Here's some sample code.
+
+	(function ((bits 32) y) gcd ((bits 32) x (bits 32) y) (
+		(while (!= y 0) ( (= x y y (% x y))))
+	))
+
+So implementing everything using hack and macro should result in not being able to
+evaluate thing correctly? Hmmm...
