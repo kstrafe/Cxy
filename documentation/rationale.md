@@ -4040,8 +4040,79 @@ about parsing? What about semantic rules? I think those would be a lot more diff
 implement. Here's some sample code.
 
 	(function ((bits 32) y) gcd ((bits 32) x (bits 32) y) (
-		(while (!= y 0) ( (= x y y (% x y))))
+		(while (!= y 0) ((= x y y (% x y))))
 	))
+	(gcd 312983 219319)
 
 So implementing everything using hack and macro should result in not being able to
-evaluate thing correctly? Hmmm...
+evaluate things correctly? Hmmm... I'm thinking about the information that the compiler
+can use. If it's kept simple, there shouldn't be too big of a problem. So let's imagine.
+
+	(macro if [a b c]
+		(hack (+ "if (" (a) "){" (b) "}else{" (c)))
+	)
+	(if (> 1 2) (print "Bigger") (print "Smaller"))
+
+So macro > evaluates to (and print)
+
+	(macro > [a b]
+		(hack (+ (a) ">" (b))
+	)
+	(macro print [a]
+		(hack (+ "std::cout << " (a) ".toString();"))
+	)
+
+This mandates that the language structures the evaluations in a certain way. Some
+languages may not be able to be translated into. Still, it is becoming interesting.
+The grammar remains the same, it's all just translated to something else. Is that
+really useful though? Well let's answer that later. Firstly, we see that + is required
+to be a builtin. Also yes, it is really useful. All we need to evaluate is a complete
+set of () at a time. This means that a macro invocation should take care of the requirements.
+Anything else? Well... hmmm. Actually making running code from this shouldn't be too
+difficult. The compiler is essentially written in itself. Hell, bootstrapping should
+be a piece of cake then!
+Alright, so what is required for the base language? We already have hack, which simply
+outputs the string given. The grammar uses () evaluation and a simple lexing scheme.
+We need string concatenation. What about checking function types? This is something
+important. If a function call merely generates code, then it is not useful. However,
+if a function call also checks the input types, then we can issue an error if the
+wrong type is given. This is why a macro needs to be able to investigate the type.
+How does this happen? How does the compiler get type information? What can be done?
+
+	(var (bits 32) a)
+	(var (bits 64) b)
+	(+= a (* a b))
+
+Suppose var and bits and var translate:
+
+	(macro bits [num] (
+		(hack (+ "BitSet<" (num) ">))
+	))
+
+	(macro var [type name] (
+		(hack (+ (type) " " (name)))
+	))
+
+Works out right? So how can += know the types?
+
+	(macro += [left right] (
+		(hack (+ (left) " += " (right) ";"))
+	))
+
+Alright, so this translates to a C++ compound assignment. So how can we know if the
+left is the same size as the right? That would be useful to know. If we look at normal
+compilers, it can be seen that part of the algorthim contains the information about
+a variable. So does this mandate a native variable declaration scheme? Or perhaps
+the macro should be recursive?
+
+	(var (bits 32) a
+		(var (bits 64) b
+			(
+				(+= a b)
+			)
+		)
+	)
+
+But then, how does the += find out about the variables? We really need to have something
+that can check. Perhaps the type checking should be delegated into the host language?
+Of course not. The language itself should perform all the static checks. Hmmm....
