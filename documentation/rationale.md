@@ -1,4 +1,5 @@
 # How UL Came To Be #
+
 I was programming and it suddenly struck me: "It must be simple".
 My view on life changed in an instant. Boom. It was over. It's happening.
 It must be simple.
@@ -4116,3 +4117,35 @@ the macro should be recursive?
 But then, how does the += find out about the variables? We really need to have something
 that can check. Perhaps the type checking should be delegated into the host language?
 Of course not. The language itself should perform all the static checks. Hmmm....
+It seems we need to be able to register data at the compiler in order to make it perform
+checks.
+
+	class MyClass
+		function (::) myFunction
+			Out.print("Hello world!");
+			if (32 > 10)
+				Out.print(math.sin(32.f));
+			fi
+		noitcnuf
+	ssalc
+
+	var [30, [2, sml.String]] choices =
+	[
+		['Rødvin', 'Rødvin'],
+		[...]
+	];
+
+The thing is, most languages - when compiled - get information about surrounding instructions.
+This is useful to the compiler. We can't perform the variable existence checks when
+the compiler just compiles into simple machine instructions. (var (bits 32) x) can
+be considered as two instructions, bits 32 returns a value, that's all. It can be
+
+	mov r0, #4
+
+And var does:
+
+	add sp, sp, r0
+
+This works, but there is no way to refer to a in the assembly language. So I can not
+perform static checks using this :(. I wish it were different. The simplicity is elegant.
+So we're back at the original grammar? Well not yet. We're back at having var in the compiler. I should really make a branch for this.
