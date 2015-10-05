@@ -23,8 +23,8 @@ reference-of operator. There are some symbols that we should consider...
 	@@a      // Let @@ return a const-reference, because a reference to a
 	         // reference is nonsensical.
 
-	^a       // Let ^ return the actual object pointed to.
-	^^a      // Let ^^ return a const-object that is pointed to.
+	^a       // Let ^ return the actual object pointed to. Stacking ^ makes sense and
+	         // just dereferences the pointer further.
 
 Imagine calling a function that takes a pointer to a const variable, but your
 local variable is not const. You need to be able to infer from the call that
