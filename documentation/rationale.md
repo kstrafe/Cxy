@@ -4162,4 +4162,23 @@ So I think this chapter can be closed. Let's move on with life.
 *Conclusion*: LISP-like grammar was considered, but deemed too impractical.
 
 
+## Meta: Documentation Organization ##
+*Description*: The documentation has become unwieldy large. Can it be shortened and/or
+segmented for easier manipulation?
+*Discussion*: Taking inspiration from the PEP (Python Enhancement Proposals, we'd
+like to have something for language rationale and proposals. Unnamed Language Enhancement
+Proposals. ULEPs. In addition, rationales need to be shortened and enhanced themselves.
+I tend to be quite wordy, so I'll have to snip them down to the bare essentials.
 
+	ULEP/
+		index.md
+		<Topic>.md
+		...
+		<Topic N>.md
+
+Each ULEP will have its own title and topic to discuss.  Hmm, why not just go with
+Cxy and call it a Cxy Rationale? Shortened to cxyr. Like the short namespaces we so
+love.
+
+*Conclusion*:
+	Use the directory documentation/cxyr/<Name>.md for each topic regarding cxy's rationale.
