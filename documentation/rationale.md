@@ -4148,4 +4148,18 @@ And var does:
 
 This works, but there is no way to refer to a in the assembly language. So I can not
 perform static checks using this :(. I wish it were different. The simplicity is elegant.
-So we're back at the original grammar? Well not yet. We're back at having var in the compiler. I should really make a branch for this.
+So we're back at the original grammar? Well not yet. We're back at having var in the
+compiler. I should really make a branch for this. Alright, so let's just imagine a
+little...
+
+You know. I've been really contemplating all this, and I tend to get back to the original
+idea for the language. It's just that it's practical. It's useful. It's ... simple.
+The LISP version is also simple, but it makes the code more ugly and more difficult
+to work with.
+
+So I think this chapter can be closed. Let's move on with life.
+
+*Conclusion*: LISP-like grammar was considered, but deemed too impractical.
+
+
+
