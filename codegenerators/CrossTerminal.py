@@ -54,7 +54,7 @@ productions = {
 ################################################################################
 	'ENTER': [
 		['DATA_DECLARATION', 'SYMBOL_SEMICOLON__PRUNE', 'ENTER'],
-		['FUNCTION_DEFINITION', 'FUNCTION_LIST'],
+		['FUNCTION_DEFINITION', 'ENTER'],
 		[]
 	],
 ################################################################################
@@ -63,10 +63,6 @@ productions = {
 	],
 	'FUNCTION_DEFINITION': [
 		['FUNCTION_SIGNATURE', 'IDENTIFIER_SUBROUTINE', 'GROUPER_LEFT_BRACE', 'STATEMENT_LIST', 'GROUPER_RIGHT_BRACE']
-	],
-	'FUNCTION_LIST': [
-		['FUNCTION_DEFINITION', 'FUNCTION_LIST'],
-		[]
 	],
 ################################################################################
 	'FUNCTION_SIGNATURE': [

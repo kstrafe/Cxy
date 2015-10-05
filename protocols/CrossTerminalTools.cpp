@@ -135,7 +135,6 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::EXPRESSION_EXPRESSION: return "EXPRESSION_EXPRESSION";
         case protocols::CrossTerminal::FOR_STATEMENT: return "FOR_STATEMENT";
         case protocols::CrossTerminal::FUNCTION_DEFINITION: return "FUNCTION_DEFINITION";
-        case protocols::CrossTerminal::FUNCTION_LIST: return "FUNCTION_LIST";
         case protocols::CrossTerminal::FUNCTION_SIGNATURE: return "FUNCTION_SIGNATURE";
         case protocols::CrossTerminal::GOTO_STATEMENT: return "GOTO_STATEMENT";
         case protocols::CrossTerminal::GROUPER_LEFT_BRACE: return "GROUPER_LEFT_BRACE";
