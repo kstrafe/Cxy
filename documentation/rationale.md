@@ -1,4 +1,4 @@
-# How UL Came To Be #
+# How Cxy Came To Be #
 
 I was programming and it suddenly struck me: "It must be simple".
 My view on life changed in an instant. Boom. It was over. It's happening.
@@ -1795,7 +1795,7 @@ This is very useful for low level control. Sometimes the compiler for a machine
 has no support for generating specific CPU assembly code. It can be useful to
 allow the user to write this code himself.
 
-The current compiler reference implementation (ULCRI) compiles to C++ (that's the
+The current compiler reference implementation (Cxy CRI) compiles to C++ (that's the
 plan). It can be tremendously useful to implement a print function by redirecting
 to std::cout. There are multiple options. One is to make the standard library
 special. The compiler generates special code for that library module.
@@ -1888,7 +1888,7 @@ I'd call what C++ does for "static ducktyping", because that's essentially what 
 is.
 
 
-So how is UL going to solve this specific problem? Should types be enforced? Let's
+So how is Cxy going to solve this specific problem? Should types be enforced? Let's
 look at the possibilities
 
 	sml.String a_ = "Type assertions are ok";
@@ -1959,7 +1959,7 @@ us an immediate place to look for that class. So far the idea is nice. I really 
 it. It's just that duck-typing part that I kinda miss. Given a constexpr-like can
 be given, it feels hacky and not clean.
 
-First, let's write some code in UL that we port from the C++ SFML library.
+First, let's write some code in Cxy that we port from the C++ SFML library.
 
 	// This should be a fully compilable program, given the library is installed
 
@@ -2005,7 +2005,7 @@ I've gotta tell ya, honestly, from my own experience, this isn't actually a prob
 The core of any problem is in the dependencies. In C++ there may be typedefs,
 shadowing, and define shenanigans at work. That causes ambiguous names to pop up.
 The reason types are hard to track is just that. They're hard to even find.
-In UL they're easy to find. Check the function scope, is it defined somewhere? No?
+In Cxy they're easy to find. Check the function scope, is it defined somewhere? No?
 Check the functions' arguments. No? Check the class declaration or the class that
 is referred to.
 
@@ -2461,7 +2461,7 @@ as if a is the return parameter. Even if there is a space.
 Where can void functions occur? Well, they can certainly not be in expressions.
 The question is whether there is any ambiguity at all. There does not appear to
 be one. In C and C++, the ~ is the bitwise NOT operator. That is a useful operator,
-so it need a replacement operator in UL.
+so it need a replacement operator in Cxy.
 
 *Conclusion*: Use any function name, as long as it does not collide with class
 names.
@@ -2476,10 +2476,10 @@ languages such as PHP also exist, even though PHP is more aimed at the net.
 
 The thing about these languages is that they exist, they are specifically for
 generating code, and they are really good at it. I think it may be better to
-avoid implementing the code generator in UL itself. Instead, think about allowing
+avoid implementing the code generator in Cxy itself. Instead, think about allowing
 compiler hooks of some sort. It calls the hook on the file upon seeing diffs.
 
-The biggest problem is that the language (UL) is itself not very practical for
+The biggest problem is that the language (Cxy) is itself not very practical for
 editing text. There is operator overloading for strings, but it is still cumbersome.
 
 	var sml.String my_string = "Hi!";
@@ -2738,7 +2738,7 @@ operator? Should an entirely new operator be applied? From C++ we learn about de
 	int main(int argc, char *argv[])
 	{ decltype(argc) copy = argc; }
 
-The following is a translation to UL:
+The following is a translation to Cxy:
 
 	(8u return : 32u argc, ptr ptr 8u argv) enter
 	{ var type(argc) copy = argc; }
@@ -3926,7 +3926,7 @@ version string, and version returning a simple name. This allows your template t
 become a macro invocation:
 
 	(function [string out] 'print [string version string compiler string to_print] (
-		(if (&& (= version "1.2.7") (= compiler "ULC")) (
+		(if (&& (= version "1.2.7") (= compiler "CxyC")) (
 			(= out
 				(+ "(hack ""std::cout << """ to_print """.toString();""")"  # std::cout << to_print.toString();
 			)
@@ -3940,7 +3940,7 @@ become a macro invocation:
 Note that (to_print) is evaluated as a string, such that the resuling C++ code may
 be like `std::cout << my_variable.toString();`. This is only valid if the compiler
 has specified all objects to be directly mapped into C++ with the same name. If the
-code is interpreted, then the (compiler) variable will be "ULCi", denoting that the
+code is interpreted, then the (compiler) variable will be "CxyCi", denoting that the
 print function ought to use another hack (or compiler builtin). Do we need any more
 primitives? It's like. I think we've gotten most of it out of the way. Templates,
 macros, variables, turing completeness, pointers. Should be fine right? Oh wait! Something
@@ -4166,17 +4166,17 @@ So I think this chapter can be closed. Let's move on with life.
 *Description*: The documentation has become unwieldy large. Can it be shortened and/or
 segmented for easier manipulation?
 *Discussion*: Taking inspiration from the PEP (Python Enhancement Proposals, we'd
-like to have something for language rationale and proposals. Unnamed Language Enhancement
-Proposals. ULEPs. In addition, rationales need to be shortened and enhanced themselves.
+like to have something for language rationale and proposals. Cxy Enhancement
+Proposals. CxyEPs. In addition, rationales need to be shortened and enhanced themselves.
 I tend to be quite wordy, so I'll have to snip them down to the bare essentials.
 
-	ULEP/
+	CxyEP/
 		index.md
 		<Topic>.md
 		...
 		<Topic N>.md
 
-Each ULEP will have its own title and topic to discuss.  Hmm, why not just go with
+Each CxyEP will have its own title and topic to discuss.  Hmm, why not just go with
 Cxy and call it a Cxy Rationale? Shortened to cxyr. Like the short namespaces we so
 love.
 

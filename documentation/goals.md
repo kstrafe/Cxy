@@ -1,4 +1,4 @@
-## Goals of Unnamed Language ##
+## Goals of Cxy ##
 * General purpose programming language
 * Comparatively quick compile-time and running speeds
   * Clean LL(1) grammar

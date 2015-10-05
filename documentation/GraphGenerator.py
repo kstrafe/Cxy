@@ -1,20 +1,20 @@
 # -*- coding: utf-8 -*-
 # Copyright © 2015 Kevin Robert Stravers
 """
-This file is part of Unnamed-Language Compiler Reference Implementation (ULCRI).
+This file is part of Cxy Compiler Reference Implementation (Cxy CRI).
 
-ULCRI is free software: you can redistribute it and/or modify
+Cxy CRI is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-ULCRI is distributed in the hope that it will be useful,
+Cxy CRI is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with ULCRI.  If not, see <http://www.gnu.org/licenses/>.
+along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 import igraph  # To install: `pip3 install python-igraph`
@@ -90,7 +90,7 @@ def createGraph(graph, parent, directory, purity=subtree_pure):
 if __name__ == '__main__':
 		graph = igraph.Graph()
 		graph.to_directed()
-		graph.add_vertex(name='Unnamed-Language')
+		graph.add_vertex(name='Cxy')
 
 		purity = impure
 		directories = ['code', 'libraries', 'protocols', 'sym']

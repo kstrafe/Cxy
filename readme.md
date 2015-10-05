@@ -1,4 +1,4 @@
-## Unnamed Language ##
+## Cxy ##
 
 
 [![Join the chat at https://gitter.im/BourgondAries/Unnamed-Language](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/BourgondAries/Unnamed-Language?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
@@ -27,7 +27,7 @@ I'm also available on Skype as 'macocio'.
 
 # How this project is organized
 
-The repository for The Unnamed Language compiler. This repository contains the following folders:
+The repository for The Cxy compiler. This repository contains the following folders:
 * code - where the code related to the compiler is stored. Tests are also stored here and must start with "test" in their filename.
 * codegenerators - code that generates code. Useful for generating switch-to-string code.
 * documentation - the documentation of the language and the compiler
@@ -39,7 +39,7 @@ The makefile contains the instructions to build the project.
 `make tdd` runs the tests in ./tests. You should only run tests this way as the test_runner script is not suited for direct calling.
 
 ## Clear Overview
-The UL dependency rule is enforced in this compiler. Modules (.cpp and their
+The Cxy dependency rule is enforced in this compiler. Modules (.cpp and their
 corresponding .hpp files) can ONLY depend/include on:
 
 1. A file in a subdirectory of their current directory.
