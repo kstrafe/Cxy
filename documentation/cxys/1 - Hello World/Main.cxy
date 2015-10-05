@@ -1,0 +1,4 @@
+(:) enter
+{
+	sml.Out << "Hello World!\n";
+}

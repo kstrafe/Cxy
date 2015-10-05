@@ -32,4 +32,3 @@ The nice thing is that the above still allows slick variable names, but separate
 classes, constants, and enums from them.
 
 *Conclusion*: Enforce names as given by the last table.
-
