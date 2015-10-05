@@ -78,6 +78,29 @@ A simplifcation can be made. Instead of redundantly specifying var, we can allow
 
 ===
 
+=== Kevin R. Stravers -- Mon 05 Oct 2015 09:19:14 AM CEST
+
+A second simplification seems feasible:
+
+	var 32u {
+		a = 345;
+		b = a * 2;
+		c = b * a;
+	};
+
+The form of this statement is `var Type { assignments };`
+
+	var sml.String {
+		a = "a";
+		b = a + "b";
+		c = a + b * 30 + "cccc";
+	};
+
+This also works for arrays. There are no clashes with other datatypes as none contain
+curly braces.
+
+===
+
 *Conclusion*:
 	var Type Identifier OptionalInitialization;
 

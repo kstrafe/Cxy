@@ -79,5 +79,3 @@ best thought to have is to just consider it a reference due to the semantics.
   * @ as the dereferencing operator.
   * @@ as the dereferencing-to-const operator.
   * A pointer is automatically casted to a reference.
-
-
