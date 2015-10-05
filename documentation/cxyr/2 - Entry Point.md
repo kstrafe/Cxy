@@ -1,7 +1,5 @@
 ## Entry Point ##
-
 *Description*: Where does the program officially _start_ execution?
-
 *Discussion*: Let's look at a few potential cases.
 
 1. `label:`
@@ -28,7 +26,7 @@ code.
 
 *Conclusion*: Entry points are defined as
 
-    (:) enterProgram
-    {
-      <:code:>
-    }
+	(:) enter
+	{
+		Code
+	}
