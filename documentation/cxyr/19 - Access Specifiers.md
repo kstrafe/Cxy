@@ -32,10 +32,8 @@ Imagine the following class.
 		this.my_num = $$this.__my_number;
 	}
 
-The above forced my_num to be public, referring to __my_number by pointer. The weakness
+The above forced `my_num` to be public, referring to `__my_number` by pointer. The weakness
 of that is that we need to assign a pointer. Pointers aren't nice to work with here.
 It's probably okay to allow restricted variables to avoid the horrible boilerplate.
 
 *Conclusion*: Use leading underscores to declare access mode.
-
-
