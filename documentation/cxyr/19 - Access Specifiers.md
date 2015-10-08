@@ -17,19 +17,19 @@ are the starting underscores. This is in line with common conventions in languag
 without data hiding methods. Instead of introducting verbose keyword, we can store
 the data along the name. The following was previously utilized
 
-	public any_name
-	restricted any_name
-	private any_name
+	public anyname
+	restricted anyname
+	private anyname
 
 What's interesting is that we can question whether restricted is really needed...
 Imagine the following class.
 
-	32u __my_number;
-	const ptr const 32u my_num;
+	32u __num;
+	const ptr const 32u num;
 
 	(: this ) ClassName
 	{
-		this.my_num = $$this.__my_number;
+		this.my_num = $$this.__num;
 	}
 
 The above forced `my_num` to be public, referring to `__my_number` by pointer. The weakness
