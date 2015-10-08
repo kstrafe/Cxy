@@ -29,7 +29,7 @@ Imagine the following class.
 
 	(: this ) ClassName
 	{
-		this.my_num = $$this.__num;
+		this.num = $$this.__num;
 	}
 
 The above forced `my_num` to be public, referring to `__my_number` by pointer. The weakness
