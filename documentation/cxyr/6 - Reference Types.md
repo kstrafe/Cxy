@@ -47,11 +47,21 @@ seems superfluous. Let's try the following.
 
 	(: cref 32u value) doSomething
 	{
-		if (@@value == 300)
+		if (value == 300)
 		{ doSomethingElse(); }
 		else
 		{ doSomethingOther(); }
 	}
+
+Note that the function actually using the reference does not in any way "dereference"
+it. It merely uses it. Once inside a function call though, then we need to be explicit.
+This seems rather odd... why would a 'function' like + not require it, but a function
+call will? It's thought that the effects of + are not having any side effects. In addition,
+such functions ought to be taking in constant references. In any other case, we can
+just create a function called "add" instead to make our purpose clear...
+
+To make the semantics explicit: operators +, -, `*`, /, %,... shall take in constant
+references.
 
 Let `cref` be syntactic sugar for `const ref`. Here, taking a pointer is
 automatically casted to a reference type. That seems to work for local
