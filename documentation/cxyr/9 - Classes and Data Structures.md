@@ -81,6 +81,7 @@ As one can observe, there is no syntax for declaring a class. There are only fil
 and there is one class per file. Can code generators create classes?  They certainly
 can, but they have to create the files in order to implement the specific class.
 
+
 *Conclusion*:
 Classes and their objects are defined as in C++. Their methods accessed via the instance,
 and not the name of the methods (like in C).

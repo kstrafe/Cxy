@@ -47,11 +47,21 @@ seems superfluous. Let's try the following.
 
 	(: cref 32u value) doSomething
 	{
-		if (@@value == 300)
+		if (value == 300)
 		{ doSomethingElse(); }
 		else
 		{ doSomethingOther(); }
 	}
+
+Note that the function actually using the reference does not in any way "dereference"
+it. It merely uses it. Once inside a function call though, then we need to be explicit.
+This seems rather odd... why would a 'function' like + not require it, but a function
+call will? It's thought that the effects of + are not having any side effects. In addition,
+such functions ought to be taking in constant references. In any other case, we can
+just create a function called "add" instead to make our purpose clear...
+
+To make the semantics explicit: operators +, -, `*`, /, %,... shall take in constant
+references.
 
 Let `cref` be syntactic sugar for `const ref`. Here, taking a pointer is
 automatically casted to a reference type. That seems to work for local
@@ -71,6 +81,18 @@ information about the function if we know if it holds a pointer or reference to
 our variable. If it's a pointer it can potentially change the pointer value, and
 that doesn't matter to us at all, since that's local inside the function. The
 best thought to have is to just consider it a reference due to the semantics.
+
+A general note as to why we need $$ and @@. One could state that the const operators
+are unnecessary simply due to their semantics in the following example:
+
+	var 32u x = 39120;
+	f(x);
+	f(@@x);
+
+Here, f takes in a const reference to x. The problem with allowing `f(x)` here is
+that the object may be acted upon, and actually change a global state. This is important.
+By making this explicit, we can actually provide the programmer with useful information.
+In many cases, overrides can be present.
 
 *Conclusion*:
   We use:
