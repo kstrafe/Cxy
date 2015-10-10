@@ -60,11 +60,11 @@ namespace
 TEST_CASE("AbstractSyntaxTreeGenerator must validate the grammar.", "[test-AbstractSyntaxTreeGenerator]")
 {
 	REQUIRE(validate(R"(
-		(:) enterProgram
+		(:) enter
 		{
-			sys.Std.printOut(str: "Hello World!");
-			sys.Std.printErr(str: "Hello Error!");
-			sys.Std.printOut(str: sys.Std.readString()~string);
+			sml.Out.print(:"Hello World!");
+			sml.Out.print(:"Hello Error!");
+			sml.Out.print(:sys.Std.readString()~string);
 		}
 
 		(32u a : 32u b) someFunction
