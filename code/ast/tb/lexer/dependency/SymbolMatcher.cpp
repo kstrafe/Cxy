@@ -54,6 +54,7 @@ protocols::TokenType SymbolMatcher::getSymbol(const std::string &lexeme)
     else if (lexeme == "<") return TokenType::SYMBOL_LESS_THAN;
     else if (lexeme == "-") return TokenType::SYMBOL_MINUS;
     else if (lexeme == "+") return TokenType::SYMBOL_PLUS;
+    else if (lexeme == ";") return TokenType::SYMBOL_SEMICOLON;
     else if (lexeme == "*") return TokenType::SYMBOL_STAR;
     else return protocols::TokenType::UNIDENTIFIED;
 }
