@@ -45,7 +45,6 @@ bool CrossTerminalTools::isExpression(const CrossTerminal &ct_)
         case CrossTerminal::OPTIONAL_BITWISE_AND_EXPRESSION: return true;
         case CrossTerminal::OPTIONAL_BITWISE_OR_EXPRESSION: return true;
         case CrossTerminal::OPTIONAL_BITWISE_XOR_EXPRESSION: return true;
-        case CrossTerminal::OPTIONAL_CALL_EXPRESSION: return true;
         case CrossTerminal::OPTIONAL_EQUALITY_EXPRESSION: return true;
         case CrossTerminal::OPTIONAL_EXTRACTOR_EXPRESSION: return true;
         case CrossTerminal::OPTIONAL_MEMBER_EXPRESSION: return true;
@@ -191,7 +190,6 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::OPTIONAL_BITWISE_AND_EXPRESSION: return "OPTIONAL_BITWISE_AND_EXPRESSION";
         case protocols::CrossTerminal::OPTIONAL_BITWISE_OR_EXPRESSION: return "OPTIONAL_BITWISE_OR_EXPRESSION";
         case protocols::CrossTerminal::OPTIONAL_BITWISE_XOR_EXPRESSION: return "OPTIONAL_BITWISE_XOR_EXPRESSION";
-        case protocols::CrossTerminal::OPTIONAL_CALL_EXPRESSION: return "OPTIONAL_CALL_EXPRESSION";
         case protocols::CrossTerminal::OPTIONAL_DATA_DECLARATION: return "OPTIONAL_DATA_DECLARATION";
         case protocols::CrossTerminal::OPTIONAL_EQUALITY_EXPRESSION: return "OPTIONAL_EQUALITY_EXPRESSION";
         case protocols::CrossTerminal::OPTIONAL_EXTRACTOR_EXPRESSION: return "OPTIONAL_EXTRACTOR_EXPRESSION";
