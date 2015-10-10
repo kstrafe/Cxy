@@ -26,8 +26,8 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
 	SECTION("Lexing a natural language string")
 	{
 		tul::lexer::Lexer lexing_engine;
-		for (char character_ : std::string("Example test input to see if alphanumeric, especially with numbers like 123 work for the lexer."))
-			lexing_engine.insertCharacter(/*character_ :*/ character_);
+		for (char character : std::string("Example test input to see if alphanumeric, especially with numbers like 123 work for the lexer."))
+			lexing_engine.insertCharacter(/*character :*/ character);
 
 		std::vector<tul::protocols::Token> &token_stack = lexing_engine.getTokenStack();
 
@@ -35,9 +35,9 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
 
 		SECTION("Check if the lexemes are correct")
 		{
-			unsigned iterator_ = 0;
-			#define caze(string_) REQUIRE(token_stack.at(iterator_).accompanying_lexeme == string_)
-			#define caze2(col_number) REQUIRE(token_stack.at(iterator_++).column_number == col_number)
+			unsigned iterator = 0;
+			#define caze(string) REQUIRE(token_stack.at(iterator).accompanying_lexeme == string)
+			#define caze2(col_number) REQUIRE(token_stack.at(iterator++).column_number == col_number)
 				caze("Example"); caze2(8);
 				caze("test"); caze2(13);
 				caze("input"); caze2(19);
@@ -57,13 +57,13 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
 				caze("lexer"); caze2(95);
 			#undef caze2
 			#undef caze
-			REQUIRE(token_stack.size() == iterator_);
+			REQUIRE(token_stack.size() == iterator);
 		}
 		SECTION("Check if the types are correct")
 		{
 			using namespace tul::protocols;
-			unsigned iterator_ = 0;
-			#define caze(type_name) REQUIRE(token_stack.at(iterator_++).token_type == TokenType::type_name)
+			unsigned iterator = 0;
+			#define caze(type_name) REQUIRE(token_stack.at(iterator++).token_type == TokenType::type_name)
 				caze(IDENTIFIER_CLASS);
 				caze(IDENTIFIER_PACKAGE);
 				caze(IDENTIFIER_PACKAGE);
@@ -82,7 +82,7 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
 				caze(IDENTIFIER_PACKAGE);
 				caze(IDENTIFIER_PACKAGE);
 			#undef caze
-			REQUIRE(token_stack.size() == iterator_);
+			REQUIRE(token_stack.size() == iterator);
 		}
 	}
 
@@ -90,8 +90,8 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
 	SECTION("Check if the lexer lexes string literals correctly")
 	{
 		tul::lexer::Lexer lexing_engine;
-		for (char character_ : std::string("\"Example test input to see if alphanumeric, especially with numbers like 123 work for the lexer.\" "))
-			lexing_engine.insertCharacter(/*character_ :*/ character_);
+		for (char character : std::string("\"Example test input to see if alphanumeric, especially with numbers like 123 work for the lexer.\" "))
+			lexing_engine.insertCharacter(/*character :*/ character);
 
 		std::vector<tul::protocols::Token> &token_stack = lexing_engine.getTokenStack();
 
@@ -105,8 +105,8 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
 	SECTION("Confirm the different alphanumeric identifies")
 	{
 		tul::lexer::Lexer lexing_engine;
-		for (char character_ : std::string("You 1s _cant_ just give 4u upYouGo!"))
-			lexing_engine.insertCharacter(/*character_ :*/ character_);
+		for (char character : std::string("You 1s _cant just give 4u upYouGo!"))
+			lexing_engine.insertCharacter(/*character :*/ character);
 
 		std::vector<tul::protocols::Token> &token_stack = lexing_engine.getTokenStack();
 
@@ -114,19 +114,19 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
 		SECTION("Check if the types are correct")
 		{
 			using namespace tul::protocols;
-			unsigned iterator_ = 0;
-			#define caze(type_name) REQUIRE(token_stack.at(iterator_).token_type == TokenType::type_name)
-			#define caze2(col_number) REQUIRE(token_stack.at(iterator_++).column_number == col_number)
+			unsigned iterator = 0;
+			#define caze(type_name) REQUIRE(token_stack.at(iterator).token_type == TokenType::type_name)
+			#define caze2(col_number) REQUIRE(token_stack.at(iterator++).column_number == col_number)
 				caze(IDENTIFIER_CLASS); caze2(4);
 				caze(PRIMITIVE_SIGNED); caze2(7);
-				caze(IDENTIFIER_VARIABLE); caze2(14);
-				caze(IDENTIFIER_PACKAGE); caze2(19);
-				caze(IDENTIFIER_PACKAGE); caze2(24);
-				caze(PRIMITIVE_UNSIGNED); caze2(27);
-				caze(IDENTIFIER_SUBROUTINE); caze2(35);
+				caze(IDENTIFIER_VARIABLE); caze2(13);
+				caze(IDENTIFIER_PACKAGE); caze2(18);
+				caze(IDENTIFIER_PACKAGE); caze2(23);
+				caze(PRIMITIVE_UNSIGNED); caze2(26);
+				caze(IDENTIFIER_SUBROUTINE); caze2(34);
 			#undef caze2
 			#undef caze
-			REQUIRE(token_stack.size() == iterator_);
+			REQUIRE(token_stack.size() == iterator);
 		}
 	}
 
@@ -134,8 +134,8 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
 	SECTION("Ensure that the groupers work")
 	{
 		tul::lexer::Lexer lexing_engine;
-		for (char character_ : std::string("([[You {]} 1s) _cant_ just give{[(]])]} 4u upYouGo!"))
-			lexing_engine.insertCharacter(/*character_ :*/ character_);
+		for (char character : std::string("([[You {]} 1s) _cant just give{[(]])]} 4u upYouGo!"))
+			lexing_engine.insertCharacter(/*character :*/ character);
 
 		std::vector<tul::protocols::Token> &token_stack = lexing_engine.getTokenStack();
 
@@ -143,8 +143,8 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
 		SECTION("Check if the types are correct")
 		{
 			using namespace tul::protocols;
-			unsigned iterator_ = 0;
-			#define caze(type_name) REQUIRE(token_stack.at(iterator_++).token_type == TokenType::type_name)
+			unsigned iterator = 0;
+			#define caze(type_name) REQUIRE(token_stack.at(iterator++).token_type == TokenType::type_name)
 				caze(GROUPER_LEFT_PARENTHESIS);
 				caze(GROUPER_LEFT_BRACKET);
 				caze(GROUPER_LEFT_BRACKET);
@@ -168,7 +168,7 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
 				caze(PRIMITIVE_UNSIGNED);
 				caze(IDENTIFIER_SUBROUTINE);
 			#undef caze
-			REQUIRE(token_stack.size() == iterator_);
+			REQUIRE(token_stack.size() == iterator);
 		}
 	}
 
@@ -176,8 +176,8 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
 	SECTION("Check if symbols are lexed")
 	{
 		tul::lexer::Lexer lexing_engine;
-		for (char character_ : std::string("Muh * + sym ++bols/\\"))
-			lexing_engine.insertCharacter(/*character_ :*/ character_);
+		for (char character : std::string("Muh * + sym ++bols/\\"))
+			lexing_engine.insertCharacter(/*character :*/ character);
 
 		std::vector<tul::protocols::Token> &token_stack = lexing_engine.getTokenStack();
 
@@ -185,8 +185,8 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
 		SECTION("Check if the types are correct")
 		{
 			using namespace tul::protocols;
-			unsigned iterator_ = 0;
-			#define caze(type_name) REQUIRE(token_stack.at(iterator_++).token_type == TokenType::type_name)
+			unsigned iterator = 0;
+			#define caze(type_name) REQUIRE(token_stack.at(iterator++).token_type == TokenType::type_name)
 				caze(IDENTIFIER_CLASS);
 				caze(SYMBOL_STAR);
 				caze(SYMBOL_PLUS);
@@ -194,7 +194,7 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
 				caze(SYMBOL_PLUS__PLUS);
 				caze(IDENTIFIER_PACKAGE);
 			#undef caze
-			REQUIRE(token_stack.size() == iterator_);
+			REQUIRE(token_stack.size() == iterator);
 		}
 	}
 
@@ -202,15 +202,15 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
 	SECTION("Are keywords detected?")
 	{
 		tul::lexer::Lexer lexing_engine;
-		for (char character_ : std::string("Muh * if()while() hack() + sym ++bols/\\"))
-			lexing_engine.insertCharacter(/*character_ :*/ character_);
+		for (char character : std::string("Muh * if()while() hack() + sym ++bols/\\"))
+			lexing_engine.insertCharacter(/*character :*/ character);
 
 		std::vector<tul::protocols::Token> &token_stack = lexing_engine.getTokenStack();
 
 		REQUIRE(token_stack.size() == 15);
 		using namespace tul::protocols;
-		unsigned iterator_ = 0;
-		#define caze(type_name) REQUIRE(token_stack.at(iterator_++).token_type == TokenType::type_name)
+		unsigned iterator = 0;
+		#define caze(type_name) REQUIRE(token_stack.at(iterator++).token_type == TokenType::type_name)
 			caze(IDENTIFIER_CLASS);
 			caze(SYMBOL_STAR);
 			caze(KEYWORD_IF);
@@ -227,7 +227,7 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
 			caze(SYMBOL_PLUS__PLUS);
 			caze(IDENTIFIER_PACKAGE);
 		#undef caze
-		REQUIRE(token_stack.size() == iterator_);
+		REQUIRE(token_stack.size() == iterator);
 	}
 
 
@@ -236,10 +236,10 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
 		using namespace tul::protocols;
 
 		tul::lexer::Lexer lexing_engine;
-		for (char character_ : std::string("æøå\u0000\u0001\u0002\u0003\u0004\u0005\u0006\u0007\u0008\u000E\u000F\u0010\u0011\u0012\u0013\u0014\u0015\u0016\u0017\u0018\u0019\u001A\u001B\u001C\u001D\u001E\u001F"))
-			REQUIRE (lexing_engine.insertCharacter(/*character_ :*/ character_) == false );
-		for (char character_ : std::string("\"æøå\u0000\u0001\u0002\u0003\u0004\u0005\u0006\u0007\u0008\u000E\u000F\u0010\u0011\u0012\u0013\u0014\u0015\u0016\u0017\u0018\u0019\u001A\u001B\u001C\u001D\u001E\u001F\" "))
-			REQUIRE (lexing_engine.insertCharacter(/*character_ :*/ character_) == true );
+		for (char character : std::string("æøå\u0000\u0001\u0002\u0003\u0004\u0005\u0006\u0007\u0008\u000E\u000F\u0010\u0011\u0012\u0013\u0014\u0015\u0016\u0017\u0018\u0019\u001A\u001B\u001C\u001D\u001E\u001F"))
+			REQUIRE (lexing_engine.insertCharacter(/*character :*/ character) == false );
+		for (char character : std::string("\"æøå\u0000\u0001\u0002\u0003\u0004\u0005\u0006\u0007\u0008\u000E\u000F\u0010\u0011\u0012\u0013\u0014\u0015\u0016\u0017\u0018\u0019\u001A\u001B\u001C\u001D\u001E\u001F\" "))
+			REQUIRE (lexing_engine.insertCharacter(/*character :*/ character) == true );
 
 		std::vector<tul::protocols::Token> &token_stack = lexing_engine.getTokenStack();
 		REQUIRE(token_stack.size() == 1);
@@ -252,22 +252,22 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
 	{
 		using namespace tul::lexer;
 		Lexer lex_eng;
-		for (auto char_ : std::string("private 32u x_ = 3; "))
-			lex_eng.insertCharacter(char_);
+		for (auto character : std::string("private 32u x = 3; "))
+			lex_eng.insertCharacter(character);
 
 		std::vector<tul::protocols::Token> &token_stack = lex_eng.getTokenStack();
 		REQUIRE(token_stack.size() == 6);
 		using namespace tul::protocols;
-		unsigned iterator_ = 0;
-		#define caze(type_name) REQUIRE(token_stack.at(iterator_++).token_type == TokenType::type_name)
+		unsigned iterator = 0;
+		#define caze(type_name) REQUIRE(token_stack.at(iterator++).token_type == TokenType::type_name)
 			caze(IDENTIFIER_PACKAGE);
 			caze(PRIMITIVE_UNSIGNED);
-			caze(IDENTIFIER_VARIABLE);
+			caze(IDENTIFIER_PACKAGE);
 			caze(SYMBOL_EQUAL);
 			caze(INTEGER_LITERAL);
 			caze(SYMBOL_SEMICOLON__PRUNE);
 		#undef caze
-		REQUIRE(token_stack.size() == iterator_);
+		REQUIRE(token_stack.size() == iterator);
 	}
 
 
@@ -275,37 +275,37 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
 	{
 		using namespace tul::lexer;
 		Lexer lex_eng;
-		for (auto char_ : std::string("public (:)   public (: ) "))
-			lex_eng.insertCharacter(char_);
+		for (auto character : std::string("public (:)   public (: ) "))
+			lex_eng.insertCharacter(character);
 
 		std::vector<tul::protocols::Token> &token_stack = lex_eng.getTokenStack();
 		REQUIRE(token_stack.size() == 8);
-		unsigned iterator_ = 0;
+		unsigned iterator = 0;
 		for (int i = 0; i < 2; ++i)
 		{
 			using namespace tul::protocols;
-			#define caze(type_name) REQUIRE(token_stack.at(iterator_++).token_type == TokenType::type_name)
+			#define caze(type_name) REQUIRE(token_stack.at(iterator++).token_type == TokenType::type_name)
 				caze(IDENTIFIER_PACKAGE);
 				caze(GROUPER_LEFT_PARENTHESIS);
 				caze(SYMBOL_COLON__PRUNE);
 				caze(GROUPER_RIGHT_PARENTHESIS);
 			#undef caze
 		}
-		REQUIRE(token_stack.size() == iterator_);
+		REQUIRE(token_stack.size() == iterator);
 	}
 
 	SECTION("Ensure the correct identification of access specifiers")
 	{
 		using namespace tul::lexer;
 		Lexer lex_eng;
-		for (auto char_ : std::string("inp_a "))
-			lex_eng.insertCharacter(char_);
+		for (auto character : std::string("inp_a "))
+			lex_eng.insertCharacter(character);
 
 		std::vector<tul::protocols::Token> &token_stack = lex_eng.getTokenStack();
 		REQUIRE(token_stack.size() == 1);
-		unsigned iterator_ = 0;
+		unsigned iterator = 0;
 		using namespace tul::protocols;
-		#define caze(type_name) REQUIRE(token_stack.at(iterator_++).token_type == TokenType::type_name)
+		#define caze(type_name) REQUIRE(token_stack.at(iterator++).token_type == TokenType::type_name)
 			caze(IDENTIFIER_VARIABLE);
 		#undef caze
 	}

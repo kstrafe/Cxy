@@ -30,8 +30,8 @@ public:
 
 	CommentBuffer();
 
-	void putCharInto(char char_);
-	char getCharFrom(uint8_t location_);
+	void putCharInto(char character);
+	char getCharFrom(uint8_t location);
 
 private:
 

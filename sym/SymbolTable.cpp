@@ -26,16 +26,16 @@ bool SymbolTable::addModule
 	Module *mod_entry
 )
 {
-	Module *mod_ = findModule(qualified_name);
-	if (mod_) return true;
+	Module *mod = findModule(qualified_name);
+	if (mod) return true;
 	module_map[qualified_name] = mod_entry;
 	return false;
 }
 
 Entry *SymbolTable::findEntry(const std::string &qualified_name)
 {
-	Module *module_ = findModule(qualified_name);
-	return module_->findEntry(qualified_name);
+	Module *module = findModule(qualified_name);
+	return module->findEntry(qualified_name);
 }
 
 Module *SymbolTable::findModule(const std::string &qualified_name)

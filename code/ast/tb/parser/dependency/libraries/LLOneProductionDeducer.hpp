@@ -95,16 +95,16 @@ public:
 		return iterator_over_map != production_rules[left_side].cend();
 	}
 
-	std::vector<SYMBOL> getTransitionTokens(const SYMBOL symbol_) const
+	std::vector<SYMBOL> getTransitionTokens(const SYMBOL symbol) const
 	{
-		auto iterator_ = production_rules.find(symbol_);
-		if (iterator_ == production_rules.end())
+		auto iterator = production_rules.find(symbol);
+		if (iterator == production_rules.end())
 			return {};
-		auto &transition_map = iterator_->second;
-		std::vector<SYMBOL> return_;
-		for (auto &prod_ : transition_map)
-			return_.emplace_back(prod_.first);
-		return return_;
+		auto &transition_map = iterator->second;
+		std::vector<SYMBOL> to_return;
+		for (auto &prod : transition_map)
+			to_return.emplace_back(prod.first);
+		return to_return;
 	}
 
 private:

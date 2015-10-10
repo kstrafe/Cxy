@@ -20,7 +20,7 @@ along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace tul { namespace dependency {
 
-void PositionCounter::countCharacter(char character_)
+void PositionCounter::countCharacter(char character)
 {
 	/**
 		We need to count UTF-8 monospace character length (the amount of code points). This is the perceived.
@@ -52,17 +52,17 @@ void PositionCounter::countCharacter(char character_)
 		return;
 	}
 
-	if (static_cast<unsigned char>(character_) & 0b10000000)
+	if (static_cast<unsigned char>(character) & 0b10000000)
 	{
-		if (static_cast<unsigned char>(character_) & 0b01000000)
+		if (static_cast<unsigned char>(character) & 0b01000000)
 		{
-			if (static_cast<unsigned char>(character_) & 0b00100000)
+			if (static_cast<unsigned char>(character) & 0b00100000)
 			{
-				if (static_cast<unsigned char>(character_) & 0b00010000)
+				if (static_cast<unsigned char>(character) & 0b00010000)
 				{
-					if (static_cast<unsigned char>(character_) & 0b00001000)
+					if (static_cast<unsigned char>(character) & 0b00001000)
 					{
-						if (static_cast<unsigned char>(character_) & 0b00000100)
+						if (static_cast<unsigned char>(character) & 0b00000100)
 						{
 							utf_bytes_left = 5;
 						}
@@ -93,7 +93,7 @@ void PositionCounter::countCharacter(char character_)
 	}
 	else
 	{
-		if (character_ == '\n')
+		if (character == '\n')
 		{
 			current_line_number += 1;
 			current_column = 1;

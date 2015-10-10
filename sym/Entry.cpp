@@ -37,9 +37,9 @@ std::string Entry::toString()
 	str_rep += CrossTerminalTools::toString(object_access_specifier);
 
 	std::string str_type_prefixes = "\n";
-	for (CrossTerminal ct_ : type_prefixes)
+	for (CrossTerminal ct : type_prefixes)
 	{
-		str_type_prefixes += CrossTerminalTools::toString(ct_);
+		str_type_prefixes += CrossTerminalTools::toString(ct);
 		str_type_prefixes += "\n";
 	}
 

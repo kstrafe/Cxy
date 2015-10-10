@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 */
 #pragma once
+#include <stdexcept>
 
 
 namespace tul { namespace utilities {
@@ -50,22 +51,33 @@ public:
 	COUNTER getPrevious() const
 	{
 		if (current_value == 0)
-			return maximum_value - 1;
+			return maximum_value;
 		return current_value - 1;
+	}
+
+	void setNumber(COUNTER number)
+	{
+		if (number >= 0 && number <= maximum_value)
+			current_value = number;
+		else
+			throw std::invalid_argument("utilities::RingNumber::setNumber(" + std::to_string(number) + ") is out of the defined bounds specified by the constructor");
 	}
 
 	COUNTER &operator ++ ()
 	{
-		current_value += 1;
-		if (!(current_value < maximum_value))
+		if (current_value == maximum_value)
 			current_value = 0;
+		else
+			current_value += 1;
 		return current_value;
 	}
 
 	COUNTER &operator -- ()
 	{
 		if (current_value == 0)
-			current_value = maximum_value - 1;
+			current_value = maximum_value;
+		else
+			current_value -= 1;
 		return current_value;
 	}
 

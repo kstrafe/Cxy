@@ -25,18 +25,18 @@ namespace tul { namespace protocols {
 
 		ConcreteSyntaxTree::ConcreteSyntaxTree()
 		{
-			token_.entry_type = EntryType::WHITESPACE;
+			token.entry_type = EntryType::WHITESPACE;
 		}
 
-		ConcreteSyntaxTree::ConcreteSyntaxTree(CrossTerminal ct_)
+		ConcreteSyntaxTree::ConcreteSyntaxTree(CrossTerminal ct)
 		:
-			node_type(ct_)
+			node_type(ct)
 		{}
 
 		ConcreteSyntaxTree::~ConcreteSyntaxTree()
 		{
-			for (ConcreteSyntaxTree *child_ : children_)
-				delete child_;
+			for (ConcreteSyntaxTree *child : children)
+				delete child;
 		}
 
 		std::string ConcreteSyntaxTree::toString(int indent)
@@ -47,11 +47,11 @@ namespace tul { namespace protocols {
 			ind += str_strm.str();
 			ind += protocols::CrossTerminalTools::toString(node_type);
 			ind += '(';
-			ind += token_.accompanying_lexeme;
+			ind += token.accompanying_lexeme;
 			ind += ')';
 			ind += '\n';
-			for (auto child_ : children_)
-					ind += child_->toString(indent + 2);
+			for (auto child : children)
+					ind += child->toString(indent + 2);
 			return ind;
 		}
 

@@ -27,9 +27,9 @@ class CrossTerminalTools
 {
 public:
 
-	static bool isKeyword(const CrossTerminal &ct_);
-	static bool isExpression(const CrossTerminal &ct_);
-	static bool isUselessSymbol(const CrossTerminal &ct_);
+	static bool isKeyword(const CrossTerminal &ct);
+	static bool isExpression(const CrossTerminal &ct);
+	static bool isUselessSymbol(const CrossTerminal &ct);
 	static std::string toString(protocols::CrossTerminal cross_terminal);
 };
 

@@ -71,7 +71,7 @@ bool Parser::parseSymbol(const protocols::Token &input_token)
 		switch (parse_return.desired_action)
 		{
 			case ParseReturn<CrossTerminal>::Action::REMOVE_TOP: // Match, also remove from the input stack, by returning, we imply this.
-				symbol_stack.top()->token_ = input_token;
+				symbol_stack.top()->token = input_token;
 				symbol_stack.top()->node_type = cross_terminal;
 				symbol_stack.pop();
 				return true;
@@ -83,14 +83,14 @@ bool Parser::parseSymbol(const protocols::Token &input_token)
 			{
 				ConcreteSyntaxTree *tree_ptr = symbol_stack.top();
 				symbol_stack.pop();
-				for (std::size_t i_ = parse_return.child_symbols->size() - 1; i_ >= 0; --i_)
+				for (std::size_t i = parse_return.child_symbols->size() - 1; i >= 0; --i)
 				{
-					ConcreteSyntaxTree *child_ = new ConcreteSyntaxTree;
-					child_->node_type = (*parse_return.child_symbols)[i_];
+					ConcreteSyntaxTree *child = new ConcreteSyntaxTree;
+					child->node_type = (*parse_return.child_symbols)[i];
 
-					symbol_stack.push(child_);
-					tree_ptr->children_.push_front(child_);
-					if (i_ == 0)
+					symbol_stack.push(child);
+					tree_ptr->children.push_front(child);
+					if (i == 0)
 						break;
 				}
 				continue;
@@ -115,9 +115,9 @@ std::vector<std::string> Parser::formulateExpectedTokens()
 	CrossTerminal cross_t = symbol_stack.top()->node_type;
 	std::vector<CrossTerminal> expected_tokens = cross_parser.calculateExpectedTokens(cross_t);
 	std::vector<std::string> serialized_tokens;
-	for (CrossTerminal ct_ : expected_tokens)
+	for (CrossTerminal ct : expected_tokens)
 	{
-		serialized_tokens.emplace_back(protocols::CrossTerminalTools::toString(ct_));
+		serialized_tokens.emplace_back(protocols::CrossTerminalTools::toString(ct));
 	}
 	return serialized_tokens;
 }

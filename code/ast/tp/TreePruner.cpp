@@ -25,78 +25,78 @@ along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace tul { namespace tp {
 
-void TreePruner::pruneTree(protocols::ConcreteSyntaxTree *ct_)
+void TreePruner::pruneTree(protocols::ConcreteSyntaxTree *ct)
 {
-	// Assume ct_ is the root of the tree.
+	// Assume ct is the root of the tree.
 	// Perform the following actions.
 	// For each node, decide which can stay, recurse
-	for (protocols::ConcreteSyntaxTree *child_ : ct_->children_)
+	for (protocols::ConcreteSyntaxTree *child : ct->children)
 	{
-		pruneTree(child_);
+		pruneTree(child);
 	}
 
-	ct_->children_.erase
+	ct->children.erase
 	(
 		std::remove_if
 		(
-			ct_->children_.begin(), ct_->children_.end(),
-			[](protocols::ConcreteSyntaxTree *child_)
+			ct->children.begin(), ct->children.end(),
+			[](protocols::ConcreteSyntaxTree *child)
 			{
-				assert(child_ != nullptr);
-				bool predicate_ =
-					// child_->node_type == tul::protocols::CrossTerminal::EPSILONATE
-					/* || */  (child_->token_.entry_type == tul::protocols::EntryType::OTHER_SYMBOL
-					&& tul::protocols::CrossTerminalTools::isUselessSymbol(child_->node_type) == true)
-					|| child_->token_.entry_type == tul::protocols::EntryType::GROUPING_SYMBOL
-					|| tul::protocols::CrossTerminalTools::isKeyword(child_->node_type) == true;
-				if (predicate_)
-					delete child_;
-				return predicate_;
+				assert(child != nullptr);
+				bool predicate =
+					// child->node_type == tul::protocols::CrossTerminal::EPSILONATE
+					/* || */  (child->token.entry_type == tul::protocols::EntryType::OTHER_SYMBOL
+					&& tul::protocols::CrossTerminalTools::isUselessSymbol(child->node_type) == true)
+					|| child->token.entry_type == tul::protocols::EntryType::GROUPING_SYMBOL
+					|| tul::protocols::CrossTerminalTools::isKeyword(child->node_type) == true;
+				if (predicate)
+					delete child;
+				return predicate;
 			}
 		),
-		ct_->children_.end()
+		ct->children.end()
 	);
 	// if this node now has one child, and this node is an expression, turn this node into its child?
 	// How about: if any child of mine has 1 child that is an expression, make it that expression?
 	// return;
 	for
 	(
-		std::size_t i_ = 0;
-		i_ < ct_->children_.size();
-		++i_
+		std::size_t i = 0;
+		i < ct->children.size();
+		++i
 	)
 	{
 		if
 		(
 			(
-				ct_->children_[i_]->children_.size() == 1
-				&& tul::protocols::CrossTerminalTools::isExpression(ct_->children_[i_]->node_type)
+				ct->children[i]->children.size() == 1
+				&& tul::protocols::CrossTerminalTools::isExpression(ct->children[i]->node_type)
 			)
 			||
 			(
-				ct_->children_[i_]->children_.size() == 2
-				&& ct_->children_[i_]->children_[1]->node_type == protocols::CrossTerminal::EPSILONATE
+				ct->children[i]->children.size() == 2
+				&& ct->children[i]->children[1]->node_type == protocols::CrossTerminal::EPSILONATE
 			)
 		)
 		{
-			assert(ct_->children_[i_]->children_[0]->node_type != protocols::CrossTerminal::EPSILONATE);
+			assert(ct->children[i]->children[0]->node_type != protocols::CrossTerminal::EPSILONATE);
 			// How do we bring that child up? We must make it a proper child of this node. How do we do this?
 			// Detach it from the child:
-			protocols::ConcreteSyntaxTree *transitive_child = ct_->children_[i_]->children_[0];
-			ct_->children_[i_]->children_.erase(ct_->children_[i_]->children_.begin());
+			protocols::ConcreteSyntaxTree *transitive_child = ct->children[i]->children[0];
+			ct->children[i]->children.erase(ct->children[i]->children.begin());
 			// Now make sure that that child doesn't get deleted
-			for (std::size_t j_ = 0; j_ < ct_->children_[i_]->children_.size(); ++j_)
+			for (std::size_t j = 0; j < ct->children[i]->children.size(); ++j)
 			{
-				//protocols::ConcreteSyntaxTree *child_ = ct_->children_[i_]->children_[j_];
-				// std::cout << protocols::CrossTerminalTools::toString(child_->node_type) << j_ << std::endl;
-				delete ct_->children_[i_]->children_[j_];
+				//protocols::ConcreteSyntaxTree *child = ct->children[i]->children[j];
+				// std::cout << protocols::CrossTerminalTools::toString(child->node_type) << j << std::endl;
+				delete ct->children[i]->children[j];
 			}
-			ct_->children_[i_]->children_.clear();
+			ct->children[i]->children.clear();
 			// delete your own child
-			delete ct_->children_[i_];
+			delete ct->children[i];
 
 			// Now assign the transitive child to this child.
-			ct_->children_[i_] = transitive_child;
+			ct->children[i] = transitive_child;
 		}
 	}
 }

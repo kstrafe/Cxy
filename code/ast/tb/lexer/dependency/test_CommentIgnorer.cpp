@@ -24,7 +24,7 @@ along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 #include <string>
 
 
-void expectFrom(std::string from_, std::string to_)
+void expectFrom(std::string from, std::string to)
 {
 	using namespace tul::dependency;
 	using namespace tul;
@@ -35,21 +35,21 @@ void expectFrom(std::string from_, std::string to_)
 	utilities::RingNumber<uint8_t> cycle_buffer(CYCLE_BUFFER_SIZE);
 	char cycle_array[CYCLE_BUFFER_SIZE];
 
-	std::string result_;
+	std::string result;
 
-	for (char in_char : from_)
+	for (char in_char : from)
 	{
 		cycle_array[++cycle_buffer] = in_char;
 		uint8_t action_code = com_ign.putOnStack(in_char);
 		if (action_code == 1)
-			result_.push_back(cycle_array[cycle_buffer.getNumber()]);
+			result.push_back(cycle_array[cycle_buffer.getNumber()]);
 		else if (action_code == 2)
 		{
-			result_.push_back(cycle_array[cycle_buffer.getPrevious()]);
-			result_.push_back(cycle_array[cycle_buffer.getNumber()]);
+			result.push_back(cycle_array[cycle_buffer.getPrevious()]);
+			result.push_back(cycle_array[cycle_buffer.getNumber()]);
 		}
 	}
-	REQUIRE(to_ == result_);
+	REQUIRE(to == result);
 }
 
 
@@ -64,8 +64,8 @@ TEST_CASE("Ignore comments correctly", "[test-CommentIgnorer]")
 	expectFrom("Hi! \"// /*wow \"*/ there\nyou", "Hi! \"// /*wow \"*/ there\nyou");
 	expectFrom
 	(
-		"a_.callSome(); // Make sure the call works\na_.makeValue(x_: a_.getValue()~val_ + b_);//This comment has no spaces around \"//\"!",
-		"a_.callSome(); \na_.makeValue(x_: a_.getValue()~val_ + b_);"
+		"a.callSome(); // Make sure the call works\na.makeValue(x: a.getValue()~val + b);//This comment has no spaces around \"//\"!",
+		"a.callSome(); \na.makeValue(x: a.getValue()~val + b);"
 	);
 	expectFrom("/**/A", "A");
 	expectFrom("//\nA", "\nA");

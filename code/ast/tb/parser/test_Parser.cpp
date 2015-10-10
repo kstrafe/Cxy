@@ -27,16 +27,16 @@ TEST_CASE("Test parser", "[test-Parser]")
 {
 	SECTION("Make sure that the root object has ENTER as type")
 	{
-		tul::parser::Parser parser_;
-		std::unique_ptr<tul::protocols::ConcreteSyntaxTree> tree_ = parser_.getConcreteSyntaxTree();
-		REQUIRE(tree_->node_type == tul::protocols::CrossTerminal::ENTER);
+		tul::parser::Parser parser;
+		std::unique_ptr<tul::protocols::ConcreteSyntaxTree> tree = parser.getConcreteSyntaxTree();
+		REQUIRE(tree->node_type == tul::protocols::CrossTerminal::ENTER);
 	}
 	SECTION("Try parsing simple a simple expression")
 	{
 		using namespace tul::protocols;
-		tul::parser::Parser parser_;
-		auto parseSymbol = [&parser_](const TokenType &token_type) -> void {Token token_; token_.token_type = token_type; REQUIRE(parser_.parseSymbol(token_) == true);};
-		auto parseFail = [&parser_](const TokenType &token_type) -> void {Token token_; token_.token_type = token_type; REQUIRE(parser_.parseSymbol(token_) == false);};
+		tul::parser::Parser parser;
+		auto parseSymbol = [&parser](const TokenType &token_type) -> void {Token token; token.token_type = token_type; REQUIRE(parser.parseSymbol(token) == true);};
+		auto parseFail = [&parser](const TokenType &token_type) -> void {Token token; token.token_type = token_type; REQUIRE(parser.parseSymbol(token) == false);};
 
 		parseSymbol(TokenType::IDENTIFIER_PACKAGE);
 		parseSymbol(TokenType::SYMBOL_DOT__PRUNE);

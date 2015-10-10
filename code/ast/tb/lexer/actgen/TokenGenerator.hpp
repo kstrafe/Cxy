@@ -35,7 +35,7 @@ class TokenGenerator
 {
 public:
 
-	std::size_t consumeCharacter(char character_, protocols::Action action_);
+	std::size_t consumeCharacter(char character, protocols::Action action);
 	std::vector<protocols::Token> &getTokenStack();
 
 private:

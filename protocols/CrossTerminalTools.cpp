@@ -53,7 +53,6 @@ bool CrossTerminalTools::isExpression(const CrossTerminal &ct_)
         case CrossTerminal::OPTIONAL_OR_EXPRESSION: return true;
         case CrossTerminal::OPTIONAL_RELATIONAL_EXPRESSION: return true;
         case CrossTerminal::OR_EXPRESSION: return true;
-        case CrossTerminal::PACKAGE_MEMBER_EXPRESSION: return true;
         case CrossTerminal::RELATIONAL_EXPRESSION: return true;
         case CrossTerminal::UNARY_EXPRESSION: return true;
         case CrossTerminal::WHEN_EXPRESSION: return true;
@@ -126,6 +125,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::CODE_BLOCK: return "CODE_BLOCK";
         case protocols::CrossTerminal::DATA_DECLARATION: return "DATA_DECLARATION";
         case protocols::CrossTerminal::DATA_DECLARATION_STATEMENT: return "DATA_DECLARATION_STATEMENT";
+        case protocols::CrossTerminal::DATA_NAMES: return "DATA_NAMES";
         case protocols::CrossTerminal::DEFER_STATEMENT: return "DEFER_STATEMENT";
         case protocols::CrossTerminal::DO_STATEMENT: return "DO_STATEMENT";
         case protocols::CrossTerminal::ELSE_STATEMENT: return "ELSE_STATEMENT";
@@ -137,6 +137,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::EXPRESSION_EXPRESSION: return "EXPRESSION_EXPRESSION";
         case protocols::CrossTerminal::FOR_STATEMENT: return "FOR_STATEMENT";
         case protocols::CrossTerminal::FUNCTION_DEFINITION: return "FUNCTION_DEFINITION";
+        case protocols::CrossTerminal::FUNCTION_NAMES: return "FUNCTION_NAMES";
         case protocols::CrossTerminal::FUNCTION_SIGNATURE: return "FUNCTION_SIGNATURE";
         case protocols::CrossTerminal::GOTO_STATEMENT: return "GOTO_STATEMENT";
         case protocols::CrossTerminal::GRANT_DEFINITION: return "GRANT_DEFINITION";
@@ -201,7 +202,6 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::OPTIONAL_PARAMETER_LIST: return "OPTIONAL_PARAMETER_LIST";
         case protocols::CrossTerminal::OPTIONAL_RELATIONAL_EXPRESSION: return "OPTIONAL_RELATIONAL_EXPRESSION";
         case protocols::CrossTerminal::OR_EXPRESSION: return "OR_EXPRESSION";
-        case protocols::CrossTerminal::PACKAGE_MEMBER_EXPRESSION: return "PACKAGE_MEMBER_EXPRESSION";
         case protocols::CrossTerminal::PARAMETER_LIST: return "PARAMETER_LIST";
         case protocols::CrossTerminal::PRIMITIVE_SIGNED: return "PRIMITIVE_SIGNED";
         case protocols::CrossTerminal::PRIMITIVE_UNSIGNED: return "PRIMITIVE_UNSIGNED";

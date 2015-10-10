@@ -47,23 +47,23 @@ class Lexer
 {
 public:
 
-	bool insertCharacter(char character_);
+	bool insertCharacter(char character);
 	std::vector<protocols::Token> &getTokenStack();
 
 private:
 
-	bool insertCharacterAfterComments(char character_);
+	bool insertCharacterAfterComments(char character);
 
 	template <typename F>
-	bool isAnyOf(char a_, F f_)
+	bool isAnyOf(char a, F f)
 	{
-		return a_ == f_;
+		return a == f;
 	}
 
 	template <typename F, typename ...Fs>
-	bool isAnyOf(char a_, F f_, Fs ...fs_)
+	bool isAnyOf(char a, F f, Fs ...fs)
 	{
-		return a_ == f_ || isAnyOf(a_, fs_...);
+		return a == f || isAnyOf(a, fs...);
 	}
 
 	protocols::TokenType getKeyword(const std::string &test_lexeme) const;
@@ -71,7 +71,7 @@ private:
 	void identifyToken(protocols::Token &token);
 	void identifyTokenAfterStrippingUnderscores(protocols::Token &token);
 
-	protocols::EntryType typify (char val_);
+	protocols::EntryType typify (char val);
 
 	std::vector<protocols::Token> token_stack;
 
