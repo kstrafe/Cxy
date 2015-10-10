@@ -73,7 +73,4 @@ TEST_CASE("Ignore comments correctly", "[test-CommentIgnorer]")
 	expectFrom("\"/*A\"", "\"/*A\"");
 	expectFrom("\"/*A*/\"", "\"/*A*/\"");
 	expectFrom("/*A*/", "");
-
-
-
 }
