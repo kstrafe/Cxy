@@ -26,30 +26,30 @@ along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace tul { namespace dependency {
 
-std::size_t TokenGenerator::consumeCharacter(char character_, protocols::Action action_)
+std::size_t TokenGenerator::consumeCharacter(char character, protocols::Action action)
 {
 	using namespace protocols;
-	switch (action_)
+	switch (action)
 	{
 		case Action::N:
 			// Do nothing
 			return 0;
 		break;
 		case Action::P:
-			current_working_lexeme.push_back(character_);
+			current_working_lexeme.push_back(character);
 			return 0;
 		break;
 		case Action::E:
 			return std::numeric_limits<std::size_t>::max();
 		break;
 		case Action::PTG:
-			current_working_lexeme.push_back(character_);
+			current_working_lexeme.push_back(character);
 			token_stack.emplace_back(Token {0, 0, EntryType::GROUPING_SYMBOL, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
 			return 1;
 		break;
 		case Action::TAPTG:
 			token_stack.emplace_back(Token {0, 0, EntryType::ALPHA_DIGIT_OR_UNDERSCORE, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
-			current_working_lexeme.push_back(character_);
+			current_working_lexeme.push_back(character);
 			token_stack.emplace_back(Token {0, 0, EntryType::GROUPING_SYMBOL, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
 			return 2;
 		break;
@@ -59,28 +59,28 @@ std::size_t TokenGenerator::consumeCharacter(char character_, protocols::Action 
 		break;
 		case Action::TAP:
 			token_stack.emplace_back(Token {0, 0, EntryType::ALPHA_DIGIT_OR_UNDERSCORE, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
-			current_working_lexeme.push_back(character_);
+			current_working_lexeme.push_back(character);
 			return 1;
 		break;
 		case Action::TRP:
 			token_stack.emplace_back(Token {0, 0, EntryType::QUOTE_SYMBOL, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
-			current_working_lexeme.push_back(character_);
+			current_working_lexeme.push_back(character);
 			return 1;
 		break;
 		case Action::TRPTG:
 			token_stack.emplace_back(Token {0, 0, EntryType::QUOTE_SYMBOL, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
-			current_working_lexeme.push_back(character_);
+			current_working_lexeme.push_back(character);
 			token_stack.emplace_back(Token {0, 0, EntryType::GROUPING_SYMBOL, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
 			return 2;
 		break;
 		case Action::TSP:
 			token_stack.emplace_back(Token {0, 0, EntryType::OTHER_SYMBOL, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
-			current_working_lexeme.push_back(character_);
+			current_working_lexeme.push_back(character);
 			return 1;
 		break;
 		case Action::TSPTG:
 			token_stack.emplace_back(Token {0, 0, EntryType::OTHER_SYMBOL, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
-			current_working_lexeme.push_back(character_);
+			current_working_lexeme.push_back(character);
 			token_stack.emplace_back(Token {0, 0, EntryType::GROUPING_SYMBOL, TokenType::UNIDENTIFIED, std::move(current_working_lexeme)} );
 			return 2;
 		break;

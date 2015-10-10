@@ -26,8 +26,8 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
 	SECTION("Lexing a natural language string")
 	{
 		tul::lexer::Lexer lexing_engine;
-		for (char character_ : std::string("Example test input to see if alphanumeric, especially with numbers like 123 work for the lexer."))
-			lexing_engine.insertCharacter(/*character_ :*/ character_);
+		for (char character : std::string("Example test input to see if alphanumeric, especially with numbers like 123 work for the lexer."))
+			lexing_engine.insertCharacter(/*character :*/ character);
 
 		std::vector<tul::protocols::Token> &token_stack = lexing_engine.getTokenStack();
 
@@ -90,8 +90,8 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
 	SECTION("Check if the lexer lexes string literals correctly")
 	{
 		tul::lexer::Lexer lexing_engine;
-		for (char character_ : std::string("\"Example test input to see if alphanumeric, especially with numbers like 123 work for the lexer.\" "))
-			lexing_engine.insertCharacter(/*character_ :*/ character_);
+		for (char character : std::string("\"Example test input to see if alphanumeric, especially with numbers like 123 work for the lexer.\" "))
+			lexing_engine.insertCharacter(/*character :*/ character);
 
 		std::vector<tul::protocols::Token> &token_stack = lexing_engine.getTokenStack();
 
@@ -105,8 +105,8 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
 	SECTION("Confirm the different alphanumeric identifies")
 	{
 		tul::lexer::Lexer lexing_engine;
-		for (char character_ : std::string("You 1s _cant_ just give 4u upYouGo!"))
-			lexing_engine.insertCharacter(/*character_ :*/ character_);
+		for (char character : std::string("You 1s _cant_ just give 4u upYouGo!"))
+			lexing_engine.insertCharacter(/*character :*/ character);
 
 		std::vector<tul::protocols::Token> &token_stack = lexing_engine.getTokenStack();
 
@@ -134,8 +134,8 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
 	SECTION("Ensure that the groupers work")
 	{
 		tul::lexer::Lexer lexing_engine;
-		for (char character_ : std::string("([[You {]} 1s) _cant_ just give{[(]])]} 4u upYouGo!"))
-			lexing_engine.insertCharacter(/*character_ :*/ character_);
+		for (char character : std::string("([[You {]} 1s) _cant_ just give{[(]])]} 4u upYouGo!"))
+			lexing_engine.insertCharacter(/*character :*/ character);
 
 		std::vector<tul::protocols::Token> &token_stack = lexing_engine.getTokenStack();
 
@@ -176,8 +176,8 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
 	SECTION("Check if symbols are lexed")
 	{
 		tul::lexer::Lexer lexing_engine;
-		for (char character_ : std::string("Muh * + sym ++bols/\\"))
-			lexing_engine.insertCharacter(/*character_ :*/ character_);
+		for (char character : std::string("Muh * + sym ++bols/\\"))
+			lexing_engine.insertCharacter(/*character :*/ character);
 
 		std::vector<tul::protocols::Token> &token_stack = lexing_engine.getTokenStack();
 
@@ -202,8 +202,8 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
 	SECTION("Are keywords detected?")
 	{
 		tul::lexer::Lexer lexing_engine;
-		for (char character_ : std::string("Muh * if()while() hack() + sym ++bols/\\"))
-			lexing_engine.insertCharacter(/*character_ :*/ character_);
+		for (char character : std::string("Muh * if()while() hack() + sym ++bols/\\"))
+			lexing_engine.insertCharacter(/*character :*/ character);
 
 		std::vector<tul::protocols::Token> &token_stack = lexing_engine.getTokenStack();
 
@@ -236,10 +236,10 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
 		using namespace tul::protocols;
 
 		tul::lexer::Lexer lexing_engine;
-		for (char character_ : std::string("æøå\u0000\u0001\u0002\u0003\u0004\u0005\u0006\u0007\u0008\u000E\u000F\u0010\u0011\u0012\u0013\u0014\u0015\u0016\u0017\u0018\u0019\u001A\u001B\u001C\u001D\u001E\u001F"))
-			REQUIRE (lexing_engine.insertCharacter(/*character_ :*/ character_) == false );
-		for (char character_ : std::string("\"æøå\u0000\u0001\u0002\u0003\u0004\u0005\u0006\u0007\u0008\u000E\u000F\u0010\u0011\u0012\u0013\u0014\u0015\u0016\u0017\u0018\u0019\u001A\u001B\u001C\u001D\u001E\u001F\" "))
-			REQUIRE (lexing_engine.insertCharacter(/*character_ :*/ character_) == true );
+		for (char character : std::string("æøå\u0000\u0001\u0002\u0003\u0004\u0005\u0006\u0007\u0008\u000E\u000F\u0010\u0011\u0012\u0013\u0014\u0015\u0016\u0017\u0018\u0019\u001A\u001B\u001C\u001D\u001E\u001F"))
+			REQUIRE (lexing_engine.insertCharacter(/*character :*/ character) == false );
+		for (char character : std::string("\"æøå\u0000\u0001\u0002\u0003\u0004\u0005\u0006\u0007\u0008\u000E\u000F\u0010\u0011\u0012\u0013\u0014\u0015\u0016\u0017\u0018\u0019\u001A\u001B\u001C\u001D\u001E\u001F\" "))
+			REQUIRE (lexing_engine.insertCharacter(/*character :*/ character) == true );
 
 		std::vector<tul::protocols::Token> &token_stack = lexing_engine.getTokenStack();
 		REQUIRE(token_stack.size() == 1);
@@ -252,8 +252,8 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
 	{
 		using namespace tul::lexer;
 		Lexer lex_eng;
-		for (auto char_ : std::string("private 32u x_ = 3; "))
-			lex_eng.insertCharacter(char_);
+		for (auto character : std::string("private 32u x_ = 3; "))
+			lex_eng.insertCharacter(character);
 
 		std::vector<tul::protocols::Token> &token_stack = lex_eng.getTokenStack();
 		REQUIRE(token_stack.size() == 6);
@@ -275,8 +275,8 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
 	{
 		using namespace tul::lexer;
 		Lexer lex_eng;
-		for (auto char_ : std::string("public (:)   public (: ) "))
-			lex_eng.insertCharacter(char_);
+		for (auto character : std::string("public (:)   public (: ) "))
+			lex_eng.insertCharacter(character);
 
 		std::vector<tul::protocols::Token> &token_stack = lex_eng.getTokenStack();
 		REQUIRE(token_stack.size() == 8);
@@ -298,8 +298,8 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
 	{
 		using namespace tul::lexer;
 		Lexer lex_eng;
-		for (auto char_ : std::string("inp_a "))
-			lex_eng.insertCharacter(char_);
+		for (auto character : std::string("inp_a "))
+			lex_eng.insertCharacter(character);
 
 		std::vector<tul::protocols::Token> &token_stack = lex_eng.getTokenStack();
 		REQUIRE(token_stack.size() == 1);

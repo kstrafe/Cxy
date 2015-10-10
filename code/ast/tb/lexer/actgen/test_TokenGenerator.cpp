@@ -30,14 +30,14 @@ TEST_CASE("Test the token generator", "[test-TokenGenerator]")
 	//enum class Action { N, E, P, PTG, TAPTG, TA, TAP, TRP, TR, TRPTG, TSP, TSPTG, TS  };
 	{
 		#define cons(action) token_generator.consumeCharacter('a', Action::action)
-		for (int i_ = 0; i_ < 100; ++i_)
+		for (int i = 0; i < 100; ++i)
 		{
 			cons(N);
 			cons(E);
-			if (i_ % 3 == 0)
+			if (i % 3 == 0)
 				cons(P);
 			cons(E);
-			if (i_ % 5 == 0)
+			if (i % 5 == 0)
 				cons(N);
 			cons(P);
 		}
@@ -51,9 +51,9 @@ TEST_CASE("Test the token generator", "[test-TokenGenerator]")
 	}
 	SECTION("For some reason the client requests only transfers! Let's see if it holds up...")
 	{
-		for (int i_ = 0; i_ < 100; ++i_)
+		for (int i = 0; i < 100; ++i)
 		{
-			REQUIRE(token_generator.consumeCharacter(static_cast<char>(i_ % 256), Action::TAP) == 1);
+			REQUIRE(token_generator.consumeCharacter(static_cast<char>(i % 256), Action::TAP) == 1);
 		}
 		REQUIRE(token_generator.getTokenStack().size() == 100 + 1 - 1); // Remember +1 from previous, but also remember that the last one pushed is not transfered
 	}

@@ -18,6 +18,7 @@ along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 #define CATCH_CONFIG_MAIN // Only in one cpp file
 #include "libraries/catch.hpp"
 
+
 TEST_CASE("Test system operational", "[test-system]")
 {
 	REQUIRE(true);
