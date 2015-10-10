@@ -235,6 +235,29 @@ something that is evaluated during compile-time, whereas () is during run-time.
 		var 64u y = cast[type[x]](x);
 	}
 
+=== Kevin: Sat 10 Oct 2015 05:28:01 AM CEST
+
+An idea that came to mind is how grants my allow double-granting simply by specifying
+an inner grant.
+
+	granted String has {
+		var 32u a;
+		granted Internal has {
+			var 32s b;
+		}
+	}
+
+	(:) something {
+		var String[Internal: my.Class] alpha;
+		alpha.a = 100;
+	}
+
+Note how we can specify an internal class into the grant. This is different from specifying
+multiple grants. The grants are specified recursively. I see nothing wrong with this
+grammar. It looks interesting. I bet you can do some interesting things with it.
+
+===
+
 *Conclusion*: Grants are given by the following grammar:
 
 	Grant ::= grant Identifier has \{ {Signature name;} \}
