@@ -34,7 +34,7 @@ Let's look at what appears practical
 	((:) b):(30u a) functionName                     // Returning a b void function
 	(ptr (:) b):(18u a) functionName                 // Returning a b, a pointer to a void function.
 	(ptr (->) b)->(32s a) functionName               // Returning a b, a pointer to a void function, using arrows
-	(32u a_, 8u b_ : C c_) functionName
+	(32u a, 8u b : C c) functionName
 
 
 Why use arrows when typing is cheaper using a colon? The function declaration will
@@ -46,6 +46,37 @@ language terser and is also easily parsable. Not to mention more easily
 understandable due to the nature of nested functions:
 
 	(ptr (:) function_match : 32u table_entry) getFunction {}
+
+=== Kevin R. S. Sat 10 Oct 2015 10:25:28 PM CEST
+
+An important conundrum has arrived. The first unnamed variable of the input can cause
+an ambiguous grammar to be created. This grammar comes from the fact that a parameter
+list can contain arbitrary expressions. So we can have an expression on the left size, a colon, and an expression on the right side.
+
+	call(a + b : c) // Does not make sense
+
+This does not make any sense. How do we still allow a single unnamed parameter to
+be given as an argument in it's parameter list? We could invert the order:
+
+	call(c + a : b) // Makes sense
+
+This allows the grammar to be of the type `EXPRESSION OPTIONAL_NAMED`. This is exactly
+what we want. An LL(1) grammar. The question is: is this desirable? First of all,
+it appears quite readable. However, it also gets unwieldy to find the name if the
+expression is sufficiently long.
+
+	fun(x*x*t.getNumber()+x*x:x,x*x*x+3/5/a^b:y);
+
+Using basic spacing should clear this up. There's something that I don't particularly
+like about this form. The idea was for the names to come before the expressions. Something
+that does not appear to be possible simply because we want a single anonymous name.
+Actually, it can be considered as a comment that actually means something.
+
+	func(700 : number_of_items);
+
+That's actually really neat and useful. Yeah. Let's make it this way.
+
+===
 
 *Conclusion*: Function signatures are to be written in the following form.
 
