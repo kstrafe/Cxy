@@ -59,4 +59,24 @@ TEST_CASE("RingNumber must behave in a modulus way", "[test-RingNumber]")
 		REQUIRE(--ring == 8);
 		REQUIRE(++ring == 9);
 	}
+	SECTION("Check the exception trigger")
+	{
+		RingNumber<uint8_t> ring(0);
+		REQUIRE(++ring == 0);
+		REQUIRE(--ring == 0);
+		REQUIRE(ring.getPrevious() == 0);
+		REQUIRE(ring.getNumber() == 0);
+		REQUIRE_THROWS(ring.setNumber(1));
+		ring.setNumber(0);
+	}
+	SECTION("Check the exception trigger on a normal number")
+	{
+		RingNumber<uint8_t> ring(5);
+		REQUIRE(++ring == 1);
+		REQUIRE(--ring == 0);
+		REQUIRE(ring.getPrevious() == 5);
+		REQUIRE(ring.getNumber() == 0);
+		REQUIRE_THROWS(ring.setNumber(6));
+		ring.setNumber(0);
+	}
 }
