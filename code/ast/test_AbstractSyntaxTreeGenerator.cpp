@@ -77,7 +77,7 @@ TEST_CASE("AbstractSyntaxTreeGenerator must validate the grammar.", "[test-Abstr
 		32u a = 3, b = 100;
 		ptr (sml.String ret : sml.String inp) ptr2_fun;
 
-		(:) enterProgram
+		(:) enter
 		{
 			var 64s some64s; // Allocate on the stack
 			var sml.String some_string;

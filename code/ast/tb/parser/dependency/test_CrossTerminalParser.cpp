@@ -18,7 +18,6 @@ along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 #include "CrossTerminalParser.hpp"
 #include "libraries/catch.hpp"
 
-
 #include <iostream>
 #include <vector>
 
