@@ -46,7 +46,9 @@ protocols::CrossTerminal TokenTypeToCrossTerminal::convertToCrossTerminal(protoc
         case protocols::TokenType::KEYWORD_ELSE: return protocols::CrossTerminal::KEYWORD_ELSE;
         case protocols::TokenType::KEYWORD_FOR: return protocols::CrossTerminal::KEYWORD_FOR;
         case protocols::TokenType::KEYWORD_GOTO: return protocols::CrossTerminal::KEYWORD_GOTO;
+        case protocols::TokenType::KEYWORD_GRANT: return protocols::CrossTerminal::KEYWORD_GRANT;
         case protocols::TokenType::KEYWORD_HACK: return protocols::CrossTerminal::KEYWORD_HACK;
+        case protocols::TokenType::KEYWORD_HAS: return protocols::CrossTerminal::KEYWORD_HAS;
         case protocols::TokenType::KEYWORD_IF: return protocols::CrossTerminal::KEYWORD_IF;
         case protocols::TokenType::KEYWORD_LABEL: return protocols::CrossTerminal::KEYWORD_LABEL;
         case protocols::TokenType::KEYWORD_PTR: return protocols::CrossTerminal::KEYWORD_PTR;
@@ -57,6 +59,7 @@ protocols::CrossTerminal TokenTypeToCrossTerminal::convertToCrossTerminal(protoc
         case protocols::TokenType::KEYWORD_VAR: return protocols::CrossTerminal::KEYWORD_VAR;
         case protocols::TokenType::KEYWORD_WHEN: return protocols::CrossTerminal::KEYWORD_WHEN;
         case protocols::TokenType::KEYWORD_WHILE: return protocols::CrossTerminal::KEYWORD_WHILE;
+        case protocols::TokenType::OPTIONAL_GRANT_LIST: return protocols::CrossTerminal::OPTIONAL_GRANT_LIST;
         case protocols::TokenType::PRIMITIVE_SIGNED: return protocols::CrossTerminal::PRIMITIVE_SIGNED;
         case protocols::TokenType::PRIMITIVE_UNSIGNED: return protocols::CrossTerminal::PRIMITIVE_UNSIGNED;
         case protocols::TokenType::STRING: return protocols::CrossTerminal::STRING;
@@ -88,6 +91,7 @@ protocols::CrossTerminal TokenTypeToCrossTerminal::convertToCrossTerminal(protoc
         case protocols::TokenType::SYMBOL_PLUS: return protocols::CrossTerminal::SYMBOL_PLUS;
         case protocols::TokenType::SYMBOL_PLUS__EQUAL: return protocols::CrossTerminal::SYMBOL_PLUS__EQUAL;
         case protocols::TokenType::SYMBOL_PLUS__PLUS: return protocols::CrossTerminal::SYMBOL_PLUS__PLUS;
+        case protocols::TokenType::SYMBOL_SEMICOLON: return protocols::CrossTerminal::SYMBOL_SEMICOLON;
         case protocols::TokenType::SYMBOL_SEMICOLON__PRUNE: return protocols::CrossTerminal::SYMBOL_SEMICOLON__PRUNE;
         case protocols::TokenType::SYMBOL_STAR: return protocols::CrossTerminal::SYMBOL_STAR;
         case protocols::TokenType::SYMBOL_STAR__EQUAL: return protocols::CrossTerminal::SYMBOL_STAR__EQUAL;

@@ -27,6 +27,7 @@ protocols::TokenType KeywordMatcher::getKeyword(const std::string &lexeme)
     else if (lexeme == "static") return TokenType::KEYWORD_STATIC;
     else if (lexeme == "const") return TokenType::KEYWORD_CONST;
     else if (lexeme == "defer") return TokenType::KEYWORD_DEFER;
+    else if (lexeme == "grant") return TokenType::KEYWORD_GRANT;
     else if (lexeme == "label") return TokenType::KEYWORD_LABEL;
     else if (lexeme == "while") return TokenType::KEYWORD_WHILE;
     else if (lexeme == "cast") return TokenType::KEYWORD_CAST;
@@ -36,6 +37,7 @@ protocols::TokenType KeywordMatcher::getKeyword(const std::string &lexeme)
     else if (lexeme == "pure") return TokenType::KEYWORD_PURE;
     else if (lexeme == "when") return TokenType::KEYWORD_WHEN;
     else if (lexeme == "for") return TokenType::KEYWORD_FOR;
+    else if (lexeme == "has") return TokenType::KEYWORD_HAS;
     else if (lexeme == "ptr") return TokenType::KEYWORD_PTR;
     else if (lexeme == "ref") return TokenType::KEYWORD_REF;
     else if (lexeme == "var") return TokenType::KEYWORD_VAR;
