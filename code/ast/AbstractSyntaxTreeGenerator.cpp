@@ -41,10 +41,10 @@ namespace tul { namespace ast {
 
 	bool AbstractSyntaxTreeGenerator::generateSemantics(const std::string &qualified_name)
 	{
-		std::unique_ptr<protocols::ConcreteSyntaxTree> tree_ = tree_builder.getConcreteSyntaxTree();
-		tp::TreePruner::pruneTree(tree_.get());
-		table_builder.runOn(tree_.get(), qualified_name);
-		// std::cout << tree_.get()->toString() << std::endl;
+		std::unique_ptr<protocols::ConcreteSyntaxTree> tree = tree_builder.getConcreteSyntaxTree();
+		tp::TreePruner::pruneTree(tree.get());
+		table_builder.runOn(tree.get(), qualified_name);
+		// std::cout << tree.get()->toString() << std::endl;
 		return true;
 	}
 

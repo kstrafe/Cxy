@@ -53,7 +53,6 @@ bool CrossTerminalTools::isExpression(const CrossTerminal &ct_)
         case CrossTerminal::OPTIONAL_OR_EXPRESSION: return true;
         case CrossTerminal::OPTIONAL_RELATIONAL_EXPRESSION: return true;
         case CrossTerminal::OR_EXPRESSION: return true;
-        case CrossTerminal::PACKAGE_MEMBER_EXPRESSION: return true;
         case CrossTerminal::RELATIONAL_EXPRESSION: return true;
         case CrossTerminal::UNARY_EXPRESSION: return true;
         case CrossTerminal::WHEN_EXPRESSION: return true;
@@ -203,7 +202,6 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::OPTIONAL_PARAMETER_LIST: return "OPTIONAL_PARAMETER_LIST";
         case protocols::CrossTerminal::OPTIONAL_RELATIONAL_EXPRESSION: return "OPTIONAL_RELATIONAL_EXPRESSION";
         case protocols::CrossTerminal::OR_EXPRESSION: return "OR_EXPRESSION";
-        case protocols::CrossTerminal::PACKAGE_MEMBER_EXPRESSION: return "PACKAGE_MEMBER_EXPRESSION";
         case protocols::CrossTerminal::PARAMETER_LIST: return "PARAMETER_LIST";
         case protocols::CrossTerminal::PRIMITIVE_SIGNED: return "PRIMITIVE_SIGNED";
         case protocols::CrossTerminal::PRIMITIVE_UNSIGNED: return "PRIMITIVE_UNSIGNED";

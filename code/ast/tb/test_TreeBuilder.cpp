@@ -37,7 +37,7 @@ namespace
 		using namespace tul::tb;
 		TreeBuilder builder_object;
 		bool ret_val = true;
-		char current_ = '\0';
+		char current = '\0';
 		for (auto input_character : string)
 		{
 			if (builder_object.buildTree(input_character) == false)
@@ -45,13 +45,13 @@ namespace
 				ret_val = false;
 				break;
 			}
-			current_ = input_character;
+			current = input_character;
 		}
 		if (ret_val)
 			ret_val = builder_object.endInput();
 		if (ret_val == false && print_error_if_exists)
 		{
-			std::cout << "last char: " << current_ << std::endl;
+			std::cout << "last char: " << current << std::endl;
 			std::vector<std::string> expected = builder_object.getExpectedTokens();
 			std::cout << "\nError: expected:\n";
 		}
@@ -103,70 +103,70 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 	SECTION("Parse the start of a module: declarations. Some permutations.")
 	{
 		REQUIRE(validate(R"(
-			1u b_;
-			1u a_;
-			1u c_;
+			1u b;
+			1u a;
+			1u c;
 		)"));
 		REQUIRE(validate(R"(
-			1u a_;
-			1u c_;
-			1u b_;
+			1u a;
+			1u c;
+			1u b;
 		)"));
 		REQUIRE(validate(R"(
-			1u c_;
-			1u b_;
-			1u a_;
+			1u c;
+			1u b;
+			1u a;
 		)"));
 	}
 	////////////////////////////////////////////////////////////////////////////////
 	SECTION("Parse the start of a module: declarations and assignments")
 	{
 		REQUIRE(validate(R"(
-			1u b_ = 1;
-			1u a_ = 2;
-			1u c_ = 3;
+			1u b = 1;
+			1u a = 2;
+			1u c = 3;
 		)"));
 		REQUIRE(validate(R"(
-			1u a_(value_: 4);
-			1u c_(value_: 5);
-			1u b_(value_: 6);
+			1u a(value: 4);
+			1u c(value: 5);
+			1u b(value: 6);
 		)"));
 		REQUIRE(validate(R"(
-			1u c_(value_: 7);
-			1u b_ = 8;
-			1u a_;
+			1u c(value: 7);
+			1u b = 8;
+			1u a;
 		)"));
 	}
 	////////////////////////////////////////////////////////////////////////////////
 	SECTION("Check non-data class with expressions")
 	{
 		REQUIRE(validate("(:) enterProgram { }"));
-		REQUIRE(validate("(:) enterProgram { a_ = \"Hi!\"; }"));
-		REQUIRE(validate("(:) enterProgram { a_ = \"Hi!\"; b_ = 300; }"));
-		REQUIRE(validate("(:) enterProgram { a_ = \"Hi!\"; b_ = 300; b_a_ =  b_; }"));
-		REQUIRE(validate("(:) enterProgram { a_ = \"Hi!\"; b_ = 300; b_a_ = 10 * b_; }"));
-		REQUIRE(validate("(:) enterProgram { b_a_ = 100 && 10 * b_ + 5 / 3 - another_identifier; }"));
-		REQUIRE(validate("(:) enterProgram { b_a_ = 100 && 10 * b_ + 5 / 3 - another_identifier | \"Cool m8\"; }"));
-		REQUIRE(validate("(:) enterProgram { b_a_ = sampleFunction()~a_; }"));
-		REQUIRE(validate("(:) enterProgram { b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction()~a_ - another_identifier | \"Cool m8\"; }"));
+		REQUIRE(validate("(:) enterProgram { a = \"Hi!\"; }"));
+		REQUIRE(validate("(:) enterProgram { a = \"Hi!\"; b = 300; }"));
+		REQUIRE(validate("(:) enterProgram { a = \"Hi!\"; b = 300; b_a =  b; }"));
+		REQUIRE(validate("(:) enterProgram { a = \"Hi!\"; b = 300; b_a = 10 * b; }"));
+		REQUIRE(validate("(:) enterProgram { b_a = 100 && 10 * b + 5 / 3 - another_identifier; }"));
+		REQUIRE(validate("(:) enterProgram { b_a = 100 && 10 * b + 5 / 3 - another_identifier | \"Cool m8\"; }"));
+		REQUIRE(validate("(:) enterProgram { b_a = sampleFunction()~a; }"));
+		REQUIRE(validate("(:) enterProgram { b_a = 100 && 10 * b + 5 / 3 * sampleFunction()~a - another_identifier | \"Cool m8\"; }"));
 		REQUIRE(validate(R"(
 			(:) enterProgram
 			{
-				b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction()~a_ - another_identifier | "Cool m8";
-				q_a_d = 100 && 10 * b_ + 5 / 3 * sampleFunction()~a_ - another_identifier | "Cool m8";
-				b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction()~a_ - another_identifier | "Cool m8";
-				b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction()~a_ ^sampleFunction()~a_ - another_identifier | "Cool m8";
-				var Type b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction()~a_ ^sampleFunction()~a_ - another_identifier | "Cool m8";
-				var 800u b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction()~a_ ^sampleFunction()~a_ - another_identifier | "Cool m8";
-				var 8s b_a_ = 100 && 10 * b_ + 5 / 3 * sampleFunction()~a_ ^sampleFunction()~a_ - another_identifier | "Cool m8";
-				var AnotherClassName b_a_ = 100 > 5 && 10 * b_ + 5 / 3 * sampleFunction()~a_ ^sampleFunction()~a_ - another_identifier | "Cool m8";
-				var AnotherClassName b_a_ = when (a_) b_ else c_;
+				b_a = 100 && 10 * b + 5 / 3 * sampleFunction()~a - another_identifier | "Cool m8";
+				q_a_d = 100 && 10 * b + 5 / 3 * sampleFunction()~a - another_identifier | "Cool m8";
+				b_a = 100 && 10 * b + 5 / 3 * sampleFunction()~a - another_identifier | "Cool m8";
+				b_a = 100 && 10 * b + 5 / 3 * sampleFunction()~a ^sampleFunction()~a - another_identifier | "Cool m8";
+				var Type b_a = 100 && 10 * b + 5 / 3 * sampleFunction()~a ^sampleFunction()~a - another_identifier | "Cool m8";
+				var 800u b_a = 100 && 10 * b + 5 / 3 * sampleFunction()~a ^sampleFunction()~a - another_identifier | "Cool m8";
+				var 8s b_a = 100 && 10 * b + 5 / 3 * sampleFunction()~a ^sampleFunction()~a - another_identifier | "Cool m8";
+				var AnotherClassName b_a = 100 > 5 && 10 * b + 5 / 3 * sampleFunction()~a ^sampleFunction()~a - another_identifier | "Cool m8";
+				var AnotherClassName b_a = when (a) b else c;
 			}
 		)"));
 		REQUIRE(false == validate("(:) enterProgram { var const ClassName ", false));
-		REQUIRE(validate("(:) enterProgram { var const ptr ClassName alpha_; }"));
-		REQUIRE(false == validate("(:) enterProgram { var const const ClassName alpha_; }", false));
-		REQUIRE(validate("(:) enterProgram { var const ptr const ClassName alpha_; }"));
+		REQUIRE(validate("(:) enterProgram { var const ptr ClassName alpha; }"));
+		REQUIRE(false == validate("(:) enterProgram { var const const ClassName alpha; }", false));
+		REQUIRE(validate("(:) enterProgram { var const ptr const ClassName alpha; }"));
 	}
 	////////////////////////////////////////////////////////////////////////////////
 	SECTION("A class using different statement types")
@@ -174,13 +174,13 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 		REQUIRE(validate(R"(
 			(:) _enterProgram
 			{
-				var 32u max_ = 1000;
-				var 32u counter_ = 0;
-				while (counter_ < 1000)
+				var 32u max = 1000;
+				var 32u counter = 0;
+				while (counter < 1000)
 				{
-					if (counter_ > 500 + 20)
+					if (counter > 500 + 20)
 					{ printSomething(); }
-					for (const 33s cuda_ = 10; cuda_ < 20; ++cuda_; --cuda_;)
+					for (const 33s cuda = 10; cuda < 20; ++cuda; --cuda;)
 					{
 						++global_var;
 					}
@@ -193,31 +193,31 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 	{
 		////////////////////////////////////////////////////////////
 		REQUIRE(validate(R"(
-			32u variable_ = 0;
+			32u variable = 0;
 
 			(:) enterProgram
 			{
-				++variable_;
+				++variable;
 			}
 
 			(:) performCalculation
 			{
-				--variable_;
+				--variable;
 			}
 		)"));
 		////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////
 		REQUIRE(validate(R"(
-			32u variable_ = 0;
+			32u variable = 0;
 
 			(:) enterProgram
 			{
-				++variable_;
+				++variable;
 			}
 
 			(:) performCalculation
 			{
-				--variable_;
+				--variable;
 			}
 		)"));
 		////////////////////////////////////////////////////////////
@@ -228,54 +228,54 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 		REQUIRE(validate(R"(
 			(:) enterProgram
 			{
-				var 32u a_ = 1000;
-				var ptr 32u b_ = $a_;
+				var 32u a = 1000;
+				var ptr 32u b = $a;
 			}
 		)"));
 		REQUIRE(validate(R"(
 			(:) enterProgram
 			{
-				var 32u a_ = 1000;
-				var ptr 32u b_ = $a_;
-				++@b_;
+				var 32u a = 1000;
+				var ptr 32u b = $a;
+				++@b;
 			}
 		)"));
 		REQUIRE(validate(R"(
 			(:) enterProgram
 			{
-				var 32u a_ = 1000;
-				var ptr 32u b_ = $$a_;
+				var 32u a = 1000;
+				var ptr 32u b = $$a;
 			}
 		)"));
 		REQUIRE(validate(R"(
 			(:) enterProgram
 			{
-				var 32u a_ = 1000;
-				var ptr const 32u b_ = $$a_;
+				var 32u a = 1000;
+				var ptr const 32u b = $$a;
 			}
 		)"));
 		REQUIRE(validate(R"(
 			(:) enterProgram
 			{
-				var 32u a_ = 1000;
-				var ptr const 32u b_ = $$a_;
-				var 32u c_ = @@b_;
+				var 32u a = 1000;
+				var ptr const 32u b = $$a;
+				var 32u c = @@b;
 			}
 		)"));
 		REQUIRE(validate(R"(
 			(:) enterProgram
 			{
-				var 32u a_ = 1000;
-				var ptr 32u b_ = $a_;
-				++ @b_;
+				var 32u a = 1000;
+				var ptr 32u b = $a;
+				++ @b;
 			}
 		)"));
 		REQUIRE(validate(R"(
 			(:) enterProgram
 			{
-				var 32u a_ = 1000;
-				var ptr 32u b_ = $a_;
-				if (!! (@b_ > 100))
+				var 32u a = 1000;
+				var ptr 32u b = $a;
+				if (!! (@b > 100))
 				{
 
 				}
@@ -284,9 +284,9 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 		REQUIRE(validate(R"(
 			(:) enterProgram
 			{
-				var 32u a_ = 1000;
-				var ptr 32u b_ = $a_;
-				if (!! (@b_ > 100))
+				var 32u a = 1000;
+				var ptr 32u b = $a;
+				if (!! (@b > 100))
 				{
 
 				}
@@ -300,9 +300,9 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 		REQUIRE(validate(R"(
 			(:) enterProgram
 			{
-				var 32u a_ = 1000;
-				var ptr 32u b_ = $a_;
-				if (!! (@b_ > 100))
+				var 32u a = 1000;
+				var ptr 32u b = $a;
+				if (!! (@b > 100))
 				{
 
 				}
@@ -326,23 +326,23 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 	SECTION("Argument Lists")
 	{
 		REQUIRE(validate(R"(
-			(32u a_:32u b_) myFunction
+			(32u a:32u b) myFunction
 			{}
 		)"));
 		REQUIRE(validate(R"(
-			(32u a_, Class b_:32u c_) myFunction
+			(32u a, Class b:32u c) myFunction
 			{}
 		)"));
 		REQUIRE(validate(R"(
-			(32u a_, Class b_ : Class c_, 32u d_) myFunction
+			(32u a, Class b : Class c, 32u d) myFunction
 			{}
 		)"));
 		REQUIRE(validate(R"(
-			(32u a_, b_ : Class c_, c2_, 32u d_, e_) myFunction
+			(32u a, 32u b : Class c, Class c2, 32u d, 32u e) myFunction
 			{}
 		)"));
 		REQUIRE(validate(R"(
-			([10, 32u] a_, b_ : Class c_, c2_, 32u d_, e_) myFunction
+			([10, 32u] a, [10, 32u] b : Class c, Class c2, 32u d, 32u e) myFunction
 			{}
 		)"));
 	}
@@ -352,13 +352,13 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 		REQUIRE(validate(R"(
 			(:) enterProgram
 			{
-				var [3, 32u] arr_;
-				arr_[1] = 200;
+				var [3, 32u] arr;
+				arr[1] = 200;
 			}
 
 			(:) anotherFunction
 			{
-				var [2, [3, [4, [5, 8u]]]] szt_;
+				var [2, [3, [4, [5, 8u]]]] szt;
 			}
 		)"));
 	}
@@ -369,7 +369,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 			(:) enterProgram
 			{}
 
-			32u var_;
+			32u var;
 		)", false));
 	}
 	////////////////////////////////////////////////////////////
@@ -378,8 +378,8 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 		REQUIRE(validate(R"(
 			(:) enterProgram
 			{
-				var 32u a_ = 100;
-				var 16u b_ = cast(16u) { a_ } * 5;
+				var 32u a = 100;
+				var 16u b = cast(16u) { a } * 5;
 			}
 		)"));
 	}
@@ -389,23 +389,23 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 		REQUIRE(validate(R"(
 			(:) enterProgram
 			{
-				var SomeClass a_ = SomeClass.createInstance()~instance_;
-				var SomeClass b_ = SomeClass.something_()~ck_;
-				var SomeClass c_ = sys.Cool.something_()~ck_()~x_[3 + 8];
-				var Qs d_ = q.Qz.ctOr()~obj_;
+				var SomeClass a = SomeClass.createInstance()~instance;
+				var SomeClass b = SomeClass.something()~ck;
+				var SomeClass c = sys.Cool.something()~ck()~x[3 + 8];
+				var Qs d = q.Qz.ctOr()~obj;
 			}
 		)"));
 		REQUIRE(validate(R"(
 			(:) enterProgram
 			{
-				var Aa a_ = Aa();
+				var Aa a = Aa();
 			}
 		)"));
 		REQUIRE(validate(R"(
 			(:) enterProgram
 			{
-				var a.Aa a_ = Aa();
-				a_ = b_;
+				var a.Aa a = Aa();
+				a = b;
 			}
 		)"));
 		REQUIRE(validate(R"(
@@ -414,72 +414,72 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 				{
 
 				}
-				var a.Aa a_ = a.Aa();
+				var a.Aa a = a.Aa();
 			}
 		)"));
-		REQUIRE(false == validate(R"(
+		REQUIRE(validate(R"(
 			(:) enterProgram
 			{
-				var a.Aa a_ = a.b.Aa();
+				var a.Aa a = a.b.Aa();
 			}
 		)", false));
 		REQUIRE(false == validate(R"(
 			(:) enterProgram
 			{
-				var a.b.Aa a_ = a.Aa();
+				var a.b.Aa a = a.Aa();
 			}
 		)", false));
 		REQUIRE(validate(R"(
 			(:) enterProgram
 			{
-				var sys.Dir dir_(start_: "/");
-				var sml.String paths_;
-				while (dir_.hasChild()~yes_)
+				var sys.Dir dir(start: "/");
+				var sml.String paths;
+				while (dir.hasChild()~yes)
 				{
-					 paths_ += dir_.getCurrent()~child_[1 + f_()~g_[a.Aa.h_()~j_()~k_[l_]]];
+					 paths += dir.getCurrent()~child[1 + f()~g[a.Aa.h()~j()~k[l]]];
 				}
 
-				a.Aa.g_ += f_;
+				a.Aa.g += f;
 			}
 		)"));
 		REQUIRE(false == validate(R"(
 			(:) enterProgram
 			{
-				a_ = b_ = c_;
+				a = b = c;
 			}
 		)", false));
 
 		REQUIRE(validate(R"(
 			(:) enterProgram
 			{
-				a_[0][1][2];
+				a[0][1][2];
 			}
 		)"));
 		REQUIRE(validate(R"(
 			(:) enterProgram
 			{
-				a_[0, 1, 2];
+				a[0, 1, 2];
 			}
 		)"));
 		REQUIRE(validate(R"(
 			(:) enterProgram
 			{
-				sys.StdOut.printLine(string_: callChild())~alpha_;
+				sys.StdOut.printLine(string: callChild())~alpha;
 			}
 
-			(23u nm_, top_kek : 800u kek_) topKek
+			(23u nm, 23u top_kek : 800u kek) topKek
 			{
-				return nm_: kek_ + 200;
+				return nm: kek + 200;
 			}
 		)"));
 		REQUIRE(validate(R"(
 			(:) enterProgram
 			{
-				if (a_)
+				if (a)
 					aAa();
-				else if (b_)
+				else if (b)
 					bBb();
-				else if (c_)
+				else if (c)
 					cCc();
 				else
 					dDd();
@@ -488,26 +488,26 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 		REQUIRE(validate(R"(
 			(:) enterProgram
 			{
-				if (a_)
+				if (a)
 				{  aAa();  }
-				else if (b_)
+				else if (b)
 				{  bBb();  }
-				else if (c_)
+				else if (c)
 				{  cCc();  }
 				else
 				{ dDd();   }
-				if (e_)
-					what_;
+				if (e)
+					what;
 			}
 		)"));
 		REQUIRE(validate(R"(
 			(:) enterProgram
 			{
-				if (a_)
-					if (b_)
-						what_;
+				if (a)
+					if (b)
+						what;
 					else
-						while (c_)
+						while (c)
 							inside_while;
 			}
 		)"));
@@ -516,7 +516,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 			{
 							hack
 				(
-							assembly_: "mov %eax, %ebx"
+							assembly: "mov %eax, %ebx"
 				);
 			}
 		)"));
@@ -525,7 +525,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 			{
 				static if (3)
 				{
-					a_ + b_;
+					a + b;
 				}
 			}
 		)"));
@@ -534,17 +534,17 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 			{
 				static if (sys.Machine.memory_size)
 				{
-					a_ + b_;
+					a + b;
 				}
 				static else
 				{
 					static if (sys.Machine.processor_type)
 					{
-						a_ - b_;
+						a - b;
 					}
 					static else
 					{
-						a_ * b_;
+						a * b;
 					}
 				}
 			}
@@ -552,34 +552,34 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 		REQUIRE(validate(R"(
 			(:) enterProgram
 			{
-				defer a_ * 4 + someStuff()~a_;
-				var Object object_;
-				object_.initObject();
+				defer a * 4 + someStuff()~a;
+				var Object object;
+				object.initObject();
 				defer
 				{
-					object_.destroyObject();
+					object.destroyObject();
 				}
 			}
 		)"));
 		REQUIRE(validate(R"(
 			(:) enterProgram
 			{
-				static if (sys.Sys.argv_[1])
+				static if (sys.Sys.argv[1])
 				{
-					var 32u x_ = computeSomething(in_: 100, sec_: 100 * 3)~value_;
-					sys.Out.printLn(val_: x_);
+					var 32u x = computeSomething(in: 100, sec: 100 * 3)~value;
+					sys.Out.printLn(val: x);
 				}
 			}
 
-			(32u value_ : 64s in_, sec_ : const pure) computeSomething
+			(32u value : 64s in, 64s sec : const pure) computeSomething
 			{
-				var SomeClass object_(arg_: in_);
-				if (sec_ > 100)
+				var SomeClass object(arg: in);
+				if (sec > 100)
 				{
-					defer object_.doAbove();
-					object_.doSense();
+					defer object.doAbove();
+					object.doSense();
 				}
-				return value_: object_.getVariable()~gotten_;
+				return value: object.getVariable()~gotten;
 			}
 		)"));
 	}

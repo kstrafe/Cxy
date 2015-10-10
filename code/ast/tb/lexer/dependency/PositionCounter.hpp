@@ -31,7 +31,7 @@ class PositionCounter
 {
 public:
 
-	void countCharacter(char character_);
+	void countCharacter(char character);
 	std::size_t getCurrentColumnNumber() const;
 	std::size_t getCurrentLineNumber() const;
 

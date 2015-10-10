@@ -28,15 +28,15 @@ CommentBuffer::CommentBuffer()
 {}
 
 
-void CommentBuffer::putCharInto(char char_)
+void CommentBuffer::putCharInto(char character)
 {
-	cycle_array[++cycle_buffer] = char_;
+	cycle_array[++cycle_buffer] = character;
 }
 
 
-char CommentBuffer::getCharFrom(uint8_t location_)
+char CommentBuffer::getCharFrom(uint8_t location)
 {
-	switch (location_)
+	switch (location)
 	{
 		case 1: return cycle_array[cycle_buffer.getNumber()];
 		case 2: return cycle_array[cycle_buffer.getPrevious()];

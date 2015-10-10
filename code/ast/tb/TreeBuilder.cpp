@@ -46,10 +46,10 @@ bool TreeBuilder::endInput()
 {
 	buildTree(' '); // Use a space to clear out the last symbol
 
-	protocols::Token token_;
-	token_.token_type = protocols::TokenType::END_OF_MODULE;
+	protocols::Token token;
+	token.token_type = protocols::TokenType::END_OF_MODULE;
 
-	if (false == parser_object.parseSymbol(token_))
+	if (false == parser_object.parseSymbol(token))
 	{
 		return false;
 	}

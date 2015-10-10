@@ -66,9 +66,9 @@ public:
 		return compound.action_out;
 	}
 
-	void setState(const STATE state_)
+	void setState(const STATE state)
 	{
-		current_state = state_;
+		current_state = state;
 	}
 
 	STATE getState() const

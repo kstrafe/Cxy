@@ -24,7 +24,7 @@ class TreePruner
 {
 public:
 
-	static void pruneTree(protocols::ConcreteSyntaxTree *ct_);
+	static void pruneTree(protocols::ConcreteSyntaxTree *ct);
 };
 
 }}

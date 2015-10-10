@@ -29,10 +29,10 @@ along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace tul { namespace lexer {
 
-bool Lexer::insertCharacter(char character_)
+bool Lexer::insertCharacter(char character)
 {
-	comment_buffer.putCharInto(character_);
-	uint8_t take_characters = comment_ignorer.putOnStack(character_);
+	comment_buffer.putCharInto(character);
+	uint8_t take_characters = comment_ignorer.putOnStack(character);
 	for (; take_characters > 0; --take_characters)
 		if (insertCharacterAfterComments(comment_buffer.getCharFrom(take_characters)))
 			continue;
@@ -42,12 +42,12 @@ bool Lexer::insertCharacter(char character_)
 }
 
 
-bool Lexer::insertCharacterAfterComments(char character_)
+bool Lexer::insertCharacterAfterComments(char character)
 {
-	protocols::EntryType type_of_character = typify(character_);
+	protocols::EntryType type_of_character = typify(character);
 	protocols::Action action_to_perform = action_generator.computeAction(type_of_character);
 	{
-		std::size_t amount_of_new_tokens = token_generator.consumeCharacter(character_, action_to_perform);
+		std::size_t amount_of_new_tokens = token_generator.consumeCharacter(character, action_to_perform);
 		if (amount_of_new_tokens == std::numeric_limits<std::size_t>::max())
 		{
 			return false;
@@ -90,7 +90,7 @@ bool Lexer::insertCharacterAfterComments(char character_)
 			getTokenStack()[new_token].line_number = position_counter.getCurrentLineNumber();
 		}
 	}
-	position_counter.countCharacter(character_);
+	position_counter.countCharacter(character);
 	return true;
 }
 
@@ -126,7 +126,7 @@ void Lexer::identifyToken(protocols::Token &input_token)
 			break;
 
 	auto has_trailing_underscores = [&]() -> bool { return left_underscores + right_underscores > 0; };
-	// Ensure there are at least +1 characters, the string can NOT be ____, or ____, or __, or _, _a__ is allowed
+	// Ensure there are at least +1 characters, the string can NOT be ___, or ___, or _, or _, _a_ is allowed
 	assert(a_lexeme.size() > left_underscores + right_underscores);
 	// Strip the trailing underscores
 	std::string substitution_lexeme = a_lexeme.substr(left_underscores, a_lexeme.size() - right_underscores - left_underscores);
@@ -299,19 +299,19 @@ void Lexer::identifyTokenAfterStrippingUnderscores(protocols::Token &input_token
 }
 
 
-protocols::EntryType Lexer::typify (char val_)
+protocols::EntryType Lexer::typify (char val)
 {
 	using namespace protocols;
 	const constexpr unsigned char UTF_8_LIMIT = 128;
-	if ((65 <= val_ && val_ <= 90) || (97 <= val_ && val_ <= 122) || val_ == 95 || (48 <= val_ && val_ <= 57))
+	if ((65 <= val && val <= 90) || (97 <= val && val <= 122) || val == 95 || (48 <= val && val <= 57))
 		return EntryType::ALPHA_DIGIT_OR_UNDERSCORE;
-	if (val_ == '"')
+	if (val == '"')
 		return EntryType::QUOTE_SYMBOL;
-	if (isAnyOf(val_, '(', ')', '{', '}', '[', ']'))
+	if (isAnyOf(val, '(', ')', '{', '}', '[', ']'))
 		return EntryType::GROUPING_SYMBOL;
-	else if (isAnyOf(val_, ' ', '\n', '\r', '\f', '\v', '\t'))
+	else if (isAnyOf(val, ' ', '\n', '\r', '\f', '\v', '\t'))
 		return EntryType::WHITESPACE;
-	else if (static_cast<unsigned char>(val_) >= UTF_8_LIMIT || isAnyOf(val_, 0, 1, 2, 3, 4, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 127))
+	else if (static_cast<unsigned char>(val) >= UTF_8_LIMIT || isAnyOf(val, 0, 1, 2, 3, 4, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 127))
 		return EntryType::UNKNOWN_CODE_POINT;
 	else
 		return EntryType::OTHER_SYMBOL;
