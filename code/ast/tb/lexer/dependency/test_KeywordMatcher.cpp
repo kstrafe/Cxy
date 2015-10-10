@@ -19,6 +19,7 @@ along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "libraries/catch.hpp"
 
+
 TEST_CASE("Test keyword matcher", "[test-KeywordMatcher]")
 {
 	SECTION("Attempting to match a few keywords")
@@ -26,8 +27,9 @@ TEST_CASE("Test keyword matcher", "[test-KeywordMatcher]")
 		using namespace tul::dependency;
 		using namespace tul::protocols;
 		auto checkReturn = [](const std::string &lexeme) -> bool { return  KeywordMatcher::getKeyword(lexeme) != TokenType::UNIDENTIFIED; };
+		REQUIRE(checkReturn("do"));
 		REQUIRE(checkReturn("if"));
 		REQUIRE(checkReturn("while"));
-		REQUIRE(checkReturn("do"));
+		REQUIRE(checkReturn("var"));
 	}
 }

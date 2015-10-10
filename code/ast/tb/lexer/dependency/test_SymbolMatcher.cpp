@@ -29,6 +29,7 @@ TEST_CASE("Test symbol matcher", "[test-SymbolMatcher]")
 		REQUIRE(checkReturn("++"));
 		REQUIRE(checkReturn("-"));
 		REQUIRE(checkReturn("^"));
+		REQUIRE(checkReturn("!"));
 		REQUIRE(!checkReturn("if"));
 	}
 }
