@@ -614,5 +614,18 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 				var ptr (:) b = lambda [a $a @a $$a @@a](:){ sml.Out.print(:"Hi"); };
 			}
 		)"));
+		REQUIRE(validate(R"(
+			(:) enter
+			{
+				var 32u a = 1;
+				var ptr (:) b =
+					lambda [a $a @a $$a @@a](:)
+					{
+						sml.Out.print(:"Hi");
+						for (32u i = 1; i < 3; ++i;)
+							sml.Out.print(:i);
+					};
+			}
+		)"));
 	}
 }
