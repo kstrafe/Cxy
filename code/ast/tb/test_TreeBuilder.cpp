@@ -637,5 +637,17 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 				var float x = sin(:32);
 			}
 		)"));
+		REQUIRE(validate(R"(
+			(:) enter {
+				sml.Out.print(
+					: sml.Math.integrateNumericallySimpsons(
+						: lambda [](double out : double in){ sml.Math.exp(:-in*in); },
+						elements: 800,
+						from: -1,
+						to: 1
+					)
+				);
+			}
+		)"));
 	}
 }
