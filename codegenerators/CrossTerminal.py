@@ -66,7 +66,7 @@ productions = {
 		['FUNCTION_SIGNATURE', 'FUNCTION_NAMES', 'GROUPER_LEFT_BRACE', 'STATEMENT_LIST', 'GROUPER_RIGHT_BRACE']
 	],
 	'GRANT_DEFINITION': [
-		['KEYWORD_GRANT', 'IDENTIFIER_CLASS', 'KEYWORD_HAS', 'GROUPER_LEFT_BRACE', 'GRANT_LIST', 'GROUPER_RIGHT_BRACE']
+		['KEYWORD_GRANT', 'IDENTIFIER_CLASS', 'GROUPER_LEFT_BRACE', 'GRANT_LIST', 'GROUPER_RIGHT_BRACE']
 	],
 ################################################################################
 	'TYPE': [
@@ -100,11 +100,12 @@ productions = {
 	],
 	'FUNCTION_NAMES': [
 		['IDENTIFIER_SUBROUTINE'],
-		['IDENTIFIER_PACKAGE']
+		['IDENTIFIER_PACKAGE'],
+		['SYMBOL_PLUS']
 	],
 	'GRANT_LIST': [
-		['TYPE', 'IDENTIFIER_VARIABLE', 'SYMBOL_SEMICOLON', 'OPTIONAL_GRANT_LIST'],
-		['FUNCTION_SIGNATURE', 'IDENTIFIER_VARIABLE', 'SYMBOL_SEMICOLON', 'OPTIONAL_GRANT_LIST']
+		['TYPE', 'DATA_NAMES', 'OPTIONAL_DATA_NAME_LIST', 'SYMBOL_SEMICOLON__PRUNE', 'OPTIONAL_GRANT_LIST'],
+		['FUNCTION_SIGNATURE', 'FUNCTION_NAMES', 'OPTIONAL_FUNCTION_NAME_LIST', 'SYMBOL_SEMICOLON__PRUNE', 'OPTIONAL_GRANT_LIST']
 	],
 ################################################################################
 	'ARGUMENT_LIST': [
@@ -169,6 +170,18 @@ productions = {
 	],
 	'EXPRESSION_EXPRESSION': [
 		['ASSIGNMENT_EXPRESSION'],
+	],
+	'OPTIONAL_DATA_NAME_LIST': [
+		['SYMBOL_COMMA__PRUNE', 'DATA_NAMES', 'OPTIONAL_DATA_NAME_LIST'],
+		[]
+	],
+	'OPTIONAL_FUNCTION_NAME_LIST': [
+		['SYMBOL_COMMA__PRUNE', 'FUNCTION_NAMES', 'OPTIONAL_FUNCTION_NAME_LIST'],
+		[]
+	],
+	'OPTIONAL_GRANT_LIST': [
+		['GRANT_LIST'],
+		[]
 	],
 ################################################################################
 	'ARGUMENT': [
@@ -392,6 +405,7 @@ productions = {
 		['GROUPER_LEFT_PARENTHESIS', 'EXPRESSION_EXPRESSION', 'GROUPER_RIGHT_PARENTHESIS'],
 		['STRING'],
 		['WHEN_EXPRESSION'],
+		['KEYWORD_LAMBDA', 'GROUPER_LEFT_BRACKET', 'CAPTURE_LIST', 'GROUPER_RIGHT_BRACKET', 'FUNCTION_SIGNATURE', 'CODE_BLOCK']
 	],
 	'OPTIONAL_MEMBER_EXPRESSION': [
 		['ARRAY_ACCESS_EXPRESSION'],
@@ -407,6 +421,11 @@ productions = {
 	],
 	'WHEN_EXPRESSION': [
 		['KEYWORD_WHEN', 'GROUPER_LEFT_PARENTHESIS', 'OR_EXPRESSION', 'GROUPER_RIGHT_PARENTHESIS', 'OR_EXPRESSION', 'KEYWORD_ELSE', 'OR_EXPRESSION'],
+	],
+	'CAPTURE_LIST': [
+		['UNARY_OPERATOR', 'DATA_NAMES', 'CAPTURE_LIST'],
+		['DATA_NAMES', 'CAPTURE_LIST'],
+		[]
 	],
 	'OPTIONAL_EXTRACTOR_EXPRESSION': [
 		['SYMBOL_TILDE__PRUNE', 'DATA_NAMES', 'OPTIONAL_MEMBER_EXPRESSION'],
@@ -655,7 +674,7 @@ def createprotocolsTokenTypehpp(terminal_set, non_terminal_set):
 		                       'namespace_tail': namespace_tail})
 
 
-def enterMain():
+def enter():
 	terminal_set, non_terminal_set = ParserTableGenerator.computeTerminals(productions)
 	terminal_set |= {'UNIDENTIFIED', 'END_OF_MODULE'}
 	non_terminal_set |= {'EPSILONATE'}
@@ -670,4 +689,4 @@ def enterMain():
 
 
 if __name__ == '__main__':
-	enterMain()
+	enter()

@@ -582,5 +582,50 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 				return value: object.getVariable()~gotten;
 			}
 		)"));
+		REQUIRE(validate(R"(
+			grant Name {
+				32u a, b, c;
+				(32u a : 32u b : pure) d, e, f;
+			}
+		)"));
+		REQUIRE(validate(R"(
+			grant String
+			{
+				64u length;
+				(String out : String left, String right) +;
+			}
+
+			(:) a
+			{
+				var String b;
+				b.length == 0;
+			}
+		)"));
+		REQUIRE(validate(R"(
+			(:) enter
+			{
+				var ptr (:) a = lambda [](:){ sml.Out.print(:"Hi"); };
+			}
+		)"));
+		REQUIRE(validate(R"(
+			(:) enter
+			{
+				var 32u a = 1;
+				var ptr (:) b = lambda [a $a @a $$a @@a](:){ sml.Out.print(:"Hi"); };
+			}
+		)"));
+		REQUIRE(validate(R"(
+			(:) enter
+			{
+				var 32u a = 1;
+				var ptr (:) b =
+					lambda [a $a @a $$a @@a](:)
+					{
+						sml.Out.print(:"Hi");
+						for (32u i = 1; i < 3; ++i;)
+							sml.Out.print(:i);
+					};
+			}
+		)"));
 	}
 }
