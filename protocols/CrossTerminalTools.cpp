@@ -75,6 +75,7 @@ bool CrossTerminalTools::isKeyword(const CrossTerminal &ct_)
         case CrossTerminal::KEYWORD_HAS: return true;
         case CrossTerminal::KEYWORD_IF: return true;
         case CrossTerminal::KEYWORD_LABEL: return true;
+        case CrossTerminal::KEYWORD_LAMBDA: return true;
         case CrossTerminal::KEYWORD_PTR: return true;
         case CrossTerminal::KEYWORD_PURE: return true;
         case CrossTerminal::KEYWORD_REF: return true;
@@ -168,6 +169,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::KEYWORD_HAS: return "KEYWORD_HAS";
         case protocols::CrossTerminal::KEYWORD_IF: return "KEYWORD_IF";
         case protocols::CrossTerminal::KEYWORD_LABEL: return "KEYWORD_LABEL";
+        case protocols::CrossTerminal::KEYWORD_LAMBDA: return "KEYWORD_LAMBDA";
         case protocols::CrossTerminal::KEYWORD_PTR: return "KEYWORD_PTR";
         case protocols::CrossTerminal::KEYWORD_PURE: return "KEYWORD_PURE";
         case protocols::CrossTerminal::KEYWORD_REF: return "KEYWORD_REF";
@@ -191,8 +193,10 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::OPTIONAL_BITWISE_OR_EXPRESSION: return "OPTIONAL_BITWISE_OR_EXPRESSION";
         case protocols::CrossTerminal::OPTIONAL_BITWISE_XOR_EXPRESSION: return "OPTIONAL_BITWISE_XOR_EXPRESSION";
         case protocols::CrossTerminal::OPTIONAL_DATA_DECLARATION: return "OPTIONAL_DATA_DECLARATION";
+        case protocols::CrossTerminal::OPTIONAL_DATA_NAME_LIST: return "OPTIONAL_DATA_NAME_LIST";
         case protocols::CrossTerminal::OPTIONAL_EQUALITY_EXPRESSION: return "OPTIONAL_EQUALITY_EXPRESSION";
         case protocols::CrossTerminal::OPTIONAL_EXTRACTOR_EXPRESSION: return "OPTIONAL_EXTRACTOR_EXPRESSION";
+        case protocols::CrossTerminal::OPTIONAL_FUNCTION_NAME_LIST: return "OPTIONAL_FUNCTION_NAME_LIST";
         case protocols::CrossTerminal::OPTIONAL_GRANT_LIST: return "OPTIONAL_GRANT_LIST";
         case protocols::CrossTerminal::OPTIONAL_MEMBER_EXPRESSION: return "OPTIONAL_MEMBER_EXPRESSION";
         case protocols::CrossTerminal::OPTIONAL_MULTIPLICATIVE_EXPRESSION: return "OPTIONAL_MULTIPLICATIVE_EXPRESSION";
@@ -241,7 +245,6 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::SYMBOL_PLUS: return "SYMBOL_PLUS";
         case protocols::CrossTerminal::SYMBOL_PLUS__EQUAL: return "SYMBOL_PLUS__EQUAL";
         case protocols::CrossTerminal::SYMBOL_PLUS__PLUS: return "SYMBOL_PLUS__PLUS";
-        case protocols::CrossTerminal::SYMBOL_SEMICOLON: return "SYMBOL_SEMICOLON";
         case protocols::CrossTerminal::SYMBOL_SEMICOLON__PRUNE: return "SYMBOL_SEMICOLON__PRUNE";
         case protocols::CrossTerminal::SYMBOL_STAR: return "SYMBOL_STAR";
         case protocols::CrossTerminal::SYMBOL_STAR__EQUAL: return "SYMBOL_STAR__EQUAL";
