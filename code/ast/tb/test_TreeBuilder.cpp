@@ -583,13 +583,13 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 			}
 		)"));
 		REQUIRE(validate(R"(
-			grant Name has {
+			grant Name {
 				32u a, b, c;
 				(32u a : 32u b : pure) d, e, f;
 			}
 		)"));
 		REQUIRE(validate(R"(
-			grant String has
+			grant String
 			{
 				64u length;
 				(String out : String left, String right) +;

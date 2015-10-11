@@ -43,7 +43,6 @@ enum class TokenType
     KEYWORD_GOTO,
     KEYWORD_GRANT,
     KEYWORD_HACK,
-    KEYWORD_HAS,
     KEYWORD_IF,
     KEYWORD_LABEL,
     KEYWORD_LAMBDA,

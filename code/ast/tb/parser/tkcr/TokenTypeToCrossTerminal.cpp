@@ -48,7 +48,6 @@ protocols::CrossTerminal TokenTypeToCrossTerminal::convertToCrossTerminal(protoc
         case protocols::TokenType::KEYWORD_GOTO: return protocols::CrossTerminal::KEYWORD_GOTO;
         case protocols::TokenType::KEYWORD_GRANT: return protocols::CrossTerminal::KEYWORD_GRANT;
         case protocols::TokenType::KEYWORD_HACK: return protocols::CrossTerminal::KEYWORD_HACK;
-        case protocols::TokenType::KEYWORD_HAS: return protocols::CrossTerminal::KEYWORD_HAS;
         case protocols::TokenType::KEYWORD_IF: return protocols::CrossTerminal::KEYWORD_IF;
         case protocols::TokenType::KEYWORD_LABEL: return protocols::CrossTerminal::KEYWORD_LABEL;
         case protocols::TokenType::KEYWORD_LAMBDA: return protocols::CrossTerminal::KEYWORD_LAMBDA;

@@ -66,7 +66,7 @@ productions = {
 		['FUNCTION_SIGNATURE', 'FUNCTION_NAMES', 'GROUPER_LEFT_BRACE', 'STATEMENT_LIST', 'GROUPER_RIGHT_BRACE']
 	],
 	'GRANT_DEFINITION': [
-		['KEYWORD_GRANT', 'IDENTIFIER_CLASS', 'KEYWORD_HAS', 'GROUPER_LEFT_BRACE', 'GRANT_LIST', 'GROUPER_RIGHT_BRACE']
+		['KEYWORD_GRANT', 'IDENTIFIER_CLASS', 'GROUPER_LEFT_BRACE', 'GRANT_LIST', 'GROUPER_RIGHT_BRACE']
 	],
 ################################################################################
 	'TYPE': [
@@ -669,7 +669,7 @@ def createprotocolsTokenTypehpp(terminal_set, non_terminal_set):
 		                       'namespace_tail': namespace_tail})
 
 
-def enterMain():
+def enter():
 	terminal_set, non_terminal_set = ParserTableGenerator.computeTerminals(productions)
 	terminal_set |= {'UNIDENTIFIED', 'END_OF_MODULE'}
 	non_terminal_set |= {'EPSILONATE'}
@@ -684,4 +684,4 @@ def enterMain():
 
 
 if __name__ == '__main__':
-	enterMain()
+	enter()

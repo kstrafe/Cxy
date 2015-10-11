@@ -72,7 +72,6 @@ bool CrossTerminalTools::isKeyword(const CrossTerminal &ct_)
         case CrossTerminal::KEYWORD_GOTO: return true;
         case CrossTerminal::KEYWORD_GRANT: return true;
         case CrossTerminal::KEYWORD_HACK: return true;
-        case CrossTerminal::KEYWORD_HAS: return true;
         case CrossTerminal::KEYWORD_IF: return true;
         case CrossTerminal::KEYWORD_LABEL: return true;
         case CrossTerminal::KEYWORD_LAMBDA: return true;
@@ -166,7 +165,6 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::KEYWORD_GOTO: return "KEYWORD_GOTO";
         case protocols::CrossTerminal::KEYWORD_GRANT: return "KEYWORD_GRANT";
         case protocols::CrossTerminal::KEYWORD_HACK: return "KEYWORD_HACK";
-        case protocols::CrossTerminal::KEYWORD_HAS: return "KEYWORD_HAS";
         case protocols::CrossTerminal::KEYWORD_IF: return "KEYWORD_IF";
         case protocols::CrossTerminal::KEYWORD_LABEL: return "KEYWORD_LABEL";
         case protocols::CrossTerminal::KEYWORD_LAMBDA: return "KEYWORD_LAMBDA";
