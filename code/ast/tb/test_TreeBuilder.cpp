@@ -604,7 +604,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 		REQUIRE(validate(R"(
 			(:) enter
 			{
-				var Function a = lambda [](:){};
+				var ptr (:) a = lambda [](:){ sml.Out.print(:"Hi"); };
 			}
 		)"));
 	}
