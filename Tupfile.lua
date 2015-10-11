@@ -1,2 +1,2 @@
-tup.rule('$(NETHACK_ROOT)/temp/<objs>', 'g++ %<objs> -o %o', {'$(NETHACK_ROOT)/binaries/test.elf', '$(NETHACK_ROOT)/binaries/<test>'})
-tup.rule({'$(NETHACK_ROOT)/binaries/<test>'}, './%<test>')
+tup.rule('$(ROOT)/temp/<objs>', 'g++ %<objs> -o %o', {'$(ROOT)/binaries/test.elf', '$(ROOT)/binaries/<test>'})
+tup.rule({'$(ROOT)/binaries/<test>'}, './%<test>')

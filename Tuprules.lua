@@ -1,1 +1,1 @@
-NETHACK_ROOT = tup.getcwd()
+ROOT = tup.getcwd()
