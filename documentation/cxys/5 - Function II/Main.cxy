@@ -1,0 +1,10 @@
+(64u choose : 32u any, 32u name, 32u here) sum
+{
+	return choose : any + name + here;
+}
+
+(:) enter
+{
+	var 32u x = sml.In.read().to32u();
+	sml.Out << sum(any : x, name : x + 2, here : x * x)~choose;
+}

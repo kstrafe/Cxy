@@ -23,7 +23,10 @@ grammar for a lambda expression:
 	Lambda ::= lambda '[' ArgumentList  ']' Signature '{' Code '}'
 
 The reason for making it an expression is because it makes no sense to be used anywhere
-but an expression.
+but an expression. The lambda operator is just like the new operator. It returns a
+pointer to the function. The reason for using pointers is because it makes no sense
+to use a constant or any other type. What about a reference? That could also be used.
+It does not make sense to use a reference because there isn't really an object to refer to.
 
 *Conclusion*: Lambdas are added as an expression using the lambda keyword.
 
