@@ -118,6 +118,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::BITWISE_AND_EXPRESSION: return "BITWISE_AND_EXPRESSION";
         case protocols::CrossTerminal::BITWISE_OR_EXPRESSION: return "BITWISE_OR_EXPRESSION";
         case protocols::CrossTerminal::BITWISE_XOR_EXPRESSION: return "BITWISE_XOR_EXPRESSION";
+        case protocols::CrossTerminal::CAPTURE_LIST: return "CAPTURE_LIST";
         case protocols::CrossTerminal::CAST_EXPRESSION: return "CAST_EXPRESSION";
         case protocols::CrossTerminal::CLASS_MEMBER: return "CLASS_MEMBER";
         case protocols::CrossTerminal::CLASS_MEMBER_EXPRESSION: return "CLASS_MEMBER_EXPRESSION";
