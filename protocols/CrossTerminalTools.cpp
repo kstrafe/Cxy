@@ -67,7 +67,9 @@ bool CrossTerminalTools::isKeyword(const CrossTerminal &ct_)
         case CrossTerminal::KEYWORD_CONST: return true;
         case CrossTerminal::KEYWORD_DEFER: return true;
         case CrossTerminal::KEYWORD_DO: return true;
+        case CrossTerminal::KEYWORD_DOUBLE: return true;
         case CrossTerminal::KEYWORD_ELSE: return true;
+        case CrossTerminal::KEYWORD_FLOAT: return true;
         case CrossTerminal::KEYWORD_FOR: return true;
         case CrossTerminal::KEYWORD_GOTO: return true;
         case CrossTerminal::KEYWORD_GRANT: return true;
@@ -161,7 +163,9 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::KEYWORD_CONST: return "KEYWORD_CONST";
         case protocols::CrossTerminal::KEYWORD_DEFER: return "KEYWORD_DEFER";
         case protocols::CrossTerminal::KEYWORD_DO: return "KEYWORD_DO";
+        case protocols::CrossTerminal::KEYWORD_DOUBLE: return "KEYWORD_DOUBLE";
         case protocols::CrossTerminal::KEYWORD_ELSE: return "KEYWORD_ELSE";
+        case protocols::CrossTerminal::KEYWORD_FLOAT: return "KEYWORD_FLOAT";
         case protocols::CrossTerminal::KEYWORD_FOR: return "KEYWORD_FOR";
         case protocols::CrossTerminal::KEYWORD_GOTO: return "KEYWORD_GOTO";
         case protocols::CrossTerminal::KEYWORD_GRANT: return "KEYWORD_GRANT";

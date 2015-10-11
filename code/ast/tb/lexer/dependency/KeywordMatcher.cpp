@@ -23,11 +23,13 @@ namespace tul { namespace dependency {
 protocols::TokenType KeywordMatcher::getKeyword(const std::string &lexeme)
 {
     using namespace protocols;
-    if (lexeme == "lambda") return TokenType::KEYWORD_LAMBDA;
+    if (lexeme == "double") return TokenType::KEYWORD_DOUBLE;
+    else if (lexeme == "lambda") return TokenType::KEYWORD_LAMBDA;
     else if (lexeme == "return") return TokenType::KEYWORD_RETURN;
     else if (lexeme == "static") return TokenType::KEYWORD_STATIC;
     else if (lexeme == "const") return TokenType::KEYWORD_CONST;
     else if (lexeme == "defer") return TokenType::KEYWORD_DEFER;
+    else if (lexeme == "float") return TokenType::KEYWORD_FLOAT;
     else if (lexeme == "grant") return TokenType::KEYWORD_GRANT;
     else if (lexeme == "label") return TokenType::KEYWORD_LABEL;
     else if (lexeme == "while") return TokenType::KEYWORD_WHILE;
