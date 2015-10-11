@@ -76,6 +76,23 @@ Actually, it can be considered as a comment that actually means something.
 
 That's actually really neat and useful. Yeah. Let's make it this way.
 
+Addendum:
+I have discovered that it's not really that neat. It requires a grammar change that
+I don't seem to be able to like. The worst case for the current grammar is to force
+the following:
+
+	var float height = sin(:pi);
+
+Where no name in front of the : designates the standard 'in' argument.
+
+	integrateNumericallySimpsons(
+		: lambda [](double out : double in){ Math.exp(-in*in); },
+		elements: 800,
+		from: -1,
+		to: 1
+	);
+
+
 ===
 
 *Conclusion*: Function signatures are to be written in the following form.
