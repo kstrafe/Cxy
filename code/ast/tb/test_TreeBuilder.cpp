@@ -675,6 +675,8 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 					to: 3
 				);
 				sml.Out.print(:curve.getGraph());
+				var ptr ref ptr const ptr const [x*x, ptr ([3, 8u] out:)] d;
+				var ref ptr ptr ptr const ptr const [x*x, ptr ([3, ref ptr 8u] out:)] d;
 			}
 		)"));
 	}
