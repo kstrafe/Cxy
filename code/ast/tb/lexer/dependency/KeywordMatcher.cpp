@@ -27,6 +27,7 @@ protocols::TokenType KeywordMatcher::getKeyword(const std::string &lexeme)
     else if (lexeme == "lambda") return TokenType::KEYWORD_LAMBDA;
     else if (lexeme == "return") return TokenType::KEYWORD_RETURN;
     else if (lexeme == "static") return TokenType::KEYWORD_STATIC;
+    else if (lexeme == "alias") return TokenType::KEYWORD_ALIAS;
     else if (lexeme == "const") return TokenType::KEYWORD_CONST;
     else if (lexeme == "defer") return TokenType::KEYWORD_DEFER;
     else if (lexeme == "float") return TokenType::KEYWORD_FLOAT;

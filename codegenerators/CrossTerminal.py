@@ -51,14 +51,18 @@ import dependency.Prepend
 # Empty productions '[]' are epsilon productions.
 # Generates a .inc file containing all lookahead rules.
 productions = {
-################################################################################
+################################################################################ 1
 	'ENTER': [
+		['ALIAS_STATEMENT', 'SYMBOL_SEMICOLON__PRUNE', 'ENTER'],
 		['DATA_DECLARATION', 'SYMBOL_SEMICOLON__PRUNE', 'ENTER'],
 		['FUNCTION_DEFINITION', 'ENTER'],
 		['GRANT_DEFINITION', 'ENTER'],
 		[]
 	],
-################################################################################
+################################################################################ 2
+	'ALIAS_STATEMENT': [
+		['KEYWORD_ALIAS', 'IDENTIFIER_PACKAGE', 'SYMBOL_EQUAL', 'IDENTIFIER_PACKAGE']
+	],
 	'DATA_DECLARATION': [
 		['TYPE', 'DATA_NAMES', 'OPTIONAL_ASSIGNMENT', 'OPTIONAL_DATA_DECLARATION'],
 	],
@@ -68,6 +72,26 @@ productions = {
 	'GRANT_DEFINITION': [
 		['KEYWORD_GRANT', 'IDENTIFIER_CLASS', 'GROUPER_LEFT_BRACE', 'GRANT_LIST', 'GROUPER_RIGHT_BRACE']
 	],
+################################################################################ 3
+# Naming subsytem
+################################################################################ 3
+	'DATA_NAMES': [
+		['IDENTIFIER_VARIABLE'],
+		['IDENTIFIER_PACKAGE']
+	],
+	'FUNCTION_NAMES': [
+		['IDENTIFIER_SUBROUTINE'],
+		['IDENTIFIER_PACKAGE'],
+		['SYMBOL_PLUS'],
+		['SYMBOL_MINUS']
+	],
+################################################################################ 3
+# End Naming subsytem
+################################################################################ 3
+################################################################################ 3
+# Type subsystem
+# External to subsystem: OR_EXPRESSION, ARGUMENT_LIST
+# Defines types: ref ptr ptr const ptr const [x * x, ptr ([3, 8u] out:)]
 ################################################################################
 	'TYPE': [
 		['ARRAY'],
@@ -76,74 +100,17 @@ productions = {
 		['KEYWORD_PTR', 'TYPE_AFTER_PTR'],
 		['KEYWORD_REF', 'TYPE_AFTER_REF'],
 	],
-	'DATA_NAMES': [
-		['IDENTIFIER_VARIABLE'],
-		['IDENTIFIER_PACKAGE']
-	],
-	'OPTIONAL_ASSIGNMENT': [
-		['GROUPER_LEFT_PARENTHESIS', 'PARAMETER_LIST', 'GROUPER_RIGHT_PARENTHESIS'],
-		['SYMBOL_EQUAL', 'EXPRESSION_EXPRESSION'],
-		[]
-	],
-	'OPTIONAL_DATA_DECLARATION': [
-		['SYMBOL_COMMA__PRUNE', 'DATA_NAMES', 'OPTIONAL_ASSIGNMENT', 'OPTIONAL_DATA_DECLARATION'],
-		[],
-	],
-
-	'FUNCTION_SIGNATURE': [
-		['GROUPER_LEFT_PARENTHESIS', 'ARGUMENT_LIST', 'SYMBOL_COLON__PRUNE', 'ARGUMENT_LIST', 'OPTIONAL_ATTRIBUTE_LIST', 'GROUPER_RIGHT_PARENTHESIS'],
-		],
-	'STATEMENT_LIST': [
-		['NO_SEMICOLON_STATEMENT', 'STATEMENT_LIST'],
-		['STATEMENT', 'SYMBOL_SEMICOLON__PRUNE', 'STATEMENT_LIST'],
-		[]
-	],
-	'FUNCTION_NAMES': [
-		['IDENTIFIER_SUBROUTINE'],
-		['IDENTIFIER_PACKAGE'],
-		['SYMBOL_PLUS']
-	],
-	'GRANT_LIST': [
-		['TYPE', 'DATA_NAMES', 'OPTIONAL_DATA_NAME_LIST', 'SYMBOL_SEMICOLON__PRUNE', 'OPTIONAL_GRANT_LIST'],
-		['FUNCTION_SIGNATURE', 'FUNCTION_NAMES', 'OPTIONAL_FUNCTION_NAME_LIST', 'SYMBOL_SEMICOLON__PRUNE', 'OPTIONAL_GRANT_LIST']
-	],
-################################################################################
-	'ARGUMENT_LIST': [
-		['ARGUMENT', 'OPTIONAL_ARGUMENT_LIST'],
-		[],
-	],
-	'OPTIONAL_ATTRIBUTE_LIST': [
-		['SYMBOL_COLON__PRUNE', 'ATTRIBUTE_LIST'],
-		[]
-	],
-	'NO_SEMICOLON_STATEMENT': [
-		['CODE_BLOCK'],
-		['DEFER_STATEMENT'],
-		['DO_STATEMENT'],
-		['FOR_STATEMENT'],
-		['IF_STATEMENT'],
-		['STATIC_IF_STATEMENT'],
-		['WHILE_STATEMENT'],
-	],
-	'STATEMENT': [
-		['DATA_DECLARATION_STATEMENT'],
-		['EXPRESSION_EXPRESSION'],
-		['GOTO_STATEMENT'],
-		['HACK_STATEMENT'],
-		['ITER_STATEMENT'],
-		['LABEL_STATEMENT'],
-		['RETURN_STATEMENT'],
-	],
+################################################################################ 4
 	'ARRAY': [
 		['GROUPER_LEFT_BRACKET', 'OR_EXPRESSION', 'SYMBOL_COMMA__PRUNE', 'TYPE', 'GROUPER_RIGHT_BRACKET']
 	],
 	'BASIC_TYPE': [
 		['IDENTIFIER_CLASS', 'OPTIONAL_TEMPLATE'],
 		['IDENTIFIER_PACKAGE', 'SYMBOL_DOT__PRUNE', 'IDENTIFIER_CLASS', 'OPTIONAL_TEMPLATE'],
+		['KEYWORD_DOUBLE'],
+		['KEYWORD_FLOAT'],
 		['PRIMITIVE_SIGNED'],
 		['PRIMITIVE_UNSIGNED'],
-		['KEYWORD_FLOAT'],
-		['KEYWORD_DOUBLE'],
 	],
 	'TYPE_AFTER_CONST': [
 		['ARRAY'],
@@ -161,9 +128,90 @@ productions = {
 	'TYPE_AFTER_REF': [
 		['ARRAY'],
 		['BASIC_TYPE'],
-		['FUNCTION_SIGNATURE'],
 		['KEYWORD_CONST', 'TYPE_AFTER_REF_CONST'],
 		['KEYWORD_PTR', 'TYPE'],
+	],
+################################################################################ 5
+	'OPTIONAL_TEMPLATE': [
+		['GROUPER_LEFT_BRACKET', 'TEMPLATE_LIST', 'GROUPER_RIGHT_BRACKET'],
+		[]
+	],
+	'TYPE_AFTER_REF_CONST': [
+		['BASIC_TYPE'],
+		['KEYWORD_PTR', 'TYPE'],
+	],
+	'FUNCTION_SIGNATURE': [
+		['GROUPER_LEFT_PARENTHESIS', 'ARGUMENT_LIST', 'SYMBOL_COLON__PRUNE', 'ARGUMENT_LIST', 'OPTIONAL_ATTRIBUTE_LIST', 'GROUPER_RIGHT_PARENTHESIS'],
+		],
+################################################################################ 6
+	'TEMPLATE_LIST': [
+		['IDENTIFIER_CLASS', 'SYMBOL_COLON__PRUNE', 'TYPE', 'OPTIONAL_TEMPLATE_LIST'],
+		['SYMBOL_COLON__PRUNE', 'TYPE', 'OPTIONAL_TEMPLATE_LIST'],
+	],
+	'OPTIONAL_ATTRIBUTE_LIST': [
+		['SYMBOL_COLON__PRUNE', 'ATTRIBUTE_LIST'],
+		[]
+	],
+################################################################################ 7
+	'OPTIONAL_TEMPLATE_LIST': [
+		['IDENTIFIER_CLASS', 'SYMBOL_COLON__PRUNE', 'TYPE', 'OPTIONAL_TEMPLATE_LIST'],
+		['SYMBOL_COLON__PRUNE', 'TYPE', 'OPTIONAL_TEMPLATE_LIST'],
+		[]
+	],
+	'ATTRIBUTE_LIST': [
+		['KEYWORD_CONST', 'ATTRIBUTE_LIST_AFTER_CONST'],
+		['KEYWORD_PURE'],
+		[]
+	],
+################################################################################ 8
+	'ATTRIBUTE_LIST_AFTER_CONST': [
+		['KEYWORD_PURE'],
+		[]
+	],
+################################################################################
+# End of Type subsystem
+################################################################################ 9
+	'ARGUMENT_LIST': [
+		['ARGUMENT', 'OPTIONAL_ARGUMENT_LIST'],
+		[],
+	],
+	'OPTIONAL_ASSIGNMENT': [
+		['GROUPER_LEFT_PARENTHESIS', 'PARAMETER_LIST', 'GROUPER_RIGHT_PARENTHESIS'],
+		['SYMBOL_EQUAL', 'EXPRESSION_EXPRESSION'],
+		[]
+	],
+	'OPTIONAL_DATA_DECLARATION': [
+		['SYMBOL_COMMA__PRUNE', 'DATA_NAMES', 'OPTIONAL_ASSIGNMENT', 'OPTIONAL_DATA_DECLARATION'],
+		[],
+	],
+	'GRANT_LIST': [
+		['TYPE', 'DATA_NAMES', 'OPTIONAL_DATA_NAME_LIST', 'SYMBOL_SEMICOLON__PRUNE', 'OPTIONAL_GRANT_LIST'],
+		['FUNCTION_SIGNATURE', 'FUNCTION_NAMES', 'OPTIONAL_FUNCTION_NAME_LIST', 'SYMBOL_SEMICOLON__PRUNE', 'OPTIONAL_GRANT_LIST']
+	],
+################################################################################ 10
+	'STATEMENT_LIST': [
+		['NO_SEMICOLON_STATEMENT', 'STATEMENT_LIST'],
+		['STATEMENT', 'SYMBOL_SEMICOLON__PRUNE', 'STATEMENT_LIST'],
+		[]
+	],
+	'NO_SEMICOLON_STATEMENT': [
+		['CODE_BLOCK'],
+		['DEFER_STATEMENT'],
+		['DO_STATEMENT'],
+		['FOR_STATEMENT'],
+		['IF_STATEMENT'],
+		['STATIC_IF_STATEMENT'],
+		['WHILE_STATEMENT'],
+	],
+	'STATEMENT': [
+		['ALIAS_STATEMENT'],
+		['DATA_DECLARATION_STATEMENT'],
+		['EXPRESSION_EXPRESSION'],
+		['GOTO_STATEMENT'],
+		['HACK_STATEMENT'],
+		['ITER_STATEMENT'],
+		['LABEL_STATEMENT'],
+		['RETURN_STATEMENT'],
 	],
 	'PARAMETER_LIST': [
 		['DATA_NAMES', 'SYMBOL_COLON__PRUNE', 'EXPRESSION_EXPRESSION', 'OPTIONAL_PARAMETER_LIST'],
@@ -185,18 +233,13 @@ productions = {
 		['GRANT_LIST'],
 		[]
 	],
-################################################################################
+################################################################################ 11
 	'ARGUMENT': [
 		['TYPE', 'DATA_NAMES', 'OPTIONAL_ASSIGNMENT'],
 		['FUNCTION_SIGNATURE', 'DATA_NAMES', 'OPTIONAL_ASSIGNMENT'],
 	],
 	'OPTIONAL_ARGUMENT_LIST': [
 		['SYMBOL_COMMA__PRUNE', 'ARGUMENT_LIST_AFTER_FIRST'],
-		[]
-	],
-	'ATTRIBUTE_LIST': [
-		['KEYWORD_CONST', 'ATTRIBUTE_LIST_AFTER_CONST'],
-		['KEYWORD_PURE'],
 		[]
 	],
 	'DEFER_STATEMENT': [
@@ -243,14 +286,6 @@ productions = {
 	'RETURN_STATEMENT': [
 		['KEYWORD_RETURN', 'PARAMETER_LIST'],
 	],
-	'OPTIONAL_TEMPLATE': [
-		['GROUPER_LEFT_BRACKET', 'TEMPLATE_LIST', 'GROUPER_RIGHT_BRACKET'],
-		[]
-	],
-	'TYPE_AFTER_REF_CONST': [
-		['BASIC_TYPE'],
-		['KEYWORD_PTR', 'TYPE'],
-	],
 	'OPTIONAL_PARAMETER_LIST': [
 		['SYMBOL_COMMA__PRUNE', 'PARAMETER_LIST'],
 		[]
@@ -258,24 +293,11 @@ productions = {
 	'ASSIGNMENT_EXPRESSION': [
 		['OR_EXPRESSION', 'OPTIONAL_ASSIGNMENT_EXPRESSION']
 	],
-################################################################################
-	'TEMPLATE_LIST': [
-		['IDENTIFIER_CLASS', 'SYMBOL_COLON__PRUNE', 'TYPE', 'OPTIONAL_TEMPLATE_LIST'],
-		['SYMBOL_COLON__PRUNE', 'TYPE', 'OPTIONAL_TEMPLATE_LIST'],
-	],
-	'OPTIONAL_TEMPLATE_LIST': [
-		['IDENTIFIER_CLASS', 'SYMBOL_COLON__PRUNE', 'TYPE', 'OPTIONAL_TEMPLATE_LIST'],
-		['SYMBOL_COLON__PRUNE', 'TYPE', 'OPTIONAL_TEMPLATE_LIST'],
-		[]
-	],
+################################################################################ 12
 	'ARGUMENT_LIST_AFTER_FIRST': [
 		['TYPE', 'DATA_NAMES', 'OPTIONAL_ASSIGNMENT', 'OPTIONAL_ARGUMENT_LIST', 'OPTIONAL_ARGUMENT_LIST'],
 		#['IDENTIFIER_VARIABLE', 'OPTIONAL_ARGUMENT_LIST', 'OPTIONAL_ARGUMENT_LIST'],
 		[],
-	],
-	'ATTRIBUTE_LIST_AFTER_CONST': [
-		['KEYWORD_PURE'],
-		[]
 	],
 	'SINGLE_STATEMENT_OR_CODE_BLOCK': [
 		['STATEMENT', 'SYMBOL_SEMICOLON__PRUNE'],
@@ -285,7 +307,7 @@ productions = {
 		['KEYWORD_ELSE', 'SINGLE_STATEMENT_OR_CODE_BLOCK'],
 		[]
 	],
-################################################################################
+################################################################################ 13
 # EXPRESSION BLOCK.
 # Contains all valid expressions in the language. These are sums, == compares...
 # a + b * c - d
@@ -302,7 +324,7 @@ productions = {
 		['SYMBOL_STAR__EQUAL', 'OR_EXPRESSION'],
 		[]
 	],
-################################################################################
+################################################################################ 14
 	'AND_EXPRESSION': [
 		['BITWISE_OR_EXPRESSION', 'OPTIONAL_AND_EXPRESSION'],
 	],
@@ -310,7 +332,7 @@ productions = {
 		['SYMBOL_BAR__BAR', 'OR_EXPRESSION'],
 		[]
 	],
-################################################################################
+################################################################################ 15
 	'BITWISE_OR_EXPRESSION': [
 		['BITWISE_XOR_EXPRESSION', 'OPTIONAL_BITWISE_OR_EXPRESSION'],
 	],
@@ -318,7 +340,7 @@ productions = {
 		['SYMBOL_AMPERSAND__AMPERSAND', 'AND_EXPRESSION'],
 		[]
 	],
-################################################################################
+################################################################################ 16
 	'BITWISE_XOR_EXPRESSION': [
 		['BITWISE_AND_EXPRESSION', 'OPTIONAL_BITWISE_XOR_EXPRESSION'],
 	],
@@ -326,7 +348,7 @@ productions = {
 		['SYMBOL_BAR', 'BITWISE_OR_EXPRESSION'],
 		[]
 	],
-################################################################################
+################################################################################ 17
 	'BITWISE_AND_EXPRESSION': [
 		['EQUALITY_EXPRESSION', 'OPTIONAL_BITWISE_AND_EXPRESSION'],
 	],
@@ -334,7 +356,7 @@ productions = {
 		['SYMBOL_CARET', 'BITWISE_XOR_EXPRESSION'],
 		[]
 	],
-################################################################################
+################################################################################ 18
 	'EQUALITY_EXPRESSION': [
 		['RELATIONAL_EXPRESSION', 'OPTIONAL_EQUALITY_EXPRESSION'],
 	],
@@ -342,7 +364,7 @@ productions = {
 		['SYMBOL_AMPERSAND', 'BITWISE_AND_EXPRESSION'],
 		[]
 	],
-################################################################################
+################################################################################ 19
 	'RELATIONAL_EXPRESSION': [
 		['ADDITIVE_EXPRESSION', 'OPTIONAL_RELATIONAL_EXPRESSION'],
 	],
@@ -350,7 +372,7 @@ productions = {
 		['SYMBOL_EQUAL__EQUAL', 'EQUALITY_EXPRESSION'],
 		[]
 	],
-################################################################################
+################################################################################ 20
 	'ADDITIVE_EXPRESSION': [
 		['MULTIPLICATIVE_EXPRESSION', 'OPTIONAL_ADDITIVE_EXPRESSION'],
 	],
@@ -358,7 +380,7 @@ productions = {
 		['RELATIONAL_OPERATOR', 'EQUALITY_EXPRESSION'],
 		[]
 	],
-################################################################################
+################################################################################ 21
 	'MULTIPLICATIVE_EXPRESSION': [
 		['CAST_EXPRESSION', 'OPTIONAL_MULTIPLICATIVE_EXPRESSION'],
 	],
@@ -373,22 +395,22 @@ productions = {
 		['SYMBOL_LESS_THAN__EQUAL'],
 		['SYMBOL_GREATER_THAN__EQUAL'],
 	],
-################################################################################
+################################################################################ 22
 	'OPTIONAL_MULTIPLICATIVE_EXPRESSION': [
 		['SYMBOL_FORWARD_SLASH', 'MULTIPLICATIVE_EXPRESSION'],
 		['SYMBOL_STAR', 'MULTIPLICATIVE_EXPRESSION'],
 		[]
 	],
 	'CAST_EXPRESSION': [
-		['KEYWORD_CAST', 'GROUPER_LEFT_PARENTHESIS', 'TYPE', 'GROUPER_RIGHT_PARENTHESIS', 'GROUPER_LEFT_BRACE', 'EXPRESSION_EXPRESSION', 'GROUPER_RIGHT_BRACE'],
+		['KEYWORD_CAST', 'GROUPER_LEFT_BRACKET', 'TYPE', 'GROUPER_RIGHT_BRACKET', 'GROUPER_LEFT_PARENTHESIS', 'EXPRESSION_EXPRESSION', 'GROUPER_RIGHT_PARENTHESIS'],
 		['UNARY_EXPRESSION'],
 	],
-################################################################################
+################################################################################ 23
 	'UNARY_EXPRESSION': [
 		['MEMBER_EXPRESSION'],
 		['UNARY_OPERATOR', 'CAST_EXPRESSION'],
 	],
-################################################################################
+################################################################################ 24
 	'MEMBER_EXPRESSION': [
 		['IDENTIFIER_CLASS', 'CLASS_MEMBER_EXPRESSION'],
 		['IDENTIFIER_ENUMERATION', 'ENUMERATION_MEMBER_EXPRESSION'],
@@ -406,7 +428,7 @@ productions = {
 		['SYMBOL_EXCLAMATION_MARK__EXCLAMATION_MARK'],
 		['SYMBOL_MINUS'],
 	],
-################################################################################
+################################################################################ 25
 	'CLASS_MEMBER_EXPRESSION': [
 		['GROUPER_LEFT_PARENTHESIS', 'PARAMETER_LIST', 'GROUPER_RIGHT_PARENTHESIS'],
 		['SYMBOL_DOT__PRUNE', 'CLASS_MEMBER', 'OPTIONAL_MEMBER_EXPRESSION'],
@@ -428,7 +450,7 @@ productions = {
 		['SYMBOL_DOT__PRUNE', 'MEMBER_EXPRESSION'],
 		[]
 	],
-################################################################################
+################################################################################ 26
 	'CLASS_MEMBER': [
 		['IDENTIFIER_SUBROUTINE'],
 		['IDENTIFIER_VARIABLE'],
@@ -453,7 +475,7 @@ productions = {
 	'ARRAY_ACCESS_EXPRESSION': [
 		['GROUPER_LEFT_BRACKET', 'EXPRESSION_EXPRESSION', 'OPTIONAL_ARRAY_ACCESS_EXPRESSION', 'GROUPER_RIGHT_BRACKET', 'OPTIONAL_MEMBER_EXPRESSION']
 	],
-################################################################################
+################################################################################ 27
 	'OPTIONAL_ARRAY_ACCESS_EXPRESSION': [
 		['SYMBOL_COMMA__PRUNE', 'EXPRESSION_EXPRESSION', 'OPTIONAL_ARRAY_ACCESS_EXPRESSION'],
 		[]

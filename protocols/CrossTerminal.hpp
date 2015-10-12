@@ -22,6 +22,7 @@ namespace tul { namespace protocols {
 enum class CrossTerminal
 {
     ADDITIVE_EXPRESSION,
+    ALIAS_STATEMENT,
     AND_EXPRESSION,
     ARGUMENT,
     ARGUMENT_LIST,
@@ -123,6 +124,7 @@ enum class CrossTerminal
     IDENTIFIER_SUBROUTINE,
     IDENTIFIER_VARIABLE,
     INTEGER_LITERAL,
+    KEYWORD_ALIAS,
     KEYWORD_CAST,
     KEYWORD_CONST,
     KEYWORD_DEFER,
