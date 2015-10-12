@@ -56,7 +56,11 @@ productions = {
 		['DATA_DECLARATION', 'SYMBOL_SEMICOLON__PRUNE', 'ENTER'],
 		['FUNCTION_DEFINITION', 'ENTER'],
 		['GRANT_DEFINITION', 'ENTER'],
+		['ALIAS_STATEMENT', 'ENTER'],
 		[]
+	],
+	'ALIAS_STATEMENT': [
+		['KEYWORD_ALIAS', 'IDENTIFIER_PACKAGE', 'SYMBOL_EQUAL', 'IDENTIFIER_PACKAGE', 'SYMBOL_SEMICOLON__PRUNE']
 	],
 ################################################################################
 	'DATA_DECLARATION': [
@@ -169,6 +173,7 @@ productions = {
 		[],
 	],
 	'NO_SEMICOLON_STATEMENT': [
+		['ALIAS_STATEMENT'],
 		['CODE_BLOCK'],
 		['DEFER_STATEMENT'],
 		['DO_STATEMENT'],

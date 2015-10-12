@@ -665,5 +665,17 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 				var sml.Vector[Xx : sml.String[:8u]] accumulator;
 			}
 		)"));
+		REQUIRE(validate(R"(
+			alias c = complicatedlibrary;
+			(:) enter {
+				alias d = anotherlonglibraryname;
+				var c.Curve curve(
+					:lambda(float out:float in){return :sml.Math.sin(:in);},
+					from: -3,
+					to: 3
+				);
+				sml.Out.print(:curve.getGraph());
+			}
+		)"));
 	}
 }

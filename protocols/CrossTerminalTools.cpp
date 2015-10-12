@@ -63,6 +63,7 @@ bool CrossTerminalTools::isKeyword(const CrossTerminal &ct_)
 {
     switch (ct_)
     {
+        case CrossTerminal::KEYWORD_ALIAS: return true;
         case CrossTerminal::KEYWORD_CAST: return true;
         case CrossTerminal::KEYWORD_CONST: return true;
         case CrossTerminal::KEYWORD_DEFER: return true;
@@ -107,6 +108,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
     switch (cross_terminal)
     {
         case protocols::CrossTerminal::ADDITIVE_EXPRESSION: return "ADDITIVE_EXPRESSION";
+        case protocols::CrossTerminal::ALIAS_STATEMENT: return "ALIAS_STATEMENT";
         case protocols::CrossTerminal::AND_EXPRESSION: return "AND_EXPRESSION";
         case protocols::CrossTerminal::ARGUMENT: return "ARGUMENT";
         case protocols::CrossTerminal::ARGUMENT_LIST: return "ARGUMENT_LIST";
@@ -159,6 +161,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::IF_STATEMENT: return "IF_STATEMENT";
         case protocols::CrossTerminal::INTEGER_LITERAL: return "INTEGER_LITERAL";
         case protocols::CrossTerminal::ITER_STATEMENT: return "ITER_STATEMENT";
+        case protocols::CrossTerminal::KEYWORD_ALIAS: return "KEYWORD_ALIAS";
         case protocols::CrossTerminal::KEYWORD_CAST: return "KEYWORD_CAST";
         case protocols::CrossTerminal::KEYWORD_CONST: return "KEYWORD_CONST";
         case protocols::CrossTerminal::KEYWORD_DEFER: return "KEYWORD_DEFER";
