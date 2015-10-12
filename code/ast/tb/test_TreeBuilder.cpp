@@ -649,5 +649,19 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 				);
 			}
 		)"));
+		REQUIRE(validate(R"(
+			(:) enter {
+				var sml.Vector accumulator;
+				accumulator.map(
+					: lambda (double out : double in){ sml.Math.exp(:-in*in); }
+				);
+			}
+		)"));
+		REQUIRE(validate(R"(
+			(:) enter {
+				var sml.Vector[Xx : float] accumulator;
+				var sml.Vector[Xx : sml.String[:8u]] accumulator;
+			}
+		)"));
 	}
 }

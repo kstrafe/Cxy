@@ -195,6 +195,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::OPTIONAL_BITWISE_AND_EXPRESSION: return "OPTIONAL_BITWISE_AND_EXPRESSION";
         case protocols::CrossTerminal::OPTIONAL_BITWISE_OR_EXPRESSION: return "OPTIONAL_BITWISE_OR_EXPRESSION";
         case protocols::CrossTerminal::OPTIONAL_BITWISE_XOR_EXPRESSION: return "OPTIONAL_BITWISE_XOR_EXPRESSION";
+        case protocols::CrossTerminal::OPTIONAL_CAPTURE_LIST: return "OPTIONAL_CAPTURE_LIST";
         case protocols::CrossTerminal::OPTIONAL_DATA_DECLARATION: return "OPTIONAL_DATA_DECLARATION";
         case protocols::CrossTerminal::OPTIONAL_DATA_NAME_LIST: return "OPTIONAL_DATA_NAME_LIST";
         case protocols::CrossTerminal::OPTIONAL_EQUALITY_EXPRESSION: return "OPTIONAL_EQUALITY_EXPRESSION";
@@ -206,6 +207,8 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::OPTIONAL_OR_EXPRESSION: return "OPTIONAL_OR_EXPRESSION";
         case protocols::CrossTerminal::OPTIONAL_PARAMETER_LIST: return "OPTIONAL_PARAMETER_LIST";
         case protocols::CrossTerminal::OPTIONAL_RELATIONAL_EXPRESSION: return "OPTIONAL_RELATIONAL_EXPRESSION";
+        case protocols::CrossTerminal::OPTIONAL_TEMPLATE: return "OPTIONAL_TEMPLATE";
+        case protocols::CrossTerminal::OPTIONAL_TEMPLATE_LIST: return "OPTIONAL_TEMPLATE_LIST";
         case protocols::CrossTerminal::OR_EXPRESSION: return "OR_EXPRESSION";
         case protocols::CrossTerminal::PARAMETER_LIST: return "PARAMETER_LIST";
         case protocols::CrossTerminal::PRIMITIVE_SIGNED: return "PRIMITIVE_SIGNED";
@@ -252,6 +255,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::SYMBOL_STAR: return "SYMBOL_STAR";
         case protocols::CrossTerminal::SYMBOL_STAR__EQUAL: return "SYMBOL_STAR__EQUAL";
         case protocols::CrossTerminal::SYMBOL_TILDE__PRUNE: return "SYMBOL_TILDE__PRUNE";
+        case protocols::CrossTerminal::TEMPLATE_LIST: return "TEMPLATE_LIST";
         case protocols::CrossTerminal::TYPE: return "TYPE";
         case protocols::CrossTerminal::TYPE_AFTER_CONST: return "TYPE_AFTER_CONST";
         case protocols::CrossTerminal::TYPE_AFTER_PTR: return "TYPE_AFTER_PTR";
