@@ -381,6 +381,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 				var 32u a = 100;
 				var 16u b = cast[16u] ( a ) * 5;
 				var 32u c = when (a > 100) a else b;
+				var [x, 32u] y;
 			}
 		)"));
 	}
