@@ -293,7 +293,6 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::TYPE_AFTER_REF: return "TYPE_AFTER_REF";
         case protocols::CrossTerminal::TYPE_AFTER_REF_CONST: return "TYPE_AFTER_REF_CONST";
         case protocols::CrossTerminal::TYPE_EXPRESSION: return "TYPE_EXPRESSION";
-        case protocols::CrossTerminal::TYPE_NO_FUNCTION: return "TYPE_NO_FUNCTION";
         case protocols::CrossTerminal::UNARY_EXPRESSION: return "UNARY_EXPRESSION";
         case protocols::CrossTerminal::UNARY_OPERATOR: return "UNARY_OPERATOR";
         case protocols::CrossTerminal::UNIDENTIFIED: return "UNIDENTIFIED";
