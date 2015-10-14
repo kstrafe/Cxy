@@ -887,10 +887,14 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 					Ot = sml.Out;
 				}
 				var St x = "x";
+				throw;
+				throw OUT_OF_BOUNDS;
 				try
 					Ot.print(:x.at(:1));
-				catch (St name)
-					Ot.print(:name);
+				catch (enum[St].OUT_OF_BOUNDS)
+					Ot.print(:name.serialize());
+				catch (enum[St].OUT_OF_MEMORY)
+					doSome();
 			}
 		)");
 	}

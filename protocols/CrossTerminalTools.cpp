@@ -35,6 +35,7 @@ bool CrossTerminalTools::isExpression(const CrossTerminal &ct_)
 		case CrossTerminal::CLASS_MEMBER_EXPRESSION: return true;
 		case CrossTerminal::DELETE_EXPRESSION: return true;
 		case CrossTerminal::ENUMERATION_MEMBER_EXPRESSION: return true;
+		case CrossTerminal::ENUM_EXPRESSION: return true;
 		case CrossTerminal::EQUALITY_EXPRESSION: return true;
 		case CrossTerminal::EXPRESSION_EXPRESSION: return true;
 		case CrossTerminal::MEMBER_EXPRESSION: return true;
@@ -76,6 +77,7 @@ bool CrossTerminalTools::isKeyword(const CrossTerminal &ct_)
 		case CrossTerminal::KEYWORD_DO: return true;
 		case CrossTerminal::KEYWORD_DOUBLE: return true;
 		case CrossTerminal::KEYWORD_ELSE: return true;
+		case CrossTerminal::KEYWORD_ENUM: return true;
 		case CrossTerminal::KEYWORD_FLOAT: return true;
 		case CrossTerminal::KEYWORD_FOR: return true;
 		case CrossTerminal::KEYWORD_GOTO: return true;
@@ -94,6 +96,7 @@ bool CrossTerminalTools::isKeyword(const CrossTerminal &ct_)
 		case CrossTerminal::KEYWORD_RETURN: return true;
 		case CrossTerminal::KEYWORD_STATIC: return true;
 		case CrossTerminal::KEYWORD_STATICS: return true;
+		case CrossTerminal::KEYWORD_THROW: return true;
 		case CrossTerminal::KEYWORD_TRY: return true;
 		case CrossTerminal::KEYWORD_TYPE: return true;
 		case CrossTerminal::KEYWORD_VAR: return true;
@@ -141,8 +144,10 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::BITWISE_XOR_EXPRESSION: return "BITWISE_XOR_EXPRESSION";
 		case protocols::CrossTerminal::CAPTURE_LIST: return "CAPTURE_LIST";
 		case protocols::CrossTerminal::CAST_EXPRESSION: return "CAST_EXPRESSION";
+		case protocols::CrossTerminal::CATCH_LIST: return "CATCH_LIST";
 		case protocols::CrossTerminal::CLASS_MEMBER: return "CLASS_MEMBER";
 		case protocols::CrossTerminal::CLASS_MEMBER_EXPRESSION: return "CLASS_MEMBER_EXPRESSION";
+		case protocols::CrossTerminal::CLASS_OR_PACKAGE_CLASS: return "CLASS_OR_PACKAGE_CLASS";
 		case protocols::CrossTerminal::CODE_BLOCK: return "CODE_BLOCK";
 		case protocols::CrossTerminal::DATA_DECLARATION_LIST: return "DATA_DECLARATION_LIST";
 		case protocols::CrossTerminal::DATA_DECLARATION_STATEMENT: return "DATA_DECLARATION_STATEMENT";
@@ -156,7 +161,9 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::END_OF_MODULE: return "END_OF_MODULE";
 		case protocols::CrossTerminal::ENTER: return "ENTER";
 		case protocols::CrossTerminal::ENUMERATION_MEMBER_EXPRESSION: return "ENUMERATION_MEMBER_EXPRESSION";
-		case protocols::CrossTerminal::ENUM_END: return "";case protocols::CrossTerminal::EPSILONATE: return "EPSILONATE";
+		case protocols::CrossTerminal::ENUM_END: return "";case protocols::CrossTerminal::ENUM_EXPRESSION: return "ENUM_EXPRESSION";
+		case protocols::CrossTerminal::ENUM_OR_NOTHING: return "ENUM_OR_NOTHING";
+		case protocols::CrossTerminal::EPSILONATE: return "EPSILONATE";
 		case protocols::CrossTerminal::EQUALITY_EXPRESSION: return "EQUALITY_EXPRESSION";
 		case protocols::CrossTerminal::EXPRESSION_EXPRESSION: return "EXPRESSION_EXPRESSION";
 		case protocols::CrossTerminal::EXPRESSION_LIST: return "EXPRESSION_LIST";
@@ -191,6 +198,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::KEYWORD_DO: return "KEYWORD_DO";
 		case protocols::CrossTerminal::KEYWORD_DOUBLE: return "KEYWORD_DOUBLE";
 		case protocols::CrossTerminal::KEYWORD_ELSE: return "KEYWORD_ELSE";
+		case protocols::CrossTerminal::KEYWORD_ENUM: return "KEYWORD_ENUM";
 		case protocols::CrossTerminal::KEYWORD_FLOAT: return "KEYWORD_FLOAT";
 		case protocols::CrossTerminal::KEYWORD_FOR: return "KEYWORD_FOR";
 		case protocols::CrossTerminal::KEYWORD_GOTO: return "KEYWORD_GOTO";
@@ -209,6 +217,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::KEYWORD_RETURN: return "KEYWORD_RETURN";
 		case protocols::CrossTerminal::KEYWORD_STATIC: return "KEYWORD_STATIC";
 		case protocols::CrossTerminal::KEYWORD_STATICS: return "KEYWORD_STATICS";
+		case protocols::CrossTerminal::KEYWORD_THROW: return "KEYWORD_THROW";
 		case protocols::CrossTerminal::KEYWORD_TRY: return "KEYWORD_TRY";
 		case protocols::CrossTerminal::KEYWORD_TYPE: return "KEYWORD_TYPE";
 		case protocols::CrossTerminal::KEYWORD_VAR: return "KEYWORD_VAR";
@@ -308,6 +317,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::SYMBOL_STAR__EQUAL: return "SYMBOL_STAR__EQUAL";
 		case protocols::CrossTerminal::SYMBOL_TILDE__PRUNE: return "SYMBOL_TILDE__PRUNE";
 		case protocols::CrossTerminal::TEMPLATE_LIST: return "TEMPLATE_LIST";
+		case protocols::CrossTerminal::THROW_STATEMENT: return "THROW_STATEMENT";
 		case protocols::CrossTerminal::TRY_BLOCK: return "TRY_BLOCK";
 		case protocols::CrossTerminal::TYPE: return "TYPE";
 		case protocols::CrossTerminal::TYPE_AFTER_CONST: return "TYPE_AFTER_CONST";

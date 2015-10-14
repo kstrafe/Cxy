@@ -209,7 +209,7 @@ void Lexer::identifyTokenAfterStrippingUnderscores(protocols::Token &input_token
 	auto ends_with_lowercase = [&input_token]() -> bool {return std::islower(input_token.accompanying_lexeme.back());};
 
 	auto is_class_identifier = [&]() -> bool {return begins_with_uppercase() && any_underscore() == false && ends_with_lowercase();};
-	auto is_enumeration_identifier = [&]() -> bool {return (begins_with_uppercase() && any_underscore() == true && any_lower() == false) || all_upper();};
+	auto is_enumeration_identifier = [&]() -> bool {return begins_with_uppercase() && any_underscore() == true && any_lower() == false; };
 	auto is_function_identifier = [&]() -> bool {return begins_with_lowercase() && any_underscore() == false && ends_with_lowercase() && any_upper();};
 	auto is_keyword = [&]() -> bool {return getKeyword(input_token.accompanying_lexeme) != TokenType::UNIDENTIFIED;};
 	auto is_number_literal = [&]() -> bool {return all_digit();};
