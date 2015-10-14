@@ -922,7 +922,11 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 			(:) enter {
 				var String string = sml.In.read()~string;
 				var 4u converted = cast[4u](string.to32u());
-				sml.Out + "derp";
+				sml.Out << "derp";
+				alias Math = sml.Math;
+				alias Out = sml.Out;
+
+				Out << Math.pi + Math.e / Math;  // makes no sense but if the operators exist, it must be accepted.
 			}
 		)");
 	}
