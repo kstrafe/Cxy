@@ -54,8 +54,8 @@ productions = {
 ################################################################################ 1
 	'ENTER': [
 		['ALIAS_STATEMENT', 'SYMBOL_SEMICOLON__PRUNE', 'ENTER'],
-		['CLASS_DATA_DECLARATION_STATEMENT', 'ENTER'],
 		['GRANT_DEFINITION', 'ENTER'],
+		['MEMBER_DECLARATION', 'ENTER'],
 		[]
 	],
 ################################################################################ 2
@@ -311,7 +311,7 @@ productions = {
 	'CODE_BLOCK': [
 		['GROUPER_LEFT_BRACE', 'STATEMENT_LIST', 'GROUPER_RIGHT_BRACE'],
 	],
-	'CLASS_DATA_DECLARATION_STATEMENT': [
+	'MEMBER_DECLARATION': [
 		['ACCESS_SPECIFIER', 'DATA_OR_METHOD'],
 	],
 	'DATA_OR_METHOD': [

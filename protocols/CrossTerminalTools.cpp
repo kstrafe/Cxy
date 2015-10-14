@@ -137,7 +137,6 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::BITWISE_XOR_EXPRESSION: return "BITWISE_XOR_EXPRESSION";
         case protocols::CrossTerminal::CAPTURE_LIST: return "CAPTURE_LIST";
         case protocols::CrossTerminal::CAST_EXPRESSION: return "CAST_EXPRESSION";
-        case protocols::CrossTerminal::CLASS_DATA_DECLARATION_STATEMENT: return "CLASS_DATA_DECLARATION_STATEMENT";
         case protocols::CrossTerminal::CLASS_MEMBER: return "CLASS_MEMBER";
         case protocols::CrossTerminal::CLASS_MEMBER_EXPRESSION: return "CLASS_MEMBER_EXPRESSION";
         case protocols::CrossTerminal::CODE_BLOCK: return "CODE_BLOCK";
@@ -211,6 +210,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::KEYWORD_WHEN: return "KEYWORD_WHEN";
         case protocols::CrossTerminal::KEYWORD_WHILE: return "KEYWORD_WHILE";
         case protocols::CrossTerminal::LABEL_STATEMENT: return "LABEL_STATEMENT";
+        case protocols::CrossTerminal::MEMBER_DECLARATION: return "MEMBER_DECLARATION";
         case protocols::CrossTerminal::MEMBER_EXPRESSION: return "MEMBER_EXPRESSION";
         case protocols::CrossTerminal::MULTIPLICATIVE_EXPRESSION: return "MULTIPLICATIVE_EXPRESSION";
         case protocols::CrossTerminal::NEW_EXPRESSION: return "NEW_EXPRESSION";
