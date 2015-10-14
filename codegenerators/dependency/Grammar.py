@@ -525,4 +525,5 @@ productions = {
 		[],
 		['EXPRESSION_EXPRESSION', 'OPTIONAL_ARRAY_ACCESS_EXPRESSION'],
 	],
-	}
+	
+}

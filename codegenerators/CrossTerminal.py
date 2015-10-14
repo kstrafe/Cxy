@@ -54,10 +54,6 @@ import dependency.TableSorter as Tbs
 # Generates a .inc file containing all lookahead rules.
 productions = Gram.productions
 
-terminal_set, _ = ParserTableGenerator.computeTerminals(productions)
-p = dependency.Prepend.prependTabEachLine
-with open('./codegenerators/dependency/Grammar.py', 'w') as file:
-	file.write(Tbs.sortTable(productions, terminal_set, p))
 
 def createcodetblexerdependencyKeywordMatchercpp(terminal_set):
 	template = '''%(license)s%(head)s\n\n%(namespace_head)s\n\n%(enumerations)s\n\n%(namespace_tail)s\n'''
@@ -290,10 +286,18 @@ def createprotocolsTokenTypehpp(terminal_set, non_terminal_set):
 		                       'namespace_tail': namespace_tail})
 
 
+def recomputeGrammar(terminal_set):
+	p = dependency.Prepend.prependTabEachLine
+	with open('./codegenerators/dependency/Grammar.py', 'w') as file:
+		file.write(Tbs.sortTable(productions, terminal_set, p))
+
+
 def enter():
 	terminal_set, non_terminal_set = ParserTableGenerator.computeTerminals(productions)
 	terminal_set |= {'UNIDENTIFIED', 'END_OF_MODULE'}
 	non_terminal_set |= {'EPSILONATE'}
+
+	recomputeGrammar(terminal_set)
 
 	createcodetblexerdependencyKeywordMatchercpp(terminal_set)
 	createcodetblexerdependencySymbolMatchercpp(terminal_set)
