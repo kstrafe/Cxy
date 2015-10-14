@@ -38,6 +38,7 @@ along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 
 import dependency.ParserTableGenerator as ParserTableGenerator
 import dependency.NamespaceGenerator
+import dependency.Grammar as Gram
 import dependency.Prepend
 import dependency.TableSorter as Tbs
 
@@ -51,10 +52,12 @@ import dependency.TableSorter as Tbs
 # The same occurs with 'SYMBOL_' (SymbolMatcher).
 # Empty productions '[]' are epsilon productions.
 # Generates a .inc file containing all lookahead rules.
-productions = Tbs.productions
+productions = Gram.productions
 
 terminal_set, _ = ParserTableGenerator.computeTerminals(productions)
-print(Tbs.sortTable(productions, terminal_set))
+p = dependency.Prepend.prependTabEachLine
+with open('./codegenerators/dependency/Grammar.py', 'w') as file:
+	file.write(Tbs.sortTable(productions, terminal_set, p))
 
 def createcodetblexerdependencyKeywordMatchercpp(terminal_set):
 	template = '''%(license)s%(head)s\n\n%(namespace_head)s\n\n%(enumerations)s\n\n%(namespace_tail)s\n'''
