@@ -74,7 +74,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 		// Every time a character is fed the return value
 		// tells you if the input is still valid.
 		TreeBuilder builder_object;
-		std::string input_string = "ClassName variable_name; String identifier_name; ";
+		std::string input_string = "var {ClassName variable_name; String identifier_name; } ";
 		// Note the trailing space in the string. This causes the TreeBuilder to be able
 		// To turn ; into a token, and thereby finish the input. If we left it out
 		// The ; would merely be in a "current_working" state. Nothing would be invalidated,
@@ -103,38 +103,50 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 	SECTION("Parse the start of a module: declarations. Some permutations.")
 	{
 		REQUIRE(validate(R"(
-			1u b;
-			1u a;
-			1u c;
+			var {
+				1u b;
+				1u a;
+				1u c;
+			}
 		)"));
 		REQUIRE(validate(R"(
-			1u a;
-			1u c;
-			1u b;
+			var {
+				1u a;
+				1u c;
+				1u b;
+			}
 		)"));
 		REQUIRE(validate(R"(
-			1u c;
-			1u b;
-			1u a;
+			var {
+				1u c;
+				1u b;
+				1u a;
+			}
 		)"));
 	}
 	////////////////////////////////////////////////////////////////////////////////
 	SECTION("Parse the start of a module: declarations and assignments")
 	{
 		REQUIRE(validate(R"(
-			1u b = 1;
-			1u a = 2;
-			1u c = 3;
+			var {
+				1u b = 1;
+				1u a = 2;
+				1u c = 3;
+			}
 		)"));
 		REQUIRE(validate(R"(
-			1u a(value: 4);
-			1u c(value: 5);
-			1u b(value: 6);
+			var {
+				1u a(value: 4);
+				1u c(value: 5);
+				1u b(value: 6);
+			}
 		)"));
 		REQUIRE(validate(R"(
-			1u c(value: 7);
-			1u b = 8;
-			1u a;
+			var {
+				1u c(value: 7);
+				1u b = 8;
+				1u a;
+			}
 		)"));
 	}
 	////////////////////////////////////////////////////////////////////////////////
@@ -193,7 +205,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 	{
 		////////////////////////////////////////////////////////////
 		REQUIRE(validate(R"(
-			32u variable = 0;
+			var 32u variable = 0;
 
 			(:) enter
 			{
@@ -208,7 +220,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 		////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////
 		REQUIRE(validate(R"(
-			32u variable = 0;
+			var 32u variable = 0;
 
 			(:) enter
 			{
@@ -524,7 +536,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 		REQUIRE(validate(R"(
 			(:) enter
 			{
-				static if (3)
+				statics if (3)
 				{
 					a + b;
 				}
@@ -533,17 +545,17 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 		REQUIRE(validate(R"(
 			(:) enter
 			{
-				static if (sys.Machine.memory_size)
+				statics if (sys.Machine.memory_size)
 				{
 					a + b;
 				}
-				static else
+				statics else
 				{
-					static if (sys.Machine.processor_type)
+					statics if (sys.Machine.processor_type)
 					{
 						a - b;
 					}
-					static else
+					statics else
 					{
 						a * b;
 					}
@@ -565,7 +577,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 		REQUIRE(validate(R"(
 			(:) enter
 			{
-				static if (sys.Sys.argv[1])
+				statics if (sys.Sys.argv[1])
 				{
 					var 32u x = computeSomething(in: 100, sec: 100 * 3)~value;
 					sys.Out.printLn(val: x);
@@ -585,14 +597,14 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 		)"));
 		REQUIRE(validate(R"(
 			grant Name {
-				32u a, b, c;
+				var 32u a, b, c;
 				(32u a : 32u b : pure) d, e, f;
 			}
 		)"));
 		REQUIRE(validate(R"(
 			grant String
 			{
-				64u length;
+				var 64u length;
 				(String out : String left, String right) +;
 			}
 
@@ -624,6 +636,10 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 					{
 						sml.Out.print(:"Hi");
 						for (32u i = 1; i < 3; ++i;)
+							sml.Out.print(:i);
+						for ({32u i = 1; 32u j = 0;} i < 3; ++i;)
+							sml.Out.print(:i);
+						for (32u i = 1, j(:0); i < 3; ++i;)
 							sml.Out.print(:i);
 					};
 			}
@@ -699,9 +715,11 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 		)");
 
 		doValidation(R"(
-			float x1;
-			32u y1 = 2;
-			sml.String z1(:"z");
+			var {
+				float x1;
+				32u y1 = 2;
+				sml.String z1(:"z");
+			}
 
 			(:) enter
 			{
@@ -709,7 +727,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 					float x2;
 					32u y2 = 2;
 					sml.String z2(:"z");
-				};
+				}
 			}
 		)");
 
@@ -735,7 +753,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 				// ...
 			}
 		)");
-		#define doInvalidation(x) REQUIRE(false == validate(x))
+		#define doInvalidation(x) REQUIRE(false == validate(x, false))
 		doInvalidation(R"(
 			(:) enter {
 				alias Long = ptr 1;
@@ -760,8 +778,107 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 				var ptr 32u c = new[32u]{:3};
 
 				// Initializing new on an array
-				var ptr 32u c = new[32u](3){:3};
+				var ptr 32u d = new[32u](4){:4};
+
+				// Initialize a two-dimensional array
+				var ptr ptr 32u e = new[ptr 32u](5){:new[32u](5){:0}};
 			}
+		)");
+		doValidation(R"(
+			var 32u a = [1, 2];
+		)");
+		doValidation(R"(
+			// Check overloadable operators
+			// Binary operators
+			(:) + {}
+			(:) ++ {}
+			(:) - {}
+			(:) -- {}
+			(:) * {}
+			(:) / {}
+			(:) % {}
+
+			// Compound operators
+			(:) += {}
+			(:) -= {}
+			(:) *= {}
+			(:) /= {}
+			(:) %= {}
+			(:) <<= {}
+			(:) >>= {}
+
+			// Comparison operators
+			(:) == {}
+			(:) != {}
+			(:) > {}
+			(:) < {}
+			(:) >= {}
+			(:) <= {}
+
+			// Shift operators
+			(:) << {}
+			(:) >> {}
+		)");
+		doValidation(R"(
+			(:) enter {
+				var 32u a;
+				var type[a] b = a;
+			}
+		)");
+		doValidation(R"(
+			(:) enter {
+				var {
+					[1, 32u] a;
+					type[a] b(:a);
+				}
+			}
+		)");
+		doValidation(R"(
+			restricted var { 32u a; 8s b = cast[8s](a); }
+			var { 32u c; 8s d = cast[type[b]](c); }
+			private var { sml.String e = "e"; }
+
+			public (: 32u a(:5)) enter { }
+		)");
+		doValidation(R"(
+			alias {}
+			alias { Aa = type[a]; Bb = type[b]; }
+			(:) enter {
+				alias { sf = sfml; Aa = type[a]; Bb = type[b]; }
+				alias abc = alphabet;
+				alias Abc = abc.Alphabet;
+			}
+		)");
+		doValidation(R"(
+			var [10, 32u] a;
+
+			(:) enter {
+				a[1, 2, 3];
+				a[1, 2, 3,];
+				sml.Out.print(:a,);
+			}
+		)");
+		doValidation(R"(
+			var 32u a, b,;
+			var { 32u a, b,; float c,; }
+			static 32u a, b,;
+			static { 32u a, b,; float c,; }
+
+			(1u c,:1u a,) b { }
+
+			grant Aa {
+				public (:) a;
+				restricted var 64u b;
+			}
+		)");
+		doInvalidation(R"(
+			grant Aa {
+				private var 5u a;
+			}
+		)");
+		doValidation(R"(
+			(1u {a, b(:0)}, String e = "e",: type[e]{f, g, h,},) d {}
+			(const ptr const 1u {a, b, c}, : ) d {}
 		)");
 	}
 }

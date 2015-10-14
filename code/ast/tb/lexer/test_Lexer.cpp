@@ -260,7 +260,7 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
 		using namespace tul::protocols;
 		unsigned iterator = 0;
 		#define caze(type_name) REQUIRE(token_stack.at(iterator++).token_type == TokenType::type_name)
-			caze(IDENTIFIER_PACKAGE);
+			caze(KEYWORD_PRIVATE);
 			caze(PRIMITIVE_UNSIGNED);
 			caze(IDENTIFIER_PACKAGE);
 			caze(SYMBOL_EQUAL);
@@ -285,7 +285,7 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
 		{
 			using namespace tul::protocols;
 			#define caze(type_name) REQUIRE(token_stack.at(iterator++).token_type == TokenType::type_name)
-				caze(IDENTIFIER_PACKAGE);
+				caze(KEYWORD_PUBLIC);
 				caze(GROUPER_LEFT_PARENTHESIS);
 				caze(SYMBOL_COLON__PRUNE);
 				caze(GROUPER_RIGHT_PARENTHESIS);

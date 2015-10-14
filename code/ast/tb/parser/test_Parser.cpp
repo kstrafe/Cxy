@@ -38,6 +38,7 @@ TEST_CASE("Test parser", "[test-Parser]")
 		auto parseSymbol = [&parser](const TokenType &token_type) -> void {Token token; token.token_type = token_type; REQUIRE(parser.parseSymbol(token) == true);};
 		auto parseFail = [&parser](const TokenType &token_type) -> void {Token token; token.token_type = token_type; REQUIRE(parser.parseSymbol(token) == false);};
 
+		parseSymbol(TokenType::KEYWORD_VAR);
 		parseSymbol(TokenType::IDENTIFIER_PACKAGE);
 		parseSymbol(TokenType::SYMBOL_DOT__PRUNE);
 		parseSymbol(TokenType::IDENTIFIER_CLASS);

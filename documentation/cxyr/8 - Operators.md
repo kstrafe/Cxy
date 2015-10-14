@@ -109,6 +109,45 @@ conveyed clearly to anyone using the language. Symbols are always grouper
 together. Very important. Anyhow, I'm still thinking a bit about the reference
 operators.
 
+=== Kevin R. Stravers Wed 14 Oct 2015 06:13:13 AM CEST
+
+Currently, I have allowed the following operator overloads:
+	// Check overloadable operators
+	// Binary operators
+	(:) + {}
+	(:) ++ {}
+	(:) - {}
+	(:) -- {}
+	(:) * {}
+	(:) / {}
+	(:) % {}
+
+	// Compound operators
+	(:) += {}
+	(:) -= {}
+	(:) *= {}
+	(:) /= {}
+	(:) %= {}
+	(:) <<= {}
+	(:) >>= {}
+
+	// Comparison operators
+	(:) == {}
+	(:) != {}
+	(:) > {}
+	(:) < {}
+	(:) >= {}
+	(:) <= {}
+
+	// Shift operators
+	(:) << {}
+	(:) >> {}
+
+I suppose it's not really necessary to allow overloading the &&, ||, and bitwise operators.
+My idea is that the overloads should be conservative... I'll check this out later
+
+===
+
 
 *Conclusion*:
 
