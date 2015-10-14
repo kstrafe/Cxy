@@ -909,5 +909,22 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 				}
 			}
 		)");
+		doValidation(R"(
+			(113u out : 4u in) factorial {
+				var type[out] out;
+				out = cast[type[out]](in);
+				--in;
+				while (in > 1)
+					out *= cast[type[out]](in);
+				return out: out;
+			}
+
+			(:) enter {
+				var String string = sml.In.read()~string;
+				var 4u converted = cast[4u](string.to32u());
+				sml.Out << "derp";
+				sml.Out.print(:"hello");
+			}
+		)");
 	}
 }
