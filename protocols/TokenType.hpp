@@ -49,6 +49,7 @@ enum class TokenType
     KEYWORD_IF,
     KEYWORD_LABEL,
     KEYWORD_LAMBDA,
+    KEYWORD_NEW,
     KEYWORD_PTR,
     KEYWORD_PURE,
     KEYWORD_REF,

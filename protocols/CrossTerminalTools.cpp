@@ -38,6 +38,7 @@ bool CrossTerminalTools::isExpression(const CrossTerminal &ct_)
         case CrossTerminal::EXPRESSION_EXPRESSION: return true;
         case CrossTerminal::MEMBER_EXPRESSION: return true;
         case CrossTerminal::MULTIPLICATIVE_EXPRESSION: return true;
+        case CrossTerminal::NEW_EXPRESSION: return true;
         case CrossTerminal::OPTIONAL_ADDITIVE_EXPRESSION: return true;
         case CrossTerminal::OPTIONAL_AND_EXPRESSION: return true;
         case CrossTerminal::OPTIONAL_ARRAY_ACCESS_EXPRESSION: return true;
@@ -78,6 +79,7 @@ bool CrossTerminalTools::isKeyword(const CrossTerminal &ct_)
         case CrossTerminal::KEYWORD_IF: return true;
         case CrossTerminal::KEYWORD_LABEL: return true;
         case CrossTerminal::KEYWORD_LAMBDA: return true;
+        case CrossTerminal::KEYWORD_NEW: return true;
         case CrossTerminal::KEYWORD_PTR: return true;
         case CrossTerminal::KEYWORD_PURE: return true;
         case CrossTerminal::KEYWORD_REF: return true;
@@ -109,6 +111,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
     {
         case protocols::CrossTerminal::ADDITIVE_EXPRESSION: return "ADDITIVE_EXPRESSION";
         case protocols::CrossTerminal::ALIAS_STATEMENT: return "ALIAS_STATEMENT";
+        case protocols::CrossTerminal::ALIAS_TRAIL: return "ALIAS_TRAIL";
         case protocols::CrossTerminal::AND_EXPRESSION: return "AND_EXPRESSION";
         case protocols::CrossTerminal::ARGUMENT: return "ARGUMENT";
         case protocols::CrossTerminal::ARGUMENT_LIST: return "ARGUMENT_LIST";
@@ -128,7 +131,9 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::CLASS_MEMBER_EXPRESSION: return "CLASS_MEMBER_EXPRESSION";
         case protocols::CrossTerminal::CODE_BLOCK: return "CODE_BLOCK";
         case protocols::CrossTerminal::DATA_DECLARATION: return "DATA_DECLARATION";
+        case protocols::CrossTerminal::DATA_DECLARATION_LIST: return "DATA_DECLARATION_LIST";
         case protocols::CrossTerminal::DATA_DECLARATION_STATEMENT: return "DATA_DECLARATION_STATEMENT";
+        case protocols::CrossTerminal::DATA_DECLARATION_TYPE: return "DATA_DECLARATION_TYPE";
         case protocols::CrossTerminal::DATA_NAMES: return "DATA_NAMES";
         case protocols::CrossTerminal::DEFER_STATEMENT: return "DEFER_STATEMENT";
         case protocols::CrossTerminal::DO_STATEMENT: return "DO_STATEMENT";
@@ -176,6 +181,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::KEYWORD_IF: return "KEYWORD_IF";
         case protocols::CrossTerminal::KEYWORD_LABEL: return "KEYWORD_LABEL";
         case protocols::CrossTerminal::KEYWORD_LAMBDA: return "KEYWORD_LAMBDA";
+        case protocols::CrossTerminal::KEYWORD_NEW: return "KEYWORD_NEW";
         case protocols::CrossTerminal::KEYWORD_PTR: return "KEYWORD_PTR";
         case protocols::CrossTerminal::KEYWORD_PURE: return "KEYWORD_PURE";
         case protocols::CrossTerminal::KEYWORD_REF: return "KEYWORD_REF";
@@ -187,6 +193,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::LABEL_STATEMENT: return "LABEL_STATEMENT";
         case protocols::CrossTerminal::MEMBER_EXPRESSION: return "MEMBER_EXPRESSION";
         case protocols::CrossTerminal::MULTIPLICATIVE_EXPRESSION: return "MULTIPLICATIVE_EXPRESSION";
+        case protocols::CrossTerminal::NEW_EXPRESSION: return "NEW_EXPRESSION";
         case protocols::CrossTerminal::NO_SEMICOLON_STATEMENT: return "NO_SEMICOLON_STATEMENT";
         case protocols::CrossTerminal::OPTIONAL_ADDITIVE_EXPRESSION: return "OPTIONAL_ADDITIVE_EXPRESSION";
         case protocols::CrossTerminal::OPTIONAL_AND_EXPRESSION: return "OPTIONAL_AND_EXPRESSION";
@@ -264,6 +271,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::TYPE_AFTER_PTR: return "TYPE_AFTER_PTR";
         case protocols::CrossTerminal::TYPE_AFTER_REF: return "TYPE_AFTER_REF";
         case protocols::CrossTerminal::TYPE_AFTER_REF_CONST: return "TYPE_AFTER_REF_CONST";
+        case protocols::CrossTerminal::TYPE_NO_FUNCTION: return "TYPE_NO_FUNCTION";
         case protocols::CrossTerminal::UNARY_EXPRESSION: return "UNARY_EXPRESSION";
         case protocols::CrossTerminal::UNARY_OPERATOR: return "UNARY_OPERATOR";
         case protocols::CrossTerminal::UNIDENTIFIED: return "UNIDENTIFIED";
