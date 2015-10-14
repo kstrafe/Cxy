@@ -68,13 +68,13 @@ is.
 So how is Cxy going to solve this specific problem? Should types be enforced? Let's
 look at the possibilities
 
-	sml.String a_ = "Type assertions are ok";
-	a_.sml.String.replaceSubstring(to_replace: "ok", with_string: "probable");
+	sml.String a = "Type assertions are ok";
+	a.sml.String.replaceSubstring(to_replace: "ok", with_string: "probable");
 
 The version that does not use type assertions:
 
-	sml.String a_ = "Type assertions are ok";
-	a_.replaceSubstring(to_replace: "ok", with_string: "probable");
+	sml.String a = "Type assertions are ok";
+	a.replaceSubstring(to_replace: "ok", with_string: "probable");
 
 Is this a non-issue? I'm not entirely sure. The latter does allow compile-time duck
 typing. Is that at all desirable or nice? It is certainly useful in some cases
@@ -101,8 +101,8 @@ variable _is_. That's a good thing. I'm afraid that it will be abused with using
 constructs:
 
 	using sml.String as x
-	var x a_;
-	a_.x.replaceSubstring(to_replace: "ok", with_string: "probable");
+	var x a;
+	a.x.replaceSubstring(to_replace: "ok", with_string: "probable");
 
 The problem is that "x" does not give the coder any information. The coder will
 have to find the using declaration, which is just as useful as finding the actual
@@ -112,22 +112,22 @@ What about going one step further? What about type-asserting method arguments an
 returns?
 
 	var sml.String a_;
-	a_ = __myFunction(in_.sml.String: a_)~a_.sml.String;
+	a = __myFunction(in.sml.String: a)~a.sml.String;
 
 Actually, that gives us a tonne of information. We know the return type immediately.
 Imagine the following scenario
 
-	getBuffer()~buf_
+	getBuffer()~buf
 
 vs
 
-	getBuffer()~buf_.usr.Buffer
+	getBuffer()~buf.usr.Buffer
 
 Holy shit! I immediately know what is returned! I don't even need to go to the getBuffer
 function. This also allows one to write two cases:
 
-	getBuffer()~buf_.usr.Buffer
-	getBuffer()~buf_.sml.String
+	getBuffer()~buf.usr.Buffer
+	getBuffer()~buf.sml.String
 
 Providing return type overloading using the same name, instead of what the context
 expects. I think this may be tremendously useful. Don't forget that the different
@@ -168,9 +168,9 @@ Think about type-inference.
 This is the declaration form that was discarded at first. What's nice is that it
 also works on non-type declarations as type names:
 
-	var x_ = y_.y.Obj.getString()~str_.sml.String;
+	var x = y.y.Obj.getString()~str.sml.String;
 
-You can infer from the right side what the type of x_ will be just by looking at
+You can infer from the right side what the type of x will be just by looking at
 the type assertion.
 
 Okay so, there is a distinction to be made. Variables declared locally can easily
@@ -187,9 +187,9 @@ Check the functions' arguments. No? Check the class declaration or the class tha
 is referred to.
 
 	sml.String // Okay, inside sml/String.tul
-	a_ // Must be locally defined somewhere in the method
-	this.a_ // A field of the current class
-	Class.a_ // Defined as a global/glocal inside Class (granted)
+	a // Must be locally defined somewhere in the method
+	this.a // A field of the current class
+	Class.a // Defined as a global/glocal inside Class (granted)
 
 Yeah, so finding the type is going to be a non-issue. Even if it is an issue you're
 probably having a function that's too big. Break it up.
