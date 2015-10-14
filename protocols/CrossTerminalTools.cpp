@@ -88,6 +88,7 @@ bool CrossTerminalTools::isKeyword(const CrossTerminal &ct_)
         case CrossTerminal::KEYWORD_REF: return true;
         case CrossTerminal::KEYWORD_RETURN: return true;
         case CrossTerminal::KEYWORD_STATIC: return true;
+        case CrossTerminal::KEYWORD_STATICS: return true;
         case CrossTerminal::KEYWORD_VAR: return true;
         case CrossTerminal::KEYWORD_WHEN: return true;
         case CrossTerminal::KEYWORD_WHILE: return true;
@@ -193,6 +194,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::KEYWORD_REF: return "KEYWORD_REF";
         case protocols::CrossTerminal::KEYWORD_RETURN: return "KEYWORD_RETURN";
         case protocols::CrossTerminal::KEYWORD_STATIC: return "KEYWORD_STATIC";
+        case protocols::CrossTerminal::KEYWORD_STATICS: return "KEYWORD_STATICS";
         case protocols::CrossTerminal::KEYWORD_VAR: return "KEYWORD_VAR";
         case protocols::CrossTerminal::KEYWORD_WHEN: return "KEYWORD_WHEN";
         case protocols::CrossTerminal::KEYWORD_WHILE: return "KEYWORD_WHILE";

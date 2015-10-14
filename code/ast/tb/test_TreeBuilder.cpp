@@ -74,7 +74,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 		// Every time a character is fed the return value
 		// tells you if the input is still valid.
 		TreeBuilder builder_object;
-		std::string input_string = "ClassName variable_name; String identifier_name; ";
+		std::string input_string = "var {ClassName variable_name; String identifier_name; } ";
 		// Note the trailing space in the string. This causes the TreeBuilder to be able
 		// To turn ; into a token, and thereby finish the input. If we left it out
 		// The ; would merely be in a "current_working" state. Nothing would be invalidated,
@@ -103,38 +103,50 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 	SECTION("Parse the start of a module: declarations. Some permutations.")
 	{
 		REQUIRE(validate(R"(
-			1u b;
-			1u a;
-			1u c;
+			var {
+				1u b;
+				1u a;
+				1u c;
+			}
 		)"));
 		REQUIRE(validate(R"(
-			1u a;
-			1u c;
-			1u b;
+			var {
+				1u a;
+				1u c;
+				1u b;
+			}
 		)"));
 		REQUIRE(validate(R"(
-			1u c;
-			1u b;
-			1u a;
+			var {
+				1u c;
+				1u b;
+				1u a;
+			}
 		)"));
 	}
 	////////////////////////////////////////////////////////////////////////////////
 	SECTION("Parse the start of a module: declarations and assignments")
 	{
 		REQUIRE(validate(R"(
-			1u b = 1;
-			1u a = 2;
-			1u c = 3;
+			var {
+				1u b = 1;
+				1u a = 2;
+				1u c = 3;
+			}
 		)"));
 		REQUIRE(validate(R"(
-			1u a(value: 4);
-			1u c(value: 5);
-			1u b(value: 6);
+			var {
+				1u a(value: 4);
+				1u c(value: 5);
+				1u b(value: 6);
+			}
 		)"));
 		REQUIRE(validate(R"(
-			1u c(value: 7);
-			1u b = 8;
-			1u a;
+			var {
+				1u c(value: 7);
+				1u b = 8;
+				1u a;
+			}
 		)"));
 	}
 	////////////////////////////////////////////////////////////////////////////////
@@ -193,7 +205,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 	{
 		////////////////////////////////////////////////////////////
 		REQUIRE(validate(R"(
-			32u variable = 0;
+			var 32u variable = 0;
 
 			(:) enter
 			{
@@ -208,7 +220,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 		////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////
 		REQUIRE(validate(R"(
-			32u variable = 0;
+			var 32u variable = 0;
 
 			(:) enter
 			{
@@ -524,7 +536,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 		REQUIRE(validate(R"(
 			(:) enter
 			{
-				static if (3)
+				statics if (3)
 				{
 					a + b;
 				}
@@ -533,17 +545,17 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 		REQUIRE(validate(R"(
 			(:) enter
 			{
-				static if (sys.Machine.memory_size)
+				statics if (sys.Machine.memory_size)
 				{
 					a + b;
 				}
-				static else
+				statics else
 				{
-					static if (sys.Machine.processor_type)
+					statics if (sys.Machine.processor_type)
 					{
 						a - b;
 					}
-					static else
+					statics else
 					{
 						a * b;
 					}
@@ -565,7 +577,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 		REQUIRE(validate(R"(
 			(:) enter
 			{
-				static if (sys.Sys.argv[1])
+				statics if (sys.Sys.argv[1])
 				{
 					var 32u x = computeSomething(in: 100, sec: 100 * 3)~value;
 					sys.Out.printLn(val: x);
@@ -699,9 +711,11 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 		)");
 
 		doValidation(R"(
-			float x1;
-			32u y1 = 2;
-			sml.String z1(:"z");
+			var {
+				float x1;
+				32u y1 = 2;
+				sml.String z1(:"z");
+			}
 
 			(:) enter
 			{
@@ -709,7 +723,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 					float x2;
 					32u y2 = 2;
 					sml.String z2(:"z");
-				};
+				}
 			}
 		)");
 
@@ -767,7 +781,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 			}
 		)");
 		doValidation(R"(
-			32u a = [1, 2];
+			var 32u a = [1, 2];
 		)");
 		doValidation(R"(
 			// Check overloadable operators
