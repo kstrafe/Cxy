@@ -760,7 +760,10 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 				var ptr 32u c = new[32u]{:3};
 
 				// Initializing new on an array
-				var ptr 32u c = new[32u](3){:3};
+				var ptr 32u d = new[32u](4){:4};
+
+				// Initialize a two-dimensional array
+				var ptr ptr 32u e = new[ptr 32u](5){:new[32u](5){:0}};
 			}
 		)");
 	}
