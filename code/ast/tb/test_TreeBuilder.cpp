@@ -753,7 +753,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 				// ...
 			}
 		)");
-		#define doInvalidation(x) REQUIRE(false == validate(x))
+		#define doInvalidation(x) REQUIRE(false == validate(x, false))
 		doInvalidation(R"(
 			(:) enter {
 				alias Long = ptr 1;
