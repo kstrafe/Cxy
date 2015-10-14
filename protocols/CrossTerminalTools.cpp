@@ -69,6 +69,7 @@ bool CrossTerminalTools::isKeyword(const CrossTerminal &ct_)
 	{
 		case CrossTerminal::KEYWORD_ALIAS: return true;
 		case CrossTerminal::KEYWORD_CAST: return true;
+		case CrossTerminal::KEYWORD_CATCH: return true;
 		case CrossTerminal::KEYWORD_CONST: return true;
 		case CrossTerminal::KEYWORD_DEFER: return true;
 		case CrossTerminal::KEYWORD_DELETE: return true;
@@ -93,6 +94,7 @@ bool CrossTerminalTools::isKeyword(const CrossTerminal &ct_)
 		case CrossTerminal::KEYWORD_RETURN: return true;
 		case CrossTerminal::KEYWORD_STATIC: return true;
 		case CrossTerminal::KEYWORD_STATICS: return true;
+		case CrossTerminal::KEYWORD_TRY: return true;
 		case CrossTerminal::KEYWORD_TYPE: return true;
 		case CrossTerminal::KEYWORD_VAR: return true;
 		case CrossTerminal::KEYWORD_WHEN: return true;
@@ -182,6 +184,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::ITER_STATEMENT: return "ITER_STATEMENT";
 		case protocols::CrossTerminal::KEYWORD_ALIAS: return "KEYWORD_ALIAS";
 		case protocols::CrossTerminal::KEYWORD_CAST: return "KEYWORD_CAST";
+		case protocols::CrossTerminal::KEYWORD_CATCH: return "KEYWORD_CATCH";
 		case protocols::CrossTerminal::KEYWORD_CONST: return "KEYWORD_CONST";
 		case protocols::CrossTerminal::KEYWORD_DEFER: return "KEYWORD_DEFER";
 		case protocols::CrossTerminal::KEYWORD_DELETE: return "KEYWORD_DELETE";
@@ -206,6 +209,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::KEYWORD_RETURN: return "KEYWORD_RETURN";
 		case protocols::CrossTerminal::KEYWORD_STATIC: return "KEYWORD_STATIC";
 		case protocols::CrossTerminal::KEYWORD_STATICS: return "KEYWORD_STATICS";
+		case protocols::CrossTerminal::KEYWORD_TRY: return "KEYWORD_TRY";
 		case protocols::CrossTerminal::KEYWORD_TYPE: return "KEYWORD_TYPE";
 		case protocols::CrossTerminal::KEYWORD_VAR: return "KEYWORD_VAR";
 		case protocols::CrossTerminal::KEYWORD_WHEN: return "KEYWORD_WHEN";
@@ -304,6 +308,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::SYMBOL_STAR__EQUAL: return "SYMBOL_STAR__EQUAL";
 		case protocols::CrossTerminal::SYMBOL_TILDE__PRUNE: return "SYMBOL_TILDE__PRUNE";
 		case protocols::CrossTerminal::TEMPLATE_LIST: return "TEMPLATE_LIST";
+		case protocols::CrossTerminal::TRY_BLOCK: return "TRY_BLOCK";
 		case protocols::CrossTerminal::TYPE: return "TYPE";
 		case protocols::CrossTerminal::TYPE_AFTER_CONST: return "TYPE_AFTER_CONST";
 		case protocols::CrossTerminal::TYPE_AFTER_PTR: return "TYPE_AFTER_PTR";
