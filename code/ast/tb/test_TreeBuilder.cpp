@@ -769,5 +769,37 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 		doValidation(R"(
 			32u a = [1, 2];
 		)");
+		doValidation(R"(
+			// Check overloadable operators
+			// Binary operators
+			(:) + {}
+			(:) ++ {}
+			(:) - {}
+			(:) -- {}
+			(:) * {}
+			(:) / {}
+			(:) % {}
+
+			// Compound operators
+			(:) += {}
+			(:) -= {}
+			(:) *= {}
+			(:) /= {}
+			(:) %= {}
+			(:) <<= {}
+			(:) >>= {}
+
+			// Comparison operators
+			(:) == {}
+			(:) != {}
+			(:) > {}
+			(:) < {}
+			(:) >= {}
+			(:) <= {}
+
+			// Shift operators
+			(:) << {}
+			(:) >> {}
+		)");
 	}
 }

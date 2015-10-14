@@ -83,11 +83,36 @@ productions = {
 		['IDENTIFIER_VARIABLE'],
 		['IDENTIFIER_PACKAGE']
 	],
+	# Function names can be any subroutine or package name, as well as any valid symbol.
 	'FUNCTION_NAMES': [
 		['IDENTIFIER_SUBROUTINE'],
 		['IDENTIFIER_PACKAGE'],
+
 		['SYMBOL_PLUS'],
-		['SYMBOL_MINUS']
+		['SYMBOL_PLUS__PLUS'],
+		['SYMBOL_MINUS'],
+		['SYMBOL_MINUS__MINUS'],
+		['SYMBOL_STAR'],
+		['SYMBOL_FORWARD_SLASH'],
+		['SYMBOL_PERCENT'],
+
+		['SYMBOL_PLUS__EQUAL'],
+		['SYMBOL_MINUS__EQUAL'],
+		['SYMBOL_STAR__EQUAL'],
+		['SYMBOL_FORWARD_SLASH__EQUAL'],
+		['SYMBOL_PERCENT__EQUAL'],
+		['SYMBOL_LESS_THAN__LESS_THAN__EQUAL'],
+		['SYMBOL_GREATER_THAN__GREATER_THAN__EQUAL'],
+
+		['SYMBOL_EQUAL__EQUAL'],
+		['SYMBOL_EXCLAMATION_MARK__EQUAL'],
+		['SYMBOL_LESS_THAN'],
+		['SYMBOL_GREATER_THAN'],
+		['SYMBOL_LESS_THAN__EQUAL'],
+		['SYMBOL_GREATER_THAN__EQUAL'],
+
+		['SYMBOL_LESS_THAN__LESS_THAN'],
+		['SYMBOL_GREATER_THAN__GREATER_THAN'],
 	],
 ################################################################################ 3
 # End Naming subsytem
@@ -95,7 +120,7 @@ productions = {
 ################################################################################ 3
 # Type subsystem
 # External to subsystem: OR_EXPRESSION, ARGUMENT_LIST
-# Defines types: ref ptr ptr const ptr const [x * x, ptr ([3, 8u] out:)]
+# Defines types: ref ptr ptr const ptr const [5, ptr ([3, 8u] out:)]
 ################################################################################
 	'TYPE': [
 		['ARRAY'],
@@ -487,11 +512,6 @@ productions = {
 		['WHEN_EXPRESSION'],
 		['KEYWORD_LAMBDA', 'OPTIONAL_CAPTURE_LIST', 'FUNCTION_SIGNATURE', 'CODE_BLOCK']
 	],
-	'EXPRESSION_LIST': [
-		['EXPRESSION_EXPRESSION', 'EXPRESSION_LIST'],
-		['SYMBOL_COMMA__PRUNE', 'EXPRESSION_LIST'],
-		[]
-	],
 	'OPTIONAL_MEMBER_EXPRESSION': [
 		['ARRAY_ACCESS_EXPRESSION'],
 		['GROUPER_LEFT_PARENTHESIS', 'PARAMETER_LIST', 'GROUPER_RIGHT_PARENTHESIS', 'OPTIONAL_EXTRACTOR_EXPRESSION'],
@@ -503,6 +523,11 @@ productions = {
 		['IDENTIFIER_SUBROUTINE'],
 		['IDENTIFIER_VARIABLE'],
 		['IDENTIFIER_PACKAGE']
+	],
+	'EXPRESSION_LIST': [
+		['EXPRESSION_EXPRESSION', 'EXPRESSION_LIST'],
+		['SYMBOL_COMMA__PRUNE', 'EXPRESSION_LIST'],
+		[]
 	],
 	'WHEN_EXPRESSION': [
 		['KEYWORD_WHEN', 'GROUPER_LEFT_PARENTHESIS', 'OR_EXPRESSION', 'GROUPER_RIGHT_PARENTHESIS', 'OR_EXPRESSION', 'KEYWORD_ELSE', 'OR_EXPRESSION'],
@@ -597,6 +622,8 @@ def createcodetblexerdependencySymbolMatchercpp(terminal_set):
 				return '*'
 			elif name == 'MINUS':
 				return '-'
+			if name == 'PERCENT':
+				return '%'
 			elif name == 'PLUS':
 				return '+'
 			elif name == 'EQUAL':

@@ -23,7 +23,9 @@ namespace tul { namespace dependency {
 protocols::TokenType SymbolMatcher::getSymbol(const std::string &lexeme)
 {
     using namespace protocols;
-    if (lexeme == "&&") return TokenType::SYMBOL_AMPERSAND__AMPERSAND;
+    if (lexeme == ">>=") return TokenType::SYMBOL_GREATER_THAN__GREATER_THAN__EQUAL;
+    else if (lexeme == "<<=") return TokenType::SYMBOL_LESS_THAN__LESS_THAN__EQUAL;
+    else if (lexeme == "&&") return TokenType::SYMBOL_AMPERSAND__AMPERSAND;
     else if (lexeme == "@@") return TokenType::SYMBOL_APETAIL__APETAIL;
     else if (lexeme == "||") return TokenType::SYMBOL_BAR__BAR;
     else if (lexeme == ":") return TokenType::SYMBOL_COLON__PRUNE;
@@ -31,12 +33,16 @@ protocols::TokenType SymbolMatcher::getSymbol(const std::string &lexeme)
     else if (lexeme == "$$") return TokenType::SYMBOL_DOLLAR__DOLLAR;
     else if (lexeme == ".") return TokenType::SYMBOL_DOT__PRUNE;
     else if (lexeme == "==") return TokenType::SYMBOL_EQUAL__EQUAL;
+    else if (lexeme == "!=") return TokenType::SYMBOL_EXCLAMATION_MARK__EQUAL;
     else if (lexeme == "!!") return TokenType::SYMBOL_EXCLAMATION_MARK__EXCLAMATION_MARK;
     else if (lexeme == "/=") return TokenType::SYMBOL_FORWARD_SLASH__EQUAL;
     else if (lexeme == ">=") return TokenType::SYMBOL_GREATER_THAN__EQUAL;
+    else if (lexeme == ">>") return TokenType::SYMBOL_GREATER_THAN__GREATER_THAN;
     else if (lexeme == "<=") return TokenType::SYMBOL_LESS_THAN__EQUAL;
+    else if (lexeme == "<<") return TokenType::SYMBOL_LESS_THAN__LESS_THAN;
     else if (lexeme == "-=") return TokenType::SYMBOL_MINUS__EQUAL;
     else if (lexeme == "--") return TokenType::SYMBOL_MINUS__MINUS;
+    else if (lexeme == "%=") return TokenType::SYMBOL_PERCENT__EQUAL;
     else if (lexeme == "+=") return TokenType::SYMBOL_PLUS__EQUAL;
     else if (lexeme == "++") return TokenType::SYMBOL_PLUS__PLUS;
     else if (lexeme == ";") return TokenType::SYMBOL_SEMICOLON__PRUNE;
@@ -53,6 +59,7 @@ protocols::TokenType SymbolMatcher::getSymbol(const std::string &lexeme)
     else if (lexeme == ">") return TokenType::SYMBOL_GREATER_THAN;
     else if (lexeme == "<") return TokenType::SYMBOL_LESS_THAN;
     else if (lexeme == "-") return TokenType::SYMBOL_MINUS;
+    else if (lexeme == "%") return TokenType::SYMBOL_PERCENT;
     else if (lexeme == "+") return TokenType::SYMBOL_PLUS;
     else if (lexeme == "*") return TokenType::SYMBOL_STAR;
     else return protocols::TokenType::UNIDENTIFIED;
