@@ -112,7 +112,7 @@ productions = {
 		['KEYWORD_PTR', 'TYPE_AFTER_PTR'],
 		['KEYWORD_REF', 'TYPE_AFTER_REF'],
 	],
-################################################################################ 4
+############################################################################### 4
 	'ARRAY': [
 		['GROUPER_LEFT_BRACKET', 'INTEGER_LITERAL', 'SYMBOL_COMMA__PRUNE', 'TYPE', 'GROUPER_RIGHT_BRACKET']
 	],
@@ -427,13 +427,30 @@ productions = {
 	],
 ################################################################################ 23
 	'NEW_EXPRESSION': [
-		['KEYWORD_NEW', 'GROUPER_LEFT_BRACKET', 'TYPE', 'GROUPER_RIGHT_BRACKET', 'GROUPER_LEFT_PARENTHESIS', 'EXPRESSION_EXPRESSION', 'GROUPER_RIGHT_PARENTHESIS'],
-		['UNARY_EXPRESSION'],
+		['KEYWORD_NEW', 'GROUPER_LEFT_BRACKET', 'TYPE', 'GROUPER_RIGHT_BRACKET', 'OPTIONAL_NEW_LIST', 'OPTIONAL_CONSTRUCTOR_LIST'],
+		['DELETE_EXPRESSION'],
 	],
 ################################################################################ 23.1
+	'DELETE_EXPRESSION': [
+		['KEYWORD_DELETE', 'GROUPER_LEFT_PARENTHESIS', 'EXPRESSION_EXPRESSION', 'GROUPER_RIGHT_PARENTHESIS'],
+		['UNARY_EXPRESSION'],
+	],
+	'OPTIONAL_NEW_LIST': [
+		['GROUPER_LEFT_PARENTHESIS', 'EXPRESSION_EXPRESSION', 'OPTIONAL_EXPRESSION', 'GROUPER_RIGHT_PARENTHESIS'],
+		[]
+	],
+	'OPTIONAL_CONSTRUCTOR_LIST': [
+		['GROUPER_LEFT_BRACE', 'PARAMETER_LIST', 'GROUPER_RIGHT_BRACE'],
+		[]
+	],
+################################################################################ 23.2
 	'UNARY_EXPRESSION': [
 		['MEMBER_EXPRESSION'],
 		['UNARY_OPERATOR', 'CAST_EXPRESSION'],
+	],
+	'OPTIONAL_EXPRESSION': [
+		['SYMBOL_COMMA__PRUNE', 'EXPRESSION_EXPRESSION'],
+		[]
 	],
 ################################################################################ 24
 	'MEMBER_EXPRESSION': [

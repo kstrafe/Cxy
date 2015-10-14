@@ -743,7 +743,24 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 		)");
 		doValidation(R"(
 			(:) enter {
-				cast[ptr 8u](new[32u](cast[5u](10)));
+				var ptr 8u a = new[8u](1024);
+				sml.Out.print(:delete(a));
+			}
+		)");
+		doValidation(R"(
+			(:) enter {
+				// Placement new on an array
+				var ptr 8u a = new[8u](1024, delete(new[8u](1024)));
+				sml.Out.print(:delete(a));
+
+				// Raw new
+				var ptr Type b = new[Type];
+
+				// Initializing new
+				var ptr 32u c = new[32u]{:3};
+
+				// Initializing new on an array
+				var ptr 32u c = new[32u](3){:3};
 			}
 		)");
 	}

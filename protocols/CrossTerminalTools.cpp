@@ -33,6 +33,7 @@ bool CrossTerminalTools::isExpression(const CrossTerminal &ct_)
         case CrossTerminal::BITWISE_XOR_EXPRESSION: return true;
         case CrossTerminal::CAST_EXPRESSION: return true;
         case CrossTerminal::CLASS_MEMBER_EXPRESSION: return true;
+        case CrossTerminal::DELETE_EXPRESSION: return true;
         case CrossTerminal::ENUMERATION_MEMBER_EXPRESSION: return true;
         case CrossTerminal::EQUALITY_EXPRESSION: return true;
         case CrossTerminal::EXPRESSION_EXPRESSION: return true;
@@ -47,6 +48,7 @@ bool CrossTerminalTools::isExpression(const CrossTerminal &ct_)
         case CrossTerminal::OPTIONAL_BITWISE_OR_EXPRESSION: return true;
         case CrossTerminal::OPTIONAL_BITWISE_XOR_EXPRESSION: return true;
         case CrossTerminal::OPTIONAL_EQUALITY_EXPRESSION: return true;
+        case CrossTerminal::OPTIONAL_EXPRESSION: return true;
         case CrossTerminal::OPTIONAL_EXTRACTOR_EXPRESSION: return true;
         case CrossTerminal::OPTIONAL_MEMBER_EXPRESSION: return true;
         case CrossTerminal::OPTIONAL_MULTIPLICATIVE_EXPRESSION: return true;
@@ -68,6 +70,7 @@ bool CrossTerminalTools::isKeyword(const CrossTerminal &ct_)
         case CrossTerminal::KEYWORD_CAST: return true;
         case CrossTerminal::KEYWORD_CONST: return true;
         case CrossTerminal::KEYWORD_DEFER: return true;
+        case CrossTerminal::KEYWORD_DELETE: return true;
         case CrossTerminal::KEYWORD_DO: return true;
         case CrossTerminal::KEYWORD_DOUBLE: return true;
         case CrossTerminal::KEYWORD_ELSE: return true;
@@ -136,6 +139,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::DATA_DECLARATION_TYPE: return "DATA_DECLARATION_TYPE";
         case protocols::CrossTerminal::DATA_NAMES: return "DATA_NAMES";
         case protocols::CrossTerminal::DEFER_STATEMENT: return "DEFER_STATEMENT";
+        case protocols::CrossTerminal::DELETE_EXPRESSION: return "DELETE_EXPRESSION";
         case protocols::CrossTerminal::DO_STATEMENT: return "DO_STATEMENT";
         case protocols::CrossTerminal::ELSE_STATEMENT: return "ELSE_STATEMENT";
         case protocols::CrossTerminal::END_OF_MODULE: return "END_OF_MODULE";
@@ -170,6 +174,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::KEYWORD_CAST: return "KEYWORD_CAST";
         case protocols::CrossTerminal::KEYWORD_CONST: return "KEYWORD_CONST";
         case protocols::CrossTerminal::KEYWORD_DEFER: return "KEYWORD_DEFER";
+        case protocols::CrossTerminal::KEYWORD_DELETE: return "KEYWORD_DELETE";
         case protocols::CrossTerminal::KEYWORD_DO: return "KEYWORD_DO";
         case protocols::CrossTerminal::KEYWORD_DOUBLE: return "KEYWORD_DOUBLE";
         case protocols::CrossTerminal::KEYWORD_ELSE: return "KEYWORD_ELSE";
@@ -206,14 +211,17 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::OPTIONAL_BITWISE_OR_EXPRESSION: return "OPTIONAL_BITWISE_OR_EXPRESSION";
         case protocols::CrossTerminal::OPTIONAL_BITWISE_XOR_EXPRESSION: return "OPTIONAL_BITWISE_XOR_EXPRESSION";
         case protocols::CrossTerminal::OPTIONAL_CAPTURE_LIST: return "OPTIONAL_CAPTURE_LIST";
+        case protocols::CrossTerminal::OPTIONAL_CONSTRUCTOR_LIST: return "OPTIONAL_CONSTRUCTOR_LIST";
         case protocols::CrossTerminal::OPTIONAL_DATA_DECLARATION: return "OPTIONAL_DATA_DECLARATION";
         case protocols::CrossTerminal::OPTIONAL_DATA_NAME_LIST: return "OPTIONAL_DATA_NAME_LIST";
         case protocols::CrossTerminal::OPTIONAL_EQUALITY_EXPRESSION: return "OPTIONAL_EQUALITY_EXPRESSION";
+        case protocols::CrossTerminal::OPTIONAL_EXPRESSION: return "OPTIONAL_EXPRESSION";
         case protocols::CrossTerminal::OPTIONAL_EXTRACTOR_EXPRESSION: return "OPTIONAL_EXTRACTOR_EXPRESSION";
         case protocols::CrossTerminal::OPTIONAL_FUNCTION_NAME_LIST: return "OPTIONAL_FUNCTION_NAME_LIST";
         case protocols::CrossTerminal::OPTIONAL_GRANT_LIST: return "OPTIONAL_GRANT_LIST";
         case protocols::CrossTerminal::OPTIONAL_MEMBER_EXPRESSION: return "OPTIONAL_MEMBER_EXPRESSION";
         case protocols::CrossTerminal::OPTIONAL_MULTIPLICATIVE_EXPRESSION: return "OPTIONAL_MULTIPLICATIVE_EXPRESSION";
+        case protocols::CrossTerminal::OPTIONAL_NEW_LIST: return "OPTIONAL_NEW_LIST";
         case protocols::CrossTerminal::OPTIONAL_OR_EXPRESSION: return "OPTIONAL_OR_EXPRESSION";
         case protocols::CrossTerminal::OPTIONAL_PARAMETER_LIST: return "OPTIONAL_PARAMETER_LIST";
         case protocols::CrossTerminal::OPTIONAL_RELATIONAL_EXPRESSION: return "OPTIONAL_RELATIONAL_EXPRESSION";

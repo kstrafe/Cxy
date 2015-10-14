@@ -221,6 +221,69 @@ Neat. I can't think of anything to criticize it right now :(
 	}
 
 Just added the new expression.
+To top it all off: we add a builtin 'new' and 'delete' expression. Variable sized
+arrays are just not a 'type', since they would depend on the runtime. The following
+is used:
+
+	new[Type](Expression)
+	delete(Expression)
+
+new returns a pointer to the type and allocates Expression units of that type.
+
+	new[Type]
+
+Merely allocates a single unit of the type.
+delete also returns the pointer, but that is the pointer that will be invalid. Why
+does it return the pointer? If you need to allocate at that location later, then this
+can be useful. We need a placement new:
+
+	new[32u](1, delete(new[32u]));
+
+We can't guarantee that this will always allocate at that position, if it's already
+taken by another resource, the call to new may fail.
+
+But how do we add a constructor call in the new operator? We know that delete implicitly
+calls the destructor, but we have no way of discerning the constructor of a new call.
+In C++:
+
+	new int(1)
+
+Creates an integer initialized to 1. How do we do this? Maybe we need to flip and use
+multiple parenthesis:
+
+	new[Type](10)(:variable, a:a, b:b, c:c);
+
+Creates 10 types, with the constructor given.  This implies that the returned 'thing'
+is not callable. How do we solve this conundrum? I think the above is pretty clear
+to be honest. What it appears to mandate is that operator () need not be overloaded,
+but in fact, if you look closely, the entire expression returns ptr Type, which means
+that ptr should not have a () available. It should not make sense.
+
+	var ptr 8u a;
+	a();  // Makes no sense
+
+So we can implement it as the above, but there's a problem, how can we ensure that
+
+	new[Type](:variable)
+
+is a single-new constructor? As humans it's easy to see due to the : present. We know
+that it's not the size of the array. The computer has a little more trouble though.
+So why not make the syntax as follows:
+
+	new[32u](1){:variable, a:a, b:b, c:c};
+
+I know it looks freaky, but at least it will be disambiguous. Any other ways? Well
+we could put it like so:
+
+	new(1, oldptr)[32u](:variable, a:a, b:b, c:c);
+
+But then the new[] doesn't look like a templated type. I like the idea of looking
+at least somewhat like other instantiations. It would be preferable to be able to
+remove the entire () section if no ctor or size is given.
+
+	new[32u]
+
+That's just beautiful. So how do we solve it? Let's just exploit the curly braces.
 
 ===
 
