@@ -880,5 +880,34 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 			(1u {a, b(:0)}, String e = "e",: type[e]{f, g, h,},) d {}
 			(const ptr const 1u {a, b, c}, : ) d {}
 		)");
+		doValidation(R"(
+			(:) enter {
+				alias {
+					St = sml.String;
+					Ot = sml.Out;
+				}
+				var St x = "x";
+				throw;
+				throw OUT_OF_BOUNDS;
+				try
+					Ot.print(:x.at(:1));
+				catch (enum[St].OUT_OF_BOUNDS)
+					Ot.print(:name.serialize());
+				catch (enum[St].OUT_OF_MEMORY)
+					doSome();
+				catch (enum[Af].WRONG_ALGORITHM) {
+					debug cause;
+				} catch (enum[What].SOMETHING_WRONG)
+					debug 1 + 2 + 3;
+			}
+		)");
+		doValidation(R"(
+			(:) enter {
+				var {
+					const 32u a = 1;
+					ref const 32u b = $a + 1;
+				}
+			}
+		)");
 	}
 }
