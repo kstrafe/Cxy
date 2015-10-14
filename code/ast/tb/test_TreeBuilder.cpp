@@ -637,6 +637,10 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 						sml.Out.print(:"Hi");
 						for (32u i = 1; i < 3; ++i;)
 							sml.Out.print(:i);
+						for ({32u i = 1; 32u j = 0;} i < 3; ++i;)
+							sml.Out.print(:i);
+						for (32u i = 1, j(:0); i < 3; ++i;)
+							sml.Out.print(:i);
 					};
 			}
 		)"));

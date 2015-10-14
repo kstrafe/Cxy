@@ -134,7 +134,6 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::CLASS_MEMBER: return "CLASS_MEMBER";
         case protocols::CrossTerminal::CLASS_MEMBER_EXPRESSION: return "CLASS_MEMBER_EXPRESSION";
         case protocols::CrossTerminal::CODE_BLOCK: return "CODE_BLOCK";
-        case protocols::CrossTerminal::DATA_DECLARATION: return "DATA_DECLARATION";
         case protocols::CrossTerminal::DATA_DECLARATION_LIST: return "DATA_DECLARATION_LIST";
         case protocols::CrossTerminal::DATA_DECLARATION_STATEMENT: return "DATA_DECLARATION_STATEMENT";
         case protocols::CrossTerminal::DATA_DECLARATION_TYPE: return "DATA_DECLARATION_TYPE";
@@ -150,6 +149,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::EQUALITY_EXPRESSION: return "EQUALITY_EXPRESSION";
         case protocols::CrossTerminal::EXPRESSION_EXPRESSION: return "EXPRESSION_EXPRESSION";
         case protocols::CrossTerminal::EXPRESSION_LIST: return "EXPRESSION_LIST";
+        case protocols::CrossTerminal::FOR_DATA_DECLARATION: return "FOR_DATA_DECLARATION";
         case protocols::CrossTerminal::FOR_STATEMENT: return "FOR_STATEMENT";
         case protocols::CrossTerminal::FUNCTION_DEFINITION: return "FUNCTION_DEFINITION";
         case protocols::CrossTerminal::FUNCTION_NAMES: return "FUNCTION_NAMES";
