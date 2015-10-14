@@ -292,7 +292,6 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::SYMBOL_BAR__BAR__EQUAL: return "SYMBOL_BAR__BAR__EQUAL";
 		case protocols::CrossTerminal::SYMBOL_BAR__EQUAL: return "SYMBOL_BAR__EQUAL";
 		case protocols::CrossTerminal::SYMBOL_CARET: return "SYMBOL_CARET";
-		case protocols::CrossTerminal::SYMBOL_CARET__CARET__EQUAL: return "SYMBOL_CARET__CARET__EQUAL";
 		case protocols::CrossTerminal::SYMBOL_CARET__EQUAL: return "SYMBOL_CARET__EQUAL";
 		case protocols::CrossTerminal::SYMBOL_COLON__PRUNE: return "SYMBOL_COLON__PRUNE";
 		case protocols::CrossTerminal::SYMBOL_COMMA__PRUNE: return "SYMBOL_COMMA__PRUNE";

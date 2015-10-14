@@ -87,7 +87,6 @@ protocols::CrossTerminal TokenTypeToCrossTerminal::convertToCrossTerminal(protoc
 		case protocols::TokenType::SYMBOL_BAR__BAR__EQUAL: return protocols::CrossTerminal::SYMBOL_BAR__BAR__EQUAL;
 		case protocols::TokenType::SYMBOL_BAR__EQUAL: return protocols::CrossTerminal::SYMBOL_BAR__EQUAL;
 		case protocols::TokenType::SYMBOL_CARET: return protocols::CrossTerminal::SYMBOL_CARET;
-		case protocols::TokenType::SYMBOL_CARET__CARET__EQUAL: return protocols::CrossTerminal::SYMBOL_CARET__CARET__EQUAL;
 		case protocols::TokenType::SYMBOL_CARET__EQUAL: return protocols::CrossTerminal::SYMBOL_CARET__EQUAL;
 		case protocols::TokenType::SYMBOL_COLON__PRUNE: return protocols::CrossTerminal::SYMBOL_COLON__PRUNE;
 		case protocols::TokenType::SYMBOL_COMMA__PRUNE: return protocols::CrossTerminal::SYMBOL_COMMA__PRUNE;
