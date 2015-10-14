@@ -427,7 +427,7 @@ productions = {
 	],
 ################################################################################ 23
 	'NEW_EXPRESSION': [
-		['KEYWORD_NEW', 'GROUPER_LEFT_BRACKET', 'TYPE', 'GROUPER_RIGHT_BRACKET', 'OPTIONAL_NEW_LIST'],
+		['KEYWORD_NEW', 'GROUPER_LEFT_BRACKET', 'TYPE', 'GROUPER_RIGHT_BRACKET', 'OPTIONAL_NEW_LIST', 'OPTIONAL_CONSTRUCTOR_LIST'],
 		['DELETE_EXPRESSION'],
 	],
 ################################################################################ 23.1
@@ -437,6 +437,10 @@ productions = {
 	],
 	'OPTIONAL_NEW_LIST': [
 		['GROUPER_LEFT_PARENTHESIS', 'EXPRESSION_EXPRESSION', 'OPTIONAL_EXPRESSION', 'GROUPER_RIGHT_PARENTHESIS'],
+		[]
+	],
+	'OPTIONAL_CONSTRUCTOR_LIST': [
+		['GROUPER_LEFT_BRACE', 'PARAMETER_LIST', 'GROUPER_RIGHT_BRACE'],
 		[]
 	],
 ################################################################################ 23.2

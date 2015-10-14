@@ -755,6 +755,12 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 
 				// Raw new
 				var ptr Type b = new[Type];
+
+				// Initializing new
+				var ptr 32u c = new[32u]{:3};
+
+				// Initializing new on an array
+				var ptr 32u c = new[32u](3){:3};
 			}
 		)");
 	}
