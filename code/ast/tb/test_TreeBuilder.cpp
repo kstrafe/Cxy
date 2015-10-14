@@ -841,6 +841,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 			public (: 32u a(:5)) enter { }
 		)");
 		doValidation(R"(
+			alias {}
 			alias { Aa = type[a]; Bb = type[b]; }
 			(:) enter {
 				alias { sf = sfml; Aa = type[a]; Bb = type[b]; }

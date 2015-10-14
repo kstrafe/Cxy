@@ -146,7 +146,6 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::DATA_DECLARATION_STATEMENT: return "DATA_DECLARATION_STATEMENT";
         case protocols::CrossTerminal::DATA_DECLARATION_TYPE: return "DATA_DECLARATION_TYPE";
         case protocols::CrossTerminal::DATA_NAMES: return "DATA_NAMES";
-        case protocols::CrossTerminal::DATA_OR_METHOD: return "DATA_OR_METHOD";
         case protocols::CrossTerminal::DEFER_STATEMENT: return "DEFER_STATEMENT";
         case protocols::CrossTerminal::DELETE_EXPRESSION: return "DELETE_EXPRESSION";
         case protocols::CrossTerminal::DO_STATEMENT: return "DO_STATEMENT";
@@ -163,7 +162,6 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::FUNCTION_NAMES: return "FUNCTION_NAMES";
         case protocols::CrossTerminal::FUNCTION_SIGNATURE: return "FUNCTION_SIGNATURE";
         case protocols::CrossTerminal::GOTO_STATEMENT: return "GOTO_STATEMENT";
-        case protocols::CrossTerminal::GRANT_DEFINITION: return "GRANT_DEFINITION";
         case protocols::CrossTerminal::GRANT_LIST: return "GRANT_LIST";
         case protocols::CrossTerminal::GROUPER_LEFT_BRACE: return "GROUPER_LEFT_BRACE";
         case protocols::CrossTerminal::GROUPER_LEFT_BRACKET: return "GROUPER_LEFT_BRACKET";
@@ -211,7 +209,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::KEYWORD_WHEN: return "KEYWORD_WHEN";
         case protocols::CrossTerminal::KEYWORD_WHILE: return "KEYWORD_WHILE";
         case protocols::CrossTerminal::LABEL_STATEMENT: return "LABEL_STATEMENT";
-        case protocols::CrossTerminal::MEMBER_DECLARATION: return "MEMBER_DECLARATION";
+        case protocols::CrossTerminal::MEMBER_DEFINITION: return "MEMBER_DEFINITION";
         case protocols::CrossTerminal::MEMBER_EXPRESSION: return "MEMBER_EXPRESSION";
         case protocols::CrossTerminal::MULTIPLICATIVE_EXPRESSION: return "MULTIPLICATIVE_EXPRESSION";
         case protocols::CrossTerminal::NEW_EXPRESSION: return "NEW_EXPRESSION";
