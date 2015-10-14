@@ -119,6 +119,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
     switch (cross_terminal)
     {
         case protocols::CrossTerminal::ACCESS_SPECIFIER: return "ACCESS_SPECIFIER";
+        case protocols::CrossTerminal::ACCESS_SPECIFIER_READABLE: return "ACCESS_SPECIFIER_READABLE";
         case protocols::CrossTerminal::ADDITIVE_EXPRESSION: return "ADDITIVE_EXPRESSION";
         case protocols::CrossTerminal::ALIAS_CORE: return "ALIAS_CORE";
         case protocols::CrossTerminal::ALIAS_STATEMENT: return "ALIAS_STATEMENT";
@@ -127,7 +128,6 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::AND_EXPRESSION: return "AND_EXPRESSION";
         case protocols::CrossTerminal::ARGUMENT: return "ARGUMENT";
         case protocols::CrossTerminal::ARGUMENT_LIST: return "ARGUMENT_LIST";
-        case protocols::CrossTerminal::ARGUMENT_LIST_AFTER_FIRST: return "ARGUMENT_LIST_AFTER_FIRST";
         case protocols::CrossTerminal::ARRAY: return "ARRAY";
         case protocols::CrossTerminal::ARRAY_ACCESS_EXPRESSION: return "ARRAY_ACCESS_EXPRESSION";
         case protocols::CrossTerminal::ASSIGNMENT_EXPRESSION: return "ASSIGNMENT_EXPRESSION";
@@ -163,6 +163,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::FUNCTION_SIGNATURE: return "FUNCTION_SIGNATURE";
         case protocols::CrossTerminal::GOTO_STATEMENT: return "GOTO_STATEMENT";
         case protocols::CrossTerminal::GRANT_LIST: return "GRANT_LIST";
+        case protocols::CrossTerminal::GRANT_LIST_ACCESS: return "GRANT_LIST_ACCESS";
         case protocols::CrossTerminal::GROUPER_LEFT_BRACE: return "GROUPER_LEFT_BRACE";
         case protocols::CrossTerminal::GROUPER_LEFT_BRACKET: return "GROUPER_LEFT_BRACKET";
         case protocols::CrossTerminal::GROUPER_LEFT_PARENTHESIS: return "GROUPER_LEFT_PARENTHESIS";
@@ -217,6 +218,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::OPTIONAL_ADDITIVE_EXPRESSION: return "OPTIONAL_ADDITIVE_EXPRESSION";
         case protocols::CrossTerminal::OPTIONAL_AND_EXPRESSION: return "OPTIONAL_AND_EXPRESSION";
         case protocols::CrossTerminal::OPTIONAL_ARGUMENT_LIST: return "OPTIONAL_ARGUMENT_LIST";
+        case protocols::CrossTerminal::OPTIONAL_ARGUMENT_LIST_AFTER_COMMA: return "OPTIONAL_ARGUMENT_LIST_AFTER_COMMA";
         case protocols::CrossTerminal::OPTIONAL_ARRAY_ACCESS_EXPRESSION: return "OPTIONAL_ARRAY_ACCESS_EXPRESSION";
         case protocols::CrossTerminal::OPTIONAL_ARRAY_ACCESS_EXPRESSION_AFTER_COMMA: return "OPTIONAL_ARRAY_ACCESS_EXPRESSION_AFTER_COMMA";
         case protocols::CrossTerminal::OPTIONAL_ASSIGNMENT: return "OPTIONAL_ASSIGNMENT";

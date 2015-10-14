@@ -861,6 +861,20 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 		doValidation(R"(
 			var 32u a, b,;
 			var { 32u a, b,; float c,; }
+			static 32u a, b,;
+			static { 32u a, b,; float c,; }
+
+			(1u c,:1u a,) b { }
+
+			grant Aa {
+				public (:) a;
+				restricted var 64u b;
+			}
+		)");
+		doInvalidation(R"(
+			grant Aa {
+				private var 5u a;
+			}
 		)");
 	}
 }
