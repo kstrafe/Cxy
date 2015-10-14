@@ -35,6 +35,7 @@ protocols::TokenType KeywordMatcher::getKeyword(const std::string &lexeme)
 	else if (lexeme == "alias") return TokenType::KEYWORD_ALIAS;
 	else if (lexeme == "catch") return TokenType::KEYWORD_CATCH;
 	else if (lexeme == "const") return TokenType::KEYWORD_CONST;
+	else if (lexeme == "debug") return TokenType::KEYWORD_DEBUG;
 	else if (lexeme == "defer") return TokenType::KEYWORD_DEFER;
 	else if (lexeme == "float") return TokenType::KEYWORD_FLOAT;
 	else if (lexeme == "grant") return TokenType::KEYWORD_GRANT;

@@ -895,6 +895,18 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 					Ot.print(:name.serialize());
 				catch (enum[St].OUT_OF_MEMORY)
 					doSome();
+				catch (enum[Af].WRONG_ALGORITHM) {
+					debug cause;
+				} catch (enum[What].SOMETHING_WRONG)
+					debug 1 + 2 + 3;
+			}
+		)");
+		doValidation(R"(
+			(:) enter {
+				var {
+					const 32u a = 1;
+					ref const 32u b = $a + 1;
+				}
 			}
 		)");
 	}

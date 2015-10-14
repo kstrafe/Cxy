@@ -72,6 +72,7 @@ bool CrossTerminalTools::isKeyword(const CrossTerminal &ct_)
 		case CrossTerminal::KEYWORD_CAST: return true;
 		case CrossTerminal::KEYWORD_CATCH: return true;
 		case CrossTerminal::KEYWORD_CONST: return true;
+		case CrossTerminal::KEYWORD_DEBUG: return true;
 		case CrossTerminal::KEYWORD_DEFER: return true;
 		case CrossTerminal::KEYWORD_DELETE: return true;
 		case CrossTerminal::KEYWORD_DO: return true;
@@ -154,6 +155,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::DATA_DECLARATION_TYPE: return "DATA_DECLARATION_TYPE";
 		case protocols::CrossTerminal::DATA_NAMES: return "DATA_NAMES";
 		case protocols::CrossTerminal::DATA_NAMES_LIST: return "DATA_NAMES_LIST";
+		case protocols::CrossTerminal::DEBUG_STATEMENT: return "DEBUG_STATEMENT";
 		case protocols::CrossTerminal::DEFER_STATEMENT: return "DEFER_STATEMENT";
 		case protocols::CrossTerminal::DELETE_EXPRESSION: return "DELETE_EXPRESSION";
 		case protocols::CrossTerminal::DO_STATEMENT: return "DO_STATEMENT";
@@ -193,6 +195,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::KEYWORD_CAST: return "KEYWORD_CAST";
 		case protocols::CrossTerminal::KEYWORD_CATCH: return "KEYWORD_CATCH";
 		case protocols::CrossTerminal::KEYWORD_CONST: return "KEYWORD_CONST";
+		case protocols::CrossTerminal::KEYWORD_DEBUG: return "KEYWORD_DEBUG";
 		case protocols::CrossTerminal::KEYWORD_DEFER: return "KEYWORD_DEFER";
 		case protocols::CrossTerminal::KEYWORD_DELETE: return "KEYWORD_DELETE";
 		case protocols::CrossTerminal::KEYWORD_DO: return "KEYWORD_DO";
