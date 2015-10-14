@@ -376,12 +376,11 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 	SECTION("Type casting")
 	{
 		REQUIRE(validate(R"(
-			(:) enter
-			{
+			(:) enter {
 				var 32u a = 100;
-				var 16u b = cast[16u] ( a ) * 5;
+				var 16u b = cast[16u](a) * 5;
 				var 32u c = when (a > 100) a else b;
-				var [x, 32u] y;
+				var [8, 32u] y;
 			}
 		)"));
 	}
@@ -675,9 +674,77 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 					to: 3
 				);
 				sml.Out.print(:curve.getGraph());
-				var ptr ref ptr const ptr const [x*x, ptr ([3, 8u] out:)] d;
-				var ref ptr ptr ptr const ptr const [x*x, ptr ([3, ref ptr 8u] out:)] d;
+				var ptr ref ptr const ptr const [80, ptr ([3, 8u] out:)] d;
+				var ref ptr ptr ptr const ptr const [80, ptr ([3, ref ptr 8u] out:)] d;
+				var This[Gg:Yy] me;
+				if (me.doSomething(:d)~error) {
+					sml.Out.print(:"Something went wrong");
+					label x;
+					goto x;
+				}
 			}
 		)"));
+		#define doValidation(x) REQUIRE(validate(x))
+		doValidation(R"(
+			(:) enter
+			{
+				alias sf = simplefastmedialibrary;
+				var sf.RenderWindow window(title: "Main window", width: 800, height: 600);
+				var sf.Circle circle(radius: 5.f, x: 0, y: 0);
+				window.clear();
+				window.draw(:circle);
+				sml.sleep(seconds: 5);
+				window.display();
+			}
+		)");
+
+		doValidation(R"(
+			float x1;
+			32u y1 = 2;
+			sml.String z1(:"z");
+
+			(:) enter
+			{
+				var {
+					float x2;
+					32u y2 = 2;
+					sml.String z2(:"z");
+				};
+			}
+		)");
+
+		doValidation(R"(
+			alias Aa = [100, ptr ref const 32u];
+			(:(:) in) call { in(); }
+
+			(:) enter {
+				call(:lambda(:){ sml.Out.print(:"Hey!");});
+			}
+		)");
+		doValidation(R"(
+			(:) enter {
+				alias Out = sml.Out;
+				var (: String in) print = cast[(: String in)](Out.print);
+				print(:"Anything");
+			}
+		)");
+		doValidation(R"(
+			(:) enter {
+				alias Long = [5, ptr [8, ref const 32u]];
+				var Long a, b, c;
+				// ...
+			}
+		)");
+		#define doInvalidation(x) REQUIRE(false == validate(x))
+		doInvalidation(R"(
+			(:) enter {
+				alias Long = ptr 1;
+			}
+		)");
+		doValidation(R"(
+			(:) enter {
+				cast[ptr 8u](new[32u](cast[5u](10)));
+			}
+		)");
 	}
 }

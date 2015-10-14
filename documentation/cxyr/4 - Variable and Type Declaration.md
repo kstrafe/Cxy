@@ -101,6 +101,129 @@ curly braces.
 
 ===
 
+=== Kevin R. Stravers -- Wed 14 Oct 2015 12:15:29 AM CEST
+
+I've been reading the python3 grammar and it's interesting. The type system is wholly
+implied. It always makes me reconsider my own language. Fundamentally, a computer
+can be idealized to be a bit processor. It takes some bits, and it processes them
+into another set of bits. The bits may be mutated, or not. I wonder if the language
+can be made into a general bit processor. Of course, it'd be beneficial to avoid any
+type problems. As of now, we have a general bit declaration:
+
+	var 32u a;
+
+It allocates at least 32 bits for a. This is a nice thing to know. Maybe bit indexing
+can be useful as well. If the memory model is defined as such that a bit array may
+point to another location where a bit array starts, then you can basically build an
+entire turing machine.
+
+	var 8u a = 0b0011010;
+
+When a is used as a pointer, it will just point to a location in memory.
+
+	var 8u b = @a;
+
+Using the @ as the dereference operator, 8u takes the 8 bits sequentially from the
+location a was pointing to. I like this idea, but it's too impractical to have any
+value in a real language. Certainly, it can be useful, but this forgoes type checking,
+which is very important. I'm wondering whether the type system and syntax are sound.
+
+Currently, functions and types are left-to-right readable entities. One thing that
+comes to mind is C++'s member syntax. I find this syntax to be ugly, especially for
+member function pointers. It looks like this:
+
+	void (ClassName::*fptr)() = &ClassName::function;
+	ClassName a;
+	(a.*fptr)();
+
+This is absolutely horrendous. My proposition is the following:
+
+	var ptr (: ptr ClassName this) fptr = ClassName.function;
+	var ClassName a;
+	fptr(this: $a);
+
+If you remember that 'this' is merely an alias for the above signature of ptr This
+this, then it should be easy to remember the syntax. There's no need to make this
+function also work like a.fptr(). That makes fptr look like a member, which it is
+not.
+
+So how sane is the type system? I just removed the requirement for 'ptr' with any
+function. I think it's implied that a function's actual entity is a pointer anyways.
+Talking to a friend of mine about the language, he said it would be nice if you could
+make a circle with your index finger and thumb when looking at the code and say 'smooth'.
+I agree with that, that's why I remove the ptr requirement. To make the language more
+terse, I suppose the 'ptr' keyword can be turned into a `*` to make it more familiar
+to C and C++ programmers. After all, it never interferes with multiplication or casts.
+
+	var **32u;
+	var ptr ptr 32u;
+
+`*` look so much more terse. I wonder if another symbol can be used for the 'const'
+name. Suppose % means constant.
+
+	var &*% 32u;
+	var ref ptr const 32u;
+
+I'm a little split between the two. Let's create an insanely long type.
+
+	var *[100, &%[10, * 32u]];
+	var ptr [100, ref const [10, ptr 32u]];
+
+What about single-statement lambdas? Those are interesting. You see, having a single
+statement removes the {} from the lambda, which makes it look nice. Oh, and alias,
+alias is new and basically allows you to retype any type or package. Currently only
+packages can be aliased, but I think classes could be added as well, but I'm not too
+sure about it. It's not a big issue, since the folder can be renamed. Okay so, I just
+added support for another alias form:
+
+	alias ClassName = Type
+
+Really, the type can be anything. You can then use it as a class name. This is still
+unambiguous since you can not have the same name as a grant.
+
+	(:) enter {
+		alias Out = sml.Out;
+		ref (: String in) print = cast[(: String in)](Out.print);
+		print(:"Anything");
+	}
+
+In python this would be:
+
+	from .sml import Out
+
+	def enter():
+		Out = sml.Out
+		print = Out.print
+		print("Anything")
+
+Note the cast, which is important due to print overloading.
+
+In C++:
+
+	int enter() {
+		using namespace sml;
+		void (*print)(std::string) = static_cast<std::function<void(std::string)>>(&Out.print);
+		print("Anything")
+	}
+
+I think my language looks clean actually.
+
+	(:) enter {
+		alias Long = [5, ptr [8, ref const 32u]];
+		var Long a, b, c;
+		// ...
+	}
+
+Neat. I can't think of anything to criticize it right now :(
+
+	(: sml.String in) print {
+		hack("std::cout << in");
+	}
+
+Just added the new expression.
+
+===
+
 *Conclusion*:
 	var Type Identifier OptionalInitialization;
 

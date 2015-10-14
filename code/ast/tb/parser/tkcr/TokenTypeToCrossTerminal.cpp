@@ -54,6 +54,7 @@ protocols::CrossTerminal TokenTypeToCrossTerminal::convertToCrossTerminal(protoc
         case protocols::TokenType::KEYWORD_IF: return protocols::CrossTerminal::KEYWORD_IF;
         case protocols::TokenType::KEYWORD_LABEL: return protocols::CrossTerminal::KEYWORD_LABEL;
         case protocols::TokenType::KEYWORD_LAMBDA: return protocols::CrossTerminal::KEYWORD_LAMBDA;
+        case protocols::TokenType::KEYWORD_NEW: return protocols::CrossTerminal::KEYWORD_NEW;
         case protocols::TokenType::KEYWORD_PTR: return protocols::CrossTerminal::KEYWORD_PTR;
         case protocols::TokenType::KEYWORD_PURE: return protocols::CrossTerminal::KEYWORD_PURE;
         case protocols::TokenType::KEYWORD_REF: return protocols::CrossTerminal::KEYWORD_REF;
