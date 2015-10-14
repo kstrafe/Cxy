@@ -55,8 +55,10 @@ bool CrossTerminalTools::isExpression(const CrossTerminal &ct_)
 		case CrossTerminal::OPTIONAL_MULTIPLICATIVE_EXPRESSION: return true;
 		case CrossTerminal::OPTIONAL_OR_EXPRESSION: return true;
 		case CrossTerminal::OPTIONAL_RELATIONAL_EXPRESSION: return true;
+		case CrossTerminal::OPTIONAL_SHIFT_EXPRESSION: return true;
 		case CrossTerminal::OR_EXPRESSION: return true;
 		case CrossTerminal::RELATIONAL_EXPRESSION: return true;
+		case CrossTerminal::SHIFT_EXPRESSION: return true;
 		case CrossTerminal::TYPE_EXPRESSION: return true;
 		case CrossTerminal::UNARY_EXPRESSION: return true;
 		case CrossTerminal::WHEN_EXPRESSION: return true;
@@ -265,6 +267,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::OPTIONAL_PARAMETER_LIST: return "OPTIONAL_PARAMETER_LIST";
 		case protocols::CrossTerminal::OPTIONAL_PARAMETER_LIST_AFTER_COMMA: return "OPTIONAL_PARAMETER_LIST_AFTER_COMMA";
 		case protocols::CrossTerminal::OPTIONAL_RELATIONAL_EXPRESSION: return "OPTIONAL_RELATIONAL_EXPRESSION";
+		case protocols::CrossTerminal::OPTIONAL_SHIFT_EXPRESSION: return "OPTIONAL_SHIFT_EXPRESSION";
 		case protocols::CrossTerminal::OPTIONAL_TEMPLATE: return "OPTIONAL_TEMPLATE";
 		case protocols::CrossTerminal::OPTIONAL_TEMPLATE_LIST: return "OPTIONAL_TEMPLATE_LIST";
 		case protocols::CrossTerminal::OR_EXPRESSION: return "OR_EXPRESSION";
@@ -275,6 +278,8 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::RELATIONAL_OPERATOR: return "RELATIONAL_OPERATOR";
 		case protocols::CrossTerminal::RESOURCE: return "RESOURCE";
 		case protocols::CrossTerminal::RETURN_STATEMENT: return "RETURN_STATEMENT";
+		case protocols::CrossTerminal::SHIFT_EXPRESSION: return "SHIFT_EXPRESSION";
+		case protocols::CrossTerminal::SHIFT_OPERATOR: return "SHIFT_OPERATOR";
 		case protocols::CrossTerminal::SINGLE_STATEMENT_OR_CODE_BLOCK: return "SINGLE_STATEMENT_OR_CODE_BLOCK";
 		case protocols::CrossTerminal::STATEMENT: return "STATEMENT";
 		case protocols::CrossTerminal::STATEMENT_LIST: return "STATEMENT_LIST";
