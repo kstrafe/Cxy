@@ -536,7 +536,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 		REQUIRE(validate(R"(
 			(:) enter
 			{
-				statics if (3)
+				if [3]
 				{
 					a + b;
 				}
@@ -545,17 +545,17 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 		REQUIRE(validate(R"(
 			(:) enter
 			{
-				statics if (sys.Machine.memory_size)
+				if [sys.Machine.memory_size]
 				{
 					a + b;
 				}
-				statics else
+				else
 				{
-					statics if (sys.Machine.processor_type)
+					if [sys.Machine.processor_type]
 					{
 						a - b;
 					}
-					statics else
+					else
 					{
 						a * b;
 					}
@@ -577,7 +577,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 		REQUIRE(validate(R"(
 			(:) enter
 			{
-				statics if (sys.Sys.argv[1])
+				if [sys.Sys.argv[1]]
 				{
 					var 32u x = computeSomething(in: 100, sec: 100 * 3)~value;
 					sys.Out.printLn(val: x);
