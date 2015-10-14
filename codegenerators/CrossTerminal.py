@@ -53,14 +53,14 @@ import dependency.Prepend
 productions = {
 ################################################################################ 1
 	'ENTER': [
-		['ALIAS_STATEMENT', 'SYMBOL_SEMICOLON__PRUNE', 'ENTER'],
+		['ALIAS_STATEMENT', 'ENTER'],
 		['GRANT_DEFINITION', 'ENTER'],
 		['MEMBER_DECLARATION', 'ENTER'],
 		[]
 	],
 ################################################################################ 2
 	'ALIAS_STATEMENT': [
-		['KEYWORD_ALIAS', 'ALIAS_TRAIL']
+		['KEYWORD_ALIAS', 'ALIAS_CORE']
 	],
 	'GRANT_DEFINITION': [
 		['KEYWORD_GRANT', 'IDENTIFIER_CLASS', 'GROUPER_LEFT_BRACE', 'GRANT_LIST', 'GROUPER_RIGHT_BRACE']
@@ -69,6 +69,14 @@ productions = {
 		['ACCESS_SPECIFIER', 'DATA_OR_METHOD'],
 	],
 ################################################################################ 2.1
+	'ALIAS_CORE': [
+		['GROUPER_LEFT_BRACE', 'ALIAS_TRAILS', 'GROUPER_RIGHT_BRACE'],
+		['ALIAS_TRAIL', 'SYMBOL_SEMICOLON__PRUNE']
+	],
+	'ALIAS_TRAILS': [
+		['ALIAS_TRAIL', 'SYMBOL_SEMICOLON__PRUNE', 'ALIAS_TRAILS'],
+		[]
+	],
 	'ALIAS_TRAIL': [
 		['IDENTIFIER_CLASS', 'SYMBOL_EQUAL', 'TYPE'],
 		['IDENTIFIER_PACKAGE', 'SYMBOL_EQUAL', 'IDENTIFIER_PACKAGE'],
@@ -253,6 +261,7 @@ productions = {
 		[]
 	],
 	'NO_SEMICOLON_STATEMENT': [
+		['ALIAS_STATEMENT'],
 		['CODE_BLOCK'],
 		['DATA_DECLARATION_STATEMENT'],
 		['DEFER_STATEMENT'],
@@ -263,7 +272,6 @@ productions = {
 		['WHILE_STATEMENT'],
 	],
 	'STATEMENT': [
-		['ALIAS_STATEMENT'],
 		['EXPRESSION_EXPRESSION'],
 		['GOTO_STATEMENT'],
 		['HACK_STATEMENT'],

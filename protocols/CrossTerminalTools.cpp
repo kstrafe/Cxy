@@ -120,8 +120,10 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
     {
         case protocols::CrossTerminal::ACCESS_SPECIFIER: return "ACCESS_SPECIFIER";
         case protocols::CrossTerminal::ADDITIVE_EXPRESSION: return "ADDITIVE_EXPRESSION";
+        case protocols::CrossTerminal::ALIAS_CORE: return "ALIAS_CORE";
         case protocols::CrossTerminal::ALIAS_STATEMENT: return "ALIAS_STATEMENT";
         case protocols::CrossTerminal::ALIAS_TRAIL: return "ALIAS_TRAIL";
+        case protocols::CrossTerminal::ALIAS_TRAILS: return "ALIAS_TRAILS";
         case protocols::CrossTerminal::AND_EXPRESSION: return "AND_EXPRESSION";
         case protocols::CrossTerminal::ARGUMENT: return "ARGUMENT";
         case protocols::CrossTerminal::ARGUMENT_LIST: return "ARGUMENT_LIST";
