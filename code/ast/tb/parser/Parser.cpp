@@ -106,6 +106,7 @@ bool Parser::parseSymbol(const protocols::Token &input_token)
 	return false;
 }
 
+
 std::vector<std::string> Parser::formulateExpectedTokens() const
 {
 	using namespace protocols;

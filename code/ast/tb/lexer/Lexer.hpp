@@ -49,6 +49,10 @@ public:
 
 	bool insertCharacter(char character);
 	std::vector<protocols::Token> &getTokenStack();
+	const std::vector<protocols::Token> &getTokenStack() const;
+
+	std::size_t getLine() const;
+	std::size_t getColumn() const;
 
 private:
 

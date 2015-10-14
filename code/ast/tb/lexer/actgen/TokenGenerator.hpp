@@ -37,6 +37,7 @@ public:
 
 	std::size_t consumeCharacter(char character, protocols::Action action);
 	std::vector<protocols::Token> &getTokenStack();
+	const std::vector<protocols::Token> &getTokenStack() const;
 
 private:
 

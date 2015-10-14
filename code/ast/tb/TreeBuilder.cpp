@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "TreeBuilder.hpp"
+#include "protocols/CrossTerminalTools.hpp"
 
 
 namespace tul { namespace tb {
@@ -72,12 +73,53 @@ std::string TreeBuilder::getExpectedTokensGrammar() const
 	if (tokens.empty())
 		return "No productions expected";
 	std::string result(tokens.at(0));
-	result += ": [\n";
-	for (std::size_t i = 1; i < tokens.size(); ++i)
+	if (tokens.size() > 1)
 	{
-		result += "\t" + tokens[i] + ",\n";
+		result += ": [\n";
+		for (std::size_t i = 1; i < tokens.size(); ++i)
+		{
+			result += "\t" + tokens[i] + ",\n";
+		}
+		return result + "\n]";
 	}
-	return result + "\n]";
+	return result;
+}
+
+
+std::size_t TreeBuilder::getLine() const
+{
+	return lexer_object.getLine();
+}
+
+
+std::size_t TreeBuilder::getColumn() const
+{
+	return lexer_object.getColumn();
+}
+
+
+std::string TreeBuilder::getCurrentLexeme() const
+{
+	if (lexer_object.getTokenStack().empty() == false) {
+		return (lexer_object.getTokenStack().cend() - 1)->accompanying_lexeme;
+	} else {
+		return "";
+	}
+}
+
+
+std::string TreeBuilder::formulateError() const
+{
+	std::string error("On line ");
+	error
+		+= std::to_string(getLine())
+		+ ", column " + std::to_string(getColumn())
+		+ std::string("\nExpected `")
+		+ getExpectedTokensGrammar()
+		+ "'\nBut got `"
+		+ getCurrentLexeme()
+		+ "'";
+	return error;
 }
 
 }}

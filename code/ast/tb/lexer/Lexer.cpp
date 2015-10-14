@@ -101,6 +101,12 @@ std::vector<protocols::Token> &Lexer::getTokenStack()
 }
 
 
+const std::vector<protocols::Token> &Lexer::getTokenStack() const
+{
+	return token_generator.getTokenStack();
+}
+
+
 protocols::TokenType Lexer::getKeyword(const std::string &test_lexeme) const
 {
 	return dependency::KeywordMatcher::getKeyword(test_lexeme);
@@ -315,6 +321,18 @@ protocols::EntryType Lexer::typify (char val)
 		return EntryType::UNKNOWN_CODE_POINT;
 	else
 		return EntryType::OTHER_SYMBOL;
+}
+
+
+std::size_t Lexer::getLine() const
+{
+	return position_counter.getCurrentLineNumber();
+}
+
+
+std::size_t Lexer::getColumn() const
+{
+	return position_counter.getCurrentColumnNumber();
 }
 
 }}

@@ -283,11 +283,17 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::STRING: return "STRING";
 		case protocols::CrossTerminal::SYMBOL_AMPERSAND: return "SYMBOL_AMPERSAND";
 		case protocols::CrossTerminal::SYMBOL_AMPERSAND__AMPERSAND: return "SYMBOL_AMPERSAND__AMPERSAND";
+		case protocols::CrossTerminal::SYMBOL_AMPERSAND__AMPERSAND__EQUAL: return "SYMBOL_AMPERSAND__AMPERSAND__EQUAL";
+		case protocols::CrossTerminal::SYMBOL_AMPERSAND__EQUAL: return "SYMBOL_AMPERSAND__EQUAL";
 		case protocols::CrossTerminal::SYMBOL_APETAIL: return "SYMBOL_APETAIL";
 		case protocols::CrossTerminal::SYMBOL_APETAIL__APETAIL: return "SYMBOL_APETAIL__APETAIL";
 		case protocols::CrossTerminal::SYMBOL_BAR: return "SYMBOL_BAR";
 		case protocols::CrossTerminal::SYMBOL_BAR__BAR: return "SYMBOL_BAR__BAR";
+		case protocols::CrossTerminal::SYMBOL_BAR__BAR__EQUAL: return "SYMBOL_BAR__BAR__EQUAL";
+		case protocols::CrossTerminal::SYMBOL_BAR__EQUAL: return "SYMBOL_BAR__EQUAL";
 		case protocols::CrossTerminal::SYMBOL_CARET: return "SYMBOL_CARET";
+		case protocols::CrossTerminal::SYMBOL_CARET__CARET__EQUAL: return "SYMBOL_CARET__CARET__EQUAL";
+		case protocols::CrossTerminal::SYMBOL_CARET__EQUAL: return "SYMBOL_CARET__EQUAL";
 		case protocols::CrossTerminal::SYMBOL_COLON__PRUNE: return "SYMBOL_COLON__PRUNE";
 		case protocols::CrossTerminal::SYMBOL_COMMA__PRUNE: return "SYMBOL_COMMA__PRUNE";
 		case protocols::CrossTerminal::SYMBOL_DOLLAR: return "SYMBOL_DOLLAR";

@@ -23,11 +23,17 @@ namespace tul { namespace dependency {
 protocols::TokenType SymbolMatcher::getSymbol(const std::string &lexeme)
 {
 	using namespace protocols;
-	if (lexeme == ">>=") return TokenType::SYMBOL_GREATER_THAN__GREATER_THAN__EQUAL;
+	if (lexeme == "&&=") return TokenType::SYMBOL_AMPERSAND__AMPERSAND__EQUAL;
+	else if (lexeme == "||=") return TokenType::SYMBOL_BAR__BAR__EQUAL;
+	else if (lexeme == "^^=") return TokenType::SYMBOL_CARET__CARET__EQUAL;
+	else if (lexeme == ">>=") return TokenType::SYMBOL_GREATER_THAN__GREATER_THAN__EQUAL;
 	else if (lexeme == "<<=") return TokenType::SYMBOL_LESS_THAN__LESS_THAN__EQUAL;
 	else if (lexeme == "&&") return TokenType::SYMBOL_AMPERSAND__AMPERSAND;
+	else if (lexeme == "&=") return TokenType::SYMBOL_AMPERSAND__EQUAL;
 	else if (lexeme == "@@") return TokenType::SYMBOL_APETAIL__APETAIL;
 	else if (lexeme == "||") return TokenType::SYMBOL_BAR__BAR;
+	else if (lexeme == "|=") return TokenType::SYMBOL_BAR__EQUAL;
+	else if (lexeme == "^=") return TokenType::SYMBOL_CARET__EQUAL;
 	else if (lexeme == ":") return TokenType::SYMBOL_COLON__PRUNE;
 	else if (lexeme == ",") return TokenType::SYMBOL_COMMA__PRUNE;
 	else if (lexeme == "$$") return TokenType::SYMBOL_DOLLAR__DOLLAR;

@@ -51,15 +51,7 @@ namespace
 			ret_val = builder_object.endInput();
 		if (ret_val == false && print_error_if_exists)
 		{
-			std::cout <<
-				builder_object.getExpectedTokensGrammar();
-			/*
-			std::cout << "last char: " << current << std::endl;
-			std::vector<std::string> expected = builder_object.getExpectedTokens();
-			std::cout << "\nError: expected:\n";
-			for (std::string i : expected)
-				std::cout << i << std::endl;
-			*/
+			std::cout << builder_object.formulateError();
 		}
 		return ret_val;
 	}
@@ -937,11 +929,14 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 		)");
 		doValidation(R"(
 			(:) enter {
-				while (a > b - cast[ptr 32u](a)) {
+				a > b - c;
+				while (a > b) {
 					sml.Out << "Forever";
 				} else {
 					sml.Out << "Never";
 				}
+				@(a - 3) %= 3;
+				@(a - 3) %= $axxa + 3;
 			}
 		)");
 	}
