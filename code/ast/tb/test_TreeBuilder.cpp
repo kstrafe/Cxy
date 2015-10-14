@@ -855,7 +855,11 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 			(:) enter {
 				a[1, 2, 3];
 				a[1, 2, 3,];
+				sml.Out.print(:a,);
 			}
+		)");
+		doValidation(R"(
+			var 32u a, b,;
 		)");
 	}
 }
