@@ -137,6 +137,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::BITWISE_XOR_EXPRESSION: return "BITWISE_XOR_EXPRESSION";
         case protocols::CrossTerminal::CAPTURE_LIST: return "CAPTURE_LIST";
         case protocols::CrossTerminal::CAST_EXPRESSION: return "CAST_EXPRESSION";
+        case protocols::CrossTerminal::CLASS_DATA_DECLARATION_STATEMENT: return "CLASS_DATA_DECLARATION_STATEMENT";
         case protocols::CrossTerminal::CLASS_MEMBER: return "CLASS_MEMBER";
         case protocols::CrossTerminal::CLASS_MEMBER_EXPRESSION: return "CLASS_MEMBER_EXPRESSION";
         case protocols::CrossTerminal::CODE_BLOCK: return "CODE_BLOCK";
@@ -144,6 +145,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::DATA_DECLARATION_STATEMENT: return "DATA_DECLARATION_STATEMENT";
         case protocols::CrossTerminal::DATA_DECLARATION_TYPE: return "DATA_DECLARATION_TYPE";
         case protocols::CrossTerminal::DATA_NAMES: return "DATA_NAMES";
+        case protocols::CrossTerminal::DATA_OR_METHOD: return "DATA_OR_METHOD";
         case protocols::CrossTerminal::DEFER_STATEMENT: return "DEFER_STATEMENT";
         case protocols::CrossTerminal::DELETE_EXPRESSION: return "DELETE_EXPRESSION";
         case protocols::CrossTerminal::DO_STATEMENT: return "DO_STATEMENT";

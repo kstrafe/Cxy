@@ -837,6 +837,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 			restricted var { 32u a; 8s b = cast[8s](a); }
 			var { 32u c; 8s d = cast[type[b]](c); }
 			private var { sml.String e = "e"; }
+
 		)");
 	}
 }
