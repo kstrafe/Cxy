@@ -221,6 +221,26 @@ Neat. I can't think of anything to criticize it right now :(
 	}
 
 Just added the new expression.
+To top it all off: we add a builtin 'new' and 'delete' expression. Variable sized
+arrays are just not a 'type', since they would depend on the runtime. The following
+is used:
+
+	new[Type](Expression)
+	delete(Expression)
+
+new returns a pointer to the type and allocates Expression units of that type.
+
+	new[Type]
+
+Merely allocates a single unit of the type.
+delete also returns the pointer, but that is the pointer that will be invalid. Why
+does it return the pointer? If you need to allocate at that location later, then this
+can be useful. We need a placement new:
+
+	new[32u](1, delete(new[32u]));
+
+We can't guarantee that this will always allocate at that position, if it's already
+taken by another resource, the call to new may fail.
 
 ===
 
