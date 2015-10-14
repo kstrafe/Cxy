@@ -36,7 +36,8 @@ public:
 
 	std::unique_ptr<protocols::ConcreteSyntaxTree> getConcreteSyntaxTree();
 
-	std::vector<std::string> getExpectedTokens();
+	std::vector<std::string> getExpectedTokens() const;
+	std::string getExpectedTokensGrammar() const;
 
 private:
 

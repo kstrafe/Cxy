@@ -37,7 +37,6 @@ bool CrossTerminalTools::isExpression(const CrossTerminal &ct_)
 		case CrossTerminal::ENUMERATION_MEMBER_EXPRESSION: return true;
 		case CrossTerminal::ENUM_EXPRESSION: return true;
 		case CrossTerminal::EQUALITY_EXPRESSION: return true;
-		case CrossTerminal::EXPRESSION_EXPRESSION: return true;
 		case CrossTerminal::MEMBER_EXPRESSION: return true;
 		case CrossTerminal::MULTIPLICATIVE_EXPRESSION: return true;
 		case CrossTerminal::NEW_EXPRESSION: return true;
@@ -168,7 +167,6 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::ENUM_OR_NOTHING: return "ENUM_OR_NOTHING";
 		case protocols::CrossTerminal::EPSILONATE: return "EPSILONATE";
 		case protocols::CrossTerminal::EQUALITY_EXPRESSION: return "EQUALITY_EXPRESSION";
-		case protocols::CrossTerminal::EXPRESSION_EXPRESSION: return "EXPRESSION_EXPRESSION";
 		case protocols::CrossTerminal::EXPRESSION_LIST: return "EXPRESSION_LIST";
 		case protocols::CrossTerminal::FOR_DATA_DECLARATION: return "FOR_DATA_DECLARATION";
 		case protocols::CrossTerminal::FOR_STATEMENT: return "FOR_STATEMENT";

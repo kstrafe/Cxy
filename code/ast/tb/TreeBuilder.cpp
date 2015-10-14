@@ -61,9 +61,23 @@ std::unique_ptr<protocols::ConcreteSyntaxTree> TreeBuilder::getConcreteSyntaxTre
 	return parser_object.getConcreteSyntaxTree();
 }
 
-std::vector<std::string> TreeBuilder::getExpectedTokens()
+std::vector<std::string> TreeBuilder::getExpectedTokens() const
 {
 	return parser_object.formulateExpectedTokens();
+}
+
+std::string TreeBuilder::getExpectedTokensGrammar() const
+{
+	std::vector<std::string> tokens = getExpectedTokens();
+	if (tokens.empty())
+		return "No productions expected";
+	std::string result(tokens.at(0));
+	result += ": [\n";
+	for (std::size_t i = 1; i < tokens.size(); ++i)
+	{
+		result += "\t" + tokens[i] + ",\n";
+	}
+	return result + "\n]";
 }
 
 }}

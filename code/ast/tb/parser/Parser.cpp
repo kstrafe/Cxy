@@ -106,14 +106,16 @@ bool Parser::parseSymbol(const protocols::Token &input_token)
 	return false;
 }
 
-
-std::vector<std::string> Parser::formulateExpectedTokens()
+std::vector<std::string> Parser::formulateExpectedTokens() const
 {
 	using namespace protocols;
 	if (symbol_stack.empty())
 		return {};
 	CrossTerminal cross_t = symbol_stack.top()->node_type;
 	std::vector<CrossTerminal> expected_tokens = cross_parser.calculateExpectedTokens(cross_t);
+
+	expected_tokens.insert(expected_tokens.begin(), cross_t);
+
 	std::vector<std::string> serialized_tokens;
 	for (CrossTerminal ct : expected_tokens)
 	{
