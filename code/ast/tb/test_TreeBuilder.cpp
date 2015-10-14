@@ -860,6 +860,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 		)");
 		doValidation(R"(
 			var 32u a, b,;
+			var { 32u a, b,; float c,; }
 		)");
 	}
 }
