@@ -56,6 +56,7 @@ bool CrossTerminalTools::isExpression(const CrossTerminal &ct_)
         case CrossTerminal::OPTIONAL_RELATIONAL_EXPRESSION: return true;
         case CrossTerminal::OR_EXPRESSION: return true;
         case CrossTerminal::RELATIONAL_EXPRESSION: return true;
+        case CrossTerminal::TYPE_EXPRESSION: return true;
         case CrossTerminal::UNARY_EXPRESSION: return true;
         case CrossTerminal::WHEN_EXPRESSION: return true;
         default: return false;
@@ -89,6 +90,7 @@ bool CrossTerminalTools::isKeyword(const CrossTerminal &ct_)
         case CrossTerminal::KEYWORD_RETURN: return true;
         case CrossTerminal::KEYWORD_STATIC: return true;
         case CrossTerminal::KEYWORD_STATICS: return true;
+        case CrossTerminal::KEYWORD_TYPE: return true;
         case CrossTerminal::KEYWORD_VAR: return true;
         case CrossTerminal::KEYWORD_WHEN: return true;
         case CrossTerminal::KEYWORD_WHILE: return true;
@@ -195,6 +197,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::KEYWORD_RETURN: return "KEYWORD_RETURN";
         case protocols::CrossTerminal::KEYWORD_STATIC: return "KEYWORD_STATIC";
         case protocols::CrossTerminal::KEYWORD_STATICS: return "KEYWORD_STATICS";
+        case protocols::CrossTerminal::KEYWORD_TYPE: return "KEYWORD_TYPE";
         case protocols::CrossTerminal::KEYWORD_VAR: return "KEYWORD_VAR";
         case protocols::CrossTerminal::KEYWORD_WHEN: return "KEYWORD_WHEN";
         case protocols::CrossTerminal::KEYWORD_WHILE: return "KEYWORD_WHILE";
@@ -289,10 +292,12 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::TYPE_AFTER_PTR: return "TYPE_AFTER_PTR";
         case protocols::CrossTerminal::TYPE_AFTER_REF: return "TYPE_AFTER_REF";
         case protocols::CrossTerminal::TYPE_AFTER_REF_CONST: return "TYPE_AFTER_REF_CONST";
+        case protocols::CrossTerminal::TYPE_EXPRESSION: return "TYPE_EXPRESSION";
         case protocols::CrossTerminal::TYPE_NO_FUNCTION: return "TYPE_NO_FUNCTION";
         case protocols::CrossTerminal::UNARY_EXPRESSION: return "UNARY_EXPRESSION";
         case protocols::CrossTerminal::UNARY_OPERATOR: return "UNARY_OPERATOR";
         case protocols::CrossTerminal::UNIDENTIFIED: return "UNIDENTIFIED";
+        case protocols::CrossTerminal::VARIABLE_NAMES: return "VARIABLE_NAMES";
         case protocols::CrossTerminal::WHEN_EXPRESSION: return "WHEN_EXPRESSION";
         case protocols::CrossTerminal::WHILE_STATEMENT: return "WHILE_STATEMENT";
         default: return "";

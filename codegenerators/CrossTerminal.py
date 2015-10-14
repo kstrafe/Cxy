@@ -76,6 +76,11 @@ productions = {
 ################################################################################ 3
 # Naming subsytem
 ################################################################################ 3
+	'VARIABLE_NAMES': [
+		['FUNCTION_NAMES'],
+		['IDENTIFIER_VARIABLE'],
+	],
+
 	'DATA_NAMES': [
 		['IDENTIFIER_VARIABLE'],
 		['IDENTIFIER_PACKAGE']
@@ -126,6 +131,7 @@ productions = {
 		['KEYWORD_CONST', 'TYPE_AFTER_CONST'],
 		['KEYWORD_PTR', 'TYPE_AFTER_PTR'],
 		['KEYWORD_REF', 'TYPE_AFTER_REF'],
+		['TYPE_EXPRESSION'],
 	],
 	'TYPE_NO_FUNCTION': [
 		['ARRAY'],
@@ -463,6 +469,7 @@ productions = {
 	'DELETE_EXPRESSION': [
 		['KEYWORD_DELETE', 'GROUPER_LEFT_PARENTHESIS', 'EXPRESSION_EXPRESSION', 'GROUPER_RIGHT_PARENTHESIS'],
 		['UNARY_EXPRESSION'],
+		['TYPE_EXPRESSION']
 	],
 	'OPTIONAL_NEW_LIST': [
 		['GROUPER_LEFT_PARENTHESIS', 'EXPRESSION_EXPRESSION', 'OPTIONAL_EXPRESSION', 'GROUPER_RIGHT_PARENTHESIS'],
@@ -473,6 +480,10 @@ productions = {
 		[]
 	],
 ################################################################################ 23.2
+	'TYPE_EXPRESSION': [
+		['KEYWORD_TYPE', 'GROUPER_LEFT_BRACKET', 'VARIABLE_NAMES', 'GROUPER_RIGHT_BRACKET'],
+	],
+################################################################################ 23.3
 	'UNARY_EXPRESSION': [
 		['MEMBER_EXPRESSION'],
 		['UNARY_OPERATOR', 'CAST_EXPRESSION'],

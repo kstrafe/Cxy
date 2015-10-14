@@ -41,6 +41,7 @@ protocols::TokenType KeywordMatcher::getKeyword(const std::string &lexeme)
     else if (lexeme == "goto") return TokenType::KEYWORD_GOTO;
     else if (lexeme == "hack") return TokenType::KEYWORD_HACK;
     else if (lexeme == "pure") return TokenType::KEYWORD_PURE;
+    else if (lexeme == "type") return TokenType::KEYWORD_TYPE;
     else if (lexeme == "when") return TokenType::KEYWORD_WHEN;
     else if (lexeme == "for") return TokenType::KEYWORD_FOR;
     else if (lexeme == "new") return TokenType::KEYWORD_NEW;
