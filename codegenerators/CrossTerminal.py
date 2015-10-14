@@ -53,9 +53,8 @@ import dependency.TableSorter as Tbs
 # Generates a .inc file containing all lookahead rules.
 productions = Tbs.productions
 
-# terminal_set, _ = ParserTableGenerator.computeTerminals(productions)
-# print(Tbs.sortTable(productions, terminal_set))
-# exit()
+terminal_set, _ = ParserTableGenerator.computeTerminals(productions)
+print(Tbs.sortTable(productions, terminal_set))
 
 def createcodetblexerdependencyKeywordMatchercpp(terminal_set):
 	template = '''%(license)s%(head)s\n\n%(namespace_head)s\n\n%(enumerations)s\n\n%(namespace_tail)s\n'''
