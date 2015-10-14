@@ -428,9 +428,14 @@ productions = {
 ################################################################################ 23
 	'NEW_EXPRESSION': [
 		['KEYWORD_NEW', 'GROUPER_LEFT_BRACKET', 'TYPE', 'GROUPER_RIGHT_BRACKET', 'GROUPER_LEFT_PARENTHESIS', 'EXPRESSION_EXPRESSION', 'GROUPER_RIGHT_PARENTHESIS'],
-		['UNARY_EXPRESSION'],
+		['DELETE_EXPRESSION'],
 	],
 ################################################################################ 23.1
+	'DELETE_EXPRESSION': [
+		['KEYWORD_DELETE', 'GROUPER_LEFT_PARENTHESIS', 'EXPRESSION_EXPRESSION', 'GROUPER_RIGHT_PARENTHESIS'],
+		['UNARY_EXPRESSION'],
+	],
+################################################################################ 23.2
 	'UNARY_EXPRESSION': [
 		['MEMBER_EXPRESSION'],
 		['UNARY_OPERATOR', 'CAST_EXPRESSION'],

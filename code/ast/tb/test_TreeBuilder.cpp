@@ -743,7 +743,8 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 		)");
 		doValidation(R"(
 			(:) enter {
-				cast[ptr 8u](new[32u](cast[5u](10)));
+				var ptr 8u a = new[8u](1024);
+				sml.Out.print(:delete(a));
 			}
 		)");
 	}
