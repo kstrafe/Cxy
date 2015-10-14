@@ -133,6 +133,16 @@ case where the 'method' syntax would disambiguate anything.
 		(:) c;
 	}
 
+It would be interesting to have a way of specifying many input parameters of the same
+type without having to repeat their types constantly. The problem here is that the
+LL(1) parser can not discern between a package name and a new typename or expression.
+The parser or lexer could use one more lookahead, but that would complicate the entire
+grammar. So let's be pragmatic. My idea is to simply state the following:
+
+	(: 32u {a, b, c}) d {}
+
+This looks clean, simple, and it works with all types.
+
 ===
 
 *Conclusion*: Function signatures are to be written in the following form.
