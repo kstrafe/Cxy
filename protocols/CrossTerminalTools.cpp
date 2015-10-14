@@ -84,9 +84,12 @@ bool CrossTerminalTools::isKeyword(const CrossTerminal &ct_)
         case CrossTerminal::KEYWORD_LABEL: return true;
         case CrossTerminal::KEYWORD_LAMBDA: return true;
         case CrossTerminal::KEYWORD_NEW: return true;
+        case CrossTerminal::KEYWORD_PRIVATE: return true;
         case CrossTerminal::KEYWORD_PTR: return true;
+        case CrossTerminal::KEYWORD_PUBLIC: return true;
         case CrossTerminal::KEYWORD_PURE: return true;
         case CrossTerminal::KEYWORD_REF: return true;
+        case CrossTerminal::KEYWORD_RESTRICTED: return true;
         case CrossTerminal::KEYWORD_RETURN: return true;
         case CrossTerminal::KEYWORD_STATIC: return true;
         case CrossTerminal::KEYWORD_STATICS: return true;
@@ -115,6 +118,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 {
     switch (cross_terminal)
     {
+        case protocols::CrossTerminal::ACCESS_SPECIFIER: return "ACCESS_SPECIFIER";
         case protocols::CrossTerminal::ADDITIVE_EXPRESSION: return "ADDITIVE_EXPRESSION";
         case protocols::CrossTerminal::ALIAS_STATEMENT: return "ALIAS_STATEMENT";
         case protocols::CrossTerminal::ALIAS_TRAIL: return "ALIAS_TRAIL";
@@ -191,9 +195,12 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::KEYWORD_LABEL: return "KEYWORD_LABEL";
         case protocols::CrossTerminal::KEYWORD_LAMBDA: return "KEYWORD_LAMBDA";
         case protocols::CrossTerminal::KEYWORD_NEW: return "KEYWORD_NEW";
+        case protocols::CrossTerminal::KEYWORD_PRIVATE: return "KEYWORD_PRIVATE";
         case protocols::CrossTerminal::KEYWORD_PTR: return "KEYWORD_PTR";
+        case protocols::CrossTerminal::KEYWORD_PUBLIC: return "KEYWORD_PUBLIC";
         case protocols::CrossTerminal::KEYWORD_PURE: return "KEYWORD_PURE";
         case protocols::CrossTerminal::KEYWORD_REF: return "KEYWORD_REF";
+        case protocols::CrossTerminal::KEYWORD_RESTRICTED: return "KEYWORD_RESTRICTED";
         case protocols::CrossTerminal::KEYWORD_RETURN: return "KEYWORD_RETURN";
         case protocols::CrossTerminal::KEYWORD_STATIC: return "KEYWORD_STATIC";
         case protocols::CrossTerminal::KEYWORD_STATICS: return "KEYWORD_STATICS";
@@ -297,6 +304,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::UNARY_OPERATOR: return "UNARY_OPERATOR";
         case protocols::CrossTerminal::UNIDENTIFIED: return "UNIDENTIFIED";
         case protocols::CrossTerminal::VARIABLE_NAMES: return "VARIABLE_NAMES";
+        case protocols::CrossTerminal::VAR_OR_STATIC: return "VAR_OR_STATIC";
         case protocols::CrossTerminal::WHEN_EXPRESSION: return "WHEN_EXPRESSION";
         case protocols::CrossTerminal::WHILE_STATEMENT: return "WHILE_STATEMENT";
         default: return "";

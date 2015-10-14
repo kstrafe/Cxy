@@ -21,6 +21,7 @@ namespace tul { namespace protocols {
 
 enum class CrossTerminal
 {
+    ACCESS_SPECIFIER,
     ADDITIVE_EXPRESSION,
     ALIAS_STATEMENT,
     ALIAS_TRAIL,
@@ -120,6 +121,7 @@ enum class CrossTerminal
     UNARY_EXPRESSION,
     UNARY_OPERATOR,
     VARIABLE_NAMES,
+    VAR_OR_STATIC,
     WHEN_EXPRESSION,
     WHILE_STATEMENT,
     END_OF_MODULE,
@@ -152,9 +154,12 @@ enum class CrossTerminal
     KEYWORD_LABEL,
     KEYWORD_LAMBDA,
     KEYWORD_NEW,
+    KEYWORD_PRIVATE,
     KEYWORD_PTR,
+    KEYWORD_PUBLIC,
     KEYWORD_PURE,
     KEYWORD_REF,
+    KEYWORD_RESTRICTED,
     KEYWORD_RETURN,
     KEYWORD_STATIC,
     KEYWORD_STATICS,
