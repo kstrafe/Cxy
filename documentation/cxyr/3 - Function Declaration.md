@@ -94,6 +94,47 @@ Where no name in front of the : designates the standard 'in' argument.
 
 ===
 
+=== Kevin R. Stravers -- Wed 14 Oct 2015 06:57:43 AM CEST
+
+The problem with the current function declaration is that it may clash in meaning.
+Certainly the type declaration is useful and correct, but suppose we have the following.
+
+	var (:) a;
+	static (:) b;
+	(:) c {};
+
+What is the semantic difference? We know that a is a variable, it is a function pointer.
+b is also a function pointer, but its lifetime is of the class itself.
+c is an actual method. It seems as if the method is a special case. This requires
+some investigation. Where does this clash? Let's look at the current grant list:
+
+	grant Aa {
+		(:) a;
+		(:) b;
+		(:) c;
+	}
+
+There is no way to distinguish the actualy localities. In this case, we should be
+able to specify whether something granted is a local object-wide variable, a method,
+or a static element. Therefore: the same syntax needs to be applied to grants.
+
+Is the syntax for methods really desirable? It at least looks simple enough to new
+users to familiarize themselves with it quickly, instead of bombarding them with:
+
+	public method (:) c {}
+
+We can say that public and method are implicit if not otherwise specified. This means
+method needs to be a keyword. Honestly, I see no need for that. I can't think of any
+case where the 'method' syntax would disambiguate anything.
+
+	grant Aa {
+		var (:) a;
+		static (:) b;
+		(:) c;
+	}
+
+===
+
 *Conclusion*: Function signatures are to be written in the following form.
 
 	( Type Name, ArgumentList : ArgumentList ) FunctionName
