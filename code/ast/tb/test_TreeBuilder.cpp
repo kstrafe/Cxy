@@ -929,5 +929,14 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 				Out << Math.pi + Math.e / Math;  // makes no sense but if the operators exist, it must be accepted.
 			}
 		)");
+		doValidation(R"(
+			(:) enter {
+				while [a > b] {
+					sml.Out << "Forever";
+				} else {
+					sml.Out << "Never";
+				}
+			}
+		)");
 	}
 }
