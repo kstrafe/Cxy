@@ -146,6 +146,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::DATA_DECLARATION_STATEMENT: return "DATA_DECLARATION_STATEMENT";
         case protocols::CrossTerminal::DATA_DECLARATION_TYPE: return "DATA_DECLARATION_TYPE";
         case protocols::CrossTerminal::DATA_NAMES: return "DATA_NAMES";
+        case protocols::CrossTerminal::DATA_NAMES_LIST: return "DATA_NAMES_LIST";
         case protocols::CrossTerminal::DEFER_STATEMENT: return "DEFER_STATEMENT";
         case protocols::CrossTerminal::DELETE_EXPRESSION: return "DELETE_EXPRESSION";
         case protocols::CrossTerminal::DO_STATEMENT: return "DO_STATEMENT";
@@ -213,6 +214,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::MEMBER_DEFINITION: return "MEMBER_DEFINITION";
         case protocols::CrossTerminal::MEMBER_EXPRESSION: return "MEMBER_EXPRESSION";
         case protocols::CrossTerminal::MULTIPLICATIVE_EXPRESSION: return "MULTIPLICATIVE_EXPRESSION";
+        case protocols::CrossTerminal::NAMEKIND: return "NAMEKIND";
         case protocols::CrossTerminal::NEW_EXPRESSION: return "NEW_EXPRESSION";
         case protocols::CrossTerminal::NO_SEMICOLON_STATEMENT: return "NO_SEMICOLON_STATEMENT";
         case protocols::CrossTerminal::OPTIONAL_ADDITIVE_EXPRESSION: return "OPTIONAL_ADDITIVE_EXPRESSION";
@@ -231,6 +233,8 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::OPTIONAL_CONSTRUCTOR_LIST: return "OPTIONAL_CONSTRUCTOR_LIST";
         case protocols::CrossTerminal::OPTIONAL_DATA_DECLARATION: return "OPTIONAL_DATA_DECLARATION";
         case protocols::CrossTerminal::OPTIONAL_DATA_DECLARATION_AFTER_COMMA: return "OPTIONAL_DATA_DECLARATION_AFTER_COMMA";
+        case protocols::CrossTerminal::OPTIONAL_DATA_NAMES_LIST: return "OPTIONAL_DATA_NAMES_LIST";
+        case protocols::CrossTerminal::OPTIONAL_DATA_NAMES_LIST_AFTER_COMMA: return "OPTIONAL_DATA_NAMES_LIST_AFTER_COMMA";
         case protocols::CrossTerminal::OPTIONAL_DATA_NAME_LIST: return "OPTIONAL_DATA_NAME_LIST";
         case protocols::CrossTerminal::OPTIONAL_EQUALITY_EXPRESSION: return "OPTIONAL_EQUALITY_EXPRESSION";
         case protocols::CrossTerminal::OPTIONAL_EXPRESSION: return "OPTIONAL_EXPRESSION";
