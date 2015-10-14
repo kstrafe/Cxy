@@ -849,5 +849,13 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 				alias Abc = abc.Alphabet;
 			}
 		)");
+		doValidation(R"(
+			var [10, 32u] a;
+
+			(:) enter {
+				a[1, 2, 3];
+				a[1, 2, 3,];
+			}
+		)");
 	}
 }

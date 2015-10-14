@@ -509,11 +509,17 @@ productions = {
 	############################################################
 	'OPTIONAL_ARRAY_ACCESS_EXPRESSION': [
 		[],
-		['SYMBOL_COMMA__PRUNE', 'EXPRESSION_EXPRESSION', 'OPTIONAL_ARRAY_ACCESS_EXPRESSION'],
+		['SYMBOL_COMMA__PRUNE', 'OPTIONAL_EXPRESSION_ARRAY_ACCESS'],
 	],
 	'CAPTURE_LIST': [
 		[],
 		['DATA_NAMES', 'CAPTURE_LIST'],
 		['UNARY_OPERATOR', 'DATA_NAMES', 'CAPTURE_LIST'],
 	],
+	############################################################
+	'OPTIONAL_EXPRESSION_ARRAY_ACCESS': [
+		[],
+		['EXPRESSION_EXPRESSION', 'OPTIONAL_ARRAY_ACCESS_EXPRESSION'],
+	]
+
 }
