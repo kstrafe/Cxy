@@ -877,7 +877,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 			}
 		)");
 		doValidation(R"(
-			(1u {a, b}, String e,: type[e]{f, g, h,},) d {}
+			(1u {a, b(:0)}, String e = "e",: type[e]{f, g, h,},) d {}
 		)");
 	}
 }
