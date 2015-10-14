@@ -1,33 +1,39 @@
 def sortTable(productions, terminals):
-	template = """productions = {{{p}}}"""
-	prod_template = """{p},\n"""
+	temp = """{p},\n"""
 	string = ''
 	seen = ['ENTER']
 	to_process = ['ENTER']
 	# Iterate all elements, if they're in the terminal set, just ignore them.
-	while to_process:
-		processing = to_process.pop()
-		start = productions[processing]
-		start.sort()
-		string += "'" + processing + "': [\n"
-		for i in start:
-			string += '\t' + prod_template.format(p=str(i))
-			for j in i:
-				if j not in terminals:
-					if j not in seen:
-						to_process.insert(0, j)
-						seen.append(j)
-		string += '],\n'
+	group = ['ENTER']
+	while group:
+		to_process = group
+		group = []
+		string += 60 * '#' + '\n'
+		while to_process:
+			processing = to_process.pop()
+			start = productions[processing]
+			start.sort()
+			string += "'" + processing + "': [\n"
+			for i in start:
+				string += '\t' + temp.format(p=str(i))
+				for j in i:
+					if j not in terminals:
+						if j not in seen:
+							group.insert(0, j)
+							seen.append(j)
+			string += '],\n'
 	return string
 
 
 productions = {
+	############################################################
 	'ENTER': [
 		[],
 		['ACCESS_SPECIFIER', 'MEMBER_DEFINITION', 'ENTER'],
 		['ALIAS_STATEMENT', 'ENTER'],
 		['KEYWORD_GRANT', 'IDENTIFIER_CLASS', 'GROUPER_LEFT_BRACE', 'GRANT_LIST', 'GROUPER_RIGHT_BRACE', 'ENTER'],
 	],
+	############################################################
 	'ACCESS_SPECIFIER': [
 		[],
 		['KEYWORD_PRIVATE'],
@@ -45,6 +51,7 @@ productions = {
 		['FUNCTION_SIGNATURE', 'FUNCTION_NAMES', 'OPTIONAL_FUNCTION_NAME_LIST', 'SYMBOL_SEMICOLON__PRUNE', 'OPTIONAL_GRANT_LIST'],
 		['VAR_OR_STATIC', 'TYPE', 'VARIABLE_NAMES', 'OPTIONAL_DATA_NAME_LIST', 'SYMBOL_SEMICOLON__PRUNE', 'OPTIONAL_GRANT_LIST'],
 	],
+	############################################################
 	'DATA_DECLARATION_STATEMENT': [
 		['VAR_OR_STATIC', 'DATA_DECLARATION_TYPE'],
 	],
@@ -115,6 +122,7 @@ productions = {
 		[],
 		['SYMBOL_COMMA__PRUNE', 'DATA_NAMES', 'OPTIONAL_DATA_NAME_LIST'],
 	],
+	############################################################
 	'DATA_DECLARATION_TYPE': [
 		['GROUPER_LEFT_BRACE', 'DATA_DECLARATION_LIST', 'GROUPER_RIGHT_BRACE'],
 		['TYPE', 'DATA_NAMES', 'OPTIONAL_ASSIGNMENT', 'OPTIONAL_DATA_DECLARATION', 'SYMBOL_SEMICOLON__PRUNE'],
@@ -192,6 +200,7 @@ productions = {
 		['IDENTIFIER_PACKAGE'],
 		['IDENTIFIER_VARIABLE'],
 	],
+	############################################################
 	'DATA_DECLARATION_LIST': [
 		[],
 		['TYPE', 'DATA_NAMES', 'OPTIONAL_ASSIGNMENT', 'SYMBOL_SEMICOLON__PRUNE', 'DATA_DECLARATION_LIST'],
@@ -265,6 +274,7 @@ productions = {
 		['BASIC_TYPE'],
 		['KEYWORD_PTR', 'TYPE'],
 	],
+	############################################################
 	'PARAMETER_LIST': [
 		[],
 		['DATA_NAMES', 'SYMBOL_COLON__PRUNE', 'EXPRESSION_EXPRESSION', 'OPTIONAL_PARAMETER_LIST'],
@@ -301,6 +311,7 @@ productions = {
 		['IDENTIFIER_CLASS', 'SYMBOL_COLON__PRUNE', 'TYPE', 'OPTIONAL_TEMPLATE_LIST'],
 		['SYMBOL_COLON__PRUNE', 'TYPE', 'OPTIONAL_TEMPLATE_LIST'],
 	],
+	############################################################
 	'OPTIONAL_PARAMETER_LIST': [
 		[],
 		['SYMBOL_COMMA__PRUNE', 'PARAMETER_LIST'],
@@ -321,6 +332,7 @@ productions = {
 		['IDENTIFIER_CLASS', 'SYMBOL_COLON__PRUNE', 'TYPE', 'OPTIONAL_TEMPLATE_LIST'],
 		['SYMBOL_COLON__PRUNE', 'TYPE', 'OPTIONAL_TEMPLATE_LIST'],
 	],
+	############################################################
 	'AND_EXPRESSION': [
 		['BITWISE_OR_EXPRESSION', 'OPTIONAL_AND_EXPRESSION'],
 	],
@@ -328,6 +340,7 @@ productions = {
 		[],
 		['SYMBOL_BAR__BAR', 'OR_EXPRESSION'],
 	],
+	############################################################
 	'BITWISE_OR_EXPRESSION': [
 		['BITWISE_XOR_EXPRESSION', 'OPTIONAL_BITWISE_OR_EXPRESSION'],
 	],
@@ -335,6 +348,7 @@ productions = {
 		[],
 		['SYMBOL_AMPERSAND__AMPERSAND', 'AND_EXPRESSION'],
 	],
+	############################################################
 	'BITWISE_XOR_EXPRESSION': [
 		['BITWISE_AND_EXPRESSION', 'OPTIONAL_BITWISE_XOR_EXPRESSION'],
 	],
@@ -342,6 +356,7 @@ productions = {
 		[],
 		['SYMBOL_BAR', 'BITWISE_OR_EXPRESSION'],
 	],
+	############################################################
 	'BITWISE_AND_EXPRESSION': [
 		['EQUALITY_EXPRESSION', 'OPTIONAL_BITWISE_AND_EXPRESSION'],
 	],
@@ -349,6 +364,7 @@ productions = {
 		[],
 		['SYMBOL_CARET', 'BITWISE_XOR_EXPRESSION'],
 	],
+	############################################################
 	'EQUALITY_EXPRESSION': [
 		['RELATIONAL_EXPRESSION', 'OPTIONAL_EQUALITY_EXPRESSION'],
 	],
@@ -356,6 +372,7 @@ productions = {
 		[],
 		['SYMBOL_AMPERSAND', 'BITWISE_AND_EXPRESSION'],
 	],
+	############################################################
 	'RELATIONAL_EXPRESSION': [
 		['ADDITIVE_EXPRESSION', 'OPTIONAL_RELATIONAL_EXPRESSION'],
 	],
@@ -363,6 +380,7 @@ productions = {
 		[],
 		['SYMBOL_EQUAL__EQUAL', 'EQUALITY_EXPRESSION'],
 	],
+	############################################################
 	'ADDITIVE_EXPRESSION': [
 		['MULTIPLICATIVE_EXPRESSION', 'OPTIONAL_ADDITIVE_EXPRESSION'],
 	],
@@ -370,6 +388,7 @@ productions = {
 		[],
 		['RELATIONAL_OPERATOR', 'EQUALITY_EXPRESSION'],
 	],
+	############################################################
 	'MULTIPLICATIVE_EXPRESSION': [
 		['CAST_EXPRESSION', 'OPTIONAL_MULTIPLICATIVE_EXPRESSION'],
 	],
@@ -384,6 +403,7 @@ productions = {
 		['SYMBOL_LESS_THAN'],
 		['SYMBOL_LESS_THAN__EQUAL'],
 	],
+	############################################################
 	'CAST_EXPRESSION': [
 		['KEYWORD_CAST', 'GROUPER_LEFT_BRACKET', 'TYPE', 'GROUPER_RIGHT_BRACKET', 'GROUPER_LEFT_PARENTHESIS', 'EXPRESSION_EXPRESSION', 'GROUPER_RIGHT_PARENTHESIS'],
 		['NEW_EXPRESSION'],
@@ -393,10 +413,12 @@ productions = {
 		['SYMBOL_FORWARD_SLASH', 'MULTIPLICATIVE_EXPRESSION'],
 		['SYMBOL_STAR', 'MULTIPLICATIVE_EXPRESSION'],
 	],
+	############################################################
 	'NEW_EXPRESSION': [
 		['DELETE_EXPRESSION'],
 		['KEYWORD_NEW', 'GROUPER_LEFT_BRACKET', 'TYPE', 'GROUPER_RIGHT_BRACKET', 'OPTIONAL_NEW_LIST', 'OPTIONAL_CONSTRUCTOR_LIST'],
 	],
+	############################################################
 	'DELETE_EXPRESSION': [
 		['KEYWORD_DELETE', 'GROUPER_LEFT_PARENTHESIS', 'EXPRESSION_EXPRESSION', 'GROUPER_RIGHT_PARENTHESIS'],
 		['UNARY_EXPRESSION'],
@@ -409,6 +431,7 @@ productions = {
 		[],
 		['GROUPER_LEFT_BRACE', 'PARAMETER_LIST', 'GROUPER_RIGHT_BRACE'],
 	],
+	############################################################
 	'UNARY_EXPRESSION': [
 		['MEMBER_EXPRESSION'],
 		['UNARY_OPERATOR', 'CAST_EXPRESSION'],
@@ -417,6 +440,7 @@ productions = {
 		[],
 		['SYMBOL_COMMA__PRUNE', 'EXPRESSION_EXPRESSION'],
 	],
+	############################################################
 	'MEMBER_EXPRESSION': [
 		['IDENTIFIER_CLASS', 'CLASS_MEMBER_EXPRESSION'],
 		['IDENTIFIER_ENUMERATION', 'ENUMERATION_MEMBER_EXPRESSION'],
@@ -434,6 +458,7 @@ productions = {
 		['SYMBOL_EXCLAMATION_MARK__EXCLAMATION_MARK'],
 		['SYMBOL_MINUS'],
 	],
+	############################################################
 	'CLASS_MEMBER_EXPRESSION': [
 		['GROUPER_LEFT_PARENTHESIS', 'PARAMETER_LIST', 'GROUPER_RIGHT_PARENTHESIS'],
 		['SYMBOL_DOT__PRUNE', 'CLASS_MEMBER', 'OPTIONAL_MEMBER_EXPRESSION'],
@@ -456,6 +481,7 @@ productions = {
 		['STRING'],
 		['WHEN_EXPRESSION'],
 	],
+	############################################################
 	'CLASS_MEMBER': [
 		['IDENTIFIER_PACKAGE'],
 		['IDENTIFIER_SUBROUTINE'],
@@ -480,6 +506,7 @@ productions = {
 	'WHEN_EXPRESSION': [
 		['KEYWORD_WHEN', 'GROUPER_LEFT_PARENTHESIS', 'OR_EXPRESSION', 'GROUPER_RIGHT_PARENTHESIS', 'OR_EXPRESSION', 'KEYWORD_ELSE', 'OR_EXPRESSION'],
 	],
+	############################################################
 	'OPTIONAL_ARRAY_ACCESS_EXPRESSION': [
 		[],
 		['SYMBOL_COMMA__PRUNE', 'EXPRESSION_EXPRESSION', 'OPTIONAL_ARRAY_ACCESS_EXPRESSION'],
