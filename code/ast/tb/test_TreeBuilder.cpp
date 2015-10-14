@@ -766,5 +766,8 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 				var ptr ptr 32u e = new[ptr 32u](5){:new[32u](5){:0}};
 			}
 		)");
+		doValidation(R"(
+			32u a = [1, 2];
+		)");
 	}
 }

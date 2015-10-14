@@ -148,6 +148,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::ENUM_END: return "";case protocols::CrossTerminal::EPSILONATE: return "EPSILONATE";
         case protocols::CrossTerminal::EQUALITY_EXPRESSION: return "EQUALITY_EXPRESSION";
         case protocols::CrossTerminal::EXPRESSION_EXPRESSION: return "EXPRESSION_EXPRESSION";
+        case protocols::CrossTerminal::EXPRESSION_LIST: return "EXPRESSION_LIST";
         case protocols::CrossTerminal::FOR_STATEMENT: return "FOR_STATEMENT";
         case protocols::CrossTerminal::FUNCTION_DEFINITION: return "FUNCTION_DEFINITION";
         case protocols::CrossTerminal::FUNCTION_NAMES: return "FUNCTION_NAMES";
