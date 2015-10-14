@@ -838,7 +838,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 			var { 32u c; 8s d = cast[type[b]](c); }
 			private var { sml.String e = "e"; }
 
-			public (:) enter { }
+			public (: 32u a(:5)) enter { }
 		)");
 	}
 }

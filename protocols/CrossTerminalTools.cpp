@@ -158,7 +158,6 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
         case protocols::CrossTerminal::EXPRESSION_LIST: return "EXPRESSION_LIST";
         case protocols::CrossTerminal::FOR_DATA_DECLARATION: return "FOR_DATA_DECLARATION";
         case protocols::CrossTerminal::FOR_STATEMENT: return "FOR_STATEMENT";
-        case protocols::CrossTerminal::FUNCTION_DEFINITION: return "FUNCTION_DEFINITION";
         case protocols::CrossTerminal::FUNCTION_NAMES: return "FUNCTION_NAMES";
         case protocols::CrossTerminal::FUNCTION_SIGNATURE: return "FUNCTION_SIGNATURE";
         case protocols::CrossTerminal::GOTO_STATEMENT: return "GOTO_STATEMENT";

@@ -62,19 +62,24 @@ productions = {
 	'ALIAS_STATEMENT': [
 		['KEYWORD_ALIAS', 'ALIAS_TRAIL']
 	],
+	'GRANT_DEFINITION': [
+		['KEYWORD_GRANT', 'IDENTIFIER_CLASS', 'GROUPER_LEFT_BRACE', 'GRANT_LIST', 'GROUPER_RIGHT_BRACE']
+	],
+	'MEMBER_DECLARATION': [
+		['ACCESS_SPECIFIER', 'DATA_OR_METHOD'],
+	],
+################################################################################ 2.1
 	'ALIAS_TRAIL': [
 		['IDENTIFIER_CLASS', 'SYMBOL_EQUAL', 'TYPE'],
 		['IDENTIFIER_PACKAGE', 'SYMBOL_EQUAL', 'IDENTIFIER_PACKAGE'],
 	],
-	'FUNCTION_DEFINITION': [
+	'DATA_OR_METHOD': [
+		['DATA_DECLARATION_STATEMENT'],
 		['FUNCTION_SIGNATURE', 'FUNCTION_NAMES', 'GROUPER_LEFT_BRACE', 'STATEMENT_LIST', 'GROUPER_RIGHT_BRACE']
-	],
-	'GRANT_DEFINITION': [
-		['KEYWORD_GRANT', 'IDENTIFIER_CLASS', 'GROUPER_LEFT_BRACE', 'GRANT_LIST', 'GROUPER_RIGHT_BRACE']
 	],
 ################################################################################ 3
 # Naming subsytem
-################################################################################ 3
+################################################################################
 	'VARIABLE_NAMES': [
 		['FUNCTION_NAMES'],
 		['IDENTIFIER_VARIABLE'],
@@ -164,6 +169,9 @@ productions = {
 		['KEYWORD_CONST', 'TYPE_AFTER_REF_CONST'],
 		['KEYWORD_PTR', 'TYPE'],
 	],
+	'TYPE_EXPRESSION': [
+		['KEYWORD_TYPE', 'GROUPER_LEFT_BRACKET', 'VARIABLE_NAMES', 'GROUPER_RIGHT_BRACKET'],
+	],
 ################################################################################ 5
 	'OPTIONAL_TEMPLATE': [
 		['GROUPER_LEFT_BRACKET', 'TEMPLATE_LIST', 'GROUPER_RIGHT_BRACKET'],
@@ -204,6 +212,17 @@ productions = {
 ################################################################################
 # End of Type subsystem
 ################################################################################ 9
+	'DATA_DECLARATION_STATEMENT': [
+		['VAR_OR_STATIC', 'DATA_DECLARATION_TYPE'],
+	],
+	'VAR_OR_STATIC': [
+		['KEYWORD_VAR'],
+		['KEYWORD_STATIC'],
+	],
+	'DATA_DECLARATION_TYPE': [
+		['GROUPER_LEFT_BRACE', 'DATA_DECLARATION_LIST', 'GROUPER_RIGHT_BRACE'],
+		['TYPE', 'DATA_NAMES', 'OPTIONAL_ASSIGNMENT', 'OPTIONAL_DATA_DECLARATION', 'SYMBOL_SEMICOLON__PRUNE'],
+	],
 	'ARGUMENT_LIST': [
 		['ARGUMENT', 'OPTIONAL_ARGUMENT_LIST'],
 		[],
@@ -280,6 +299,7 @@ productions = {
 		['SYMBOL_COMMA__PRUNE', 'ARGUMENT_LIST_AFTER_FIRST'],
 		[]
 	],
+################################################################################ Statements
 	'DEFER_STATEMENT': [
 		['KEYWORD_DEFER', 'SINGLE_STATEMENT_OR_CODE_BLOCK']
 	],
@@ -289,12 +309,10 @@ productions = {
 	'FOR_STATEMENT': [
 		['KEYWORD_FOR', 'GROUPER_LEFT_PARENTHESIS', 'FOR_DATA_DECLARATION', 'EXPRESSION_EXPRESSION', 'SYMBOL_SEMICOLON__PRUNE', 'STATEMENT_LIST', 'GROUPER_RIGHT_PARENTHESIS', 'SINGLE_STATEMENT_OR_CODE_BLOCK']
 	],
-
 	'FOR_DATA_DECLARATION': [
 		['DATA_DECLARATION_TYPE'],
 		['SYMBOL_SEMICOLON__PRUNE']
 	],
-
 	'IF_STATEMENT': [
 		['KEYWORD_IF', 'GROUPER_LEFT_PARENTHESIS', 'EXPRESSION_EXPRESSION', 'GROUPER_RIGHT_PARENTHESIS', 'SINGLE_STATEMENT_OR_CODE_BLOCK', 'ELSE_STATEMENT']
 	],
@@ -310,24 +328,6 @@ productions = {
 	],
 	'CODE_BLOCK': [
 		['GROUPER_LEFT_BRACE', 'STATEMENT_LIST', 'GROUPER_RIGHT_BRACE'],
-	],
-	'MEMBER_DECLARATION': [
-		['ACCESS_SPECIFIER', 'DATA_OR_METHOD'],
-	],
-	'DATA_OR_METHOD': [
-		['DATA_DECLARATION_STATEMENT'],
-		['FUNCTION_DEFINITION']
-	],
-	'DATA_DECLARATION_STATEMENT': [
-		['VAR_OR_STATIC', 'DATA_DECLARATION_TYPE'],
-	],
-	'VAR_OR_STATIC': [
-		['KEYWORD_VAR'],
-		['KEYWORD_STATIC'],
-	],
-	'DATA_DECLARATION_TYPE': [
-		['GROUPER_LEFT_BRACE', 'DATA_DECLARATION_LIST', 'GROUPER_RIGHT_BRACE'],
-		['TYPE', 'DATA_NAMES', 'OPTIONAL_ASSIGNMENT', 'OPTIONAL_DATA_DECLARATION', 'SYMBOL_SEMICOLON__PRUNE'],
 	],
 	'DATA_DECLARATION_LIST': [
 		['TYPE', 'DATA_NAMES', 'OPTIONAL_ASSIGNMENT', 'SYMBOL_SEMICOLON__PRUNE', 'DATA_DECLARATION_LIST'],
@@ -477,7 +477,6 @@ productions = {
 	'DELETE_EXPRESSION': [
 		['KEYWORD_DELETE', 'GROUPER_LEFT_PARENTHESIS', 'EXPRESSION_EXPRESSION', 'GROUPER_RIGHT_PARENTHESIS'],
 		['UNARY_EXPRESSION'],
-		['TYPE_EXPRESSION']
 	],
 	'OPTIONAL_NEW_LIST': [
 		['GROUPER_LEFT_PARENTHESIS', 'EXPRESSION_EXPRESSION', 'OPTIONAL_EXPRESSION', 'GROUPER_RIGHT_PARENTHESIS'],
@@ -486,10 +485,6 @@ productions = {
 	'OPTIONAL_CONSTRUCTOR_LIST': [
 		['GROUPER_LEFT_BRACE', 'PARAMETER_LIST', 'GROUPER_RIGHT_BRACE'],
 		[]
-	],
-################################################################################ 23.2
-	'TYPE_EXPRESSION': [
-		['KEYWORD_TYPE', 'GROUPER_LEFT_BRACKET', 'VARIABLE_NAMES', 'GROUPER_RIGHT_BRACKET'],
 	],
 ################################################################################ 23.3
 	'UNARY_EXPRESSION': [
