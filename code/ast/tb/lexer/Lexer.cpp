@@ -110,39 +110,10 @@ protocols::TokenType Lexer::getKeyword(const std::string &test_lexeme) const
 
 void Lexer::identifyToken(protocols::Token &input_token)
 {
-	using namespace protocols;
-	const std::string &a_lexeme = input_token.accompanying_lexeme;
-	if (a_lexeme.size() == 0) throw std::string("Lexer::identifyToken: Zero-sized");
+	if (input_token.accompanying_lexeme.size() == 0)
+		throw std::string("Lexer::identifyToken: Zero-sized");
 
-	std::size_t left_underscores = 0, right_underscores = 0;
-	for (char lex_char : a_lexeme)
-		if (lex_char == '_')
-			++left_underscores;
-		else
-			break;
-
-	if (a_lexeme.size() > 0)
-		for (std::size_t back_it = a_lexeme.size() - 1; back_it > 0; --back_it)
-			if (a_lexeme.at(back_it) == '_')
-				++right_underscores;
-			else
-				break;
-
-	auto has_trailing_underscores = [&]() -> bool { return left_underscores + right_underscores > 0; };
-	// Ensure there are at least +1 characters, the string can NOT be ___, or ___, or _, or _, _a_ is allowed
-	assert(a_lexeme.size() > left_underscores + right_underscores);
-	// Strip the trailing underscores
-	std::string substitution_lexeme = a_lexeme.substr(left_underscores, a_lexeme.size() - right_underscores - left_underscores);
-	protocols::Token dummy_token = input_token;
-	dummy_token.accompanying_lexeme = substitution_lexeme;
-	const std::string backup_string = a_lexeme;
-	identifyTokenAfterStrippingUnderscores(dummy_token);
-	input_token = dummy_token;
-	input_token.accompanying_lexeme = backup_string;
-
-	if (has_trailing_underscores())
-		if (input_token.token_type == TokenType::IDENTIFIER_PACKAGE)
-			input_token.token_type = TokenType::IDENTIFIER_VARIABLE;
+	identifyTokenAfterStrippingUnderscores(input_token);
 }
 
 
@@ -165,6 +136,7 @@ void Lexer::identifyTokenAfterStrippingUnderscores(protocols::Token &input_token
 	auto ends_with_lowercase = [&input_token]() -> bool {return std::islower(input_token.accompanying_lexeme.back());};
 
 	auto is_class_identifier = [&]() -> bool {return begins_with_uppercase() && any_underscore() == false && ends_with_lowercase();};
+	auto is_constexpr_identifier = [&]() -> bool {return all_upper() && any_underscore() == false && any_lower() == false; };
 	auto is_enumeration_identifier = [&]() -> bool {return begins_with_uppercase() && any_underscore() == true && any_lower() == false; };
 	auto is_function_identifier = [&]() -> bool {return begins_with_lowercase() && any_underscore() == false && ends_with_lowercase() && any_upper();};
 	auto is_keyword = [&]() -> bool {return getKeyword(input_token.accompanying_lexeme) != TokenType::UNIDENTIFIED;};
@@ -184,46 +156,28 @@ void Lexer::identifyTokenAfterStrippingUnderscores(protocols::Token &input_token
 	if (input_token.entry_type == EntryType::ALPHA_DIGIT_OR_UNDERSCORE)
 	{
 		if (is_class_identifier())
-		{
 			 input_token.token_type = TokenType::IDENTIFIER_CLASS;
-		}
 		else if (is_enumeration_identifier())
-		{
 			input_token.token_type = TokenType::IDENTIFIER_ENUMERATION;
-		}
+		else if (is_constexpr_identifier())
+			input_token.token_type = TokenType::IDENTIFIER_CONSTEXPR;
 		else if (is_function_identifier())
-		{
 			input_token.token_type = TokenType::IDENTIFIER_SUBROUTINE;
-		}
 		else if (is_number_literal())
-		{
 			input_token.token_type = TokenType::INTEGER_LITERAL;
-		}
 		else if (is_keyword())
-		{
 			input_token.token_type = getKeyword(input_token.accompanying_lexeme);
-		}
 		// Fold this with identifier variable.
 		else if (is_package_identifier())
-		{
 			input_token.token_type = TokenType::IDENTIFIER_PACKAGE;
-		}
 		else if (is_primitive_signed())
-		{
 			input_token.token_type = TokenType::PRIMITIVE_SIGNED;
-		}
 		else if (is_primitive_unsigned())
-		{
 			input_token.token_type = TokenType::PRIMITIVE_UNSIGNED;
-		}
 		else if (is_variable_identifier())
-		{
 			input_token.token_type = TokenType::IDENTIFIER_VARIABLE;
-		}
 		else
-		{
 			input_token.token_type = TokenType::UNIDENTIFIED;
-		}
 	}
 	else if (input_token.entry_type == EntryType::GROUPING_SYMBOL)
 	{
@@ -241,17 +195,11 @@ void Lexer::identifyTokenAfterStrippingUnderscores(protocols::Token &input_token
 		#undef caze
 	}
 	else if (input_token.entry_type == EntryType::QUOTE_SYMBOL)
-	{
 		input_token.token_type = TokenType::STRING;
-	}
 	else if (input_token.entry_type == EntryType::OTHER_SYMBOL)
-	{
 		input_token.token_type = dependency::SymbolMatcher::getSymbol(input_token.accompanying_lexeme);
-	}
 	else
-	{
 		input_token.token_type = TokenType::UNIDENTIFIED;
-	}
 }
 
 

@@ -977,5 +977,8 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 				cool += ber;
 			}
 		)");
+		doValidation(R"(
+			var 32u AAA = 1;
+		)");
 	}
 }
