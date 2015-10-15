@@ -287,6 +287,58 @@ That's just beautiful. So how do we solve it? Let's just exploit the curly brace
 
 ===
 
+=== Kevin R. Stravers -- Thu 15 Oct 2015 02:03:30 AM CEST
+
+An important aspect is to be able to get the results from procedure calls. Preferably
+not by calling them and extracting all arguments manually.
+
+	var 32u a: a, b: b = myCall();
+
+This is useful, however, the grammar is currently constructed such that:
+
+	// Multiple declarations
+	var { 32u a, b, c; Type d(:); }
+	// Single declaration
+	var Type e;
+	// Multiple decls of the same type
+	var Type f, g, h;
+
+So what other options are there? Preferably, this needs to work well together with
+functions. Note that as expressions, we allow the brackets to represent anonymous
+arrays.
+
+	(32u out:32u {x, y, z}) f {
+		return :x + y + z;
+	}
+
+	(32u {a, b, c}:) g {
+		return a: 1, b: 2, c: 3;
+	}
+
+	f({x: a, y: b, z: c}: g())
+
+var {} is currently, used to initialize multiple variables... maybe something else
+could be used.
+
+This is currently pretty much the only thing left for the grammar to specify. It's
+interesting... So what can be done? What can we do to salvage the compound 'stuff'
+like this?
+
+	var [  // Stop right there
+
+Is not usable, [ starts a type. In function calls [ denotes an array expression.
+
+	var {  // Works,.. but what if we use another rule.
+
+Suppose we allow a grammar that has var declarations in this manner, but also allows
+an optional assignment to the entire sequence.
+
+	var { 32u a: a; Type b: b; } = f();
+
+This might well work, it's just a little uncomfortable. Oh well. Should be good.
+
+===
+
 *Conclusion*:
 	var Type Identifier OptionalInitialization;
 
