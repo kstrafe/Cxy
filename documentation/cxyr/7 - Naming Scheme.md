@@ -31,4 +31,9 @@ constantexpr: [A-Z]+                                // THIS, IS, A, CONSTANTEXPR
 The nice thing is that the above still allows slick variable names, but separates
 classes, constants, and enums from them.
 
+The constant expressions need to be worked out. Their exact semantics are still unclear.
+As of right now, CONSTEXPR variables are const and are deducible by the compiler.
+Later on, the lexer can be changed to be a pure table-based lexer... that's a fun
+little project for later though.
+
 *Conclusion*: Enforce names as given by the last table.
