@@ -12,7 +12,7 @@ This language will be. Amazing.
 Okay okay, it won't be better than DSL's made for their specific domains, but generally,
 this language will be reliable, simple, practical, and avoid general 'wtf'. It needs
 to be hackable so it runs on machines ranging from low-powered microcontrollers, to
-high-end servers!
+high-end servers! The final solution to a high-performance, C-like, reliable language.
 
 ## Why another language?
 
