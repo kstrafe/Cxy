@@ -955,5 +955,20 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 				sml.In.read().toFloat();
 			}
 		)");
+		doValidation(R"(
+			grant Aa {
+				(:) kill;
+				var {32u a, b, c; 64s d, e, f;}
+				restricted static {Type g, h, i;}
+				static Type j, k,;
+				public var sml.String l,;
+			}
+
+			(:this) tell {
+				var type[this] now(:this);
+				var ptr Aa local = new[Aa];
+				(@local).kill();
+			}
+		)");
 	}
 }

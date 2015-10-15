@@ -155,8 +155,10 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::COLONIZED: return "COLONIZED";
 		case protocols::CrossTerminal::COLON_LIST: return "COLON_LIST";
 		case protocols::CrossTerminal::DATA_DECLARATION_LIST: return "DATA_DECLARATION_LIST";
+		case protocols::CrossTerminal::DATA_DECLARATION_LIST_GRANT: return "DATA_DECLARATION_LIST_GRANT";
 		case protocols::CrossTerminal::DATA_DECLARATION_STATEMENT: return "DATA_DECLARATION_STATEMENT";
 		case protocols::CrossTerminal::DATA_DECLARATION_TYPE: return "DATA_DECLARATION_TYPE";
+		case protocols::CrossTerminal::DATA_DECLARATION_TYPE_GRANT: return "DATA_DECLARATION_TYPE_GRANT";
 		case protocols::CrossTerminal::DATA_NAMES: return "DATA_NAMES";
 		case protocols::CrossTerminal::DATA_NAMES_LIST: return "DATA_NAMES_LIST";
 		case protocols::CrossTerminal::DEBUG_STATEMENT: return "DEBUG_STATEMENT";

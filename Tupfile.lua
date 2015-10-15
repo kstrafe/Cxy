@@ -8,5 +8,5 @@
 	'$(ROOT)/protocols/TokenType.hpp'
 })
 --]]
-tup.rule('$(ROOT)/temp/<objs>', 'g++ %<objs> -o %o', {'$(ROOT)/binaries/test.elf', '$(ROOT)/binaries/<test>'})
-tup.rule({'$(ROOT)/binaries/<test>'}, './%<test>')
+tup.rule('$(ROOT)/temp/<objs>', 'g++ -g %<objs> -o %o', {'$(ROOT)/binaries/cxyc.elf', '$(ROOT)/binaries/<bin>'})
+tup.rule({'$(ROOT)/binaries/<bin>'}, './%<bin> --test')

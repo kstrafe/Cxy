@@ -27,6 +27,7 @@ class AbstractSyntaxTreeGenerator
 {
 public:
 
+	bool buildTree(const std::string &code);
 	bool buildTree(char next_character);
 	bool endInput();
 	std::vector<std::string> getExpectedTokens();
