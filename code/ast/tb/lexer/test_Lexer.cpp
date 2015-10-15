@@ -105,12 +105,12 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
 	SECTION("Confirm the different alphanumeric identifies")
 	{
 		tul::lexer::Lexer lexing_engine;
-		for (char character : std::string("You 1s _cant just give 4u upYouGo!"))
+		for (char character : std::string("You 1s _cant just give 4u upYouGo! MO "))
 			lexing_engine.insertCharacter(/*character :*/ character);
 
 		std::vector<tul::protocols::Token> &token_stack = lexing_engine.getTokenStack();
 
-		REQUIRE(token_stack.size() == 7);
+		REQUIRE(token_stack.size() == 9);
 		SECTION("Check if the types are correct")
 		{
 			using namespace tul::protocols;
@@ -124,6 +124,8 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
 				caze(IDENTIFIER_PACKAGE); caze2(23);
 				caze(PRIMITIVE_UNSIGNED); caze2(26);
 				caze(IDENTIFIER_SUBROUTINE); caze2(34);
+				caze(SYMBOL_EXCLAMATION_MARK); caze2(35);
+				caze(IDENTIFIER_CONSTEXPR); caze2(38);
 			#undef caze2
 			#undef caze
 			REQUIRE(token_stack.size() == iterator);
