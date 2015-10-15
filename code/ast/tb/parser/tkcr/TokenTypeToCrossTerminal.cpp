@@ -76,7 +76,9 @@ protocols::CrossTerminal TokenTypeToCrossTerminal::convertToCrossTerminal(protoc
 		case protocols::TokenType::KEYWORD_WHEN: return protocols::CrossTerminal::KEYWORD_WHEN;
 		case protocols::TokenType::KEYWORD_WHILE: return protocols::CrossTerminal::KEYWORD_WHILE;
 		case protocols::TokenType::PRIMITIVE_SIGNED: return protocols::CrossTerminal::PRIMITIVE_SIGNED;
+		case protocols::TokenType::PRIMITIVE_SIGNED_WRAPPED: return protocols::CrossTerminal::PRIMITIVE_SIGNED_WRAPPED;
 		case protocols::TokenType::PRIMITIVE_UNSIGNED: return protocols::CrossTerminal::PRIMITIVE_UNSIGNED;
+		case protocols::TokenType::PRIMITIVE_UNSIGNED_WRAPPED: return protocols::CrossTerminal::PRIMITIVE_UNSIGNED_WRAPPED;
 		case protocols::TokenType::STRING: return protocols::CrossTerminal::STRING;
 		case protocols::TokenType::SYMBOL_AMPERSAND: return protocols::CrossTerminal::SYMBOL_AMPERSAND;
 		case protocols::TokenType::SYMBOL_AMPERSAND__AMPERSAND: return protocols::CrossTerminal::SYMBOL_AMPERSAND__AMPERSAND;

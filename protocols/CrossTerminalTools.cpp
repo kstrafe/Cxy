@@ -281,7 +281,9 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::OR_EXPRESSION: return "OR_EXPRESSION";
 		case protocols::CrossTerminal::PARAMETER_LIST: return "PARAMETER_LIST";
 		case protocols::CrossTerminal::PRIMITIVE_SIGNED: return "PRIMITIVE_SIGNED";
+		case protocols::CrossTerminal::PRIMITIVE_SIGNED_WRAPPED: return "PRIMITIVE_SIGNED_WRAPPED";
 		case protocols::CrossTerminal::PRIMITIVE_UNSIGNED: return "PRIMITIVE_UNSIGNED";
+		case protocols::CrossTerminal::PRIMITIVE_UNSIGNED_WRAPPED: return "PRIMITIVE_UNSIGNED_WRAPPED";
 		case protocols::CrossTerminal::RELATIONAL_EXPRESSION: return "RELATIONAL_EXPRESSION";
 		case protocols::CrossTerminal::RELATIONAL_OPERATOR: return "RELATIONAL_OPERATOR";
 		case protocols::CrossTerminal::RESOURCE: return "RESOURCE";

@@ -135,6 +135,8 @@ void Lexer::identifyTokenAfterStrippingUnderscores(protocols::Token &input_token
 
 	auto ends_with_lowercase = [&input_token]() -> bool {return std::islower(input_token.accompanying_lexeme.back());};
 
+	auto fromEnd = [&input_token](int n, char x) -> bool {return *(input_token.accompanying_lexeme.cend() - n) == x;};
+
 	auto is_class_identifier = [&]() -> bool {return begins_with_uppercase() && any_underscore() == false && ends_with_lowercase();};
 	auto is_constexpr_identifier = [&]() -> bool {return all_upper() && any_underscore() == false && any_lower() == false; };
 	auto is_enumeration_identifier = [&]() -> bool {return begins_with_uppercase() && any_underscore() == true && any_lower() == false; };
@@ -144,6 +146,8 @@ void Lexer::identifyTokenAfterStrippingUnderscores(protocols::Token &input_token
 	auto is_package_identifier = [&]() -> bool {return any_underscore() == false && any_upper() == false && any_lower() && begins_with_lowercase();};
 	auto is_primitive_signed = [&]() -> bool {return input_token.accompanying_lexeme.back() == 's' && std::all_of(input_token.accompanying_lexeme.cbegin(), input_token.accompanying_lexeme.cend() - 1, [](char in_character) -> bool {return std::isdigit(in_character);});};
 	auto is_primitive_unsigned = [&]() -> bool {return input_token.accompanying_lexeme.back() == 'u' && std::all_of(input_token.accompanying_lexeme.cbegin(), input_token.accompanying_lexeme.cend() - 1, [](char in_character) -> bool {return std::isdigit(in_character);});};
+	auto is_primitive_signed_wrapped = [&]() -> bool {return fromEnd(1, 'o') && fromEnd(2, 's') && std::all_of(input_token.accompanying_lexeme.cbegin(), input_token.accompanying_lexeme.cend() - 2, [](char in_character) -> bool {return std::isdigit(in_character);});};
+	auto is_primitive_unsigned_wrapped = [&]() -> bool {return fromEnd(1, 'o') && fromEnd(2, 'u') && std::all_of(input_token.accompanying_lexeme.cbegin(), input_token.accompanying_lexeme.cend() - 2, [](char in_character) -> bool {return std::isdigit(in_character);});};
 	auto is_variable_identifier = [&]() -> bool {return any_underscore() && any_upper() == false && any_lower();};
 
 	/*
@@ -174,6 +178,10 @@ void Lexer::identifyTokenAfterStrippingUnderscores(protocols::Token &input_token
 			input_token.token_type = TokenType::PRIMITIVE_SIGNED;
 		else if (is_primitive_unsigned())
 			input_token.token_type = TokenType::PRIMITIVE_UNSIGNED;
+		else if (is_primitive_signed_wrapped())
+			input_token.token_type = TokenType::PRIMITIVE_SIGNED_WRAPPED;
+		else if (is_primitive_unsigned_wrapped())
+			input_token.token_type = TokenType::PRIMITIVE_UNSIGNED_WRAPPED;
 		else if (is_variable_identifier())
 			input_token.token_type = TokenType::IDENTIFIER_VARIABLE;
 		else
