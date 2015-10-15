@@ -23,13 +23,14 @@ along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 #include <string>
 
 namespace tul { namespace protocols {
-		struct Token
-		{
-			int line_number;
-			int column_number;
-			EntryType entry_type;
-			TokenType token_type;
-			std::string accompanying_lexeme;
-		};
+
+	struct Token
+	{
+		int line_number;
+		int column_number;
+		EntryType entry_type;
+		TokenType token_type;
+		std::string accompanying_lexeme;
+	};
 
 }}

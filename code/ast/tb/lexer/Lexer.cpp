@@ -49,43 +49,38 @@ bool Lexer::insertCharacterAfterComments(char character)
 	protocols::Action action_to_perform = action_generator.computeAction(type_of_character);
 	{
 		std::size_t amount_of_new_tokens = token_generator.consumeCharacter(character, action_to_perform);
-		if (amount_of_new_tokens == std::numeric_limits<std::size_t>::max())
-		{
-			return false;
-		}
-		// A new token is ready to be identified
-		for
-		(
+		bool error = amount_of_new_tokens == std::numeric_limits<std::size_t>::max();
+		if (error) return false;
+		for (
 			std::size_t new_token = getTokenStack().size() - amount_of_new_tokens
 			; new_token < getTokenStack().size();
 			++new_token
-		)
-		{
+		) {
 			protocols::Token &curr_token = getTokenStack()[new_token];
 			identifyToken(curr_token);
 
 			{
-				protocols::Token potential_next {0, 0, protocols::EntryType::OTHER_SYMBOL, protocols::TokenType::UNIDENTIFIED, ""};
-				while
-				(
+				protocols::Token potential_next {
+					0, 0, protocols::EntryType::OTHER_SYMBOL,
+					protocols::TokenType::UNIDENTIFIED, ""};
+
+				while (
 					curr_token.token_type == protocols::TokenType::UNIDENTIFIED
 					&& curr_token.entry_type == protocols::EntryType::OTHER_SYMBOL
-				)
-				{
-					if (curr_token.accompanying_lexeme.empty())
-					{
+				) {
+					if (curr_token.accompanying_lexeme.empty()) {
 						return false;
 					}
 					// Take the last character off...
+					// Try and match with a shorter symbol.
+					// Really don't like this.
 					char last = curr_token.accompanying_lexeme.back();
 					curr_token.accompanying_lexeme.erase(curr_token.accompanying_lexeme.size() - 1);
 					potential_next.accompanying_lexeme.insert(potential_next.accompanying_lexeme.begin(), last);
 					identifyToken(curr_token);
 				}
 				if (potential_next.accompanying_lexeme.empty() == false)
-				{
 					getTokenStack().insert(getTokenStack().begin() + new_token + 1, potential_next);
-				}
 			}
 			getTokenStack()[new_token].column_number = position_counter.getCurrentColumnNumber();
 			getTokenStack()[new_token].line_number = position_counter.getCurrentLineNumber();
@@ -117,6 +112,7 @@ void Lexer::identifyToken(protocols::Token &input_token)
 {
 	using namespace protocols;
 	const std::string &a_lexeme = input_token.accompanying_lexeme;
+	if (a_lexeme.size() == 0) throw std::string("Lexer::identifyToken: Zero-sized");
 
 	std::size_t left_underscores = 0, right_underscores = 0;
 	for (char lex_char : a_lexeme)
@@ -147,53 +143,6 @@ void Lexer::identifyToken(protocols::Token &input_token)
 	if (has_trailing_underscores())
 		if (input_token.token_type == TokenType::IDENTIFIER_PACKAGE)
 			input_token.token_type = TokenType::IDENTIFIER_VARIABLE;
-
-	/*
-	switch (left_underscores)
-	{
-		default: break;
-		case 1:
-			switch (input_token.token_type)
-			{
-				case TokenType::IDENTIFIER_VARIABLE: input_token.token_type = TokenType::IDENTIFIER_VARIABLE_RESTRICTED;
-				case TokenType::IDENTIFIER_SUBROUTINE: input_token.token_type = TokenType::IDENTIFIER_SUBROUTINE_RESTRICTED;
-				default: break;
-			}
-		case 2:
-			switch (input_token.token_type)
-			{
-				case TokenType::IDENTIFIER_VARIABLE: input_token.token_type = TokenType::IDENTIFIER_VARIABLE_PRIVATE;
-				case TokenType::IDENTIFIER_SUBROUTINE: input_token.token_type = TokenType::IDENTIFIER_SUBROUTINE_PRIVATE;
-				default: break;
-			}
-	}
-	switch (right_underscores)
-	{
-		default: break;
-		case 1:
-			switch (input_token.token_type)
-			{
-				case TokenType::IDENTIFIER_VARIABLE: input_token.token_type = TokenType::IDENTIFIER_VARIABLE_GLOCAL;
-				case TokenType::IDENTIFIER_SUBROUTINE: input_token.token_type = TokenType::IDENTIFIER_SUBROUTINE_GLOCAL;
-				case TokenType::IDENTIFIER_VARIABLE_RESTRICTED: input_token.token_type = TokenType::IDENTIFIER_VARIABLE_RESTRICTED_GLOCAL;
-				case TokenType::IDENTIFIER_SUBROUTINE_RESTRICTED: input_token.token_type = TokenType::IDENTIFIER_SUBROUTINE_RESTRICTED_GLOCAL;
-				case TokenType::IDENTIFIER_VARIABLE_PRIVATE: input_token.token_type = TokenType::IDENTIFIER_VARIABLE_PRIVATE_GLOCAL;
-				case TokenType::IDENTIFIER_SUBROUTINE_PRIVATE: input_token.token_type = TokenType::IDENTIFIER_SUBROUTINE_PRIVATE_GLOCAL;
-				default: break;
-			}
-		case 2:
-			switch (input_token.token_type)
-			{
-				case TokenType::IDENTIFIER_VARIABLE: input_token.token_type = TokenType::IDENTIFIER_VARIABLE_GLOBAL;
-				case TokenType::IDENTIFIER_SUBROUTINE: input_token.token_type = TokenType::IDENTIFIER_SUBROUTINE_GLOBAL;
-				case TokenType::IDENTIFIER_VARIABLE_RESTRICTED: input_token.token_type = TokenType::IDENTIFIER_VARIABLE_RESTRICTED_GLOBAL;
-				case TokenType::IDENTIFIER_SUBROUTINE_RESTRICTED: input_token.token_type = TokenType::IDENTIFIER_SUBROUTINE_RESTRICTED_GLOBAL;
-				case TokenType::IDENTIFIER_VARIABLE_PRIVATE: input_token.token_type = TokenType::IDENTIFIER_VARIABLE_PRIVATE_GLOBAL;
-				case TokenType::IDENTIFIER_SUBROUTINE_PRIVATE: input_token.token_type = TokenType::IDENTIFIER_SUBROUTINE_PRIVATE_GLOBAL;
-				default: break;
-			}
-	}
-	*/
 }
 
 
@@ -325,15 +274,15 @@ protocols::EntryType Lexer::typify (char val)
 }
 
 
-std::size_t Lexer::getLine() const
-{
-	return position_counter.getCurrentLineNumber();
-}
-
-
 std::size_t Lexer::getColumn() const
 {
 	return position_counter.getCurrentColumnNumber();
+}
+
+
+std::size_t Lexer::getLine() const
+{
+	return position_counter.getCurrentLineNumber();
 }
 
 }}

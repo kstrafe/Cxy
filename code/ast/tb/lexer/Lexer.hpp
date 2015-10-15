@@ -50,11 +50,14 @@ public:
 	std::vector<protocols::Token> &getTokenStack();
 	const std::vector<protocols::Token> &getTokenStack() const;
 
-	std::size_t getLine() const;
 	std::size_t getColumn() const;
+	std::size_t getLine() const;
 
 private:
 
+	dependency::PositionCounter position_counter;
+	dependency::TokenGenerator token_generator;
+	filter::CommentFilter comment_filter;
 
 	bool insertCharacterAfterComments(char character);
 
@@ -80,9 +83,7 @@ private:
 	std::vector<protocols::Token> token_stack;
 
 	actgen::ActionGenerator<dependency::Mealy<std::size_t, protocols::Action, protocols::EntryType>> action_generator;
-	dependency::PositionCounter position_counter;
-	dependency::TokenGenerator token_generator;
-	filter::CommentFilter comment_filter;
+
 };
 
 }}
