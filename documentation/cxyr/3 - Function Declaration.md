@@ -143,6 +143,16 @@ grammar. So let's be pragmatic. My idea is to simply state the following:
 
 This looks clean, simple, and it works with all types.
 
+To continue on that, we can also add syntax that corresponds to the var-function extraction.
+Inside functions, we want to be able to transfer our return values directly into the
+called function.
+
+	(32u {x, y, z}:) g { /* */ }
+	f({a: x, b: y, c: z}: g())
+
+Should work, since it merely takes a list on the left and fills in the correct variables
+from on the right
+
 ===
 
 *Conclusion*: Function signatures are to be written in the following form.
