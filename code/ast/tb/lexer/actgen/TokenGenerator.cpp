@@ -98,7 +98,14 @@ std::size_t TokenGenerator::consumeCharacter(char character, protocols::Action a
 	return 0;
 }
 
+
 std::vector<protocols::Token> &TokenGenerator::getTokenStack()
+{
+	return token_stack;
+}
+
+
+const std::vector<protocols::Token> &TokenGenerator::getTokenStack() const
 {
 	return token_stack;
 }

@@ -51,9 +51,7 @@ namespace
 			ret_val = builder_object.endInput();
 		if (ret_val == false && print_error_if_exists)
 		{
-			std::cout << "last char: " << current << std::endl;
-			std::vector<std::string> expected = builder_object.getExpectedTokens();
-			std::cout << "\nError: expected:\n";
+			std::cout << builder_object.formulateError();
 		}
 		return ret_val;
 	}
@@ -536,7 +534,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 		REQUIRE(validate(R"(
 			(:) enter
 			{
-				statics if (3)
+				if [3]
 				{
 					a + b;
 				}
@@ -545,17 +543,17 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 		REQUIRE(validate(R"(
 			(:) enter
 			{
-				statics if (sys.Machine.memory_size)
+				if [sys.Machine.memory_size]
 				{
 					a + b;
 				}
-				statics else
+				else
 				{
-					statics if (sys.Machine.processor_type)
+					if [sys.Machine.processor_type]
 					{
 						a - b;
 					}
-					statics else
+					else
 					{
 						a * b;
 					}
@@ -577,7 +575,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 		REQUIRE(validate(R"(
 			(:) enter
 			{
-				statics if (sys.Sys.argv[1])
+				if [sys.Sys.argv[1]]
 				{
 					var 32u x = computeSomething(in: 100, sec: 100 * 3)~value;
 					sys.Out.printLn(val: x);
@@ -907,6 +905,57 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 					const 32u a = 1;
 					ref const 32u b = $a + 1;
 				}
+			}
+		)");
+		doValidation(R"(
+			(113u out : 4u in) factorial {
+				var type[out] out;
+				out = cast[type[out]](in);
+				--in;
+				while (in > 1)
+					out *= cast[type[out]](in);
+				return out: out;
+			}
+
+			(:) enter {
+				var String string = sml.In.read()~string;
+				var 4u converted = cast[4u](string.to32u());
+				sml.Out << "derp";
+				alias Math = sml.Math;
+				alias Out = sml.Out;
+
+				Out << Math.pi + Math.e / Math;  // makes no sense but if the operators exist, it must be accepted.
+			}
+		)");
+		doValidation(R"(
+			(:) enter {
+				a > b - c;
+				while (a > b) {
+					sml.Out << "Forever";
+				} else {
+					sml.Out << "Never";
+				}
+				@(a - 3) %= 3;
+				@(a - 3) %= $axxa + 3;
+			}
+		)");
+		doValidation(R"(
+			(:) enter {
+				var {32u a, b;}
+
+				function({a: a, b: b,}: g(),);
+				function({derp: herp, g: z,}: h() - j(), {a: a, b: b,}: g(),);
+			}
+		)");
+		doValidation(R"(
+			(: this, Type {x, z, y}) c
+			{ }
+			(:) enter {
+				var type[this] self;
+				var {32u a: a;} = f();
+				var {32u a: a; Type b: from_f;} = f();
+				var Type h = f({x: a,}: g())~header;
+				d(t: f({x: a,}: g())~header);
 			}
 		)");
 	}

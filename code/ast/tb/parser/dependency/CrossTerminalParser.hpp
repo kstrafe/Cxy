@@ -36,7 +36,7 @@ public:
 
 	CrossTerminalParser();
 
-	std::vector<protocols::CrossTerminal> calculateExpectedTokens(const protocols::CrossTerminal stack_top);
+	std::vector<protocols::CrossTerminal> calculateExpectedTokens(const protocols::CrossTerminal stack_top) const;
 
 	protocols::ParseReturn<protocols::CrossTerminal> parseSymbol(const protocols::CrossTerminal stack_top, const protocols::CrossTerminal &input_element);
 

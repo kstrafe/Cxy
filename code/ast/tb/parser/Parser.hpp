@@ -54,7 +54,7 @@ public:
 	bool parseSymbol(const protocols::Token &input_token);
 	std::unique_ptr<protocols::ConcreteSyntaxTree> getConcreteSyntaxTree();
 
-	std::vector<std::string> formulateExpectedTokens();
+	std::vector<std::string> formulateExpectedTokens() const;
 
 private:
 

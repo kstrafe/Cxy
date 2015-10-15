@@ -67,7 +67,7 @@ protocols::CrossTerminal TokenTypeToCrossTerminal::convertToCrossTerminal(protoc
 		case protocols::TokenType::KEYWORD_RESTRICTED: return protocols::CrossTerminal::KEYWORD_RESTRICTED;
 		case protocols::TokenType::KEYWORD_RETURN: return protocols::CrossTerminal::KEYWORD_RETURN;
 		case protocols::TokenType::KEYWORD_STATIC: return protocols::CrossTerminal::KEYWORD_STATIC;
-		case protocols::TokenType::KEYWORD_STATICS: return protocols::CrossTerminal::KEYWORD_STATICS;
+		case protocols::TokenType::KEYWORD_THIS: return protocols::CrossTerminal::KEYWORD_THIS;
 		case protocols::TokenType::KEYWORD_THROW: return protocols::CrossTerminal::KEYWORD_THROW;
 		case protocols::TokenType::KEYWORD_TRY: return protocols::CrossTerminal::KEYWORD_TRY;
 		case protocols::TokenType::KEYWORD_TYPE: return protocols::CrossTerminal::KEYWORD_TYPE;
@@ -79,11 +79,16 @@ protocols::CrossTerminal TokenTypeToCrossTerminal::convertToCrossTerminal(protoc
 		case protocols::TokenType::STRING: return protocols::CrossTerminal::STRING;
 		case protocols::TokenType::SYMBOL_AMPERSAND: return protocols::CrossTerminal::SYMBOL_AMPERSAND;
 		case protocols::TokenType::SYMBOL_AMPERSAND__AMPERSAND: return protocols::CrossTerminal::SYMBOL_AMPERSAND__AMPERSAND;
+		case protocols::TokenType::SYMBOL_AMPERSAND__AMPERSAND__EQUAL: return protocols::CrossTerminal::SYMBOL_AMPERSAND__AMPERSAND__EQUAL;
+		case protocols::TokenType::SYMBOL_AMPERSAND__EQUAL: return protocols::CrossTerminal::SYMBOL_AMPERSAND__EQUAL;
 		case protocols::TokenType::SYMBOL_APETAIL: return protocols::CrossTerminal::SYMBOL_APETAIL;
 		case protocols::TokenType::SYMBOL_APETAIL__APETAIL: return protocols::CrossTerminal::SYMBOL_APETAIL__APETAIL;
 		case protocols::TokenType::SYMBOL_BAR: return protocols::CrossTerminal::SYMBOL_BAR;
 		case protocols::TokenType::SYMBOL_BAR__BAR: return protocols::CrossTerminal::SYMBOL_BAR__BAR;
+		case protocols::TokenType::SYMBOL_BAR__BAR__EQUAL: return protocols::CrossTerminal::SYMBOL_BAR__BAR__EQUAL;
+		case protocols::TokenType::SYMBOL_BAR__EQUAL: return protocols::CrossTerminal::SYMBOL_BAR__EQUAL;
 		case protocols::TokenType::SYMBOL_CARET: return protocols::CrossTerminal::SYMBOL_CARET;
+		case protocols::TokenType::SYMBOL_CARET__EQUAL: return protocols::CrossTerminal::SYMBOL_CARET__EQUAL;
 		case protocols::TokenType::SYMBOL_COLON__PRUNE: return protocols::CrossTerminal::SYMBOL_COLON__PRUNE;
 		case protocols::TokenType::SYMBOL_COMMA__PRUNE: return protocols::CrossTerminal::SYMBOL_COMMA__PRUNE;
 		case protocols::TokenType::SYMBOL_DOLLAR: return protocols::CrossTerminal::SYMBOL_DOLLAR;

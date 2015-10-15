@@ -36,7 +36,13 @@ public:
 
 	std::unique_ptr<protocols::ConcreteSyntaxTree> getConcreteSyntaxTree();
 
-	std::vector<std::string> getExpectedTokens();
+	std::vector<std::string> getExpectedTokens() const;
+	std::string getExpectedTokensGrammar() const;
+	std::size_t getLine() const;
+	std::size_t getColumn() const;
+	std::string getCurrentLexeme() const;
+
+	std::string formulateError() const;
 
 private:
 

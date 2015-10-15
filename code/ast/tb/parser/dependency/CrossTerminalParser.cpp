@@ -37,7 +37,7 @@ CrossTerminalParser::CrossTerminalParser()
 	#undef cT
 }
 
-std::vector<protocols::CrossTerminal> CrossTerminalParser::calculateExpectedTokens(const protocols::CrossTerminal stack_top)
+std::vector<protocols::CrossTerminal> CrossTerminalParser::calculateExpectedTokens(const protocols::CrossTerminal stack_top) const
 {
 	return ll_parser.getTransitionTokens(stack_top);
 }
