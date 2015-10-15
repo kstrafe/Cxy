@@ -21,6 +21,25 @@ along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace tul { namespace tb {
 
+bool TreeBuilder::buildTree(const std::string &string, bool throw_error)
+{
+	bool ret_val = true;
+	char current = '\0';
+	for (auto chara : string)
+	{
+		if (buildTree(chara) == false)
+		{
+			ret_val = false;
+			break;
+		}
+		current = chara;
+	}
+	if (ret_val) ret_val = endInput();
+	else if (throw_error) throw formulateError();
+	else return false;
+}
+
+
 bool TreeBuilder::buildTree(char character)
 {
 	if (lexer_object.insertCharacter(character))

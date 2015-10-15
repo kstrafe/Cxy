@@ -15,11 +15,12 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 */
-#define CATCH_CONFIG_MAIN // Only in one cpp file
+#define CATCH_CONFIG_RUNNER  // Only in one cpp file
 #include "libraries/catch.hpp"
 
 
-TEST_CASE("Test system operational", "[test-system]")
+int main(int argc, char *argv[])
 {
-	REQUIRE(true);
+	int result = Catch::Session().run(argc, argv);
+	return result;
 }

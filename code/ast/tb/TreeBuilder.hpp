@@ -30,6 +30,7 @@ class TreeBuilder
 {
 public:
 
+	bool buildTree(const std::string &string, bool throw_error = true);
 	bool buildTree(char character);
 
 	bool endInput();

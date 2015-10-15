@@ -32,28 +32,23 @@ along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 ////////////////////////////////////////////////////////////////////////////////
 namespace
 {
-	bool validate(const std::string &string, bool print_error_if_exists = true)
+	// All this does is feed the characters.
+	bool validate(const std::string &string, bool throw_error = true)
 	{
 		using namespace tul::tb;
-		TreeBuilder builder_object;
-		bool ret_val = true;
-		char current = '\0';
-		for (auto input_character : string)
+		TreeBuilder bdr;
+		try
 		{
-			if (builder_object.buildTree(input_character) == false)
-			{
-				ret_val = false;
-				break;
-			}
-			current = input_character;
+			if (bdr.buildTree(string, throw_error))
+				return true;
+			return false;
 		}
-		if (ret_val)
-			ret_val = builder_object.endInput();
-		if (ret_val == false && print_error_if_exists)
+		catch (const std::string &string)
 		{
-			std::cout << builder_object.formulateError();
+			std::cout << string << std::endl;
+			return false;
 		}
-		return ret_val;
+		return false;
 	}
 }
 ////////////////////////////////////////////////////////////////////////////////
@@ -66,37 +61,6 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 {
 	using namespace tul::tb;
 
-	SECTION("Attempting to validate a small program")
-	{
-		// Create an instance and feed characters into it.
-		// Every time a character is fed the return value
-		// tells you if the input is still valid.
-		TreeBuilder builder_object;
-		std::string input_string = "var {ClassName variable_name; String identifier_name; } ";
-		// Note the trailing space in the string. This causes the TreeBuilder to be able
-		// To turn ; into a token, and thereby finish the input. If we left it out
-		// The ; would merely be in a "current_working" state. Nothing would be invalidated,
-		// It's just that we would not see it in the tree.
-		for (auto input_character : input_string)
-		{
-			// Note that each character is validated, and aded to the tree if it completes
-			// a token. Data structure:
-			/*
-				string: current building token. (characters are appended)
-				TokenTree
-				| --> TokenTree
-							| --> TokenTree
-				| --> TokenTree --> TokenTree
-
-				The tokentree is a tree of tokens. Once the current building token
-				is finished, it's appended to the tree by the internal parser.
-			*/
-			REQUIRE(builder_object.buildTree(input_character));
-		}
-
-		// Eventually, we may want to get that tree
-		REQUIRE(builder_object.getConcreteSyntaxTree() != nullptr);
-	}
 	////////////////////////////////////////////////////////////////////////////////
 	SECTION("Parse the start of a module: declarations. Some permutations.")
 	{
