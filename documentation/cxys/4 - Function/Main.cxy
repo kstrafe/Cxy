@@ -2,11 +2,11 @@
 {
 	var float x = in;
 	var float y = x - x*x*x/6 + x*x*x*x*x/120 - x*x*x*x*x*x*x/5040;
-	return y;
+	return :y;
 }
 
 (:) enter
 {
 	var float x = sml.In.read().toFloat();
-	sml.Out << sin(x);
+	sml.Out << sin(:x);
 }
