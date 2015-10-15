@@ -80,6 +80,7 @@ std::string TreeBuilder::getExpectedTokensGrammar() const
 		{
 			result += "\t" + tokens[i] + ",\n";
 		}
+		result.erase(result.end() - 1);
 		return result + "\n]";
 	}
 	return result;
@@ -114,7 +115,7 @@ std::string TreeBuilder::formulateError() const
 	error
 		+= std::to_string(getLine())
 		+ ", column " + std::to_string(getColumn())
-		+ std::string("\nExpected `")
+		+ std::string("\nExpected\n`")
 		+ getExpectedTokensGrammar()
 		+ "'\nBut got `"
 		+ getCurrentLexeme()

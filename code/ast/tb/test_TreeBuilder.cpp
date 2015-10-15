@@ -958,5 +958,38 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 				d(t: f({x: a,}: g())~header);
 			}
 		)");
+		doValidation(R"(
+			(float out : float in) sin
+			{
+				var float x = in;
+				var float y = x - x*x*x/6 + x*x*x*x*x/120 - x*x*x*x*x*x*x/5040;
+				return :y;
+			}
+
+			(:) enter
+			{
+				var float x = sml.In.read().toFloat();
+				var float x = sml.In.read()~out.toFloat();
+				sml.Out << sin(:x);
+			}
+		)");
+		doValidation(R"(
+			(64u choose : 32u {any, name, here} : pure) sum
+			{
+				return choose: any + name + here;
+			}
+
+			(float out : float in) sin
+			{
+				var float x = in;
+				var float y = x - x*x*x/6 + x*x*x*x*x/120 - x*x*x*x*x*x*x/5040;
+				return :y;
+			}
+
+			(:) enter
+			{
+				sml.In.read().toFloat();
+			}
+		)");
 	}
 }
