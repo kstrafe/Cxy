@@ -35,7 +35,7 @@ public:
 
 private:
 
-	static constexpr const std::size_t CYCLE_BUFFER_SIZE = 2;
+	static constexpr const std::size_t CYCLE_BUFFER_SIZE = 1;
 	utilities::RingNumber<uint8_t> cycle_buffer;
 	char cycle_array[CYCLE_BUFFER_SIZE];
 

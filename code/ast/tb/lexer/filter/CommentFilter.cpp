@@ -15,22 +15,24 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 */
-#pragma once
+#include "CommentFilter.hpp"
 
-#include "EntryType.hpp"
-#include "TokenType.hpp"
+namespace tul { namespace filter {
 
-#include <string>
+void CommentFilter::push(char symbol)
+{
+	comment_buffer.putCharInto(symbol);
+	symbols_waiting = comment_ignorer.putOnStack(symbol);
+}
 
-namespace tul { namespace protocols {
+bool CommentFilter::available() const
+{
+	return symbols_waiting > 0;
+}
 
-	struct Token
-	{
-		int line_number;
-		int column_number;
-		EntryType entry_type;
-		TokenType token_type;
-		std::string accompanying_lexeme;
-	};
+char CommentFilter::pop()
+{
+	return comment_buffer.getCharFrom(symbols_waiting--);
+}
 
 }}

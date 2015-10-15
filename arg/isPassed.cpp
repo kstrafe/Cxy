@@ -19,22 +19,28 @@ along with TTL.  If not, see <http://www.gnu.org/licenses/>.
 
 
 // Headers
-#include "libraries/arg/Argument.hpp"
+#include "arg/Argument.hpp"
 
 
 namespace ttl
 {
 
 	////////////////////////////////////////////////////////////
-	const std::string &Argument::getOperand(const std::size_t id) const
+	bool Argument::isPassed(const std::string &argument) const
 	{
-		return m_operands[id];
+		std::string tmp = argument;
+		tmp.insert(0, "--");
+
+		return (m_flags_and_parameters.find(tmp) != m_flags_and_parameters.end());
 	}
 
 	////////////////////////////////////////////////////////////
-	std::string &Argument::getOperand(const std::size_t id)
+	bool Argument::isPassed(const char argument) const
 	{
-		return m_operands[id];
+		std::string tmp("-");
+		tmp.push_back(argument);
+
+		return (m_flags_and_parameters.find(tmp) != m_flags_and_parameters.end());
 	}
 
 } // Namespace ttl

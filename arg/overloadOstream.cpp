@@ -21,7 +21,7 @@ along with schdl.  If not, see <http://www.gnu.org/licenses/>.
 // Headers
 #include <ostream>
 #include <iomanip>
-#include "libraries/arg/Argument.hpp"
+#include "arg/Argument.hpp"
 
 
 namespace ttl

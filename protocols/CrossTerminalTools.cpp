@@ -189,6 +189,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::GROUPER_RIGHT_PARENTHESIS: return "GROUPER_RIGHT_PARENTHESIS";
 		case protocols::CrossTerminal::HACK_STATEMENT: return "HACK_STATEMENT";
 		case protocols::CrossTerminal::IDENTIFIER_CLASS: return "IDENTIFIER_CLASS";
+		case protocols::CrossTerminal::IDENTIFIER_CONSTEXPR: return "IDENTIFIER_CONSTEXPR";
 		case protocols::CrossTerminal::IDENTIFIER_ENUMERATION: return "IDENTIFIER_ENUMERATION";
 		case protocols::CrossTerminal::IDENTIFIER_PACKAGE: return "IDENTIFIER_PACKAGE";
 		case protocols::CrossTerminal::IDENTIFIER_SUBROUTINE: return "IDENTIFIER_SUBROUTINE";
@@ -234,6 +235,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::LABEL_STATEMENT: return "LABEL_STATEMENT";
 		case protocols::CrossTerminal::MEMBER_DEFINITION: return "MEMBER_DEFINITION";
 		case protocols::CrossTerminal::MEMBER_EXPRESSION: return "MEMBER_EXPRESSION";
+		case protocols::CrossTerminal::METHOD_DECL_OR_DEF: return "METHOD_DECL_OR_DEF";
 		case protocols::CrossTerminal::MULTIPLICATIVE_EXPRESSION: return "MULTIPLICATIVE_EXPRESSION";
 		case protocols::CrossTerminal::NAMEKIND: return "NAMEKIND";
 		case protocols::CrossTerminal::NAMES_SYMBOL: return "NAMES_SYMBOL";
@@ -261,7 +263,6 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::OPTIONAL_DATA_DECLARATION_AFTER_COMMA: return "OPTIONAL_DATA_DECLARATION_AFTER_COMMA";
 		case protocols::CrossTerminal::OPTIONAL_DATA_NAMES_LIST: return "OPTIONAL_DATA_NAMES_LIST";
 		case protocols::CrossTerminal::OPTIONAL_DATA_NAMES_LIST_AFTER_COMMA: return "OPTIONAL_DATA_NAMES_LIST_AFTER_COMMA";
-		case protocols::CrossTerminal::OPTIONAL_DATA_NAME_LIST: return "OPTIONAL_DATA_NAME_LIST";
 		case protocols::CrossTerminal::OPTIONAL_EQUALITY_EXPRESSION: return "OPTIONAL_EQUALITY_EXPRESSION";
 		case protocols::CrossTerminal::OPTIONAL_EXPRESSION: return "OPTIONAL_EXPRESSION";
 		case protocols::CrossTerminal::OPTIONAL_EXTRACTOR_EXPRESSION: return "OPTIONAL_EXTRACTOR_EXPRESSION";

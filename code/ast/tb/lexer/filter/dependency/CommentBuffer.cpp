@@ -17,7 +17,7 @@ along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "CommentBuffer.hpp"
 
-#include <cassert>
+#include <string>
 
 
 namespace tul { namespace dependency {
@@ -40,7 +40,7 @@ char CommentBuffer::getCharFrom(uint8_t location)
 	{
 		case 1: return cycle_array[cycle_buffer.getNumber()];
 		case 2: return cycle_array[cycle_buffer.getPrevious()];
-		case 0: default: assert(false);
+		case 0: default: throw std::string(__FILE__) + ":" + std::to_string(__LINE__) + ": location given is out of bounds.";
 	}
 }
 

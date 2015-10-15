@@ -18,10 +18,9 @@ along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 #include "actgen/ActionGenerator.hpp"
 #include "actgen/TokenGenerator.hpp"
-#include "dependency/CommentBuffer.hpp"
-#include "dependency/CommentIgnorer.hpp"
 #include "dependency/Mealy.hpp"
 #include "dependency/PositionCounter.hpp"
+#include "filter/CommentFilter.hpp"
 #include "protocols/EntryType.hpp"
 #include "protocols/Token.hpp"
 
@@ -51,10 +50,14 @@ public:
 	std::vector<protocols::Token> &getTokenStack();
 	const std::vector<protocols::Token> &getTokenStack() const;
 
-	std::size_t getLine() const;
 	std::size_t getColumn() const;
+	std::size_t getLine() const;
 
 private:
+
+	dependency::PositionCounter position_counter;
+	dependency::TokenGenerator token_generator;
+	filter::CommentFilter comment_filter;
 
 	bool insertCharacterAfterComments(char character);
 
@@ -80,10 +83,7 @@ private:
 	std::vector<protocols::Token> token_stack;
 
 	actgen::ActionGenerator<dependency::Mealy<std::size_t, protocols::Action, protocols::EntryType>> action_generator;
-	dependency::PositionCounter position_counter;
-	dependency::TokenGenerator token_generator;
-	dependency::CommentIgnorer comment_ignorer;
-	dependency::CommentBuffer comment_buffer;
+
 };
 
 }}

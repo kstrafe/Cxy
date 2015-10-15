@@ -969,6 +969,16 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 				var ptr Aa local = new[Aa];
 				(@local).kill();
 			}
+			(:) %=;
+			(:) %=
+			{
+				cool <<=-ber;
+				cool >>= ber;
+				cool += ber;
+			}
+		)");
+		doValidation(R"(
+			var 32u AAA = 1;
 		)");
 	}
 }

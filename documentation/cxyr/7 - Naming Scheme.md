@@ -22,13 +22,18 @@ The issue with this is that it just looks ugly. Trailing underscores are not nic
 have peppered all over.
 
 package: [a-z]+                                 // sml, math, gl,..
-variable: [a-z][0-9a-z]+                        // name, numb01, x1y1, x2y1,..
+variable: `[a-z][0-9a-z]*`                        // name, numb01, x1y1, x2y1,..
 function: [a-z][0-9a-zA-Z]+[0-9a-z]             // doSomething, sin, enter, createNewUnit, kill5
 class: [A-Z][0-9a-zA-Z]+[a-z]                   // Name, MyClass09, Queue, Vector2mapNice
 enum: `[A-Z]+_[A-Z_]+`                          // `ENUM_NUM, IS_DAMAGED, CONTROL_THE_LEAK`
-constant: [A-Z]+                                // THIS, IS, A, CONSTANT
+constantexpr: [A-Z]+                                // THIS, IS, A, CONSTANTEXPRESSION
 
 The nice thing is that the above still allows slick variable names, but separates
 classes, constants, and enums from them.
+
+The constant expressions need to be worked out. Their exact semantics are still unclear.
+As of right now, CONSTEXPR variables are const and are deducible by the compiler.
+Later on, the lexer can be changed to be a pure table-based lexer... that's a fun
+little project for later though.
 
 *Conclusion*: Enforce names as given by the last table.

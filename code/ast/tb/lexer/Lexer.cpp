@@ -31,13 +31,14 @@ namespace tul { namespace lexer {
 
 bool Lexer::insertCharacter(char character)
 {
-	comment_buffer.putCharInto(character);
-	uint8_t take_characters = comment_ignorer.putOnStack(character);
-	for (; take_characters > 0; --take_characters)
-		if (insertCharacterAfterComments(comment_buffer.getCharFrom(take_characters)))
-			continue;
-		else
+	comment_filter.push(character);
+	while (comment_filter.available())
+	{
+		char top = comment_filter.pop();
+		if (! insertCharacterAfterComments(top))
 			return false;
+	}
+	position_counter.countCharacter(character);
 	return true;
 }
 
@@ -48,49 +49,43 @@ bool Lexer::insertCharacterAfterComments(char character)
 	protocols::Action action_to_perform = action_generator.computeAction(type_of_character);
 	{
 		std::size_t amount_of_new_tokens = token_generator.consumeCharacter(character, action_to_perform);
-		if (amount_of_new_tokens == std::numeric_limits<std::size_t>::max())
-		{
-			return false;
-		}
-		// A new token is ready to be identified
-		for
-		(
+		bool error = amount_of_new_tokens == std::numeric_limits<std::size_t>::max();
+		if (error) return false;
+		for (
 			std::size_t new_token = getTokenStack().size() - amount_of_new_tokens
 			; new_token < getTokenStack().size();
 			++new_token
-		)
-		{
+		) {
 			protocols::Token &curr_token = getTokenStack()[new_token];
 			identifyToken(curr_token);
 
 			{
-				protocols::Token potential_next {0, 0, protocols::EntryType::OTHER_SYMBOL, protocols::TokenType::UNIDENTIFIED, ""};
-				while
-				(
+				protocols::Token potential_next {
+					0, 0, protocols::EntryType::OTHER_SYMBOL,
+					protocols::TokenType::UNIDENTIFIED, ""};
+
+				while (
 					curr_token.token_type == protocols::TokenType::UNIDENTIFIED
 					&& curr_token.entry_type == protocols::EntryType::OTHER_SYMBOL
-				)
-				{
-					if (curr_token.accompanying_lexeme.empty())
-					{
+				) {
+					if (curr_token.accompanying_lexeme.empty()) {
 						return false;
 					}
 					// Take the last character off...
+					// Try and match with a shorter symbol.
+					// Really don't like this.
 					char last = curr_token.accompanying_lexeme.back();
 					curr_token.accompanying_lexeme.erase(curr_token.accompanying_lexeme.size() - 1);
 					potential_next.accompanying_lexeme.insert(potential_next.accompanying_lexeme.begin(), last);
 					identifyToken(curr_token);
 				}
 				if (potential_next.accompanying_lexeme.empty() == false)
-				{
 					getTokenStack().insert(getTokenStack().begin() + new_token + 1, potential_next);
-				}
 			}
 			getTokenStack()[new_token].column_number = position_counter.getCurrentColumnNumber();
 			getTokenStack()[new_token].line_number = position_counter.getCurrentLineNumber();
 		}
 	}
-	position_counter.countCharacter(character);
 	return true;
 }
 
@@ -115,85 +110,10 @@ protocols::TokenType Lexer::getKeyword(const std::string &test_lexeme) const
 
 void Lexer::identifyToken(protocols::Token &input_token)
 {
-	using namespace protocols;
-	const std::string &a_lexeme = input_token.accompanying_lexeme;
+	if (input_token.accompanying_lexeme.size() == 0)
+		throw std::string("Lexer::identifyToken: Zero-sized");
 
-	std::size_t left_underscores = 0, right_underscores = 0;
-	for (char lex_char : a_lexeme)
-		if (lex_char == '_')
-			++left_underscores;
-		else
-			break;
-
-	if (a_lexeme.size() > 0)
-		for (std::size_t back_it = a_lexeme.size() - 1; back_it > 0; --back_it)
-			if (a_lexeme.at(back_it) == '_')
-				++right_underscores;
-			else
-				break;
-
-	auto has_trailing_underscores = [&]() -> bool { return left_underscores + right_underscores > 0; };
-	// Ensure there are at least +1 characters, the string can NOT be ___, or ___, or _, or _, _a_ is allowed
-	assert(a_lexeme.size() > left_underscores + right_underscores);
-	// Strip the trailing underscores
-	std::string substitution_lexeme = a_lexeme.substr(left_underscores, a_lexeme.size() - right_underscores - left_underscores);
-	protocols::Token dummy_token = input_token;
-	dummy_token.accompanying_lexeme = substitution_lexeme;
-	const std::string backup_string = a_lexeme;
-	identifyTokenAfterStrippingUnderscores(dummy_token);
-	input_token = dummy_token;
-	input_token.accompanying_lexeme = backup_string;
-
-	if (has_trailing_underscores())
-		if (input_token.token_type == TokenType::IDENTIFIER_PACKAGE)
-			input_token.token_type = TokenType::IDENTIFIER_VARIABLE;
-
-	/*
-	switch (left_underscores)
-	{
-		default: break;
-		case 1:
-			switch (input_token.token_type)
-			{
-				case TokenType::IDENTIFIER_VARIABLE: input_token.token_type = TokenType::IDENTIFIER_VARIABLE_RESTRICTED;
-				case TokenType::IDENTIFIER_SUBROUTINE: input_token.token_type = TokenType::IDENTIFIER_SUBROUTINE_RESTRICTED;
-				default: break;
-			}
-		case 2:
-			switch (input_token.token_type)
-			{
-				case TokenType::IDENTIFIER_VARIABLE: input_token.token_type = TokenType::IDENTIFIER_VARIABLE_PRIVATE;
-				case TokenType::IDENTIFIER_SUBROUTINE: input_token.token_type = TokenType::IDENTIFIER_SUBROUTINE_PRIVATE;
-				default: break;
-			}
-	}
-	switch (right_underscores)
-	{
-		default: break;
-		case 1:
-			switch (input_token.token_type)
-			{
-				case TokenType::IDENTIFIER_VARIABLE: input_token.token_type = TokenType::IDENTIFIER_VARIABLE_GLOCAL;
-				case TokenType::IDENTIFIER_SUBROUTINE: input_token.token_type = TokenType::IDENTIFIER_SUBROUTINE_GLOCAL;
-				case TokenType::IDENTIFIER_VARIABLE_RESTRICTED: input_token.token_type = TokenType::IDENTIFIER_VARIABLE_RESTRICTED_GLOCAL;
-				case TokenType::IDENTIFIER_SUBROUTINE_RESTRICTED: input_token.token_type = TokenType::IDENTIFIER_SUBROUTINE_RESTRICTED_GLOCAL;
-				case TokenType::IDENTIFIER_VARIABLE_PRIVATE: input_token.token_type = TokenType::IDENTIFIER_VARIABLE_PRIVATE_GLOCAL;
-				case TokenType::IDENTIFIER_SUBROUTINE_PRIVATE: input_token.token_type = TokenType::IDENTIFIER_SUBROUTINE_PRIVATE_GLOCAL;
-				default: break;
-			}
-		case 2:
-			switch (input_token.token_type)
-			{
-				case TokenType::IDENTIFIER_VARIABLE: input_token.token_type = TokenType::IDENTIFIER_VARIABLE_GLOBAL;
-				case TokenType::IDENTIFIER_SUBROUTINE: input_token.token_type = TokenType::IDENTIFIER_SUBROUTINE_GLOBAL;
-				case TokenType::IDENTIFIER_VARIABLE_RESTRICTED: input_token.token_type = TokenType::IDENTIFIER_VARIABLE_RESTRICTED_GLOBAL;
-				case TokenType::IDENTIFIER_SUBROUTINE_RESTRICTED: input_token.token_type = TokenType::IDENTIFIER_SUBROUTINE_RESTRICTED_GLOBAL;
-				case TokenType::IDENTIFIER_VARIABLE_PRIVATE: input_token.token_type = TokenType::IDENTIFIER_VARIABLE_PRIVATE_GLOBAL;
-				case TokenType::IDENTIFIER_SUBROUTINE_PRIVATE: input_token.token_type = TokenType::IDENTIFIER_SUBROUTINE_PRIVATE_GLOBAL;
-				default: break;
-			}
-	}
-	*/
+	identifyTokenAfterStrippingUnderscores(input_token);
 }
 
 
@@ -216,6 +136,7 @@ void Lexer::identifyTokenAfterStrippingUnderscores(protocols::Token &input_token
 	auto ends_with_lowercase = [&input_token]() -> bool {return std::islower(input_token.accompanying_lexeme.back());};
 
 	auto is_class_identifier = [&]() -> bool {return begins_with_uppercase() && any_underscore() == false && ends_with_lowercase();};
+	auto is_constexpr_identifier = [&]() -> bool {return all_upper() && any_underscore() == false && any_lower() == false; };
 	auto is_enumeration_identifier = [&]() -> bool {return begins_with_uppercase() && any_underscore() == true && any_lower() == false; };
 	auto is_function_identifier = [&]() -> bool {return begins_with_lowercase() && any_underscore() == false && ends_with_lowercase() && any_upper();};
 	auto is_keyword = [&]() -> bool {return getKeyword(input_token.accompanying_lexeme) != TokenType::UNIDENTIFIED;};
@@ -235,46 +156,28 @@ void Lexer::identifyTokenAfterStrippingUnderscores(protocols::Token &input_token
 	if (input_token.entry_type == EntryType::ALPHA_DIGIT_OR_UNDERSCORE)
 	{
 		if (is_class_identifier())
-		{
 			 input_token.token_type = TokenType::IDENTIFIER_CLASS;
-		}
 		else if (is_enumeration_identifier())
-		{
 			input_token.token_type = TokenType::IDENTIFIER_ENUMERATION;
-		}
+		else if (is_constexpr_identifier())
+			input_token.token_type = TokenType::IDENTIFIER_CONSTEXPR;
 		else if (is_function_identifier())
-		{
 			input_token.token_type = TokenType::IDENTIFIER_SUBROUTINE;
-		}
 		else if (is_number_literal())
-		{
 			input_token.token_type = TokenType::INTEGER_LITERAL;
-		}
 		else if (is_keyword())
-		{
 			input_token.token_type = getKeyword(input_token.accompanying_lexeme);
-		}
 		// Fold this with identifier variable.
 		else if (is_package_identifier())
-		{
 			input_token.token_type = TokenType::IDENTIFIER_PACKAGE;
-		}
 		else if (is_primitive_signed())
-		{
 			input_token.token_type = TokenType::PRIMITIVE_SIGNED;
-		}
 		else if (is_primitive_unsigned())
-		{
 			input_token.token_type = TokenType::PRIMITIVE_UNSIGNED;
-		}
 		else if (is_variable_identifier())
-		{
 			input_token.token_type = TokenType::IDENTIFIER_VARIABLE;
-		}
 		else
-		{
 			input_token.token_type = TokenType::UNIDENTIFIED;
-		}
 	}
 	else if (input_token.entry_type == EntryType::GROUPING_SYMBOL)
 	{
@@ -292,17 +195,11 @@ void Lexer::identifyTokenAfterStrippingUnderscores(protocols::Token &input_token
 		#undef caze
 	}
 	else if (input_token.entry_type == EntryType::QUOTE_SYMBOL)
-	{
 		input_token.token_type = TokenType::STRING;
-	}
 	else if (input_token.entry_type == EntryType::OTHER_SYMBOL)
-	{
 		input_token.token_type = dependency::SymbolMatcher::getSymbol(input_token.accompanying_lexeme);
-	}
 	else
-	{
 		input_token.token_type = TokenType::UNIDENTIFIED;
-	}
 }
 
 
@@ -325,15 +222,15 @@ protocols::EntryType Lexer::typify (char val)
 }
 
 
-std::size_t Lexer::getLine() const
-{
-	return position_counter.getCurrentLineNumber();
-}
-
-
 std::size_t Lexer::getColumn() const
 {
 	return position_counter.getCurrentColumnNumber();
+}
+
+
+std::size_t Lexer::getLine() const
+{
+	return position_counter.getCurrentLineNumber();
 }
 
 }}
