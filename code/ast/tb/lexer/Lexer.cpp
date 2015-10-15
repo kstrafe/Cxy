@@ -110,6 +110,7 @@ protocols::TokenType Lexer::getKeyword(const std::string &test_lexeme) const
 
 void Lexer::identifyToken(protocols::Token &input_token)
 {
+	using namespace protocols;
 	if (input_token.accompanying_lexeme.size() == 0)
 		throw std::string("Lexer::identifyToken: Zero-sized");
 
