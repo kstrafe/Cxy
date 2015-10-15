@@ -8,8 +8,11 @@
 The cleanest. The nicest. The fastest. The most consistent. Language. Ever.
 We want raw control with assembly, and ease of coding with scripting.
 We want EXTREME power... with EXTREME templates.
-This language will be. The best. When it is done, all other languages will disappear.
-It is: The Final Programming Language
+This language will be. Amazing.
+Okay okay, it won't be better than DSL's made for their specific domains, but generally,
+this language will be reliable, simple, practical, and avoid general 'wtf'. It needs
+to be hackable so it runs on machines ranging from low-powered microcontrollers, to
+high-end servers!
 
 ## Why another language?
 
