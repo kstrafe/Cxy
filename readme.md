@@ -3,6 +3,9 @@
 
 [![Join the chat at https://gitter.im/BourgondAries/Unnamed-Language](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/BourgondAries/Unnamed-Language?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
+# Tutorial #
+The tutorials are located in documentation/cxys/.
+
 # The Best. Language. Ever.
 >We want to make _the best_ language, ever.
 The cleanest. The nicest. The fastest. The most consistent. Language. Ever.
