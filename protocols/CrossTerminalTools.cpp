@@ -234,6 +234,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::LABEL_STATEMENT: return "LABEL_STATEMENT";
 		case protocols::CrossTerminal::MEMBER_DEFINITION: return "MEMBER_DEFINITION";
 		case protocols::CrossTerminal::MEMBER_EXPRESSION: return "MEMBER_EXPRESSION";
+		case protocols::CrossTerminal::METHOD_DECL_OR_DEF: return "METHOD_DECL_OR_DEF";
 		case protocols::CrossTerminal::MULTIPLICATIVE_EXPRESSION: return "MULTIPLICATIVE_EXPRESSION";
 		case protocols::CrossTerminal::NAMEKIND: return "NAMEKIND";
 		case protocols::CrossTerminal::NAMES_SYMBOL: return "NAMES_SYMBOL";
