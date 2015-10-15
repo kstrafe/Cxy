@@ -49,6 +49,7 @@ int main(int argc, char *argv[])
 			}
 		} catch (std::string string) {
 			std::cout << string << std::endl;
+			return 1;
 		}
 	}
 	return result;
