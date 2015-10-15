@@ -24,6 +24,13 @@ along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace tul { namespace ast {
 
+	bool AbstractSyntaxTreeGenerator::buildTree(const std::string &code)
+	{
+		if (tree_builder.buildTree(code))
+		{ return true; }
+		return false;
+	}
+
 	bool AbstractSyntaxTreeGenerator::buildTree(char next_character)
 	{
 		return tree_builder.buildTree(next_character);

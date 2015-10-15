@@ -125,11 +125,12 @@ void Lexer::identifyToken(protocols::Token &input_token)
 		else
 			break;
 
-	for (std::size_t back_it = a_lexeme.size() - 1; back_it > 0; --back_it)
-		if (a_lexeme.at(back_it) == '_')
-			++right_underscores;
-		else
-			break;
+	if (a_lexeme.size() > 0)
+		for (std::size_t back_it = a_lexeme.size() - 1; back_it > 0; --back_it)
+			if (a_lexeme.at(back_it) == '_')
+				++right_underscores;
+			else
+				break;
 
 	auto has_trailing_underscores = [&]() -> bool { return left_underscores + right_underscores > 0; };
 	// Ensure there are at least +1 characters, the string can NOT be ___, or ___, or _, or _, _a_ is allowed
