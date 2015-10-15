@@ -189,6 +189,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::GROUPER_RIGHT_PARENTHESIS: return "GROUPER_RIGHT_PARENTHESIS";
 		case protocols::CrossTerminal::HACK_STATEMENT: return "HACK_STATEMENT";
 		case protocols::CrossTerminal::IDENTIFIER_CLASS: return "IDENTIFIER_CLASS";
+		case protocols::CrossTerminal::IDENTIFIER_CONSTEXPR: return "IDENTIFIER_CONSTEXPR";
 		case protocols::CrossTerminal::IDENTIFIER_ENUMERATION: return "IDENTIFIER_ENUMERATION";
 		case protocols::CrossTerminal::IDENTIFIER_PACKAGE: return "IDENTIFIER_PACKAGE";
 		case protocols::CrossTerminal::IDENTIFIER_SUBROUTINE: return "IDENTIFIER_SUBROUTINE";

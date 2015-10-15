@@ -34,6 +34,7 @@ protocols::CrossTerminal TokenTypeToCrossTerminal::convertToCrossTerminal(protoc
 		case protocols::TokenType::GROUPER_RIGHT_BRACKET: return protocols::CrossTerminal::GROUPER_RIGHT_BRACKET;
 		case protocols::TokenType::GROUPER_RIGHT_PARENTHESIS: return protocols::CrossTerminal::GROUPER_RIGHT_PARENTHESIS;
 		case protocols::TokenType::IDENTIFIER_CLASS: return protocols::CrossTerminal::IDENTIFIER_CLASS;
+		case protocols::TokenType::IDENTIFIER_CONSTEXPR: return protocols::CrossTerminal::IDENTIFIER_CONSTEXPR;
 		case protocols::TokenType::IDENTIFIER_ENUMERATION: return protocols::CrossTerminal::IDENTIFIER_ENUMERATION;
 		case protocols::TokenType::IDENTIFIER_PACKAGE: return protocols::CrossTerminal::IDENTIFIER_PACKAGE;
 		case protocols::TokenType::IDENTIFIER_SUBROUTINE: return protocols::CrossTerminal::IDENTIFIER_SUBROUTINE;
