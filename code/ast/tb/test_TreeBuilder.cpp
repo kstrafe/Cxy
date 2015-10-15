@@ -948,9 +948,13 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 			}
 		)");
 		doValidation(R"(
+			(: this) c
+			{ }
 			(:) enter {
 				var {32u a: a;} = f();
 				var {32u a: a; Type b: from_f;} = f();
+				var Type h = f({x: a,}: g())~header;
+				d(t: f({x: a,}: g())~header);
 			}
 		)");
 	}

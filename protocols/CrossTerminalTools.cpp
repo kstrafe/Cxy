@@ -97,6 +97,7 @@ bool CrossTerminalTools::isKeyword(const CrossTerminal &ct_)
 		case CrossTerminal::KEYWORD_RESTRICTED: return true;
 		case CrossTerminal::KEYWORD_RETURN: return true;
 		case CrossTerminal::KEYWORD_STATIC: return true;
+		case CrossTerminal::KEYWORD_THIS: return true;
 		case CrossTerminal::KEYWORD_THROW: return true;
 		case CrossTerminal::KEYWORD_TRY: return true;
 		case CrossTerminal::KEYWORD_TYPE: return true;
@@ -134,6 +135,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::AND_EXPRESSION: return "AND_EXPRESSION";
 		case protocols::CrossTerminal::ARGUMENT: return "ARGUMENT";
 		case protocols::CrossTerminal::ARGUMENT_LIST: return "ARGUMENT_LIST";
+		case protocols::CrossTerminal::ARGUMENT_LIST_WITH_THIS: return "ARGUMENT_LIST_WITH_THIS";
 		case protocols::CrossTerminal::ARRAY: return "ARRAY";
 		case protocols::CrossTerminal::ARRAY_ACCESS_EXPRESSION: return "ARRAY_ACCESS_EXPRESSION";
 		case protocols::CrossTerminal::ASSIGNMENT_EXPRESSION: return "ASSIGNMENT_EXPRESSION";
@@ -220,6 +222,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::KEYWORD_RESTRICTED: return "KEYWORD_RESTRICTED";
 		case protocols::CrossTerminal::KEYWORD_RETURN: return "KEYWORD_RETURN";
 		case protocols::CrossTerminal::KEYWORD_STATIC: return "KEYWORD_STATIC";
+		case protocols::CrossTerminal::KEYWORD_THIS: return "KEYWORD_THIS";
 		case protocols::CrossTerminal::KEYWORD_THROW: return "KEYWORD_THROW";
 		case protocols::CrossTerminal::KEYWORD_TRY: return "KEYWORD_TRY";
 		case protocols::CrossTerminal::KEYWORD_TYPE: return "KEYWORD_TYPE";
