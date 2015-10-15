@@ -21,7 +21,7 @@ along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 #include <fstream>
 #include <iostream>
 #include <sstream>
-#include "libraries/arg/Argument.hpp"
+#include "arg/Argument.hpp"
 #include "ast/AbstractSyntaxTreeGenerator.hpp"
 
 

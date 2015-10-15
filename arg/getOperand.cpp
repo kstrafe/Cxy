@@ -14,32 +14,27 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with schdl.  If not, see <http://www.gnu.org/licenses/>.
+along with TTL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 
 // Headers
-#include "libraries/arg/Argument.hpp"
+#include "arg/Argument.hpp"
 
 
 namespace ttl
 {
 
-	void Argument::setArgumentOfUnsetUninertFlag
-	(
-		const std::string &argument,
-		TheUnset &unset_flags
-	)
+	////////////////////////////////////////////////////////////
+	const std::string &Argument::getOperand(const std::size_t id) const
 	{
-		if (unset_flags.size() > 0)
-		{
-			unset_flags.top().first->second = argument;
-			unset_flags.pop();
-		}
-		else
-		{
-			m_operands.emplace_back(argument);
-		}
+		return m_operands[id];
+	}
+
+	////////////////////////////////////////////////////////////
+	std::string &Argument::getOperand(const std::size_t id)
+	{
+		return m_operands[id];
 	}
 
 } // Namespace ttl

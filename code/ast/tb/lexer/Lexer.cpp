@@ -31,13 +31,13 @@ namespace tul { namespace lexer {
 
 bool Lexer::insertCharacter(char character)
 {
-	comment_buffer.putCharInto(character);
-	uint8_t take_characters = comment_ignorer.putOnStack(character);
-	for (; take_characters > 0; --take_characters)
-		if (insertCharacterAfterComments(comment_buffer.getCharFrom(take_characters)))
-			continue;
-		else
+	comment_filter.push(character);
+	while (comment_filter.available())
+	{
+		char top = comment_filter.pop();
+		if (! insertCharacterAfterComments(top))
 			return false;
+	}
 	return true;
 }
 

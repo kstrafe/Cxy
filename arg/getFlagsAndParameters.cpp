@@ -14,28 +14,21 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with schdl.  If not, see <http://www.gnu.org/licenses/>.
+along with TTL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 
 // Headers
-#include "libraries/arg/Argument.hpp"
+#include "arg/Argument.hpp"
 
 
 namespace ttl
 {
 
-	bool Argument::isInert(const std::string &flag) const
+	////////////////////////////////////////////////////////////
+	auto Argument::getFlagsAndParameters() const -> const decltype(m_flags_and_parameters) &
 	{
-		return (m_inert_flags.find("--" + flag) != m_inert_flags.end());
-	}
-
-
-	bool Argument::isInert(const char flag) const
-	{
-		std::string tmp = "-";
-		tmp += flag;
-		return (m_inert_flags.find(tmp) != m_inert_flags.end());
+		return m_flags_and_parameters;
 	}
 
 } // Namespace ttl

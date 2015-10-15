@@ -14,21 +14,24 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with TTL.  If not, see <http://www.gnu.org/licenses/>.
+along with schdl.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 
 // Headers
-#include "libraries/arg/Argument.hpp"
+#include "arg/Argument.hpp"
 
 
 namespace ttl
 {
 
-	////////////////////////////////////////////////////////////
-	const std::string &Argument::getPath() const
+	std::string Argument::parseEqualArgument
+	(
+		const std::string &argument,
+		std::size_t x
+	)
 	{
-		return m_path;
+		return std::string(argument.begin() + x + 1u, argument.end());
 	}
 
 } // Namespace ttl

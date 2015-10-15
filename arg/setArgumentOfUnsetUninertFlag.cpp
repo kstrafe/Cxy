@@ -19,44 +19,26 @@ along with schdl.  If not, see <http://www.gnu.org/licenses/>.
 
 
 // Headers
-#include "libraries/arg/Argument.hpp"
+#include "arg/Argument.hpp"
 
 
 namespace ttl
 {
 
-	void Argument::setSingleCharFlags
+	void Argument::setArgumentOfUnsetUninertFlag
 	(
 		const std::string &argument,
 		TheUnset &unset_flags
 	)
 	{
-		for (int x = 1, y = argument.size(); x < y; ++x)
+		if (unset_flags.size() > 0)
 		{
-			if (argument[x] == '=')
-			{
-				setArgumentOfUnsetUninertFlag
-				(
-					parseEqualArgument(argument, x),
-					unset_flags
-				);
-				return;
-			}
-			InsertReturn it = m_flags_and_parameters.insert
-			(
-				std::make_pair
-				(
-					std::string("-")
-					+ argument[x], ""
-				)
-			);
-			if (!isInert(argument[x]))
-			{
-				unset_flags.push
-				(
-					it
-				);
-			}
+			unset_flags.top().first->second = argument;
+			unset_flags.pop();
+		}
+		else
+		{
+			m_operands.emplace_back(argument);
 		}
 	}
 

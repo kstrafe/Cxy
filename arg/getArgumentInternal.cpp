@@ -1,5 +1,5 @@
 /*
-Copyright 2013, 2014 Kevin Robert Stravers
+Copyright 2014 Kevin Robert Stravers
 
 This file is part of TTL.
 
@@ -10,7 +10,7 @@ the Free Software Foundation, either version 3 of the License, or
 
 TTL is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-ERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
@@ -19,33 +19,15 @@ along with TTL.  If not, see <http://www.gnu.org/licenses/>.
 
 
 // Headers
-#include "libraries/arg/Argument.hpp"
-
+#include "arg/Argument.hpp"
 
 namespace ttl
 {
 
-	Argument::Argument()
+	////////////////////////////////////////////////////////////
+	const std::string &Argument::getArgumentInternal(const std::string &flag) const
 	{
-
-	}
-
-
-	Argument::Argument(const std::size_t argc, char *argv[])
-	{
-			this->pass(argc, argv);
-	}
-
-
-	Argument::Argument(const std::string &argument)
-	{
-			this->pass(argument);
-	}
-
-
-	Argument::~Argument()
-	{
-
+		return m_flags_and_parameters.find(flag)->second;
 	}
 
 } // Namespace ttl

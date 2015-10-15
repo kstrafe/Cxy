@@ -1,5 +1,5 @@
 /*
-Copyright 2014 Kevin Robert Stravers
+Copyright 2013, 2014 Kevin Robert Stravers
 
 This file is part of TTL.
 
@@ -19,15 +19,16 @@ along with TTL.  If not, see <http://www.gnu.org/licenses/>.
 
 
 // Headers
-#include "libraries/arg/Argument.hpp"
+#include "arg/Argument.hpp"
+
 
 namespace ttl
 {
 
 	////////////////////////////////////////////////////////////
-	const std::string &Argument::getArgumentInternal(const std::string &flag) const
+	std::size_t Argument::getOperandCount() const
 	{
-		return m_flags_and_parameters.find(flag)->second;
+		return m_operands.size();
 	}
 
 } // Namespace ttl

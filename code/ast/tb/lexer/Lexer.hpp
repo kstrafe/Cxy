@@ -18,10 +18,9 @@ along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 #include "actgen/ActionGenerator.hpp"
 #include "actgen/TokenGenerator.hpp"
-#include "dependency/CommentBuffer.hpp"
-#include "dependency/CommentIgnorer.hpp"
 #include "dependency/Mealy.hpp"
 #include "dependency/PositionCounter.hpp"
+#include "filter/CommentFilter.hpp"
 #include "protocols/EntryType.hpp"
 #include "protocols/Token.hpp"
 
@@ -56,6 +55,7 @@ public:
 
 private:
 
+
 	bool insertCharacterAfterComments(char character);
 
 	template <typename F>
@@ -82,8 +82,7 @@ private:
 	actgen::ActionGenerator<dependency::Mealy<std::size_t, protocols::Action, protocols::EntryType>> action_generator;
 	dependency::PositionCounter position_counter;
 	dependency::TokenGenerator token_generator;
-	dependency::CommentIgnorer comment_ignorer;
-	dependency::CommentBuffer comment_buffer;
+	filter::CommentFilter comment_filter;
 };
 
 }}

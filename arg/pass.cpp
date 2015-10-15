@@ -19,7 +19,7 @@ along with TTL.  If not, see <http://www.gnu.org/licenses/>.
 
 
 // Headers
-#include "libraries/arg/Argument.hpp"
+#include "arg/Argument.hpp"
 #include <cstring>
 #include <stack>
 #include <iostream>

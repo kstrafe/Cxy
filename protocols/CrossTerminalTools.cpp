@@ -261,7 +261,6 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::OPTIONAL_DATA_DECLARATION_AFTER_COMMA: return "OPTIONAL_DATA_DECLARATION_AFTER_COMMA";
 		case protocols::CrossTerminal::OPTIONAL_DATA_NAMES_LIST: return "OPTIONAL_DATA_NAMES_LIST";
 		case protocols::CrossTerminal::OPTIONAL_DATA_NAMES_LIST_AFTER_COMMA: return "OPTIONAL_DATA_NAMES_LIST_AFTER_COMMA";
-		case protocols::CrossTerminal::OPTIONAL_DATA_NAME_LIST: return "OPTIONAL_DATA_NAME_LIST";
 		case protocols::CrossTerminal::OPTIONAL_EQUALITY_EXPRESSION: return "OPTIONAL_EQUALITY_EXPRESSION";
 		case protocols::CrossTerminal::OPTIONAL_EXPRESSION: return "OPTIONAL_EXPRESSION";
 		case protocols::CrossTerminal::OPTIONAL_EXTRACTOR_EXPRESSION: return "OPTIONAL_EXTRACTOR_EXPRESSION";

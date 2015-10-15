@@ -65,8 +65,6 @@ public:
 		return mealy_machine.transist(with_type, 6);
 	}
 
-
-
 private:
 
 	MACHINE mealy_machine;
