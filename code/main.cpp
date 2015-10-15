@@ -45,12 +45,16 @@ int main(int argc, char *argv[])
 				ss << stream.rdbuf();
 				astg.buildTree(ss.str());
 			} else {
-				std::cerr << "File `" << file << "' does not exist.";
+				std::cerr << "File `" << file << "' does not exist.\n";
 			}
 		} catch (std::string string) {
 			std::cout << string << std::endl;
 			return 1;
 		}
+	}
+	else
+	{
+		std::cerr << "cxyc: fatal error: no input files\ncompilation terminated.\n";
 	}
 	return result;
 }
