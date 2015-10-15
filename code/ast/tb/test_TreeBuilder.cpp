@@ -959,9 +959,9 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 			grant Aa {
 				(:) kill;
 				var {32u a, b, c; 64s d, e, f;}
-				static {Type g, h, i;}
+				restricted static {Type g, h, i;}
 				static Type j, k,;
-				var sml.String l,;
+				public var sml.String l,;
 			}
 
 			(:this) tell {
