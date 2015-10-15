@@ -939,5 +939,13 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 				@(a - 3) %= $axxa + 3;
 			}
 		)");
+		doValidation(R"(
+			(:) enter {
+				var {32u a, b;}
+
+				function({a: a, b: b,}: g(),);
+				function({derp: herp, g: z}: h() - j(), {a: a, b: b,}: g(),);
+			}
+		)");
 	}
 }

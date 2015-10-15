@@ -150,6 +150,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::CLASS_MEMBER_EXPRESSION: return "CLASS_MEMBER_EXPRESSION";
 		case protocols::CrossTerminal::CLASS_OR_PACKAGE_CLASS: return "CLASS_OR_PACKAGE_CLASS";
 		case protocols::CrossTerminal::CODE_BLOCK: return "CODE_BLOCK";
+		case protocols::CrossTerminal::COLON_LIST: return "COLON_LIST";
 		case protocols::CrossTerminal::DATA_DECLARATION_LIST: return "DATA_DECLARATION_LIST";
 		case protocols::CrossTerminal::DATA_DECLARATION_STATEMENT: return "DATA_DECLARATION_STATEMENT";
 		case protocols::CrossTerminal::DATA_DECLARATION_TYPE: return "DATA_DECLARATION_TYPE";
@@ -245,6 +246,8 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::OPTIONAL_BITWISE_OR_EXPRESSION: return "OPTIONAL_BITWISE_OR_EXPRESSION";
 		case protocols::CrossTerminal::OPTIONAL_BITWISE_XOR_EXPRESSION: return "OPTIONAL_BITWISE_XOR_EXPRESSION";
 		case protocols::CrossTerminal::OPTIONAL_CAPTURE_LIST: return "OPTIONAL_CAPTURE_LIST";
+		case protocols::CrossTerminal::OPTIONAL_COLON_LIST: return "OPTIONAL_COLON_LIST";
+		case protocols::CrossTerminal::OPTIONAL_COLON_LIST_AFTER_COMMA: return "OPTIONAL_COLON_LIST_AFTER_COMMA";
 		case protocols::CrossTerminal::OPTIONAL_CONSTRUCTOR_LIST: return "OPTIONAL_CONSTRUCTOR_LIST";
 		case protocols::CrossTerminal::OPTIONAL_DATA_DECLARATION: return "OPTIONAL_DATA_DECLARATION";
 		case protocols::CrossTerminal::OPTIONAL_DATA_DECLARATION_AFTER_COMMA: return "OPTIONAL_DATA_DECLARATION_AFTER_COMMA";
