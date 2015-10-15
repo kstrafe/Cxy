@@ -150,6 +150,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::CLASS_MEMBER_EXPRESSION: return "CLASS_MEMBER_EXPRESSION";
 		case protocols::CrossTerminal::CLASS_OR_PACKAGE_CLASS: return "CLASS_OR_PACKAGE_CLASS";
 		case protocols::CrossTerminal::CODE_BLOCK: return "CODE_BLOCK";
+		case protocols::CrossTerminal::COLONIZED: return "COLONIZED";
 		case protocols::CrossTerminal::COLON_LIST: return "COLON_LIST";
 		case protocols::CrossTerminal::DATA_DECLARATION_LIST: return "DATA_DECLARATION_LIST";
 		case protocols::CrossTerminal::DATA_DECLARATION_STATEMENT: return "DATA_DECLARATION_STATEMENT";
@@ -241,6 +242,8 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::OPTIONAL_ARRAY_ACCESS_EXPRESSION_AFTER_COMMA: return "OPTIONAL_ARRAY_ACCESS_EXPRESSION_AFTER_COMMA";
 		case protocols::CrossTerminal::OPTIONAL_ASSIGNMENT: return "OPTIONAL_ASSIGNMENT";
 		case protocols::CrossTerminal::OPTIONAL_ASSIGNMENT_EXPRESSION: return "OPTIONAL_ASSIGNMENT_EXPRESSION";
+		case protocols::CrossTerminal::OPTIONAL_ASSIGNMENT_MULTIVARIABLE: return "OPTIONAL_ASSIGNMENT_MULTIVARIABLE";
+		case protocols::CrossTerminal::OPTIONAL_ASSIGNMENT_OR_CAPTURE: return "OPTIONAL_ASSIGNMENT_OR_CAPTURE";
 		case protocols::CrossTerminal::OPTIONAL_ATTRIBUTE_LIST: return "OPTIONAL_ATTRIBUTE_LIST";
 		case protocols::CrossTerminal::OPTIONAL_BITWISE_AND_EXPRESSION: return "OPTIONAL_BITWISE_AND_EXPRESSION";
 		case protocols::CrossTerminal::OPTIONAL_BITWISE_OR_EXPRESSION: return "OPTIONAL_BITWISE_OR_EXPRESSION";
