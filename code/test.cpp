@@ -18,9 +18,15 @@ along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 #define CATCH_CONFIG_RUNNER  // Only in one cpp file
 #include "libraries/catch.hpp"
 
+#include "libraries/arg/Argument.hpp"
 
 int main(int argc, char *argv[])
 {
-	int result = Catch::Session().run(argc, argv);
+	int result = 1;
+	ttl::Argument argument(argc, argv);
+	if (argument.isPassed("test"))
+		result = Catch::Session().run(1, &argv[0]);
+	else if (argument.isPassed("check-syntax"))
+		result = 1;
 	return result;
 }
