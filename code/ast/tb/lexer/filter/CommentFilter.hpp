@@ -58,6 +58,7 @@ class CommentFilter
 {
 public:
 
+	// Always clear the available before pushing again.
 	void push(char symbol);
 	bool available() const;
 	char pop();

@@ -38,6 +38,7 @@ bool Lexer::insertCharacter(char character)
 		if (! insertCharacterAfterComments(top))
 			return false;
 	}
+	position_counter.countCharacter(character);
 	return true;
 }
 
@@ -90,7 +91,6 @@ bool Lexer::insertCharacterAfterComments(char character)
 			getTokenStack()[new_token].line_number = position_counter.getCurrentLineNumber();
 		}
 	}
-	position_counter.countCharacter(character);
 	return true;
 }
 
