@@ -112,6 +112,7 @@ bool CrossTerminalTools::isUselessSymbol(const CrossTerminal &ct_)
 {
 	switch (ct_)
 	{
+		case CrossTerminal::SYMBOL_CARET__PRUNE: return true;
 		case CrossTerminal::SYMBOL_COLON__PRUNE: return true;
 		case CrossTerminal::SYMBOL_COMMA__PRUNE: return true;
 		case CrossTerminal::SYMBOL_DOT__PRUNE: return true;
@@ -306,8 +307,8 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::SYMBOL_BAR__BAR: return "SYMBOL_BAR__BAR";
 		case protocols::CrossTerminal::SYMBOL_BAR__BAR__EQUAL: return "SYMBOL_BAR__BAR__EQUAL";
 		case protocols::CrossTerminal::SYMBOL_BAR__EQUAL: return "SYMBOL_BAR__EQUAL";
-		case protocols::CrossTerminal::SYMBOL_CARET: return "SYMBOL_CARET";
 		case protocols::CrossTerminal::SYMBOL_CARET__EQUAL: return "SYMBOL_CARET__EQUAL";
+		case protocols::CrossTerminal::SYMBOL_CARET__PRUNE: return "SYMBOL_CARET__PRUNE";
 		case protocols::CrossTerminal::SYMBOL_COLON__PRUNE: return "SYMBOL_COLON__PRUNE";
 		case protocols::CrossTerminal::SYMBOL_COMMA__PRUNE: return "SYMBOL_COMMA__PRUNE";
 		case protocols::CrossTerminal::SYMBOL_DOLLAR: return "SYMBOL_DOLLAR";

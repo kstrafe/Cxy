@@ -1035,6 +1035,12 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 		doValidation(R"(
 			grant MYWISH 32u;
 		)");
+		doValidation(R"(
+			(:) enter
+			{
+				a ^ b;
+			}
+		)");
 
 	}
 	#undef doValidation

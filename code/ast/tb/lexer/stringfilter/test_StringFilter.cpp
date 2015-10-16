@@ -47,37 +47,37 @@ TEST_CASE("Test if the string filter works correctly", "[test-StringFilter]")
 	SECTION("Compare different strings")
 	{
 		REQUIRE(construct("a") == "a");
-		test(R"('\n')", "\"\n\"");
-		test(R"('\t')", "\"\t\"");
-		test(R"('\r')", "\"\r\"");
-		test(R"("\r")", "\"\r\"");
-		test(R"(`\r`)", R"("\r")");
-		test(R"(`\r``)", R"("\r`)");
-		test(R"(`"`)", R"("""")");
-		test(R"("\"")", R"("""")");
-		test(R"('\"')", R"("""")");
-		test(R"(`\"`)", R"("\""")");
+		test(R"('\n')", "`\n`");
+		test(R"('\t')", "`\t`");
+		test(R"('\r')", "`\r`");
+		test(R"("\r")", "`\r`");
+		test(R"(`\r`)", R"(`\r`)");
+		test(R"(`\r``)", R"(`\r``)");
+		test(R"(`"`)", R"(`"`)");
+		test(R"("\"")", R"(`"`)");
+		test(R"('\"')", R"(`"`)");
+		test(R"(`\"`)", R"(`\"`)");
 	}
 	SECTION("Escape inside different quotes")
 	{
-		test(R"("")", R"("")");
-		test(R"(``)", R"("")");
-		test(R"('"')", R"("""")");
-		test(R"("'")", R"("'")");
-		test(R"("""")", R"("""")");
-		test(R"(`'`)", R"("'")");
-		test(R"(`"`)", R"("""")");
-		test(R"(`"``"`)", R"("""`""")");
-		test(R"(`e " f`;)", R"("e "" f";)");
+		test(R"("")", R"(``)");
+		test(R"(``)", R"(``)");
+		test(R"('"')", R"(`"`)");
+		test(R"("'")", R"(`'`)");
+		test(R"("""")", R"(````)");
+		test(R"(`'`)", R"(`'`)");
+		test(R"(`"`)", R"(`"`)");
+		test(R"(`"``"`)", R"(`"``"`)");
+		test(R"(`e " f`;)", R"(`e " f`;)");
 		test(R"()", R"()");
 	}
 	SECTION("Check out coded escapes")
 	{
-		test(R"(`\c22`)", R"("\c22")");
-		test(R"("\c22")", R"("""")");
-		test(R"('\c22')", R"("""")");
-		test(R"('\c5E')", R"("^")");
-		test(R"('\c7E')", R"("~")");
+		test(R"(`\c22`)", R"(`\c22`)");
+		test(R"("\c22")", R"(`"`)");
+		test(R"('\c22')", R"(`"`)");
+		test(R"('\c5E')", R"(`^`)");
+		test(R"('\c7E')", R"(`~`)");
 	}
 	#undef test
 }

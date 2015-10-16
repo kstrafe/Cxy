@@ -56,7 +56,7 @@ uint8_t StringFilter::hexToBits(char hex)
 void StringFilter::push(char character)
 {
 	#define putOut() out[0] = character; can_fetch = 1
-	#define outQuote() out[0] = '"'; can_fetch = 1
+	#define outQuote() out[0] = '`'; can_fetch = 1
 	#define cOut(x) can_fetch = 1; out[0] = x
 	switch (state)
 	{
@@ -85,11 +85,10 @@ void StringFilter::push(char character)
 					state = State::NOTHING;
 					outQuote();
 				break;
-				case '"':
 				case '`':
 					can_fetch = 2;
-					out[0] = '"';
-					out[1] = '"';
+					out[0] = '`';
+					out[1] = '`';
 				break;
 				case '\\':
 					previous = state;
@@ -105,6 +104,11 @@ void StringFilter::push(char character)
 					state = State::NOTHING;
 					outQuote();
 				break;
+				case '`':
+					can_fetch = 2;
+					out[0] = '`';
+					out[1] = '`';
+				break;
 				case '\\':
 					previous = state;
 					state = State::ESCAPE;
@@ -118,11 +122,6 @@ void StringFilter::push(char character)
 				case '`':
 					state = State::ESCAPE_VERBATIM;
 				break;
-				case '"':
-					can_fetch = 2;
-					out[0] = '"';
-					out[1] = '"';
-				break;
 				default: putOut(); break;
 			}
 		break;
@@ -131,13 +130,15 @@ void StringFilter::push(char character)
 			{
 				case '`':
 					state = State::VERBATIM;
-					cOut('`');
+					can_fetch = 2;
+					out[0] = '`';
+					out[1] = '`';
 					break;
 				default:
 					state = State::NOTHING;
 					can_fetch = 2;
 					out[0] = character;
-					out[1] = '"';
+					out[1] = '`';
 				break;
 			}
 		break;
@@ -150,7 +151,7 @@ void StringFilter::push(char character)
 				case 'f': state = previous; cOut('\f'); break;
 				case 'v': state = previous; cOut('\v'); break;
 				case 't': state = previous; cOut('\t'); break;
-				case '"': state = previous; can_fetch = 2; out[0] = '"'; out[1] = '"'; break;
+				case '"': state = previous; can_fetch = 1; out[0] = '"'; break;
 				default: throw std::string("Can not escape this!"); break;
 			}
 		break;
@@ -161,9 +162,9 @@ void StringFilter::push(char character)
 		break;
 		case State::CODE2:
 			out[0] |= hexToBits(character);
-			if (out[0] == '"')
+			if (out[0] == '`')
 			{
-				out[1] = '"';
+				out[1] = '`';
 				can_fetch = 2;
 			}
 			else
@@ -195,7 +196,7 @@ void StringFilter::end()
 	switch (state)
 	{
 		case State::ESCAPE_VERBATIM:
-			out[0] = '"';
+			out[0] = '`';
 			can_fetch = 1;
 		default: break;
 	}
