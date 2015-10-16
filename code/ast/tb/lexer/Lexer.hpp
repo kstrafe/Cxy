@@ -60,6 +60,7 @@ private:
 	dependency::TokenGenerator token_generator;
 	filter::CommentFilter comment_filter;
 	stringfilter::StringFilter string_filter;
+	std::size_t last_line_length = 0;
 
 	bool insertCharacterAfterComments(char character);
 	bool insertCharacterAfterQuotes(char character);

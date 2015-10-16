@@ -38,23 +38,23 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
 			unsigned iterator = 0;
 			#define caze(string) REQUIRE(token_stack.at(iterator).accompanying_lexeme == string)
 			#define caze2(col_number) REQUIRE(token_stack.at(iterator++).column_number == col_number)
-				caze("Example"); caze2(8);
-				caze("test"); caze2(13);
-				caze("input"); caze2(19);
-				caze("to"); caze2(22);
-				caze("see"); caze2(26);
-				caze("if"); caze2(29);
-				caze("alphanumeric"); caze2(42);
-				caze(","); caze2(43);
-				caze("especially"); caze2(54);
-				caze("with"); caze2(59);
-				caze("numbers"); caze2(67);
-				caze("like"); caze2(72);
-				caze("123"); caze2(76);
-				caze("work"); caze2(81);
-				caze("for"); caze2(85);
-				caze("the"); caze2(89);
-				caze("lexer"); caze2(95);
+				caze("Example"); caze2(7);
+				caze("test"); caze2(12);
+				caze("input"); caze2(18);
+				caze("to"); caze2(21);
+				caze("see"); caze2(25);
+				caze("if"); caze2(28);
+				caze("alphanumeric"); caze2(41);
+				caze(","); caze2(42);
+				caze("especially"); caze2(53);
+				caze("with"); caze2(58);
+				caze("numbers"); caze2(66);
+				caze("like"); caze2(71);
+				caze("123"); caze2(75);
+				caze("work"); caze2(80);
+				caze("for"); caze2(84);
+				caze("the"); caze2(88);
+				caze("lexer"); caze2(94);
 			#undef caze2
 			#undef caze
 			REQUIRE(token_stack.size() == iterator);
@@ -98,7 +98,7 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
 		REQUIRE(token_stack.size() == 1);
 		REQUIRE(token_stack.at(0).accompanying_lexeme == "Example test input to see if alphanumeric, especially with numbers like 123 work for the lexer.");
 		REQUIRE(token_stack.at(0).token_type == tul::protocols::TokenType::STRING);
-		REQUIRE(token_stack.at(0).column_number == 98);
+		REQUIRE(token_stack.at(0).column_number == 97);
 	}
 
 
@@ -117,15 +117,15 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
 			unsigned iterator = 0;
 			#define caze(type_name) REQUIRE(token_stack.at(iterator).token_type == TokenType::type_name)
 			#define caze2(col_number) REQUIRE(token_stack.at(iterator++).column_number == col_number)
-				caze(IDENTIFIER_CLASS); caze2(4);
-				caze(PRIMITIVE_SIGNED); caze2(7);
-				caze(IDENTIFIER_VARIABLE); caze2(13);
-				caze(IDENTIFIER_PACKAGE); caze2(18);
-				caze(IDENTIFIER_PACKAGE); caze2(23);
-				caze(PRIMITIVE_UNSIGNED); caze2(26);
-				caze(IDENTIFIER_SUBROUTINE); caze2(34);
-				caze(SYMBOL_EXCLAMATION_MARK); caze2(35);
-				caze(IDENTIFIER_CONSTEXPR); caze2(38);
+				caze(IDENTIFIER_CLASS); caze2(3);
+				caze(PRIMITIVE_SIGNED); caze2(6);
+				caze(IDENTIFIER_VARIABLE); caze2(12);
+				caze(IDENTIFIER_PACKAGE); caze2(17);
+				caze(IDENTIFIER_PACKAGE); caze2(22);
+				caze(PRIMITIVE_UNSIGNED); caze2(25);
+				caze(IDENTIFIER_SUBROUTINE); caze2(33);
+				caze(SYMBOL_EXCLAMATION_MARK); caze2(34);
+				caze(IDENTIFIER_CONSTEXPR); caze2(37);
 			#undef caze2
 			#undef caze
 			REQUIRE(token_stack.size() == iterator);
@@ -173,6 +173,29 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
 			REQUIRE(token_stack.size() == iterator);
 		}
 	}
+
+	SECTION("Check newlines give correct line numbers")
+	{
+		tul::lexer::Lexer lexing_engine;
+		for (char character : std::string("\na\nbb\ncccl\ndddd"))
+			lexing_engine.insertCharacter(character);
+
+		std::vector<tul::protocols::Token> &token_stack = lexing_engine.getTokenStack();
+
+		REQUIRE(token_stack.size() == 3);
+		SECTION("Check the numbers")
+		{
+			using namespace tul::protocols;
+			unsigned iterator = 0;
+			#define caze(col_number) REQUIRE(token_stack.at(iterator++).line_number == col_number)
+				caze(2);
+				caze(3);
+				caze(4);
+			#undef caze
+			REQUIRE(token_stack.size() == iterator);
+		}
+	}
+
 
 
 	SECTION("Check if symbols are lexed")
