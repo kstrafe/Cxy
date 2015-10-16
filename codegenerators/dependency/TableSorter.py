@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # Copyright © 2015 Kevin Robert Stravers
-"""
-This file is part of Cxy Compiler Reference Implementation (Cxy CRI).
+notice = """This file is part of Cxy Compiler Reference Implementation (Cxy CRI).
 
 Cxy CRI is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -15,13 +14,14 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
+
 """
 
 import re
 
 def commentOut(string):
 	"""Prepend a comment in front of every line"""
-	return re.sub(r'\n', r'\n' + '#', '#' + string)
+	return re.sub(r'^|\n', r'\n' + '# ', string)
 
 def sortTable(productions, terminals, prepend):
 	temp = """{p},\n"""
@@ -55,5 +55,6 @@ def sortTable(productions, terminals, prepend):
 	statistics = ''
 	for i in sorted(references):
 		statistics += '# ' + i + ': ' + str(references[i]) + '\n'
-	return '{stats}\nproductions = {{\n{x}\n}}'.format(x=prepend(string),
+	to_ret = '{stats}\nproductions = {{\n{x}\n}}'.format(x=prepend(string),
 	                                                   stats=statistics)
+	return commentOut(notice) + to_ret
