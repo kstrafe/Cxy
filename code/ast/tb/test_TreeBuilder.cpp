@@ -1012,6 +1012,9 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 		doValidation(R"(
 			var Aa B;
 		)");
+		doValidation(R"(
+			var Aa B = A + B ^ C;
+		)");
 	}
 	#undef doValidation
 	#undef doInvalidation
