@@ -1018,6 +1018,9 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 		doValidation(R"(
 			var Aa a = b->c;
 		)");
+		doValidation(R"(
+		)");
+
 	}
 	#undef doValidation
 	#undef doInvalidation
