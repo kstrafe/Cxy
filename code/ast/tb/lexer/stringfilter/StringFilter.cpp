@@ -145,12 +145,14 @@ void StringFilter::push(char character)
 		case State::ESCAPE:
 			switch (character)
 			{
+				case 'a': state = previous; cOut('\a'); break;
+				case 'b': state = previous; cOut('\b'); break;
 				case 'c': state = State::CODE; break;
+				case 'f': state = previous; cOut('\f'); break;
 				case 'n': state = previous; cOut('\n'); break;
 				case 'r': state = previous; cOut('\r'); break;
-				case 'f': state = previous; cOut('\f'); break;
-				case 'v': state = previous; cOut('\v'); break;
 				case 't': state = previous; cOut('\t'); break;
+				case 'v': state = previous; cOut('\v'); break;
 				case '"': state = previous; can_fetch = 1; out[0] = '"'; break;
 				default: throw std::string("Can not escape this!"); break;
 			}

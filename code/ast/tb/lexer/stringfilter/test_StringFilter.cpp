@@ -78,6 +78,14 @@ TEST_CASE("Test if the string filter works correctly", "[test-StringFilter]")
 		test(R"('\c22')", R"(`"`)");
 		test(R"('\c5E')", R"(`^`)");
 		test(R"('\c7E')", R"(`~`)");
+		test(R"('\n7E')", R"(`
+7E`)");
+		test(R"('\t7E')", R"(`	7E`)");
+		test(R"('\t')", "`\t`");
+		test(R"('\a')", "`\a`");
+		test(R"('\b')", "`\b`");
+		test(R"('\v')", "`\v`");
+		test(R"('\s')", "`\s`");
 	}
 	#undef test
 }
