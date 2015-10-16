@@ -26,6 +26,33 @@ StringFilter::StringFilter()
 {}
 
 
+uint8_t StringFilter::hexToBits(char hex)
+{
+	uint8_t to_ret = 0;
+	switch (hex)
+	{
+		case '0': to_ret |= 0b0000; break;
+		case '1': to_ret |= 0b0001; break;
+		case '2': to_ret |= 0b0010; break;
+		case '3': to_ret |= 0b0011; break;
+		case '4': to_ret |= 0b0100; break;
+		case '5': to_ret |= 0b0101; break;
+		case '6': to_ret |= 0b0110; break;
+		case '7': to_ret |= 0b0111; break;
+		case '8': to_ret |= 0b1000; break;
+		case '9': to_ret |= 0b1001; break;
+		case 'A': to_ret |= 0b1010; break;
+		case 'B': to_ret |= 0b1011; break;
+		case 'C': to_ret |= 0b1100; break;
+		case 'D': to_ret |= 0b1101; break;
+		case 'E': to_ret |= 0b1110; break;
+		case 'F': to_ret |= 0b1111; break;
+		default: throw std::string("Invalid code point"); break;
+	}
+	return to_ret;
+}
+
+
 void StringFilter::push(char character)
 {
 	#define putOut() out[0] = character; can_fetch = 1
@@ -117,8 +144,7 @@ void StringFilter::push(char character)
 		case State::ESCAPE:
 			switch (character)
 			{
-				case 'u': state = State::CODESMALL; break;
-				case 'U': state = State::CODEBIG; break;
+				case 'c': state = State::CODE; break;
 				case 'n': state = previous; cOut('\n'); break;
 				case 'r': state = previous; cOut('\r'); break;
 				case 'f': state = previous; cOut('\f'); break;
@@ -127,7 +153,22 @@ void StringFilter::push(char character)
 				case '"': state = previous; can_fetch = 2; out[0] = '"'; out[1] = '"'; break;
 				default: throw std::string("Can not escape this!"); break;
 			}
-
+		break;
+		case State::CODE:
+			out[0] = 0;
+			out[0] |= hexToBits(character) << 4;
+			state = State::CODE2;
+		break;
+		case State::CODE2:
+			out[0] |= hexToBits(character);
+			if (out[0] == '"')
+			{
+				out[1] = '"';
+				can_fetch = 2;
+			}
+			else
+				can_fetch = 1;
+			state = previous;
 		break;
 	}
 	#undef cOut

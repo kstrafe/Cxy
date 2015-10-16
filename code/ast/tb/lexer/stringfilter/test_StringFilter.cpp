@@ -71,5 +71,13 @@ TEST_CASE("Test if the string filter works correctly", "[test-StringFilter]")
 		test(R"(`e " f`;)", R"("e "" f";)");
 		test(R"()", R"()");
 	}
+	SECTION("Check out coded escapes")
+	{
+		test(R"(`\c22`)", R"("\c22")");
+		test(R"("\c22")", R"("""")");
+		test(R"('\c22')", R"("""")");
+		test(R"('\c5E')", R"("^")");
+		test(R"('\c7E')", R"("~")");
+	}
 	#undef test
 }

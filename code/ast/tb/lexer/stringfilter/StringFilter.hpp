@@ -26,6 +26,7 @@ class StringFilter
 public:
 
 	StringFilter();
+	uint8_t hexToBits(char hex);
 	void push(char character);
 	bool available() const;
 	char pop();
@@ -40,8 +41,8 @@ private:
 		MULTIPLE,
 		VERBATIM,
 		ESCAPE,
-		CODESMALL,
-		CODEBIG,
+		CODE,
+		CODE2,
 		ESCAPE_VERBATIM,
 	} state = State::NOTHING, previous = State::NOTHING;
 
