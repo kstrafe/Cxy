@@ -24,7 +24,6 @@ namespace tul { namespace tb {
 bool TreeBuilder::buildTree(const std::string &string, bool throw_error)
 {
 	bool ret_val = true;
-	char current = '\0';
 	for (auto chara : string)
 	{
 		if (buildTree(chara) == false)
@@ -32,7 +31,6 @@ bool TreeBuilder::buildTree(const std::string &string, bool throw_error)
 			ret_val = false;
 			break;
 		}
-		current = chara;
 	}
 	if (ret_val) ret_val = endInput();
 	else if (throw_error) throw formulateError();
@@ -48,17 +46,13 @@ bool TreeBuilder::buildTree(char character)
 		for (std::size_t i = 0; i < token_stack.size(); ++i)
 		{
 			if (false == parser_object.parseSymbol(token_stack[i]))
-			{
 				return false;
-			}
 		}
 		token_stack.clear();
 		return true;
 	}
 	else
-	{
 		return false;
-	}
 	return false;
 }
 
@@ -70,9 +64,7 @@ bool TreeBuilder::endInput()
 	token.token_type = protocols::TokenType::END_OF_MODULE;
 
 	if (false == parser_object.parseSymbol(token))
-	{
 		return false;
-	}
 	return parser_object.isEmpty();
 }
 

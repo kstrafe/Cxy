@@ -59,7 +59,8 @@ namespace
 ////////////////////////////////////////////////////////////////////////////////
 TEST_CASE("AbstractSyntaxTreeGenerator must validate the grammar.", "[test-AbstractSyntaxTreeGenerator]")
 {
-	REQUIRE(validate(R"(
+	#define doValidation(x) REQUIRE(validate(x))
+	doValidation(R"(
 		(:) enter
 		{
 			sml.Out.print(:"Hello World!");
@@ -71,9 +72,9 @@ TEST_CASE("AbstractSyntaxTreeGenerator must validate the grammar.", "[test-Abstr
 		{
 			return a: b;
 		}
-	)"));
+	)");
 
-	REQUIRE(validate(R"(
+	doValidation(R"(
 		var 32u a = 3, b = 100;
 		var ptr (sml.String ret : sml.String inp) ptr2_fun;
 
@@ -88,16 +89,20 @@ TEST_CASE("AbstractSyntaxTreeGenerator must validate the grammar.", "[test-Abstr
 			var 64s some64s;
 			var sml.String some_string;
 		}
-	)"));
+	)");
 
-	REQUIRE(validate(R"(
+	doValidation(R"(
 		(: ((:) b :) a) doStuff
 		{}
-	)"));
+	)");
 
-	REQUIRE(validate(R"(
+	doValidation(R"(
 		(:) doStuff
 		{}
-	)"));
-
+		grant Aa {
+			(:) a;
+		}
+		public var Aa a;
+	)");
+	#undef doValidation
 }

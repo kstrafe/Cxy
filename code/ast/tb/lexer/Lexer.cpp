@@ -45,6 +45,19 @@ bool Lexer::insertCharacter(char character)
 
 bool Lexer::insertCharacterAfterComments(char character)
 {
+	string_filter.push(character);
+	while (string_filter.available())
+	{
+		char top = string_filter.pop();
+		if (! insertCharacterAfterQuotes(top))
+			return false;
+	}
+	return true;
+}
+
+
+bool Lexer::insertCharacterAfterQuotes(char character)
+{
 	protocols::EntryType type_of_character = typify(character);
 	protocols::Action action_to_perform = action_generator.computeAction(type_of_character);
 	{
@@ -110,8 +123,8 @@ protocols::TokenType Lexer::getKeyword(const std::string &test_lexeme) const
 
 void Lexer::identifyToken(protocols::Token &input_token)
 {
-	using namespace protocols;
-	if (input_token.accompanying_lexeme.size() == 0)
+	if (input_token.entry_type != protocols::EntryType::QUOTE_SYMBOL
+		&& input_token.accompanying_lexeme.size() == 0)
 		throw std::string("Lexer::identifyToken: Zero-sized");
 
 	identifyTokenAfterStrippingUnderscores(input_token);
@@ -219,7 +232,7 @@ protocols::EntryType Lexer::typify (char val)
 	const constexpr unsigned char UTF_8_LIMIT = 128;
 	if ((65 <= val && val <= 90) || (97 <= val && val <= 122) || val == 95 || (48 <= val && val <= 57))
 		return EntryType::ALPHA_DIGIT_OR_UNDERSCORE;
-	if (val == '"')
+	if (val == 34)
 		return EntryType::QUOTE_SYMBOL;
 	if (isAnyOf(val, '(', ')', '{', '}', '[', ']'))
 		return EntryType::GROUPING_SYMBOL;

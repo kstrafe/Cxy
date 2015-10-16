@@ -46,6 +46,7 @@ protocols::TokenType SymbolMatcher::getSymbol(const std::string &lexeme)
 	else if (lexeme == "<=") return TokenType::SYMBOL_LESS_THAN__EQUAL;
 	else if (lexeme == "<<") return TokenType::SYMBOL_LESS_THAN__LESS_THAN;
 	else if (lexeme == "-=") return TokenType::SYMBOL_MINUS__EQUAL;
+	else if (lexeme == "->") return TokenType::SYMBOL_MINUS__GREATER_THAN;
 	else if (lexeme == "--") return TokenType::SYMBOL_MINUS__MINUS;
 	else if (lexeme == "%=") return TokenType::SYMBOL_PERCENT__EQUAL;
 	else if (lexeme == "+=") return TokenType::SYMBOL_PLUS__EQUAL;

@@ -38,6 +38,8 @@ namespace tul { namespace actgen {
 	This class solely concerns itself with providing information about what
 	action to take.
 */
+using namespace protocols;  // Odd, it does not work inside the class itself.
+
 template <typename MACHINE>
 class ActionGenerator
 {
@@ -72,11 +74,11 @@ private:
 
 	static constexpr const typename  MACHINE::Compound action_table[]
 	{ /*    ALPHA_DIGIT_OR_UNDERSCORE  GROUPING_SYMBOL     QUOTE_SYMBOL     OTHER_SYMBOL      UNKNOWN_CODE_POINT  WHITESPACE  */
-		/*0*/ {1, protocols::Action::P},            {0, protocols::Action::PTG},   {2, protocols::Action::N},  {4, protocols::Action::P},   {0, protocols::Action::E},     {0, protocols::Action::N},
-		/*1*/ {1, protocols::Action::P},            {0, protocols::Action::TAPTG}, {2, protocols::Action::TA}, {4, protocols::Action::TAP}, {0, protocols::Action::E},     {0, protocols::Action::TA},
-		/*2*/ {2, protocols::Action::P},            {2, protocols::Action::P},     {3, protocols::Action::N},  {2, protocols::Action::P},   {2, protocols::Action::P},     {2, protocols::Action::P},
-		/*3*/ {1, protocols::Action::TRP},          {0, protocols::Action::TRPTG}, {2, protocols::Action::P},  {4, protocols::Action::TRP}, {0, protocols::Action::E},     {0, protocols::Action::TR},
-		/*4*/ {1, protocols::Action::TSP},          {0, protocols::Action::TSPTG}, {2, protocols::Action::TS}, {4, protocols::Action::P},   {0, protocols::Action::E},     {0, protocols::Action::TS}
+		/*0*/ {1, Action::P},            {0, Action::PTG},   {2, Action::N},  {4, Action::P},   {0, Action::E},     {0, Action::N},
+		/*1*/ {1, Action::P},            {0, Action::TAPTG}, {2, Action::TA}, {4, Action::TAP}, {0, Action::E},     {0, Action::TA},
+		/*2*/ {2, Action::P},            {2, Action::P},     {3, Action::N},  {2, Action::P},   {2, Action::P},     {2, Action::P},
+		/*3*/ {1, Action::TRP},          {0, Action::TRPTG}, {2, Action::P},  {4, Action::TRP}, {0, Action::E},     {0, Action::TR},
+		/*4*/ {1, Action::TSP},          {0, Action::TSPTG}, {2, Action::TS}, {4, Action::P},   {0, Action::E},     {0, Action::TS}
 		// Remember to set the transist value in computeprotocols::Action to the amount of columns here.
 	};
 

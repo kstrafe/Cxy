@@ -312,4 +312,21 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
 		#undef caze
 	}
 
+	SECTION("Check if the -> lexeme is identified")
+	{
+		using namespace tul::lexer;
+		Lexer lex_eng;
+		for (char chara : std::string("a->b--c"))
+			lex_eng.insertCharacter(chara);
+		std::vector<tul::protocols::Token> &token_stack = lex_eng.getTokenStack();
+		unsigned iterator = 0;
+		using namespace tul::protocols;
+		#define caze(type_name) REQUIRE(token_stack.at(iterator++).token_type == TokenType::type_name)
+			caze(IDENTIFIER_PACKAGE);
+			caze(SYMBOL_MINUS__GREATER_THAN);
+			caze(IDENTIFIER_PACKAGE);
+			caze(SYMBOL_MINUS__MINUS);
+		#undef caze
+	}
+
 }
