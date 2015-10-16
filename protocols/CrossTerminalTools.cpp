@@ -181,6 +181,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::GOTO_STATEMENT: return "GOTO_STATEMENT";
 		case protocols::CrossTerminal::GRANT_LIST: return "GRANT_LIST";
 		case protocols::CrossTerminal::GRANT_LIST_ACCESS: return "GRANT_LIST_ACCESS";
+		case protocols::CrossTerminal::GRANT_TYPE: return "GRANT_TYPE";
 		case protocols::CrossTerminal::GROUPER_LEFT_BRACE: return "GROUPER_LEFT_BRACE";
 		case protocols::CrossTerminal::GROUPER_LEFT_BRACKET: return "GROUPER_LEFT_BRACKET";
 		case protocols::CrossTerminal::GROUPER_LEFT_PARENTHESIS: return "GROUPER_LEFT_PARENTHESIS";
