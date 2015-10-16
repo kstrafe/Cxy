@@ -48,32 +48,27 @@ class LLOneProductionDeducer
 public:
 
 	////////////////////////////////////////////////////////////
+	#define MapIteratorType typename std::map<SYMBOL, std::vector<SYMBOL>>::iterator
 	#define thisSymbolHasAnEpsilonRule() epsilonable_symbols.find(top_of_stack) != epsilonable_symbols.cend()
 	#define thereExistsNoProduction() iterator_over_map == production_rules[top_of_stack].cend()
 	#define getEntry() production_rules[top_of_stack].find(symbol_to_parse)
-	#define MapIteratorType typename std::map<SYMBOL, std::vector<SYMBOL>>::iterator
 
-		protocols::ParseReturn<SYMBOL> parseSymbol(const SYMBOL &symbol_to_parse, const SYMBOL &top_of_stack)
+	protocols::ParseReturn<SYMBOL> parseSymbol(const SYMBOL &symbol_to_parse, const SYMBOL &top_of_stack)
+	{
+		using namespace protocols;
+		if (symbol_to_parse == top_of_stack)
+			return {nullptr, ParseReturn<SYMBOL>::Action::REMOVE_TOP};
+
+		MapIteratorType iterator_over_map = getEntry();
+		if (thereExistsNoProduction())
 		{
-			using namespace protocols;
-			if (symbol_to_parse == top_of_stack)
-			{
-				return {nullptr, ParseReturn<SYMBOL>::Action::REMOVE_TOP};
-			}
-
-			MapIteratorType iterator_over_map = getEntry();
-			if (thereExistsNoProduction())
-			{
-				if (thisSymbolHasAnEpsilonRule())
-				{
-					return {nullptr, ParseReturn<SYMBOL>::Action::EPSILONATE};
-				}
-				return {nullptr, ParseReturn<SYMBOL>::Action::OBSERVE_ERROR};
-			}
-			return {&iterator_over_map->second, ParseReturn<SYMBOL>::Action::CONTINUE};
+			if (thisSymbolHasAnEpsilonRule())
+				return {nullptr, ParseReturn<SYMBOL>::Action::EPSILONATE};
+			return {nullptr, ParseReturn<SYMBOL>::Action::OBSERVE_ERROR};
 		}
+		return {&iterator_over_map->second, ParseReturn<SYMBOL>::Action::CONTINUE};
+	}
 
-	#undef MapIteratorType
 	#undef getEntry
 	#undef thereExistsNoProduction
 	#undef thisSymbolHasAnEpsilonRule
@@ -91,9 +86,11 @@ public:
 
 	bool doesRuleExist(const SYMBOL &left_side, const SYMBOL &transition_symbol)
 	{
-		typename std::map<SYMBOL, std::vector<SYMBOL>>::iterator iterator_over_map = production_rules[left_side].find(transition_symbol);
+		MapIteratorType iterator_over_map = production_rules[left_side].find(transition_symbol);
 		return iterator_over_map != production_rules[left_side].cend();
 	}
+
+	#undef MapIteratorType
 
 	std::vector<SYMBOL> getTransitionTokens(const SYMBOL symbol) const
 	{
