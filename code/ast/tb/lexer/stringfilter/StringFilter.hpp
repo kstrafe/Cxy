@@ -47,7 +47,6 @@ private:
 
 	uint8_t out[2], can_fetch = 0;
 
-	char universal[8];
 };
 
 }}
