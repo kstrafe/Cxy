@@ -61,69 +61,71 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 {
 	using namespace tul::tb;
 
+	#define doValidation(x) REQUIRE(validate(x))
+	#define doInvalidation(x) REQUIRE(false == validate(x, false))
 	////////////////////////////////////////////////////////////////////////////////
 	SECTION("Parse the start of a module: declarations. Some permutations.")
 	{
-		REQUIRE(validate(R"(
+		doValidation(R"(
 			var {
 				1u b;
 				1u a;
 				1u c;
 			}
-		)"));
-		REQUIRE(validate(R"(
+		)");
+		doValidation(R"(
 			var {
 				1u a;
 				1u c;
 				1u b;
 			}
-		)"));
-		REQUIRE(validate(R"(
+		)");
+		doValidation(R"(
 			var {
 				1u c;
 				1u b;
 				1u a;
 			}
-		)"));
+		)");
 	}
 	////////////////////////////////////////////////////////////////////////////////
 	SECTION("Parse the start of a module: declarations and assignments")
 	{
-		REQUIRE(validate(R"(
+		doValidation(R"(
 			var {
 				1u b = 1;
 				1u a = 2;
 				1u c = 3;
 			}
-		)"));
-		REQUIRE(validate(R"(
+		)");
+		doValidation(R"(
 			var {
 				1u a(value: 4);
 				1u c(value: 5);
 				1u b(value: 6);
 			}
-		)"));
-		REQUIRE(validate(R"(
+		)");
+		doValidation(R"(
 			var {
 				1u c(value: 7);
 				1u b = 8;
 				1u a;
 			}
-		)"));
+		)");
 	}
 	////////////////////////////////////////////////////////////////////////////////
 	SECTION("Check non-data class with expressions")
 	{
-		REQUIRE(validate("(:) enter { }"));
-		REQUIRE(validate("(:) enter { a = \"Hi!\"; }"));
-		REQUIRE(validate("(:) enter { a = \"Hi!\"; b = 300; }"));
-		REQUIRE(validate("(:) enter { a = \"Hi!\"; b = 300; b_a =  b; }"));
-		REQUIRE(validate("(:) enter { a = \"Hi!\"; b = 300; b_a = 10 * b; }"));
-		REQUIRE(validate("(:) enter { b_a = 100 && 10 * b + 5 / 3 - another_identifier; }"));
-		REQUIRE(validate("(:) enter { b_a = 100 && 10 * b + 5 / 3 - another_identifier | \"Cool m8\"; }"));
-		REQUIRE(validate("(:) enter { b_a = sampleFunction()~a; }"));
-		REQUIRE(validate("(:) enter { b_a = 100 && 10 * b + 5 / 3 * sampleFunction()~a - another_identifier | \"Cool m8\"; }"));
-		REQUIRE(validate(R"(
+		doValidation("(:) enter { }");
+		doValidation("(:) enter { a = \"Hi!\"; }");
+		doValidation("(:) enter { a = \"Hi!\"; b = 300; }");
+		doValidation("(:) enter { a = \"Hi!\"; b = 300; b_a =  b; }");
+		doValidation("(:) enter { a = \"Hi!\"; b = 300; b_a = 10 * b; }");
+		doValidation("(:) enter { b_a = 100 && 10 * b + 5 / 3 - another_identifier; }");
+		doValidation("(:) enter { b_a = 100 && 10 * b + 5 / 3 - another_identifier | \"Cool m8\"; }");
+		doValidation("(:) enter { b_a = sampleFunction()~a; }");
+		doValidation("(:) enter { b_a = 100 && 10 * b + 5 / 3 * sampleFunction()~a - another_identifier | \"Cool m8\"; }");
+		doValidation(R"(
 			(:) enter
 			{
 				b_a = 100 && 10 * b + 5 / 3 * sampleFunction()~a - another_identifier | "Cool m8";
@@ -136,16 +138,16 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 				var AnotherClassName b_a = 100 > 5 && 10 * b + 5 / 3 * sampleFunction()~a ^sampleFunction()~a - another_identifier | "Cool m8";
 				var AnotherClassName b_a = when (a) b else c;
 			}
-		)"));
+		)");
 		REQUIRE(false == validate("(:) enter { var const ClassName ", false));
-		REQUIRE(validate("(:) enter { var const ptr ClassName alpha; }"));
+		doValidation("(:) enter { var const ptr ClassName alpha; }");
 		REQUIRE(false == validate("(:) enter { var const const ClassName alpha; }", false));
-		REQUIRE(validate("(:) enter { var const ptr const ClassName alpha; }"));
+		doValidation("(:) enter { var const ptr const ClassName alpha; }");
 	}
 	////////////////////////////////////////////////////////////////////////////////
 	SECTION("A class using different statement types")
 	{
-		REQUIRE(validate(R"(
+		doValidation(R"(
 			(:) enter
 			{
 				var 32u max = 1000;
@@ -160,13 +162,13 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 					}
 				}
 			}
-		)"));
+		)");
 	}
 	////////////////////////////////////////////////////////////////////////////////
 	SECTION("Multiple function definitions")
 	{
 		////////////////////////////////////////////////////////////
-		REQUIRE(validate(R"(
+		doValidation(R"(
 			var 32u variable = 0;
 
 			(:) enter
@@ -178,10 +180,10 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 			{
 				--variable;
 			}
-		)"));
+		)");
 		////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////
-		REQUIRE(validate(R"(
+		doValidation(R"(
 			var 32u variable = 0;
 
 			(:) enter
@@ -193,58 +195,58 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 			{
 				--variable;
 			}
-		)"));
+		)");
 		////////////////////////////////////////////////////////////
 	}
 	////////////////////////////////////////////////////////////
 	SECTION("Unary operators")
 	{
-		REQUIRE(validate(R"(
+		doValidation(R"(
 			(:) enter
 			{
 				var 32u a = 1000;
 				var ptr 32u b = $a;
 			}
-		)"));
-		REQUIRE(validate(R"(
+		)");
+		doValidation(R"(
 			(:) enter
 			{
 				var 32u a = 1000;
 				var ptr 32u b = $a;
 				++@b;
 			}
-		)"));
-		REQUIRE(validate(R"(
+		)");
+		doValidation(R"(
 			(:) enter
 			{
 				var 32u a = 1000;
 				var ptr 32u b = $$a;
 			}
-		)"));
-		REQUIRE(validate(R"(
+		)");
+		doValidation(R"(
 			(:) enter
 			{
 				var 32u a = 1000;
 				var ptr const 32u b = $$a;
 			}
-		)"));
-		REQUIRE(validate(R"(
+		)");
+		doValidation(R"(
 			(:) enter
 			{
 				var 32u a = 1000;
 				var ptr const 32u b = $$a;
 				var 32u c = @@b;
 			}
-		)"));
-		REQUIRE(validate(R"(
+		)");
+		doValidation(R"(
 			(:) enter
 			{
 				var 32u a = 1000;
 				var ptr 32u b = $a;
 				++ @b;
 			}
-		)"));
-		REQUIRE(validate(R"(
+		)");
+		doValidation(R"(
 			(:) enter
 			{
 				var 32u a = 1000;
@@ -254,8 +256,8 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 
 				}
 			}
-		)"));
-		REQUIRE(validate(R"(
+		)");
+		doValidation(R"(
 			(:) enter
 			{
 				var 32u a = 1000;
@@ -270,8 +272,8 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 			{
 
 			}
-		)"));
-		REQUIRE(validate(R"(
+		)");
+		doValidation(R"(
 			(:) enter
 			{
 				var 32u a = 1000;
@@ -294,36 +296,36 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 
 			(:: const pure) funcTione
 			{}
-		)"));
+		)");
 	}
 	////////////////////////////////////////////////////////////
 	SECTION("Argument Lists")
 	{
-		REQUIRE(validate(R"(
+		doValidation(R"(
 			(32u a:32u b) myFunction
 			{}
-		)"));
-		REQUIRE(validate(R"(
+		)");
+		doValidation(R"(
 			(32u a, Class b:32u c) myFunction
 			{}
-		)"));
-		REQUIRE(validate(R"(
+		)");
+		doValidation(R"(
 			(32u a, Class b : Class c, 32u d) myFunction
 			{}
-		)"));
-		REQUIRE(validate(R"(
+		)");
+		doValidation(R"(
 			(32u a, 32u b : Class c, Class c2, 32u d, 32u e) myFunction
 			{}
-		)"));
-		REQUIRE(validate(R"(
+		)");
+		doValidation(R"(
 			([10, 32u] a, [10, 32u] b : Class c, Class c2, 32u d, 32u e) myFunction
 			{}
-		)"));
+		)");
 	}
 	////////////////////////////////////////////////////////////
 	SECTION("Array types")
 	{
-		REQUIRE(validate(R"(
+		doValidation(R"(
 			(:) enter
 			{
 				var [3, 32u] arr;
@@ -334,7 +336,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 			{
 				var [2, [3, [4, [5, 8u]]]] szt;
 			}
-		)"));
+		)");
 	}
 	////////////////////////////////////////////////////////////
 	SECTION("Putting variables in the middle is not allowed")
@@ -349,19 +351,19 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 	////////////////////////////////////////////////////////////
 	SECTION("Type casting")
 	{
-		REQUIRE(validate(R"(
+		doValidation(R"(
 			(:) enter {
 				var 32u a = 100;
 				var 16u b = cast[16u](a) * 5;
 				var 32u c = when (a > 100) a else b;
 				var [8, 32u] y;
 			}
-		)"));
+		)");
 	}
 	////////////////////////////////////////////////////////////
 	SECTION("Member expression")
 	{
-		REQUIRE(validate(R"(
+		doValidation(R"(
 			(:) enter
 			{
 				var SomeClass a = SomeClass.createInstance()~instance;
@@ -369,21 +371,21 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 				var SomeClass c = sys.Cool.something()~ck()~x[3 + 8];
 				var Qs d = q.Qz.ctOr()~obj;
 			}
-		)"));
-		REQUIRE(validate(R"(
+		)");
+		doValidation(R"(
 			(:) enter
 			{
 				var Aa a = Aa();
 			}
-		)"));
-		REQUIRE(validate(R"(
+		)");
+		doValidation(R"(
 			(:) enter
 			{
 				var a.Aa a = Aa();
 				a = b;
 			}
-		)"));
-		REQUIRE(validate(R"(
+		)");
+		doValidation(R"(
 			(:) enter
 			{
 				{
@@ -391,20 +393,20 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 				}
 				var a.Aa a = a.Aa();
 			}
-		)"));
-		REQUIRE(validate(R"(
+		)");
+		doValidation(R"(
 			(:) enter
 			{
 				var a.Aa a = a.b.Aa();
 			}
-		)", false));
-		REQUIRE(false == validate(R"(
+		)");
+		doInvalidation(R"(
 			(:) enter
 			{
 				var a.b.Aa a = a.Aa();
 			}
-		)", false));
-		REQUIRE(validate(R"(
+		)");
+		doValidation(R"(
 			(:) enter
 			{
 				var sys.Dir dir(start: "/");
@@ -416,27 +418,27 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 
 				a.Aa.g += f;
 			}
-		)"));
-		REQUIRE(false == validate(R"(
+		)");
+		doInvalidation(R"(
 			(:) enter
 			{
 				a = b = c;
 			}
-		)", false));
+		)");
 
-		REQUIRE(validate(R"(
+		doValidation(R"(
 			(:) enter
 			{
 				a[0][1][2];
 			}
-		)"));
-		REQUIRE(validate(R"(
+		)");
+		doValidation(R"(
 			(:) enter
 			{
 				a[0, 1, 2];
 			}
-		)"));
-		REQUIRE(validate(R"(
+		)");
+		doValidation(R"(
 			(:) enter
 			{
 				sys.StdOut.printLine(string: callChild())~alpha;
@@ -446,8 +448,8 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 			{
 				return nm: kek + 200;
 			}
-		)"));
-		REQUIRE(validate(R"(
+		)");
+		doValidation(R"(
 			(:) enter
 			{
 				if (a)
@@ -459,8 +461,8 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 				else
 					dDd();
 			}
-		)"));
-		REQUIRE(validate(R"(
+		)");
+		doValidation(R"(
 			(:) enter
 			{
 				if (a)
@@ -474,8 +476,8 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 				if (e)
 					what;
 			}
-		)"));
-		REQUIRE(validate(R"(
+		)");
+		doValidation(R"(
 			(:) enter
 			{
 				if (a)
@@ -485,8 +487,8 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 						while (c)
 							inside_while;
 			}
-		)"));
-		REQUIRE(validate(R"(
+		)");
+		doValidation(R"(
 			(:) enter
 			{
 							hack
@@ -494,8 +496,8 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 							assembly: "mov %eax, %ebx"
 				);
 			}
-		)"));
-		REQUIRE(validate(R"(
+		)");
+		doValidation(R"(
 			(:) enter
 			{
 				if [3]
@@ -503,8 +505,8 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 					a + b;
 				}
 			}
-		)"));
-		REQUIRE(validate(R"(
+		)");
+		doValidation(R"(
 			(:) enter
 			{
 				if [sys.Machine.memory_size]
@@ -523,8 +525,8 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 					}
 				}
 			}
-		)"));
-		REQUIRE(validate(R"(
+		)");
+		doValidation(R"(
 			(:) enter
 			{
 				defer a * 4 + someStuff()~a;
@@ -535,8 +537,8 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 					object.destroyObject();
 				}
 			}
-		)"));
-		REQUIRE(validate(R"(
+		)");
+		doValidation(R"(
 			(:) enter
 			{
 				if [sys.Sys.argv[1]]
@@ -556,14 +558,14 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 				}
 				return value: object.getVariable()~gotten;
 			}
-		)"));
-		REQUIRE(validate(R"(
+		)");
+		doValidation(R"(
 			grant Name {
 				var 32u a, b, c;
 				(32u a : 32u b : pure) d, e, f;
 			}
-		)"));
-		REQUIRE(validate(R"(
+		)");
+		doValidation(R"(
 			grant String
 			{
 				var 64u length;
@@ -575,21 +577,21 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 				var String b;
 				b.length == 0;
 			}
-		)"));
-		REQUIRE(validate(R"(
+		)");
+		doValidation(R"(
 			(:) enter
 			{
 				var ptr (:) a = lambda [](:){ sml.Out.print(:"Hi"); };
 			}
-		)"));
-		REQUIRE(validate(R"(
+		)");
+		doValidation(R"(
 			(:) enter
 			{
 				var 32u a = 1;
 				var ptr (:) b = lambda [a $a @a $$a @@a](:){ sml.Out.print(:"Hi"); };
 			}
-		)"));
-		REQUIRE(validate(R"(
+		)");
+		doValidation(R"(
 			(:) enter
 			{
 				var 32u a = 1;
@@ -605,8 +607,8 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 							sml.Out.print(:i);
 					};
 			}
-		)"));
-		REQUIRE(validate(R"(
+		)");
+		doValidation(R"(
 			(: Aa in, Aa b) doSomething {
 				// ...
 			}
@@ -615,8 +617,8 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 				doSomething(: a, b: b);
 				var float x = sin(:32);
 			}
-		)"));
-		REQUIRE(validate(R"(
+		)");
+		doValidation(R"(
 			(:) enter {
 				sml.Out.print(
 					: sml.Math.integrateNumericallySimpsons(
@@ -627,22 +629,22 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 					)
 				);
 			}
-		)"));
-		REQUIRE(validate(R"(
+		)");
+		doValidation(R"(
 			(:) enter {
 				var sml.Vector accumulator;
 				accumulator.map(
 					: lambda (double out : double in){ sml.Math.exp(:-in*in); }
 				);
 			}
-		)"));
-		REQUIRE(validate(R"(
+		)");
+		doValidation(R"(
 			(:) enter {
 				var sml.Vector[Xx : float] accumulator;
 				var sml.Vector[Xx : sml.String[:8u]] accumulator;
 			}
-		)"));
-		REQUIRE(validate(R"(
+		)");
+		doValidation(R"(
 			alias c = complicatedlibrary;
 			(:) enter {
 				alias d = anotherlonglibraryname;
@@ -661,8 +663,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 					goto x;
 				}
 			}
-		)"));
-		#define doValidation(x) REQUIRE(validate(x))
+		)");
 		doValidation(R"(
 			(:) enter
 			{
@@ -715,7 +716,6 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 				// ...
 			}
 		)");
-		#define doInvalidation(x) REQUIRE(false == validate(x, false))
 		doInvalidation(R"(
 			(:) enter {
 				alias Long = ptr 1;
@@ -985,5 +985,34 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 			public (enum[type[this]] out : 8u in) typify { }
 			var enum[Aa] a = Aa.WHAT_IS;
 		)");
+		doInvalidation(R"(
+			var enum[a + b] c;
+		)");
+		doInvalidation(R"(
+			var enum[b] c;
+		)");
+		doInvalidation(R"(
+			var enum[type[this + a]] b;
+		)");
+		doInvalidation(R"(
+			var enum[] b;
+		)");
+		doInvalidation(R"(
+			static a b;
+		)");
+		doInvalidation(R"(
+			var a b;
+		)");
+		doInvalidation(R"(
+			var A b;
+		)");
+		doInvalidation(R"(
+			var A B;
+		)");
+		doValidation(R"(
+			var Aa B;
+		)");
 	}
+	#undef doValidation
+	#undef doInvalidation
 }
