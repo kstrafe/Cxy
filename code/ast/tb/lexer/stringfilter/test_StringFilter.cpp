@@ -64,7 +64,7 @@ TEST_CASE("Test if the string filter works correctly", "[test-StringFilter]")
 		test(R"(``)", R"(``)");
 		test(R"('"')", R"(`"`)");
 		test(R"("'")", R"(`'`)");
-		test(R"("""")", R"(````)");
+		test(R"("""")", R"(````)");  // Looks odd, but think of two strings.
 		test(R"(`'`)", R"(`'`)");
 		test(R"(`"`)", R"(`"`)");
 		test(R"(`"``"`)", R"(`"``"`)");
