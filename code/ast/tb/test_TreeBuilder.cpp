@@ -1019,6 +1019,10 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 			var Aa a = b->c;
 		)");
 		doValidation(R"(
+			var 8u a = 'a';
+			var sml.String b = "b'";
+			var sml.String c = `c"`;
+			var sml.String d = `e " f`;
 		)");
 
 	}

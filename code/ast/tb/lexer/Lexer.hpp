@@ -23,6 +23,7 @@ along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 #include "filter/CommentFilter.hpp"
 #include "protocols/EntryType.hpp"
 #include "protocols/Token.hpp"
+#include "stringfilter/StringFilter.hpp"
 
 #include <vector>
 
@@ -58,8 +59,10 @@ private:
 	dependency::PositionCounter position_counter;
 	dependency::TokenGenerator token_generator;
 	filter::CommentFilter comment_filter;
+	stringfilter::StringFilter string_filter;
 
 	bool insertCharacterAfterComments(char character);
+	bool insertCharacterAfterQuotes(char character);
 
 	template <typename F>
 	bool isAnyOf(char a, F f)

@@ -45,6 +45,19 @@ bool Lexer::insertCharacter(char character)
 
 bool Lexer::insertCharacterAfterComments(char character)
 {
+	string_filter.push(character);
+	while (string_filter.available())
+	{
+		char top = string_filter.pop();
+		if (! insertCharacterAfterQuotes(top))
+			return false;
+	}
+	return true;
+}
+
+
+bool Lexer::insertCharacterAfterQuotes(char character)
+{
 	protocols::EntryType type_of_character = typify(character);
 	protocols::Action action_to_perform = action_generator.computeAction(type_of_character);
 	{

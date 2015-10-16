@@ -43,7 +43,7 @@ private:
 		CODEBIG,
 	} state = State::NOTHING, previous = State::NOTHING;
 
-	uint8_t code, out[2], can_fetch = 0;
+	uint8_t out[2], can_fetch = 0;
 
 	char universal[8];
 };
