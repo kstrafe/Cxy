@@ -150,7 +150,6 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::CATCH_LIST: return "CATCH_LIST";
 		case protocols::CrossTerminal::CLASS_MEMBER: return "CLASS_MEMBER";
 		case protocols::CrossTerminal::CLASS_MEMBER_EXPRESSION: return "CLASS_MEMBER_EXPRESSION";
-		case protocols::CrossTerminal::CLASS_OR_PACKAGE_CLASS: return "CLASS_OR_PACKAGE_CLASS";
 		case protocols::CrossTerminal::CODE_BLOCK: return "CODE_BLOCK";
 		case protocols::CrossTerminal::COLONIZED: return "COLONIZED";
 		case protocols::CrossTerminal::COLON_LIST: return "COLON_LIST";
@@ -168,6 +167,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::ELSE_STATEMENT: return "ELSE_STATEMENT";
 		case protocols::CrossTerminal::END_OF_MODULE: return "END_OF_MODULE";
 		case protocols::CrossTerminal::ENTER: return "ENTER";
+		case protocols::CrossTerminal::ENUMERABLE_TYPE: return "ENUMERABLE_TYPE";
 		case protocols::CrossTerminal::ENUMERATION_MEMBER_EXPRESSION: return "ENUMERATION_MEMBER_EXPRESSION";
 		case protocols::CrossTerminal::ENUM_END: return "";case protocols::CrossTerminal::ENUM_EXPRESSION: return "ENUM_EXPRESSION";
 		case protocols::CrossTerminal::ENUM_OR_NOTHING: return "ENUM_OR_NOTHING";
