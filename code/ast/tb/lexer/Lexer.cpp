@@ -218,7 +218,7 @@ protocols::EntryType Lexer::typify (char val)
 	const constexpr unsigned char UTF_8_LIMIT = 128;
 	if ((65 <= val && val <= 90) || (97 <= val && val <= 122) || val == 95 || (48 <= val && val <= 57))
 		return EntryType::ALPHA_DIGIT_OR_UNDERSCORE;
-	if (val == '"')
+	if (val == 34)
 		return EntryType::QUOTE_SYMBOL;
 	if (isAnyOf(val, '(', ')', '{', '}', '[', ']'))
 		return EntryType::GROUPING_SYMBOL;
