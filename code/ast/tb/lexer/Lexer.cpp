@@ -108,10 +108,10 @@ bool Lexer::insertCharacterAfterQuotes(char character)
 			else
 			{
 				newtok.line_number = lncount;
-				newtok.column_number = colcount - 2;
+				newtok.column_number = colcount - 2;  // WARNING/TODO: gives wrong value for self-breaking tokens like {}[]().
 			}
 
-			// std::cout << getTokenStack()[new_token].accompanying_lexeme << std::endl;
+			// std::cout << newtok.line_number << ':' << newtok.column_number << ' ' << newtok.accompanying_lexeme << std::endl;
 		}
 	}
 	return true;
