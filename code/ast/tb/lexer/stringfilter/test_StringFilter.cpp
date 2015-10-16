@@ -85,7 +85,7 @@ TEST_CASE("Test if the string filter works correctly", "[test-StringFilter]")
 		test(R"('\a')", "`\a`");
 		test(R"('\b')", "`\b`");
 		test(R"('\v')", "`\v`");
-		test(R"('\s')", "`\s`");
+		test(R"('\'')", "`'`");
 	}
 	#undef test
 }

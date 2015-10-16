@@ -154,6 +154,7 @@ void StringFilter::push(char character)
 				case 't': state = previous; cOut('\t'); break;
 				case 'v': state = previous; cOut('\v'); break;
 				case '"': state = previous; can_fetch = 1; out[0] = '"'; break;
+				case '\'': state = previous; can_fetch = 1; out[0] = '\''; break;
 				default: throw std::string("Can not escape this!"); break;
 			}
 		break;
