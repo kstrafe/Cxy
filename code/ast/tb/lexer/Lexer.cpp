@@ -123,7 +123,8 @@ protocols::TokenType Lexer::getKeyword(const std::string &test_lexeme) const
 
 void Lexer::identifyToken(protocols::Token &input_token)
 {
-	if (input_token.accompanying_lexeme.size() == 0)
+	if (input_token.entry_type != protocols::EntryType::QUOTE_SYMBOL
+		&& input_token.accompanying_lexeme.size() == 0)
 		throw std::string("Lexer::identifyToken: Zero-sized");
 
 	identifyTokenAfterStrippingUnderscores(input_token);

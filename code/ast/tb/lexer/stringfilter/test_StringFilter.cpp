@@ -57,6 +57,8 @@ TEST_CASE("Test if the string filter works correctly", "[test-StringFilter]")
 	}
 	SECTION("Escape inside different quotes")
 	{
+		test(R"("")", R"("")");
+		test(R"(``)", R"("")");
 		test(R"('"')", R"("""")");
 		test(R"("'")", R"("'")");
 		test(R"("""")", R"("""")");
