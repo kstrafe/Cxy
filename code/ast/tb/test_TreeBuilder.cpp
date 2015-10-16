@@ -1029,6 +1029,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 				c = '';
 				d = '\c22';
 				e = "";
+				return;
 			}
 		)");
 
