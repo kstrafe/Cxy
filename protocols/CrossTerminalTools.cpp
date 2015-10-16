@@ -329,6 +329,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::SYMBOL_LESS_THAN__LESS_THAN__EQUAL: return "SYMBOL_LESS_THAN__LESS_THAN__EQUAL";
 		case protocols::CrossTerminal::SYMBOL_MINUS: return "SYMBOL_MINUS";
 		case protocols::CrossTerminal::SYMBOL_MINUS__EQUAL: return "SYMBOL_MINUS__EQUAL";
+		case protocols::CrossTerminal::SYMBOL_MINUS__GREATER_THAN: return "SYMBOL_MINUS__GREATER_THAN";
 		case protocols::CrossTerminal::SYMBOL_MINUS__MINUS: return "SYMBOL_MINUS__MINUS";
 		case protocols::CrossTerminal::SYMBOL_PERCENT: return "SYMBOL_PERCENT";
 		case protocols::CrossTerminal::SYMBOL_PERCENT__EQUAL: return "SYMBOL_PERCENT__EQUAL";

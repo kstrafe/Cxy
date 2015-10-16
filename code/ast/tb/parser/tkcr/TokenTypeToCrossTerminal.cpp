@@ -114,6 +114,7 @@ protocols::CrossTerminal TokenTypeToCrossTerminal::convertToCrossTerminal(protoc
 		case protocols::TokenType::SYMBOL_LESS_THAN__LESS_THAN__EQUAL: return protocols::CrossTerminal::SYMBOL_LESS_THAN__LESS_THAN__EQUAL;
 		case protocols::TokenType::SYMBOL_MINUS: return protocols::CrossTerminal::SYMBOL_MINUS;
 		case protocols::TokenType::SYMBOL_MINUS__EQUAL: return protocols::CrossTerminal::SYMBOL_MINUS__EQUAL;
+		case protocols::TokenType::SYMBOL_MINUS__GREATER_THAN: return protocols::CrossTerminal::SYMBOL_MINUS__GREATER_THAN;
 		case protocols::TokenType::SYMBOL_MINUS__MINUS: return protocols::CrossTerminal::SYMBOL_MINUS__MINUS;
 		case protocols::TokenType::SYMBOL_PERCENT: return protocols::CrossTerminal::SYMBOL_PERCENT;
 		case protocols::TokenType::SYMBOL_PERCENT__EQUAL: return protocols::CrossTerminal::SYMBOL_PERCENT__EQUAL;
