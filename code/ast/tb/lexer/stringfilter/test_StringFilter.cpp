@@ -34,6 +34,9 @@ namespace
 			while (filter.available())
 				b.push_back(filter.pop());
 		}
+		filter.end();
+		while (filter.available())
+			b.push_back(filter.pop());
 		return b;
 	}
 }
@@ -49,7 +52,7 @@ TEST_CASE("Test if the string filter works correctly", "[test-StringFilter]")
 		test(R"('\r')", "\"\r\"");
 		test(R"("\r")", "\"\r\"");
 		test(R"(`\r`)", R"("\r")");
-		test(R"(`\r``)", R"("\r"")");
+		test(R"(`\r``)", R"("\r`)");
 		test(R"(`"`)", R"("""")");
 		test(R"("\"")", R"("""")");
 		test(R"('\"')", R"("""")");
@@ -64,7 +67,8 @@ TEST_CASE("Test if the string filter works correctly", "[test-StringFilter]")
 		test(R"("""")", R"("""")");
 		test(R"(`'`)", R"("'")");
 		test(R"(`"`)", R"("""")");
-		test(R"(`"``"`)", R"("""""""")");
+		test(R"(`"``"`)", R"("""`""")");
+		test(R"(`e " f`;)", R"("e "" f";)");
 		test(R"()", R"()");
 	}
 	#undef test

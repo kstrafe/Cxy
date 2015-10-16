@@ -29,6 +29,7 @@ public:
 	void push(char character);
 	bool available() const;
 	char pop();
+	void end();
 
 private:
 
@@ -41,6 +42,7 @@ private:
 		ESCAPE,
 		CODESMALL,
 		CODEBIG,
+		ESCAPE_VERBATIM,
 	} state = State::NOTHING, previous = State::NOTHING;
 
 	uint8_t out[2], can_fetch = 0;

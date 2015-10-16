@@ -1024,7 +1024,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 			var sml.String c = `c"`;
 			var sml.String d = `e " f`;
 			(:) enter {
-				a = ``;
+				a = ````;
 				b = "";
 				c = '';
 			}

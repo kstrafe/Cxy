@@ -30,6 +30,7 @@ void StringFilter::push(char character)
 {
 	#define putOut() out[0] = character; can_fetch = 1
 	#define outQuote() out[0] = '"'; can_fetch = 1
+	#define cOut(x) can_fetch = 1; out[0] = x
 	switch (state)
 	{
 		case State::NOTHING:
@@ -88,8 +89,7 @@ void StringFilter::push(char character)
 			switch (character)
 			{
 				case '`':
-					state = State::NOTHING;
-					outQuote();
+					state = State::ESCAPE_VERBATIM;
 				break;
 				case '"':
 					can_fetch = 2;
@@ -99,10 +99,24 @@ void StringFilter::push(char character)
 				default: putOut(); break;
 			}
 		break;
+		case State::ESCAPE_VERBATIM:
+			switch (character)
+			{
+				case '`':
+					state = State::VERBATIM;
+					cOut('`');
+					break;
+				default:
+					state = State::NOTHING;
+					can_fetch = 2;
+					out[0] = character;
+					out[1] = '"';
+				break;
+			}
+		break;
 		case State::ESCAPE:
 			switch (character)
 			{
-				#define cOut(x) can_fetch = 1; out[0] = x
 				case 'u': state = State::CODESMALL; break;
 				case 'U': state = State::CODEBIG; break;
 				case 'n': state = previous; cOut('\n'); break;
@@ -116,6 +130,9 @@ void StringFilter::push(char character)
 
 		break;
 	}
+	#undef cOut
+	#undef putOut
+	#undef outQuote
 }
 
 
@@ -129,6 +146,18 @@ char StringFilter::pop()
 {
 	--can_fetch;
 	return out[can_fetch];
+}
+
+
+void StringFilter::end()
+{
+	switch (state)
+	{
+		case State::ESCAPE_VERBATIM:
+			out[0] = '"';
+			can_fetch = 1;
+		default: break;
+	}
 }
 
 }}
