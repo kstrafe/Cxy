@@ -979,6 +979,11 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 		)");
 		doValidation(R"(
 			var 32u AAA = 1;
+			var 8uo a;
+			var {64so a, b, c;}
+
+			public (enum[type[this]] out : 8u in) typify { }
+			var enum[Aa] a = Aa.WHAT_IS;
 		)");
 	}
 }
