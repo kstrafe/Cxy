@@ -65,30 +65,28 @@ void TreePruner::pruneTree(protocols::ConcreteSyntaxTree *ct)
 		ct->children.end()
 	);
 
-	// pull no semicolon statement
-	/*
+	// Pull the NO_SEMICOLON and STATEMENT upward
 	for (std::size_t i = 0; i < ct->children.size(); ++i)
 	{
-		protocols::ConcreteSyntaxTree *child = ct->children.at(i);
-		if (ct->node_type == protocols::CrossTerminal::NO_SEMICOLON_STATEMENT)
-		{
+		using namespace protocols;
+		ConcreteSyntaxTree *child = ct->children.at(i);
+		if (
+			child->node_type == CrossTerminal::NO_SEMICOLON_STATEMENT
+			&& child->node_type == CrossTerminal::STATEMENT
+		) {
 			decltype(child) trans_child = child->children.at(0);
-			*ct->children.at(i) = *trans_child;
+			child->children.clear();
+			ct->children.at(i) = trans_child;
 			delete child;
-			ct->children.erase(ct->children.begin() + i);
-			--i;
 		}
 	}
-	*/
 
 	// Prune all expressions that have one child and the second child as an epsilonate.
-	for
-	(
+	for (
 		std::size_t i = 0;
 		i < ct->children.size();
 		++i
-	)
-	{
+	) {
 		if (
 			tul::protocols::CrossTerminalTools::isExpression(
 				ct->children[i]->node_type)
