@@ -105,19 +105,15 @@ TEST_CASE("AbstractSyntaxTreeGenerator must validate the grammar.", "[test-Abstr
 		public var Aa a;
 	)");
 	doValidation(R"(
-		public var 1u a = b ^ c;
-		var 1u d;
-		(:) >=;
-		(:) >=
-		{
-			when (a-e) b else c;
-			if ($@! cast[1u](a)) b;
-			if [a>b-c*d || f && e + new[32u]] c;
-		}
 		alias {
 			st = stiti;
 			dude = what;
 		}
+		grant Aa {
+			(:) >;
+			var ptr 1u dude;
+		}
+		grant EBBA 32u;
 	)");
 	#undef doValidation
 }
