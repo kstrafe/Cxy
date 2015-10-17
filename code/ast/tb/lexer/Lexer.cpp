@@ -31,6 +31,9 @@ namespace tul { namespace lexer {
 
 bool Lexer::insertCharacter(char character)
 {
+	if (character == '\n')
+		last_line_length = position_counter.getCurrentColumnNumber();
+	position_counter.countCharacter(character);
 	comment_filter.push(character);
 	while (comment_filter.available())
 	{
@@ -38,7 +41,6 @@ bool Lexer::insertCharacter(char character)
 		if (! insertCharacterAfterComments(top))
 			return false;
 	}
-	position_counter.countCharacter(character);
 	return true;
 }
 
@@ -95,8 +97,21 @@ bool Lexer::insertCharacterAfterQuotes(char character)
 				if (potential_next.accompanying_lexeme.empty() == false)
 					getTokenStack().insert(getTokenStack().begin() + new_token + 1, potential_next);
 			}
-			getTokenStack()[new_token].column_number = position_counter.getCurrentColumnNumber();
-			getTokenStack()[new_token].line_number = position_counter.getCurrentLineNumber();
+			protocols::Token &newtok = getTokenStack()[new_token];
+			std::size_t colcount = position_counter.getCurrentColumnNumber();
+			std::size_t lncount = position_counter.getCurrentLineNumber();
+			if (colcount == 1)
+			{
+				newtok.line_number = lncount - 1;
+				newtok.column_number = last_line_length;
+			}
+			else
+			{
+				newtok.line_number = lncount;
+				newtok.column_number = colcount - 2;  // WARNING/TODO: gives wrong value for self-breaking tokens like {}[]().
+			}
+
+			// std::cout << newtok.line_number << ':' << newtok.column_number << ' ' << newtok.accompanying_lexeme << std::endl;
 		}
 	}
 	return true;
@@ -232,7 +247,7 @@ protocols::EntryType Lexer::typify (char val)
 	const constexpr unsigned char UTF_8_LIMIT = 128;
 	if ((65 <= val && val <= 90) || (97 <= val && val <= 122) || val == 95 || (48 <= val && val <= 57))
 		return EntryType::ALPHA_DIGIT_OR_UNDERSCORE;
-	if (val == 34)
+	if (val == '`')
 		return EntryType::QUOTE_SYMBOL;
 	if (isAnyOf(val, '(', ')', '{', '}', '[', ']'))
 		return EntryType::GROUPING_SYMBOL;

@@ -101,5 +101,15 @@ TEST_CASE("Test the position counter", "[test-PositionCounter]")
 		REQUIRE(position_counter.getCurrentColumnNumber() == 23);
 		REQUIRE(position_counter.getCurrentLineNumber() == 1);
 	}
+	SECTION("Common code")
+	{
+		using namespace tul::dependency;
+		PositionCounter posc;
+		for (auto &character : std::string("(:"))
+			posc.countCharacter(character);
+		REQUIRE(posc.getCurrentColumnNumber() == 3);
+		posc.countCharacter(')');
+		REQUIRE(posc.getCurrentColumnNumber() == 4);
+	}
 
 }

@@ -1029,6 +1029,16 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 				c = '';
 				d = '\c22';
 				e = "";
+				return;
+			}
+		)");
+		doValidation(R"(
+			grant MYWISH 32u;
+		)");
+		doValidation(R"(
+			(:) enter
+			{
+				a ^ b;
 			}
 		)");
 

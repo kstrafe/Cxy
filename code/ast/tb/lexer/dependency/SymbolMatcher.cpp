@@ -33,6 +33,7 @@ protocols::TokenType SymbolMatcher::getSymbol(const std::string &lexeme)
 	else if (lexeme == "||") return TokenType::SYMBOL_BAR__BAR;
 	else if (lexeme == "|=") return TokenType::SYMBOL_BAR__EQUAL;
 	else if (lexeme == "^=") return TokenType::SYMBOL_CARET__EQUAL;
+	else if (lexeme == "^") return TokenType::SYMBOL_CARET__PRUNE;
 	else if (lexeme == ":") return TokenType::SYMBOL_COLON__PRUNE;
 	else if (lexeme == ",") return TokenType::SYMBOL_COMMA__PRUNE;
 	else if (lexeme == "$$") return TokenType::SYMBOL_DOLLAR__DOLLAR;
@@ -57,7 +58,6 @@ protocols::TokenType SymbolMatcher::getSymbol(const std::string &lexeme)
 	else if (lexeme == "&") return TokenType::SYMBOL_AMPERSAND;
 	else if (lexeme == "@") return TokenType::SYMBOL_APETAIL;
 	else if (lexeme == "|") return TokenType::SYMBOL_BAR;
-	else if (lexeme == "^") return TokenType::SYMBOL_CARET;
 	else if (lexeme == "$") return TokenType::SYMBOL_DOLLAR;
 	else if (lexeme == "=") return TokenType::SYMBOL_EQUAL;
 	else if (lexeme == "!") return TokenType::SYMBOL_EXCLAMATION_MARK;
