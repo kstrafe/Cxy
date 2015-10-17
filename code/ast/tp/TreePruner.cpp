@@ -38,10 +38,11 @@ void TreePruner::pruneTree(protocols::ConcreteSyntaxTree *ct)
 		std::remove_if
 		(
 			ct->children.begin(), ct->children.end(),
-			[](protocols::ConcreteSyntaxTree *child)
+			[&](protocols::ConcreteSyntaxTree *child)
 			{
 				assert(child != nullptr);
 				#define caze(x) child->node_type == protocols::CrossTerminal::x ||
+				#define cazeself(x, y) ct->node_type == protocols::CrossTerminal::x && child->node_type == protocols::CrossTerminal::y ||
 				bool predicate =
 					caze(GROUPER_LEFT_BRACE)
 					caze(GROUPER_LEFT_PARENTHESIS)
@@ -55,6 +56,8 @@ void TreePruner::pruneTree(protocols::ConcreteSyntaxTree *ct)
 					caze(SYMBOL_CARET)
 					caze(SYMBOL_COLON)
 					caze(SYMBOL_SEMICOLON)
+					cazeself(ALIAS_TRAIL, SYMBOL_EQUAL)
+					cazeself(ALIAS_TRAILS, EPSILONATE)
 					false;
 				#undef caze
 				if (predicate)
@@ -183,6 +186,14 @@ void TreePruner::pruneTree(protocols::ConcreteSyntaxTree *ct)
 	popud(ACCESS_SPECIFIER, KEYWORD_RESTRICTED);
 
 	popud(METHOD_DECL_OR_DEF, STATEMENT_LIST);
+
+	popud(ALIAS_CORE, ALIAS_TRAIL);
+	popud(ALIAS_CORE, ALIAS_TRAILS);
+	popud(ALIAS_TRAILS, ALIAS_TRAILS);
+	popud(ALIAS_TRAILS, ALIAS_TRAIL);
+	popud(ALIAS_TRAIL, ALIAS_TRAIL);
+	popud(ENTER, ALIAS_STATEMENT);
+
 	// If this is an expression, and the second child is an expression, and it has two children, bring that child all the way up.
 
 	// Prune all expressions that have one child or the second child as an epsilonate.

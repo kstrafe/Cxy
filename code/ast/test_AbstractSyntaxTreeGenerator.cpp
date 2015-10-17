@@ -114,6 +114,10 @@ TEST_CASE("AbstractSyntaxTreeGenerator must validate the grammar.", "[test-Abstr
 			if (a) b;
 			if [a>b-c*d || f && e + new[32u]] c;
 		}
+		alias {
+			st = stiti;
+			dude = what;
+		}
 	)");
 	#undef doValidation
 }
