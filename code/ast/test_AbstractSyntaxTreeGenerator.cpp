@@ -113,7 +113,7 @@ TEST_CASE("AbstractSyntaxTreeGenerator must validate the grammar.", "[test-Abstr
 			(:) >;
 			var ptr 1u dude;
 		}
-		grant EBBA 32u;
+		grant EBBA [EBBA, 8u];
 	)");
 	#undef doValidation
 }
