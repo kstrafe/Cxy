@@ -71,7 +71,7 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
 				caze(IDENTIFIER_PACKAGE);
 				caze(KEYWORD_IF);
 				caze(IDENTIFIER_PACKAGE);
-				caze(SYMBOL_COMMA__PRUNE);
+				caze(SYMBOL_COMMA);
 				caze(IDENTIFIER_PACKAGE);
 				caze(IDENTIFIER_PACKAGE);
 				caze(IDENTIFIER_PACKAGE);
@@ -290,7 +290,7 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
 			caze(IDENTIFIER_PACKAGE);
 			caze(SYMBOL_EQUAL);
 			caze(INTEGER_LITERAL);
-			caze(SYMBOL_SEMICOLON__PRUNE);
+			caze(SYMBOL_SEMICOLON);
 		#undef caze
 		REQUIRE(token_stack.size() == iterator);
 	}
@@ -312,7 +312,7 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
 			#define caze(type_name) REQUIRE(token_stack.at(iterator++).token_type == TokenType::type_name)
 				caze(KEYWORD_PUBLIC);
 				caze(GROUPER_LEFT_PARENTHESIS);
-				caze(SYMBOL_COLON__PRUNE);
+				caze(SYMBOL_COLON);
 				caze(GROUPER_RIGHT_PARENTHESIS);
 			#undef caze
 		}

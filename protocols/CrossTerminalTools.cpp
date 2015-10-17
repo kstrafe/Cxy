@@ -112,12 +112,51 @@ bool CrossTerminalTools::isUselessSymbol(const CrossTerminal &ct_)
 {
 	switch (ct_)
 	{
-		case CrossTerminal::SYMBOL_CARET__PRUNE: return true;
-		case CrossTerminal::SYMBOL_COLON__PRUNE: return true;
-		case CrossTerminal::SYMBOL_COMMA__PRUNE: return true;
-		case CrossTerminal::SYMBOL_DOT__PRUNE: return true;
-		case CrossTerminal::SYMBOL_SEMICOLON__PRUNE: return true;
-		case CrossTerminal::SYMBOL_TILDE__PRUNE: return true;
+		case CrossTerminal::SYMBOL_AMPERSAND: return true;
+		case CrossTerminal::SYMBOL_AMPERSAND__AMPERSAND: return true;
+		case CrossTerminal::SYMBOL_AMPERSAND__AMPERSAND__EQUAL: return true;
+		case CrossTerminal::SYMBOL_AMPERSAND__EQUAL: return true;
+		case CrossTerminal::SYMBOL_APETAIL: return true;
+		case CrossTerminal::SYMBOL_APETAIL__APETAIL: return true;
+		case CrossTerminal::SYMBOL_BAR: return true;
+		case CrossTerminal::SYMBOL_BAR__BAR: return true;
+		case CrossTerminal::SYMBOL_BAR__BAR__EQUAL: return true;
+		case CrossTerminal::SYMBOL_BAR__EQUAL: return true;
+		case CrossTerminal::SYMBOL_CARET: return true;
+		case CrossTerminal::SYMBOL_CARET__EQUAL: return true;
+		case CrossTerminal::SYMBOL_COLON: return true;
+		case CrossTerminal::SYMBOL_COMMA: return true;
+		case CrossTerminal::SYMBOL_DOLLAR: return true;
+		case CrossTerminal::SYMBOL_DOLLAR__DOLLAR: return true;
+		case CrossTerminal::SYMBOL_DOT: return true;
+		case CrossTerminal::SYMBOL_EQUAL: return true;
+		case CrossTerminal::SYMBOL_EQUAL__EQUAL: return true;
+		case CrossTerminal::SYMBOL_EXCLAMATION_MARK: return true;
+		case CrossTerminal::SYMBOL_EXCLAMATION_MARK__EQUAL: return true;
+		case CrossTerminal::SYMBOL_EXCLAMATION_MARK__EXCLAMATION_MARK: return true;
+		case CrossTerminal::SYMBOL_FORWARD_SLASH: return true;
+		case CrossTerminal::SYMBOL_FORWARD_SLASH__EQUAL: return true;
+		case CrossTerminal::SYMBOL_GREATER_THAN: return true;
+		case CrossTerminal::SYMBOL_GREATER_THAN__EQUAL: return true;
+		case CrossTerminal::SYMBOL_GREATER_THAN__GREATER_THAN: return true;
+		case CrossTerminal::SYMBOL_GREATER_THAN__GREATER_THAN__EQUAL: return true;
+		case CrossTerminal::SYMBOL_LESS_THAN: return true;
+		case CrossTerminal::SYMBOL_LESS_THAN__EQUAL: return true;
+		case CrossTerminal::SYMBOL_LESS_THAN__LESS_THAN: return true;
+		case CrossTerminal::SYMBOL_LESS_THAN__LESS_THAN__EQUAL: return true;
+		case CrossTerminal::SYMBOL_MINUS: return true;
+		case CrossTerminal::SYMBOL_MINUS__EQUAL: return true;
+		case CrossTerminal::SYMBOL_MINUS__GREATER_THAN: return true;
+		case CrossTerminal::SYMBOL_MINUS__MINUS: return true;
+		case CrossTerminal::SYMBOL_PERCENT: return true;
+		case CrossTerminal::SYMBOL_PERCENT__EQUAL: return true;
+		case CrossTerminal::SYMBOL_PLUS: return true;
+		case CrossTerminal::SYMBOL_PLUS__EQUAL: return true;
+		case CrossTerminal::SYMBOL_PLUS__PLUS: return true;
+		case CrossTerminal::SYMBOL_SEMICOLON: return true;
+		case CrossTerminal::SYMBOL_STAR: return true;
+		case CrossTerminal::SYMBOL_STAR__EQUAL: return true;
+		case CrossTerminal::SYMBOL_TILDE: return true;
 		default: return false;
 	}
 }
@@ -307,13 +346,13 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::SYMBOL_BAR__BAR: return "SYMBOL_BAR__BAR";
 		case protocols::CrossTerminal::SYMBOL_BAR__BAR__EQUAL: return "SYMBOL_BAR__BAR__EQUAL";
 		case protocols::CrossTerminal::SYMBOL_BAR__EQUAL: return "SYMBOL_BAR__EQUAL";
+		case protocols::CrossTerminal::SYMBOL_CARET: return "SYMBOL_CARET";
 		case protocols::CrossTerminal::SYMBOL_CARET__EQUAL: return "SYMBOL_CARET__EQUAL";
-		case protocols::CrossTerminal::SYMBOL_CARET__PRUNE: return "SYMBOL_CARET__PRUNE";
-		case protocols::CrossTerminal::SYMBOL_COLON__PRUNE: return "SYMBOL_COLON__PRUNE";
-		case protocols::CrossTerminal::SYMBOL_COMMA__PRUNE: return "SYMBOL_COMMA__PRUNE";
+		case protocols::CrossTerminal::SYMBOL_COLON: return "SYMBOL_COLON";
+		case protocols::CrossTerminal::SYMBOL_COMMA: return "SYMBOL_COMMA";
 		case protocols::CrossTerminal::SYMBOL_DOLLAR: return "SYMBOL_DOLLAR";
 		case protocols::CrossTerminal::SYMBOL_DOLLAR__DOLLAR: return "SYMBOL_DOLLAR__DOLLAR";
-		case protocols::CrossTerminal::SYMBOL_DOT__PRUNE: return "SYMBOL_DOT__PRUNE";
+		case protocols::CrossTerminal::SYMBOL_DOT: return "SYMBOL_DOT";
 		case protocols::CrossTerminal::SYMBOL_EQUAL: return "SYMBOL_EQUAL";
 		case protocols::CrossTerminal::SYMBOL_EQUAL__EQUAL: return "SYMBOL_EQUAL__EQUAL";
 		case protocols::CrossTerminal::SYMBOL_EXCLAMATION_MARK: return "SYMBOL_EXCLAMATION_MARK";
@@ -338,10 +377,10 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::SYMBOL_PLUS: return "SYMBOL_PLUS";
 		case protocols::CrossTerminal::SYMBOL_PLUS__EQUAL: return "SYMBOL_PLUS__EQUAL";
 		case protocols::CrossTerminal::SYMBOL_PLUS__PLUS: return "SYMBOL_PLUS__PLUS";
-		case protocols::CrossTerminal::SYMBOL_SEMICOLON__PRUNE: return "SYMBOL_SEMICOLON__PRUNE";
+		case protocols::CrossTerminal::SYMBOL_SEMICOLON: return "SYMBOL_SEMICOLON";
 		case protocols::CrossTerminal::SYMBOL_STAR: return "SYMBOL_STAR";
 		case protocols::CrossTerminal::SYMBOL_STAR__EQUAL: return "SYMBOL_STAR__EQUAL";
-		case protocols::CrossTerminal::SYMBOL_TILDE__PRUNE: return "SYMBOL_TILDE__PRUNE";
+		case protocols::CrossTerminal::SYMBOL_TILDE: return "SYMBOL_TILDE";
 		case protocols::CrossTerminal::TEMPLATE_LIST: return "TEMPLATE_LIST";
 		case protocols::CrossTerminal::THROW_STATEMENT: return "THROW_STATEMENT";
 		case protocols::CrossTerminal::TRY_BLOCK: return "TRY_BLOCK";

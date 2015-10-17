@@ -106,6 +106,9 @@ TEST_CASE("AbstractSyntaxTreeGenerator must validate the grammar.", "[test-Abstr
 	)");
 	doValidation(R"(
 		public var 1u a = b ^ c;
+		(:) enter
+		{
+		}
 	)");
 	#undef doValidation
 }
