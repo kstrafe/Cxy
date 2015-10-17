@@ -31,9 +31,7 @@ void TreePruner::pruneTree(protocols::ConcreteSyntaxTree *ct)
 	// Perform the following actions.
 	// For each node, decide which can stay, recurse
 	for (protocols::ConcreteSyntaxTree *child : ct->children)
-	{
 		pruneTree(child);
-	}
 
 	ct->children.erase
 	(
@@ -43,12 +41,16 @@ void TreePruner::pruneTree(protocols::ConcreteSyntaxTree *ct)
 			[](protocols::ConcreteSyntaxTree *child)
 			{
 				assert(child != nullptr);
+				#define caze(x) child->node_type == protocols::CrossTerminal::x ||
 				bool predicate =
-					// child->node_type == tul::protocols::CrossTerminal::EPSILONATE
-					/* || */  (child->token.entry_type == tul::protocols::EntryType::OTHER_SYMBOL
-					&& tul::protocols::CrossTerminalTools::isUselessSymbol(child->node_type) == true)
-					|| child->token.entry_type == tul::protocols::EntryType::GROUPING_SYMBOL
-					|| tul::protocols::CrossTerminalTools::isKeyword(child->node_type) == true;
+					caze(SYMBOL_COLON)
+					caze(GROUPER_LEFT_BRACE)
+					caze(GROUPER_RIGHT_BRACE)
+					caze(GROUPER_LEFT_PARENTHESIS)
+					caze(GROUPER_RIGHT_PARENTHESIS)
+					caze(GROUPER_RIGHT_BRACKET)
+					false;
+				#undef caze
 				if (predicate)
 					delete child;
 				return predicate;
