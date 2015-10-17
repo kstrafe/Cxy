@@ -106,6 +106,14 @@ TEST_CASE("AbstractSyntaxTreeGenerator must validate the grammar.", "[test-Abstr
 	)");
 	doValidation(R"(
 		public var 1u a = b ^ c;
+		var 1u d;
+		(:) >=;
+		(:) >=
+		{
+			when (a-e) b else c;
+			if (a) b;
+			if [a>b-c*d || f && e + new[32u]] c;
+		}
 	)");
 	#undef doValidation
 }

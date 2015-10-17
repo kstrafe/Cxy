@@ -27,7 +27,7 @@ namespace tul { namespace ast {
 	bool AbstractSyntaxTreeGenerator::buildTree(const std::string &code)
 	{
 		if (tree_builder.buildTree(code))
-		{ return true; }
+			return true;
 		return false;
 	}
 
@@ -50,7 +50,7 @@ namespace tul { namespace ast {
 	{
 		std::unique_ptr<protocols::ConcreteSyntaxTree> tree = tree_builder.getConcreteSyntaxTree();
 		tp::TreePruner::pruneTree(tree.get());
-		table_builder.runOn(tree.get(), qualified_name);
+		// table_builder.runOn(tree.get(), qualified_name);
 		std::cout << tree.get()->toString() << std::endl;
 		return true;
 	}

@@ -33,11 +33,7 @@ protocols::TokenType SymbolMatcher::getSymbol(const std::string &lexeme)
 	else if (lexeme == "||") return TokenType::SYMBOL_BAR__BAR;
 	else if (lexeme == "|=") return TokenType::SYMBOL_BAR__EQUAL;
 	else if (lexeme == "^=") return TokenType::SYMBOL_CARET__EQUAL;
-	else if (lexeme == "^") return TokenType::SYMBOL_CARET__PRUNE;
-	else if (lexeme == ":") return TokenType::SYMBOL_COLON__PRUNE;
-	else if (lexeme == ",") return TokenType::SYMBOL_COMMA__PRUNE;
 	else if (lexeme == "$$") return TokenType::SYMBOL_DOLLAR__DOLLAR;
-	else if (lexeme == ".") return TokenType::SYMBOL_DOT__PRUNE;
 	else if (lexeme == "==") return TokenType::SYMBOL_EQUAL__EQUAL;
 	else if (lexeme == "!=") return TokenType::SYMBOL_EXCLAMATION_MARK__EQUAL;
 	else if (lexeme == "!!") return TokenType::SYMBOL_EXCLAMATION_MARK__EXCLAMATION_MARK;
@@ -52,13 +48,15 @@ protocols::TokenType SymbolMatcher::getSymbol(const std::string &lexeme)
 	else if (lexeme == "%=") return TokenType::SYMBOL_PERCENT__EQUAL;
 	else if (lexeme == "+=") return TokenType::SYMBOL_PLUS__EQUAL;
 	else if (lexeme == "++") return TokenType::SYMBOL_PLUS__PLUS;
-	else if (lexeme == ";") return TokenType::SYMBOL_SEMICOLON__PRUNE;
 	else if (lexeme == "*=") return TokenType::SYMBOL_STAR__EQUAL;
-	else if (lexeme == "~") return TokenType::SYMBOL_TILDE__PRUNE;
 	else if (lexeme == "&") return TokenType::SYMBOL_AMPERSAND;
 	else if (lexeme == "@") return TokenType::SYMBOL_APETAIL;
 	else if (lexeme == "|") return TokenType::SYMBOL_BAR;
+	else if (lexeme == "^") return TokenType::SYMBOL_CARET;
+	else if (lexeme == ":") return TokenType::SYMBOL_COLON;
+	else if (lexeme == ",") return TokenType::SYMBOL_COMMA;
 	else if (lexeme == "$") return TokenType::SYMBOL_DOLLAR;
+	else if (lexeme == ".") return TokenType::SYMBOL_DOT;
 	else if (lexeme == "=") return TokenType::SYMBOL_EQUAL;
 	else if (lexeme == "!") return TokenType::SYMBOL_EXCLAMATION_MARK;
 	else if (lexeme == "/") return TokenType::SYMBOL_FORWARD_SLASH;
@@ -67,7 +65,9 @@ protocols::TokenType SymbolMatcher::getSymbol(const std::string &lexeme)
 	else if (lexeme == "-") return TokenType::SYMBOL_MINUS;
 	else if (lexeme == "%") return TokenType::SYMBOL_PERCENT;
 	else if (lexeme == "+") return TokenType::SYMBOL_PLUS;
+	else if (lexeme == ";") return TokenType::SYMBOL_SEMICOLON;
 	else if (lexeme == "*") return TokenType::SYMBOL_STAR;
+	else if (lexeme == "~") return TokenType::SYMBOL_TILDE;
 	else return protocols::TokenType::UNIDENTIFIED;
 }
 

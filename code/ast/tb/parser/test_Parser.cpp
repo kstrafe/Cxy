@@ -40,14 +40,14 @@ TEST_CASE("Test parser", "[test-Parser]")
 
 		parseSymbol(TokenType::KEYWORD_VAR);
 		parseSymbol(TokenType::IDENTIFIER_PACKAGE);
-		parseSymbol(TokenType::SYMBOL_DOT__PRUNE);
+		parseSymbol(TokenType::SYMBOL_DOT);
 		parseSymbol(TokenType::IDENTIFIER_CLASS);
 		parseSymbol(TokenType::IDENTIFIER_VARIABLE);
-		parseSymbol(TokenType::SYMBOL_SEMICOLON__PRUNE);
+		parseSymbol(TokenType::SYMBOL_SEMICOLON);
 
 		SECTION("See if we handle an empty stack correctly")
 		{
-			parseFail(TokenType::SYMBOL_SEMICOLON__PRUNE);
+			parseFail(TokenType::SYMBOL_SEMICOLON);
 		}
 	}
 }

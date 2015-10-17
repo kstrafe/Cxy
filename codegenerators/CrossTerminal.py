@@ -224,7 +224,7 @@ def createprotocolsCrossTerminalToolscpp(terminal_set, non_terminal_set):
 		cases = '''case CrossTerminal::%(ctname)s: return true;'''
 		default = '''default: return false;'''
 
-		result = [cases % {'ctname': i} for i in sorted(terminal_set) if i.startswith('SYMBOL_') and i.endswith('__PRUNE')]
+		result = [cases % {'ctname': i} for i in sorted(terminal_set) if i.startswith('SYMBOL_') and i.endswith('')]
 		result = switches % {'cases': dependency.Prepend.prependTabEachLine('\n'.join(result) + '\n' + default)}
 		result = is_keyword_function % {'switches': dependency.Prepend.prependTabEachLine(result)}
 		return result
