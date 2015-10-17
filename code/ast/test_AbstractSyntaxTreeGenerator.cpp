@@ -108,12 +108,13 @@ TEST_CASE("AbstractSyntaxTreeGenerator must validate the grammar.", "[test-Abstr
 		alias {
 			st = stiti;
 			dude = what;
+			Smh = what.Cool;
 		}
 		grant Aa {
 			(:) >;
 			var ptr 1u dude;
 		}
-		grant EBBA [EBBA, 8u];
+		grant EBBA [EBBA + DERP, ptr [3, 8u]];
 	)");
 	#undef doValidation
 }

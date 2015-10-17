@@ -27,6 +27,8 @@ namespace tul { namespace tp {
 
 void TreePruner::pruneTree(protocols::ConcreteSyntaxTree *ct)
 {
+	// Instead of manually pruning trees, we can add an annotation to the grammar so that
+	// it can generate a pruner for us.
 	// Assume ct is the root of the tree.
 	// Perform the following actions.
 	// For each node, decide which can stay, recurse
