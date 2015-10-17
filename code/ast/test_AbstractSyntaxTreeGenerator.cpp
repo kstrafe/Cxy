@@ -109,9 +109,9 @@ TEST_CASE("AbstractSyntaxTreeGenerator must validate the grammar.", "[test-Abstr
 		var 1u d;
 		(:) enter
 		{
-			when (a) b else c;
+			when (a-e) b else c;
 			if (a) b;
-			if [a>b-c*d && e] c;
+			if [a>b-c*d || f && e + new[32u]] c;
 		}
 	)");
 	#undef doValidation

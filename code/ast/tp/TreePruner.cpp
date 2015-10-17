@@ -119,8 +119,16 @@ void TreePruner::pruneTree(protocols::ConcreteSyntaxTree *ct)
 	exprpop(RELATIONAL, LESS_THAN);
 	exprpop(RELATIONAL, LESS_THAN__EQUAL);
 	exprpop(ADDITIVE, PLUS);
+	exprpop(ADDITIVE, MINUS);
 	exprpop(MULTIPLICATIVE, STAR);
 	exprpop(MULTIPLICATIVE, FORWARD_SLASH);
+	popud(RELATIONAL_OPERATOR, SYMBOL_GREATER_THAN);
+	popud(RELATIONAL_OPERATOR, SYMBOL_GREATER_THAN__EQUAL);
+	popud(RELATIONAL_OPERATOR, SYMBOL_LESS_THAN);
+	popud(RELATIONAL_OPERATOR, SYMBOL_LESS_THAN__EQUAL);
+
+	popud(VAR_OR_STATIC, KEYWORD_VAR);
+	popud(VAR_OR_STATIC, KEYWORD_STATIC);
 	// If this is an expression, and the second child is an expression, and it has two children, bring that child all the way up.
 
 	// Prune all expressions that have one child or the second child as an epsilonate.
