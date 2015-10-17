@@ -56,6 +56,7 @@ bool TreeBuilder::buildTree(char character)
 	return false;
 }
 
+
 bool TreeBuilder::endInput()
 {
 	buildTree(' '); // Use a space to clear out the last symbol
@@ -68,15 +69,18 @@ bool TreeBuilder::endInput()
 	return parser_object.isEmpty();
 }
 
+
 std::unique_ptr<protocols::ConcreteSyntaxTree> TreeBuilder::getConcreteSyntaxTree()
 {
 	return parser_object.getConcreteSyntaxTree();
 }
 
+
 std::vector<std::string> TreeBuilder::getExpectedTokens() const
 {
 	return parser_object.formulateExpectedTokens();
 }
+
 
 std::string TreeBuilder::getExpectedTokensGrammar() const
 {
