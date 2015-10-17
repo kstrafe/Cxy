@@ -65,23 +65,47 @@ void TreePruner::pruneTree(protocols::ConcreteSyntaxTree *ct)
 		ct->children.end()
 	);
 
-	// Pull the NO_SEMICOLON and STATEMENT upward
-	for (std::size_t i = 0; i < ct->children.size(); ++i)
-	{
-		using namespace protocols;
-		ConcreteSyntaxTree *child = ct->children.at(i);
-		if (
-			child->node_type == CrossTerminal::NO_SEMICOLON_STATEMENT
-			&& child->node_type == CrossTerminal::STATEMENT
-		) {
-			decltype(child) trans_child = child->children.at(0);
-			child->children.clear();
-			ct->children.at(i) = trans_child;
-			delete child;
+	using namespace protocols;
+	auto popfirst = [&](CrossTerminal cte) {
+		for (std::size_t i = 0; i < ct->children.size(); ++i)
+		{
+			ConcreteSyntaxTree *child = ct->children.at(i);
+			if ( child->node_type == cte) {
+				assert(child->children.size() == 1);
+				decltype(child) trans_child = child->children.at(0);
+				child->children.clear();
+				ct->children.at(i) = trans_child;
+				delete child;
+			}
 		}
-	}
+	};
+	// Pull the NO_SEMICOLON and STATEMENT upward
+	popfirst(CrossTerminal::NO_SEMICOLON_STATEMENT);
+	popfirst(CrossTerminal::STATEMENT);
 
-	// Prune all expressions that have one child and the second child as an epsilonate.
+	auto popup = [&](CrossTerminal left, CrossTerminal right) {
+		for (std::size_t i = 0; i < ct->children.size(); ++i) {
+			ConcreteSyntaxTree *child = ct->children.at(i);
+			if ( child->node_type == left ) {
+				for (std::size_t j = 0; j < child->children.size(); ++j) {
+					ConcreteSyntaxTree *child2 = child->children.at(j);
+					if ( child2->node_type == right ) {
+						for (std::size_t x = 0; x < j; ++x)
+							child2->children.push_front(child->children.at(x));
+						for (std::size_t x = j + 1; x < child->children.size(); ++x)
+							child2->children.push_back(child->children.at(x));
+						ct->children.at(i) = child2;
+						child->children.clear();
+						delete child;
+					}
+				}
+			}
+		}
+	};
+	popup(CrossTerminal::RELATIONAL_OPERATOR, CrossTerminal::SYMBOL_GREATER_THAN);
+	popup(CrossTerminal::OPTIONAL_RELATIONAL_EXPRESSION, CrossTerminal::SYMBOL_GREATER_THAN);
+	popup(CrossTerminal::RELATIONAL_EXPRESSION, CrossTerminal::SYMBOL_GREATER_THAN);
+	// Prune all expressions that have one child or the second child as an epsilonate.
 	for (
 		std::size_t i = 0;
 		i < ct->children.size();
