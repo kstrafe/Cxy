@@ -56,8 +56,8 @@ uint8_t StringFilter::hexToBits(char hex)
 void StringFilter::push(char character)
 {
 	#define putOut() out[0] = character; can_fetch = 1
-	#define outQuote() out[0] = '`'; can_fetch = 1
 	#define cOut(x) can_fetch = 1; out[0] = x
+	#define outQuote() out[0] = '`'; can_fetch = 1
 	switch (state)
 	{
 		case State::NOTHING:

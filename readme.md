@@ -3,13 +3,19 @@
 
 [![Join the chat at https://gitter.im/BourgondAries/Unnamed-Language](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/BourgondAries/Unnamed-Language?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
+# Tutorial #
+The tutorials are located in documentation/cxys/.
+
 # The Best. Language. Ever.
 >We want to make _the best_ language, ever.
 The cleanest. The nicest. The fastest. The most consistent. Language. Ever.
 We want raw control with assembly, and ease of coding with scripting.
 We want EXTREME power... with EXTREME templates.
-This language will be. The best. When it is done, all other languages will disappear.
-It is: The Final Programming Language
+This language will be. Amazing.
+Okay okay, it won't be better than DSL's made for their specific domains, but generally,
+this language will be reliable, simple, practical, and avoid general 'wtf'. It needs
+to be hackable so it runs on machines ranging from low-powered microcontrollers, to
+high-end servers! The final solution to a high-performance, C-like, reliable language.
 
 ## Why another language?
 
