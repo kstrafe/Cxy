@@ -102,9 +102,27 @@ void TreePruner::pruneTree(protocols::ConcreteSyntaxTree *ct)
 			}
 		}
 	};
-	popup(CrossTerminal::RELATIONAL_OPERATOR, CrossTerminal::SYMBOL_GREATER_THAN);
-	popup(CrossTerminal::OPTIONAL_RELATIONAL_EXPRESSION, CrossTerminal::SYMBOL_GREATER_THAN);
-	popup(CrossTerminal::RELATIONAL_EXPRESSION, CrossTerminal::SYMBOL_GREATER_THAN);
+
+	#define popud(x, y) popup(CrossTerminal::x, CrossTerminal::y)
+	#define exprpop(x, y) popud(x##_EXPRESSION, SYMBOL_##y); popud(OPTIONAL_##x##_EXPRESSION, SYMBOL_##y)
+	exprpop(AND, AMPERSAND__AMPERSAND);
+	exprpop(OR, BAR__BAR);
+	exprpop(BITWISE_OR, BAR);
+	exprpop(BITWISE_XOR, CARET);
+	exprpop(BITWISE_AND, AMPERSAND);
+	exprpop(EQUALITY, EQUAL__EQUAL);
+	exprpop(EQUALITY, EXCLAMATION_MARK__EQUAL);
+	exprpop(SHIFT, LESS_THAN__LESS_THAN);
+	exprpop(SHIFT, GREATER_THAN__GREATER_THAN);
+	exprpop(RELATIONAL, GREATER_THAN);
+	exprpop(RELATIONAL, GREATER_THAN__EQUAL);
+	exprpop(RELATIONAL, LESS_THAN);
+	exprpop(RELATIONAL, LESS_THAN__EQUAL);
+	exprpop(ADDITIVE, PLUS);
+	exprpop(MULTIPLICATIVE, STAR);
+	exprpop(MULTIPLICATIVE, FORWARD_SLASH);
+	// If this is an expression, and the second child is an expression, and it has two children, bring that child all the way up.
+
 	// Prune all expressions that have one child or the second child as an epsilonate.
 	for (
 		std::size_t i = 0;
