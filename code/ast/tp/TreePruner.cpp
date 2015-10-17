@@ -43,12 +43,18 @@ void TreePruner::pruneTree(protocols::ConcreteSyntaxTree *ct)
 				assert(child != nullptr);
 				#define caze(x) child->node_type == protocols::CrossTerminal::x ||
 				bool predicate =
-					caze(SYMBOL_COLON)
 					caze(GROUPER_LEFT_BRACE)
-					caze(GROUPER_RIGHT_BRACE)
 					caze(GROUPER_LEFT_PARENTHESIS)
-					caze(GROUPER_RIGHT_PARENTHESIS)
+					caze(GROUPER_RIGHT_BRACE)
 					caze(GROUPER_RIGHT_BRACKET)
+					caze(GROUPER_RIGHT_PARENTHESIS)
+					caze(KEYWORD_IF)
+					caze(KEYWORD_WHILE)
+					caze(KEYWORD_ELSE)
+					caze(KEYWORD_WHEN)
+					caze(SYMBOL_CARET)
+					caze(SYMBOL_COLON)
+					caze(SYMBOL_SEMICOLON)
 					false;
 				#undef caze
 				if (predicate)
@@ -58,9 +64,24 @@ void TreePruner::pruneTree(protocols::ConcreteSyntaxTree *ct)
 		),
 		ct->children.end()
 	);
-	// if this node now has one child, and this node is an expression, turn this node into its child?
-	// How about: if any child of mine has 1 child that is an expression, make it that expression?
-	// return;
+
+	// pull no semicolon statement
+	/*
+	for (std::size_t i = 0; i < ct->children.size(); ++i)
+	{
+		protocols::ConcreteSyntaxTree *child = ct->children.at(i);
+		if (ct->node_type == protocols::CrossTerminal::NO_SEMICOLON_STATEMENT)
+		{
+			decltype(child) trans_child = child->children.at(0);
+			*ct->children.at(i) = *trans_child;
+			delete child;
+			ct->children.erase(ct->children.begin() + i);
+			--i;
+		}
+	}
+	*/
+
+	// Prune all expressions that have one child and the second child as an epsilonate.
 	for
 	(
 		std::size_t i = 0;
@@ -68,19 +89,19 @@ void TreePruner::pruneTree(protocols::ConcreteSyntaxTree *ct)
 		++i
 	)
 	{
-		if
-		(
-			(
-				ct->children[i]->children.size() == 1
-				&& tul::protocols::CrossTerminalTools::isExpression(ct->children[i]->node_type)
+		if (
+			tul::protocols::CrossTerminalTools::isExpression(
+				ct->children[i]->node_type)
+			&& (
+				(
+					ct->children[i]->children.size() == 1
+				) || (
+					ct->children[i]->children.size() == 2
+					&& ct->children[i]->children[1]->node_type
+						== protocols::CrossTerminal::EPSILONATE
+				)
 			)
-			||
-			(
-				ct->children[i]->children.size() == 2
-				&& ct->children[i]->children[1]->node_type == protocols::CrossTerminal::EPSILONATE
-			)
-		)
-		{
+		) {
 			assert(ct->children[i]->children[0]->node_type != protocols::CrossTerminal::EPSILONATE);
 			// How do we bring that child up? We must make it a proper child of this node. How do we do this?
 			// Detach it from the child:
