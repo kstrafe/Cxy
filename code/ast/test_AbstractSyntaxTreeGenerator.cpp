@@ -111,7 +111,7 @@ TEST_CASE("AbstractSyntaxTreeGenerator must validate the grammar.", "[test-Abstr
 		(:) >=
 		{
 			when (a-e) b else c;
-			if (a) b;
+			if ($@! cast[1u](a)) b;
 			if [a>b-c*d || f && e + new[32u]] c;
 		}
 		alias {

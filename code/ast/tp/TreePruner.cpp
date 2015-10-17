@@ -49,6 +49,7 @@ void TreePruner::pruneTree(protocols::ConcreteSyntaxTree *ct)
 					caze(GROUPER_RIGHT_BRACE)
 					caze(GROUPER_RIGHT_BRACKET)
 					caze(GROUPER_RIGHT_PARENTHESIS)
+					caze(KEYWORD_CAST)
 					caze(KEYWORD_IF)
 					caze(KEYWORD_WHILE)
 					caze(KEYWORD_ELSE)
@@ -86,7 +87,39 @@ void TreePruner::pruneTree(protocols::ConcreteSyntaxTree *ct)
 	popfirst(CrossTerminal::NO_SEMICOLON_STATEMENT);
 	popfirst(CrossTerminal::STATEMENT);
 
+	// If this is a unary expression, make the second element a child of the first.
+	if (ct->node_type == CrossTerminal::UNARY_EXPRESSION) {
+		if (ct->children.size() > 2)
+			throw std::string("Unary expression does not have less than or two children");
+		if (ct->children[0]->node_type == CrossTerminal::UNARY_OPERATOR)
+		{
+			ct->children[0]->children.push_back(ct->children[1]);
+			ct->children.erase(ct->children.end() - 1);
+		}
+	}
+
 	auto popup = [&](CrossTerminal left, CrossTerminal right) {
+		for (std::size_t i = 0; i < ct->children.size(); ++i) {
+			ConcreteSyntaxTree *child = ct->children.at(i);
+			if ( child->node_type == left ) {
+				for (std::size_t j = 0; j < child->children.size(); ++j) {
+					ConcreteSyntaxTree *child2 = child->children.at(j);
+					if ( child2->node_type == right ) {
+						for (std::size_t x = 0; x < j; ++x)
+							child2->children.push_front(child->children.at(x));
+						for (std::size_t x = j + 1; x < child->children.size(); ++x)
+							child2->children.push_back(child->children.at(x));
+						ct->children.at(i) = child2;
+						child->children.clear();
+						delete child;
+					}
+				}
+			}
+		}
+	};
+
+
+	auto moveup = [&](CrossTerminal left, CrossTerminal right) {
 		for (std::size_t i = 0; i < ct->children.size(); ++i) {
 			ConcreteSyntaxTree *child = ct->children.at(i);
 			if ( child->node_type == left ) {
@@ -129,6 +162,13 @@ void TreePruner::pruneTree(protocols::ConcreteSyntaxTree *ct)
 	popud(RELATIONAL_OPERATOR, SYMBOL_GREATER_THAN__EQUAL);
 	popud(RELATIONAL_OPERATOR, SYMBOL_LESS_THAN);
 	popud(RELATIONAL_OPERATOR, SYMBOL_LESS_THAN__EQUAL);
+
+	popud(UNARY_OPERATOR, SYMBOL_EXCLAMATION_MARK);
+	popud(UNARY_OPERATOR, SYMBOL_EXCLAMATION_MARK__EXCLAMATION_MARK);
+	popud(UNARY_OPERATOR, SYMBOL_APETAIL);
+	popud(UNARY_OPERATOR, SYMBOL_APETAIL__APETAIL);
+	popud(UNARY_OPERATOR, SYMBOL_DOLLAR);
+	popud(UNARY_OPERATOR, SYMBOL_DOLLAR__DOLLAR);
 
 	popud(VAR_OR_STATIC, KEYWORD_VAR);
 	popud(VAR_OR_STATIC, KEYWORD_STATIC);
