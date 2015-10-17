@@ -139,6 +139,8 @@ void TreePruner::pruneTree(protocols::ConcreteSyntaxTree *ct)
 		}
 	};
 
+	// Basically, what we want to do anyways is to prune any child not conveying any useful information... I wonder if it can be automated.
+
 	#define popud(x, y) popup(CrossTerminal::x, CrossTerminal::y)
 	#define exprpop(x, y) popud(x##_EXPRESSION, SYMBOL_##y); popud(OPTIONAL_##x##_EXPRESSION, SYMBOL_##y)
 	exprpop(AND, AMPERSAND__AMPERSAND);
@@ -170,6 +172,8 @@ void TreePruner::pruneTree(protocols::ConcreteSyntaxTree *ct)
 	popud(UNARY_OPERATOR, SYMBOL_DOLLAR);
 	popud(UNARY_OPERATOR, SYMBOL_DOLLAR__DOLLAR);
 
+	popud(DATA_DECLARATION_STATEMENT, KEYWORD_VAR);
+	popud(DATA_DECLARATION_STATEMENT, KEYWORD_STATIC);
 	popud(VAR_OR_STATIC, KEYWORD_VAR);
 	popud(VAR_OR_STATIC, KEYWORD_STATIC);
 	popud(FUNCTION_NAMES, IDENTIFIER_PACKAGE);
@@ -226,6 +230,10 @@ void TreePruner::pruneTree(protocols::ConcreteSyntaxTree *ct)
 	popud(ACCESS_SPECIFIER, KEYWORD_RESTRICTED);
 
 	popud(METHOD_DECL_OR_DEF, STATEMENT_LIST);
+
+	popud(NAMEKIND, DATA_NAMES);
+	popud(NAMEKIND, IDENTIFIER_PACKAGE);
+	popud(DATA_NAMES, IDENTIFIER_PACKAGE);
 
 	popud(ALIAS_CORE, ALIAS_TRAIL);
 	popud(ALIAS_CORE, ALIAS_TRAILS);
