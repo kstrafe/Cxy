@@ -50,7 +50,8 @@ namespace tul { namespace ast {
 	{
 		std::unique_ptr<protocols::ConcreteSyntaxTree> tree = tree_builder.getConcreteSyntaxTree();
 		tp::TreePruner::pruneTree(tree.get());
-		// table_builder.runOn(tree.get(), qualified_name);
+		tp::TreePruner::pruneTree(tree.get());
+		table_builder.runOn(tree.get(), qualified_name);
 		std::cout << tree.get()->toString() << std::endl;
 		return true;
 	}

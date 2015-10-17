@@ -35,6 +35,7 @@ public:
 private:
 
 	std::map<std::string, Module *> module_map;
+
 };
 
 }}

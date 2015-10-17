@@ -50,6 +50,7 @@ a string, the escapes will be used (except for verbatim strings).
 
 ##
 
-The escape sequences are \uXXXX, \UXXXXXXXX, \n, \t, \r, \v, \f.
+The escape sequences are \cXX \n, \t, \r, \v, \f.
+X denote any hexadecimal digit.
 
 *Conclusion*: Strings are given by '' (multichar), "" (multichar), and `` (verbatim)
