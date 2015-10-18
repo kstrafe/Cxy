@@ -24,12 +24,10 @@ along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace tul { namespace tbl {
 
-bool TableBuilder::runOn
-(
+bool TableBuilder::runOn (
 	protocols::ConcreteSyntaxTree *ct_root,
 	const std::string &qualified_name
-)
-{
+) {
 	return false;
 }
 
