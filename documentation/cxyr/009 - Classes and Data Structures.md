@@ -123,7 +123,51 @@ I think this can actually be a valid thing. Upon leaving the construct member, w
 can just say that the object becomes default-constructed. I like the idea, it requires
 no new special syntax like C++. It also allows you to use the variables from the constructed
 elements more easily. C++ has the problem that its declaration is stiff and declarative.
-You can't work with that. Construct allows you to place constructions anywhere.
+You can't work with that. Construct allows you to place constructions anywhere. The
+classic problem in construction is that we can't allow for multiple branches to exist
+inside the constructor. It is unknown at compile time which branch is taken and hence
+whether a default or non-default constructor is called. This is a dataflow analysis
+problem. C++ goes around this by putting constructors in their own little section.
+My biggest problem with this is that it requires the programmer to create a function
+for,. say, a recalculation:
+
+	This (int a)
+	:
+		someobj(a),
+		someobj2(func(someobj))
+	{}
+
+	SomeObj2 func(SomeObj a)
+	{
+		while (a...)
+		{
+			...
+		}
+		...
+		return result;
+	}
+
+I'd like it to be like the following:
+
+	(:this, 32s a) This
+	{
+		construct someobj(:a);
+		while (a....)
+		{
+			...
+		}
+		...
+		construct someobj2(:result);
+	}
+
+That is cleaner and in many cases more neat. We can't express everything in mere expressions.
+Even if we could, it's just unwieldy and impractical.
+
+Now, of course, this requires one strict condition: construct statements can never
+be placed inside branches.
+
+This means constructs can not be iterated, if'd, while'd, whatever. That's all invalid.
+This can be implemented in the semantic analyzer.
 
 ===
 
