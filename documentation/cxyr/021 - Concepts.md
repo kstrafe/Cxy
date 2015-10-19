@@ -42,4 +42,4 @@ cases come to light, I suppose code generation can be used instead.
 		grants
 	}
 
-
+Where grants are function and variable/static signatures.
