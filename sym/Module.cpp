@@ -20,12 +20,10 @@ along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace tul { namespace sym {
 
-bool Module::addEntry
-(
+bool Module::addEntry (
 	const std::string &qualified_name,
 	Entry *val_entry
-)
-{
+) {
 	return false;
 }
 

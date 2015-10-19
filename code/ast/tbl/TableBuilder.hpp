@@ -35,8 +35,7 @@ namespace tul { namespace tbl {
 
 	private:
 
-
-		sym::SymbolTable module_symtab;
+		sym::SymbolTable symboltable;
 
 	};
 

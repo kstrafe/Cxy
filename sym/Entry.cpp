@@ -28,6 +28,7 @@ Entry::Entry()
 	object_access_specifier(protocols::CrossTerminal::EPSILONATE)
 {}
 
+
 std::string Entry::toString()
 {
 	using namespace protocols;

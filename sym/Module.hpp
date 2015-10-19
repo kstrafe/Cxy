@@ -34,6 +34,7 @@ public:
 private:
 
 	std::map<std::string, Entry *> entry_map;
+
 };
 
 }}

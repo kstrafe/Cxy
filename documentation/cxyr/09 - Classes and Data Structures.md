@@ -65,22 +65,67 @@ Let's not forget that we wanted a directory structure for the namespaces or pack
 and filenames for the classes. An idea I've been playing with is to remove all class
 boilerplate code. Suppose that a file contains the following code.
 
-    private 32u counter = 0;
+	private 32u counter = 0;
 
-    public (:) countSomething(32u number_count)
-    {
-      counter += number_count;
-    }
+	public (:) countSomething(32u number_count)
+	{
+		counter += number_count;
+	}
 
-    public (32u counter_value:) getValue
-    {
-      return counter_value: counter;
-    }
+	public (32u counter_value:) getValue
+	{
+		return counter_value: counter;
+	}
 
 As one can observe, there is no syntax for declaring a class. There are only files,
 and there is one class per file. Can code generators create classes?  They certainly
 can, but they have to create the files in order to implement the specific class.
 
+=== Kevin R. Stravers -- Mon 19 Oct 2015 01:54:22 AM CEST
+
+It is appropriate to have a method of specifying constructor delegation in classes.
+C++ uses a special place right after the constructor declaration and before the definition.
+
+	ClassName(arguments)
+	:
+		element1(...),
+		element2(...)
+		...
+	{
+		// Definition
+	}
+
+This is something that I'd prefer to be avoided. Instead, a different, simpler method
+has to be devised. Let's look at a normal constructor:
+
+	(: this : pure) This
+	{
+		// Definition
+	}
+
+Now, how can the constructor be used to set certain variables? Specifically const
+variables that should not be able to change in running code. How is it done? Let's
+see...
+
+	private var {
+		const 32u my_value;
+		Class member;
+	}
+
+
+	public (: this : pure) This {
+		construct my_value(: 100);
+
+		construct member(: 10, name: "ten");
+	}
+
+I think this can actually be a valid thing. Upon leaving the construct member, we
+can just say that the object becomes default-constructed. I like the idea, it requires
+no new special syntax like C++. It also allows you to use the variables from the constructed
+elements more easily. C++ has the problem that its declaration is stiff and declarative.
+You can't work with that. Construct allows you to place constructions anywhere.
+
+===
 
 *Conclusion*:
 Classes and their objects are defined as in C++. Their methods accessed via the instance,
