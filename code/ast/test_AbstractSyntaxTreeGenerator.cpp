@@ -110,7 +110,7 @@ TEST_CASE("AbstractSyntaxTreeGenerator must validate the grammar.", "[test-Abstr
 			dude = what;
 			Smh = what.Cool;
 		}
-		grant Aa {
+		grant Aa = sml.String {
 			(:) >;
 			var ptr 1u dude;
 		}

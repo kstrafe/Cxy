@@ -1061,6 +1061,8 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 			(: this) constructor {
 				var ptr type[this][MYWISH: 3] a;
 				a->MYWISH + size[Type] - size[32u];
+				var ptr 32u a, b;
+				++@(a + b);
 			}
 		)");
 		doValidation(R"(
