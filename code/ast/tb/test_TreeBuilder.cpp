@@ -1049,6 +1049,8 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 				}
 				construct c();
 			}
+			(: this) destructor {
+			}
 		)");
 
 	}
