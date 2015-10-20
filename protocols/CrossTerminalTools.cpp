@@ -73,6 +73,7 @@ bool CrossTerminalTools::isKeyword(const CrossTerminal &ct_)
 		case CrossTerminal::KEYWORD_CAST: return true;
 		case CrossTerminal::KEYWORD_CATCH: return true;
 		case CrossTerminal::KEYWORD_CONST: return true;
+		case CrossTerminal::KEYWORD_CONSTRUCT: return true;
 		case CrossTerminal::KEYWORD_DEBUG: return true;
 		case CrossTerminal::KEYWORD_DEFER: return true;
 		case CrossTerminal::KEYWORD_DELETE: return true;
@@ -193,6 +194,8 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::CODE_BLOCK: return "CODE_BLOCK";
 		case protocols::CrossTerminal::COLONIZED: return "COLONIZED";
 		case protocols::CrossTerminal::COLON_LIST: return "COLON_LIST";
+		case protocols::CrossTerminal::CONSTRUCT_LIST: return "CONSTRUCT_LIST";
+		case protocols::CrossTerminal::CONSTRUCT_STATEMENT: return "CONSTRUCT_STATEMENT";
 		case protocols::CrossTerminal::DATA_DECLARATION_LIST: return "DATA_DECLARATION_LIST";
 		case protocols::CrossTerminal::DATA_DECLARATION_LIST_GRANT: return "DATA_DECLARATION_LIST_GRANT";
 		case protocols::CrossTerminal::DATA_DECLARATION_STATEMENT: return "DATA_DECLARATION_STATEMENT";
@@ -242,6 +245,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::KEYWORD_CAST: return "KEYWORD_CAST";
 		case protocols::CrossTerminal::KEYWORD_CATCH: return "KEYWORD_CATCH";
 		case protocols::CrossTerminal::KEYWORD_CONST: return "KEYWORD_CONST";
+		case protocols::CrossTerminal::KEYWORD_CONSTRUCT: return "KEYWORD_CONSTRUCT";
 		case protocols::CrossTerminal::KEYWORD_DEBUG: return "KEYWORD_DEBUG";
 		case protocols::CrossTerminal::KEYWORD_DEFER: return "KEYWORD_DEFER";
 		case protocols::CrossTerminal::KEYWORD_DELETE: return "KEYWORD_DELETE";
@@ -277,6 +281,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::MEMBER_DEFINITION: return "MEMBER_DEFINITION";
 		case protocols::CrossTerminal::MEMBER_EXPRESSION: return "MEMBER_EXPRESSION";
 		case protocols::CrossTerminal::METHOD_DECL_OR_DEF: return "METHOD_DECL_OR_DEF";
+		case protocols::CrossTerminal::MULTIPLE_OR_SINGLE_CONSTRUCT: return "MULTIPLE_OR_SINGLE_CONSTRUCT";
 		case protocols::CrossTerminal::MULTIPLICATIVE_EXPRESSION: return "MULTIPLICATIVE_EXPRESSION";
 		case protocols::CrossTerminal::NAMEKIND: return "NAMEKIND";
 		case protocols::CrossTerminal::NAMES_SYMBOL: return "NAMES_SYMBOL";
@@ -300,6 +305,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::OPTIONAL_COLON_LIST: return "OPTIONAL_COLON_LIST";
 		case protocols::CrossTerminal::OPTIONAL_COLON_LIST_AFTER_COMMA: return "OPTIONAL_COLON_LIST_AFTER_COMMA";
 		case protocols::CrossTerminal::OPTIONAL_CONSTRUCTOR_LIST: return "OPTIONAL_CONSTRUCTOR_LIST";
+		case protocols::CrossTerminal::OPTIONAL_CONSTRUCT_LIST: return "OPTIONAL_CONSTRUCT_LIST";
 		case protocols::CrossTerminal::OPTIONAL_DATA_DECLARATION: return "OPTIONAL_DATA_DECLARATION";
 		case protocols::CrossTerminal::OPTIONAL_DATA_DECLARATION_AFTER_COMMA: return "OPTIONAL_DATA_DECLARATION_AFTER_COMMA";
 		case protocols::CrossTerminal::OPTIONAL_DATA_NAMES_LIST: return "OPTIONAL_DATA_NAMES_LIST";
@@ -331,6 +337,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::RETURN_STATEMENT: return "RETURN_STATEMENT";
 		case protocols::CrossTerminal::SHIFT_EXPRESSION: return "SHIFT_EXPRESSION";
 		case protocols::CrossTerminal::SHIFT_OPERATOR: return "SHIFT_OPERATOR";
+		case protocols::CrossTerminal::SINGLE_CONSTRUCT: return "SINGLE_CONSTRUCT";
 		case protocols::CrossTerminal::SINGLE_STATEMENT_OR_CODE_BLOCK: return "SINGLE_STATEMENT_OR_CODE_BLOCK";
 		case protocols::CrossTerminal::STATEMENT: return "STATEMENT";
 		case protocols::CrossTerminal::STATEMENT_LIST: return "STATEMENT_LIST";
