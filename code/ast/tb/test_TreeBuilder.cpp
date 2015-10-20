@@ -1077,6 +1077,15 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 				return : in + 1;
 			}
 		)");
+		doValidation(R"(
+			(:) enter {
+				foreach (32u i in args) {
+					sml.Out << i;
+				}
+				[39 12, a = -2];
+			}
+		)");
+
 
 	}
 	#undef doValidation
