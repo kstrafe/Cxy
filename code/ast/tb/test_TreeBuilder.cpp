@@ -1054,7 +1054,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 			}
 		)");
 		doValidation(R"(
-			grant MYWISH 32u;
+			grant MYWISH 32u = 100;
 			grant MyClass = sml.String {
 				(: this) getLength;
 			}
