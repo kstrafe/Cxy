@@ -1049,6 +1049,28 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 				}
 				construct c();
 			}
+			(: this) destructor {
+
+			}
+		)");
+		doValidation(R"(
+			grant MYWISH 32u;
+			(: this) constructor {
+				var ptr type[this][MYWISH: 3] a;
+				a->MYWISH;
+			}
+		)");
+		doValidation(R"(
+			global var 32u a;
+			global static 32u b;
+			(: this) constructor {
+				++a;
+				++b;
+			}
+
+			global (32u out : 32u in) add {
+				return : in + 1;
+			}
 		)");
 
 	}
