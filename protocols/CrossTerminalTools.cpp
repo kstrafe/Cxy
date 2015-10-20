@@ -85,6 +85,7 @@ bool CrossTerminalTools::isKeyword(const CrossTerminal &ct_)
 		case CrossTerminal::KEYWORD_ENUM: return true;
 		case CrossTerminal::KEYWORD_FLOAT: return true;
 		case CrossTerminal::KEYWORD_FOR: return true;
+		case CrossTerminal::KEYWORD_GLOBAL: return true;
 		case CrossTerminal::KEYWORD_GOTO: return true;
 		case CrossTerminal::KEYWORD_GRANT: return true;
 		case CrossTerminal::KEYWORD_HACK: return true;
@@ -259,6 +260,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::KEYWORD_ENUM: return "KEYWORD_ENUM";
 		case protocols::CrossTerminal::KEYWORD_FLOAT: return "KEYWORD_FLOAT";
 		case protocols::CrossTerminal::KEYWORD_FOR: return "KEYWORD_FOR";
+		case protocols::CrossTerminal::KEYWORD_GLOBAL: return "KEYWORD_GLOBAL";
 		case protocols::CrossTerminal::KEYWORD_GOTO: return "KEYWORD_GOTO";
 		case protocols::CrossTerminal::KEYWORD_GRANT: return "KEYWORD_GRANT";
 		case protocols::CrossTerminal::KEYWORD_HACK: return "KEYWORD_HACK";
@@ -282,6 +284,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::KEYWORD_WHEN: return "KEYWORD_WHEN";
 		case protocols::CrossTerminal::KEYWORD_WHILE: return "KEYWORD_WHILE";
 		case protocols::CrossTerminal::LABEL_STATEMENT: return "LABEL_STATEMENT";
+		case protocols::CrossTerminal::LOCALITY_SPECIFIER: return "LOCALITY_SPECIFIER";
 		case protocols::CrossTerminal::MEMBER_DEFINITION: return "MEMBER_DEFINITION";
 		case protocols::CrossTerminal::MEMBER_EXPRESSION: return "MEMBER_EXPRESSION";
 		case protocols::CrossTerminal::METHOD_DECL_OR_DEF: return "METHOD_DECL_OR_DEF";

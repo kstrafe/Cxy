@@ -30,6 +30,7 @@ protocols::TokenType KeywordMatcher::getKeyword(const std::string &lexeme)
 	else if (lexeme == "private") return TokenType::KEYWORD_PRIVATE;
 	else if (lexeme == "delete") return TokenType::KEYWORD_DELETE;
 	else if (lexeme == "double") return TokenType::KEYWORD_DOUBLE;
+	else if (lexeme == "global") return TokenType::KEYWORD_GLOBAL;
 	else if (lexeme == "lambda") return TokenType::KEYWORD_LAMBDA;
 	else if (lexeme == "public") return TokenType::KEYWORD_PUBLIC;
 	else if (lexeme == "return") return TokenType::KEYWORD_RETURN;
