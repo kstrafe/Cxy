@@ -74,9 +74,11 @@ bool CrossTerminalTools::isKeyword(const CrossTerminal &ct_)
 		case CrossTerminal::KEYWORD_CATCH: return true;
 		case CrossTerminal::KEYWORD_CONST: return true;
 		case CrossTerminal::KEYWORD_CONSTRUCT: return true;
+		case CrossTerminal::KEYWORD_CONSTRUCTOR: return true;
 		case CrossTerminal::KEYWORD_DEBUG: return true;
 		case CrossTerminal::KEYWORD_DEFER: return true;
 		case CrossTerminal::KEYWORD_DELETE: return true;
+		case CrossTerminal::KEYWORD_DESTRUCTOR: return true;
 		case CrossTerminal::KEYWORD_DO: return true;
 		case CrossTerminal::KEYWORD_DOUBLE: return true;
 		case CrossTerminal::KEYWORD_ELSE: return true;
@@ -246,9 +248,11 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::KEYWORD_CATCH: return "KEYWORD_CATCH";
 		case protocols::CrossTerminal::KEYWORD_CONST: return "KEYWORD_CONST";
 		case protocols::CrossTerminal::KEYWORD_CONSTRUCT: return "KEYWORD_CONSTRUCT";
+		case protocols::CrossTerminal::KEYWORD_CONSTRUCTOR: return "KEYWORD_CONSTRUCTOR";
 		case protocols::CrossTerminal::KEYWORD_DEBUG: return "KEYWORD_DEBUG";
 		case protocols::CrossTerminal::KEYWORD_DEFER: return "KEYWORD_DEFER";
 		case protocols::CrossTerminal::KEYWORD_DELETE: return "KEYWORD_DELETE";
+		case protocols::CrossTerminal::KEYWORD_DESTRUCTOR: return "KEYWORD_DESTRUCTOR";
 		case protocols::CrossTerminal::KEYWORD_DO: return "KEYWORD_DO";
 		case protocols::CrossTerminal::KEYWORD_DOUBLE: return "KEYWORD_DOUBLE";
 		case protocols::CrossTerminal::KEYWORD_ELSE: return "KEYWORD_ELSE";
