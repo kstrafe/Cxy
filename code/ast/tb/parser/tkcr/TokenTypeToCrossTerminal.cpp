@@ -71,6 +71,7 @@ protocols::CrossTerminal TokenTypeToCrossTerminal::convertToCrossTerminal(protoc
 		case protocols::TokenType::KEYWORD_REF: return protocols::CrossTerminal::KEYWORD_REF;
 		case protocols::TokenType::KEYWORD_RESTRICTED: return protocols::CrossTerminal::KEYWORD_RESTRICTED;
 		case protocols::TokenType::KEYWORD_RETURN: return protocols::CrossTerminal::KEYWORD_RETURN;
+		case protocols::TokenType::KEYWORD_SIZE: return protocols::CrossTerminal::KEYWORD_SIZE;
 		case protocols::TokenType::KEYWORD_STATIC: return protocols::CrossTerminal::KEYWORD_STATIC;
 		case protocols::TokenType::KEYWORD_THIS: return protocols::CrossTerminal::KEYWORD_THIS;
 		case protocols::TokenType::KEYWORD_THROW: return protocols::CrossTerminal::KEYWORD_THROW;
