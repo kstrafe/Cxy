@@ -1041,6 +1041,15 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 				a ^ b;
 			}
 		)");
+		doValidation(R"(
+			(: this) constructor {
+				construct {
+					a(:1);
+					b(name: "Hello!");
+				}
+				construct c();
+			}
+		)");
 
 	}
 	#undef doValidation
