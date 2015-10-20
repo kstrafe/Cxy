@@ -1066,6 +1066,10 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 				++a;
 				++b;
 			}
+
+			global (32u out : 32u in) add {
+				return : in + 1;
+			}
 		)");
 
 	}
