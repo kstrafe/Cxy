@@ -8,7 +8,7 @@
 		32s c;
 		[5, 8u] d;
 		[5, [3, 8u]] e;
-		[5, 3, 8u] f;
+		[5:3, 8u] f;
 		float g;
 		double h;
 		ptr 8u i;
@@ -77,7 +77,7 @@ This can be visualized as:
 	8u 8u 8u 8u 8u
 	8u 8u 8u 8u 8u
 
-Five long, and three down. The type of `f` is the same type, `[5, 3, 8u]` means the
+Five long, and three down. The type of `f` is the same type, `[5:3, 8u]` means the
 same as `[5, [3, 8u]]`, it's just a simpler and cleaner way of writing it.
 
 Now for floats and doubles. Floats and doubles are quite the same in many aspects.
