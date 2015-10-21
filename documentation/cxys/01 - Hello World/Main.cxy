@@ -1,0 +1,61 @@
+// This is a comment
+/* This is a multiline comment */
+
+(:) enter
+{
+	sml.Out << "Hello World!\n";
+}
+
+/* It will later become obvious what `(:) enter` means. For now, focus on the part
+that says
+
+	sml.Out << "Hello World!\n";
+
+This line is executed. What it does is that it accesses the package named `sml`. Inside
+this package, it accesses the `Out` class. Note that classes always start with a capital
+letter. Packages are always lowercase.
+
+Think of a package as a folder or directory, and the class as a file. Indeed, this
+is how a project is structured. When writing `sml.Out`, we're accessing the folder
+`sml`, and then getting the file `Out` from that folder. In that file is the code
+that we wish to use.
+
+We then see a `<<`. This is an `operator`. An operator is like a mathematical operator.
+
+	1 + 2
+
+`+` is an operator. `<<` is normally the 'Shift Operator'. For the class `sml.Out`,
+the meaning of `<<` has been defined in a different way. What you can read from this
+is that the string "Hello World!\n" is fed into `sml.Out` using the `<<` operator.
+
+The "" is the notation for an escapable multi-character string. A string is simply
+a series of characters.
+
+`;` denotes the end of a statement. Most statements require the `;` to end the statement.
+This will become obvious later on.
+
+That is the first tutorial on Cxy. Here are some tasks to get you accustomed to making
+statements:
+
+	(:) enter
+	{
+		sml.Out << "Hello World!\n";
+		sml.Out << "This is me\n";
+	}
+
+Note that you can add many any amount of statements. You can modify what is inside
+the "". Try using `` instead of "". What is the difference between
+
+	(:) enter
+	{
+		sml.Out << "Hello World!\n";
+	}
+
+and
+
+	(:) enter
+	{
+		sml.Out << `Hello World!\n`;
+	}
+
+*/

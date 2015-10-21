@@ -1,6 +1,0 @@
-// This is a comment
-/* This is a multiline comment */
-(:) enter
-{
-	sml.Out << "Hello World!\n";
-}

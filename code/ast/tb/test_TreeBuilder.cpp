@@ -1060,7 +1060,9 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 			}
 			(: this) constructor {
 				var ptr type[this][MYWISH: 3] a;
-				a->MYWISH;
+				a->MYWISH + size[Type] - size[32u];
+				var ptr 32u a, b;
+				++@(a + b);
 			}
 		)");
 		doValidation(R"(
@@ -1075,7 +1077,19 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 				return : in + 1;
 			}
 		)");
-
+		doValidation(R"(
+			(:) enter {
+				foreach (32u i in args) {
+					sml.Out << i;
+				}
+				[39 12, a = -2];
+			}
+		)");
+		doValidation(R"(
+			(:) enter {
+				var [2:3:4, 32u] a;
+			}
+		)");
 	}
 	#undef doValidation
 	#undef doInvalidation

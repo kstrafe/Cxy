@@ -1,0 +1,17 @@
+// This may look slightly cryptic, but it will be obvious in a bit.
+
+(:) enter
+{
+	sml.Out << sml.In;
+}
+
+/*
+
+Again, the `<<` operator is used. This time, instead of sending in a string, we send
+in a `stream`. `sml.In` is a class that represents the 'standard input' of a program.
+From here, we can enter input from the keyboard, or from a pipe.
+
+In the next iteration, we'll look at how we can actually store and use the input from
+`sml.In`.
+
+*/

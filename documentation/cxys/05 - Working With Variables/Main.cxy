@@ -1,0 +1,84 @@
+(:) enter
+{
+	// Integer subtraction
+	var 8u a = 100;
+	a = a - 1;
+	sml.Out << a;
+
+
+	// Array assignment
+	var [5, 8u] b = [10 20 30 40 50];
+	b[0] = b[0] - 1;
+	sml.Out << b[0];
+
+
+	// Integer subtraction 2
+	var 32s c = 200;
+	c -= 100;  // Subtract 100 from c
+	sml.Out << c;
+
+	// Iterator addition/subtraction
+	var 10u d = 100;
+	++d;  // Add one to d
+	--d;  // Subtract one from d
+	sml.Out << d;
+
+	// An expression
+	sml.Out << 10 * d / a + b[4];
+}
+
+/*
+
+In the previous chapter, we learned how to declare different types. Please try and
+remember all of them. This may take some time if you're new to programming.
+
+So, let's look at working with the actual types!
+
+Notice that we have the statement `var 8u a = 100;`. This means that the variable
+`a` is initialized with a value of 100. What can we do with this?
+
+On the next line, we subtract one from `a`. Thereafter, `a` is printed. When you run
+this code, you will see `99` printed. You can do the same for all other integer types.
+Of course; the integer type needs to be big enough to hold the value '100'.
+
+The array assignment is similar. We access elements inside the array with the `[`
+operator. This operator contains another integer. It accesses the elements in the
+list. The first element is always `0`.
+Note that, using `[10 20 30 40 50]` is an expression, and not an 'array type'. The
+expression is a list of the elements 10 to 50. Commas are optional. Commas are only
+used to disambiguate the infix operator `-` from the prefix operator `-`:
+
+	[10 -3]
+
+is not the same as
+
+	[10, -3]
+
+Because the former will evaluate to
+
+	[7]
+
+Whilst the latter evaluates to a list of two elements, 10, and -3.
+
+Looking at the second subtraction shows the `-=` operator. This is a combination of
+`-` and `=`. We can combine many other operators. Such as `*`, `/`, and `+`. All of
+these operators combined with `=` are called 'compound assignments'.
+
+Later on, more complex expressions will be revealed, for now, here is a list of operators:
+
+	+  // Add two numbers
+	-  // Subtract the right from left
+	*  // Multiply two numbers
+	/  // Divide left by right
+	%  // Take the remainder from the left by the right
+
+	+=  // Add a number to the left
+	-=  // Subtract a number from the left
+	*=  // Multiply the left with a number
+	/=  // Divide the left by a number
+	%=  // Assign the remainder to the left
+
+Note that `a %= b` actually means `a = a % b`. The same expansion is true for all compound
+operators.
+
+*/

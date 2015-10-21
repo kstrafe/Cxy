@@ -1,4 +1,0 @@
-(:) enter
-{
-	sml.Out << sml.In;
-}

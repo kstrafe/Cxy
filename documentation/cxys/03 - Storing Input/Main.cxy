@@ -1,0 +1,49 @@
+// Getting accustomed to the variable declaration.
+
+(:) enter
+{
+	var sml.String a = sml.In.read();
+	sml.Out << a;
+	var sml.String b = sml.In.read();
+	sml.Out << b;
+}
+
+/*
+
+What is happening in the above? You should be familiar with the `<<` operator on `sml.Out`
+by now. As a reminder: it prints the argument on the right of the `<<` operator to
+the 'standard output'.
+
+So what does `sml.In.read()` do? What does `()` mean? What does `var sml.String` mean?
+Let's break it up:
+
+`var` - This tells the the compiler that we want to declare data. It tells the computer
+that it must store some data for us, so that we can use it later.
+
+`sml.String` - This tells the compiler what kind of data we need to store. Later on,
+we'll look at different types of data. The reason for writing this will become clear
+later on. It's actually very important for writing good programs.
+
+`a` - This tells the computer how to refer to the storage. If we want to use the string
+we just stored, we want to be able to find it later. So we give it a name.
+
+`sml.In.read()` - From before, we know that `sml.In` accesses the code in the folder
+`sml`, in the file `In`. What does `read()` do then? It is what is known as a `subroutine`
+or `function`. What this does is that it actually runs some code.
+
+`enter` is in fact also a function! `read` is a function that gets a string from the
+standard input. So what you wrote in the terminal, will be placed there (after you
+press enter).
+
+Go ahead and play around with this code. Did you know that, after declaring a variable,
+that you can re-assign to it?
+
+	(:) enter
+	{
+		var sml.String a = sml.In.read()
+		sml.Out << a;
+		a = sml.In.read();
+		sml.Out << a;
+	}
+
+*/

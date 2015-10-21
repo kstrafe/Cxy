@@ -56,11 +56,13 @@ protocols::CrossTerminal TokenTypeToCrossTerminal::convertToCrossTerminal(protoc
 		case protocols::TokenType::KEYWORD_ENUM: return protocols::CrossTerminal::KEYWORD_ENUM;
 		case protocols::TokenType::KEYWORD_FLOAT: return protocols::CrossTerminal::KEYWORD_FLOAT;
 		case protocols::TokenType::KEYWORD_FOR: return protocols::CrossTerminal::KEYWORD_FOR;
+		case protocols::TokenType::KEYWORD_FOREACH: return protocols::CrossTerminal::KEYWORD_FOREACH;
 		case protocols::TokenType::KEYWORD_GLOBAL: return protocols::CrossTerminal::KEYWORD_GLOBAL;
 		case protocols::TokenType::KEYWORD_GOTO: return protocols::CrossTerminal::KEYWORD_GOTO;
 		case protocols::TokenType::KEYWORD_GRANT: return protocols::CrossTerminal::KEYWORD_GRANT;
 		case protocols::TokenType::KEYWORD_HACK: return protocols::CrossTerminal::KEYWORD_HACK;
 		case protocols::TokenType::KEYWORD_IF: return protocols::CrossTerminal::KEYWORD_IF;
+		case protocols::TokenType::KEYWORD_IN: return protocols::CrossTerminal::KEYWORD_IN;
 		case protocols::TokenType::KEYWORD_LABEL: return protocols::CrossTerminal::KEYWORD_LABEL;
 		case protocols::TokenType::KEYWORD_LAMBDA: return protocols::CrossTerminal::KEYWORD_LAMBDA;
 		case protocols::TokenType::KEYWORD_NEW: return protocols::CrossTerminal::KEYWORD_NEW;
@@ -71,6 +73,7 @@ protocols::CrossTerminal TokenTypeToCrossTerminal::convertToCrossTerminal(protoc
 		case protocols::TokenType::KEYWORD_REF: return protocols::CrossTerminal::KEYWORD_REF;
 		case protocols::TokenType::KEYWORD_RESTRICTED: return protocols::CrossTerminal::KEYWORD_RESTRICTED;
 		case protocols::TokenType::KEYWORD_RETURN: return protocols::CrossTerminal::KEYWORD_RETURN;
+		case protocols::TokenType::KEYWORD_SIZE: return protocols::CrossTerminal::KEYWORD_SIZE;
 		case protocols::TokenType::KEYWORD_STATIC: return protocols::CrossTerminal::KEYWORD_STATIC;
 		case protocols::TokenType::KEYWORD_THIS: return protocols::CrossTerminal::KEYWORD_THIS;
 		case protocols::TokenType::KEYWORD_THROW: return protocols::CrossTerminal::KEYWORD_THROW;

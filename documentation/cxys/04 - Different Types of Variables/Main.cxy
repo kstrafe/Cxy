@@ -1,0 +1,96 @@
+// We previously stored sml.String types, what about other types?
+
+(:) enter
+{
+	var {  // var { } is a way of specifying multiple variables. Don't be scared.
+		8u a;  // We'll take each type one at a time.
+		32u b;
+		32s c;
+		[5, 8u] d;
+		[5, [3, 8u]] e;
+		[5, 3, 8u] f;
+		float g;
+		double h;
+		ptr 8u i;
+		ref 8u j;
+	}
+}
+
+/*
+
+Note: in this chapter, types are explained. In the next, we explore operations on
+types. Here we merely show the different basic types.
+
+Types are extremely important. In this chapter, all 'basic' types will be explored.
+Let's start with the meaning of `var { }`. This is a simple expansion of the var statement.
+Instead of writing
+
+	var TypeA a;
+	var TypeB b;
+	var TypeC c;
+
+we can more easily write:
+
+	var {
+		TypeA a;
+		TypeB b;
+		TypeC c;
+	}
+
+So let's look at what we find inside the `var` clause. The first type we see is the
+`8u`. Any type starting with a number is a 'raw bit type'. This means that we can
+specify how many bits of information we want. The raw bit types are integers. An integer
+means that it is a number, like -1, 3, 9000, -32103,...
+
+The `u` part of `8u` means that the integer is unsigned. This means that `-` does
+not exist, so only positive numbers will be used for this type. The type can hold
+any number from zero to 255.
+
+The next type is `32u`. Instead of having eight bits, this type uses 32 bits. Again,
+the type is unsigned. This type can count from zero to 4'294'967'295.
+
+Next up is the `32s`. This type has one difference. It has an `s`. This means that
+it can hold negative integers as well! This type holds numbers from -2'147'483'648, to
+2'147'483'647.
+
+You can choose any number you like, from `1u` to `1000s`. All of them will work. These
+are the most fundamental types: integers. Computers use them all the time. Of course,
+there are other important types as well. Let's look at the next one, an array.
+
+`[5, 8u]` looks quite daunting, but don't worry, it's really simple! The first number
+tells the computer how many elements the array will contain. The `8u` after the comma
+tells the compiler what type the elements will have.
+This means that the elements are all of the same type. This is a must for arrays.
+To visualize the array: it will look like this:
+
+	8u 8u 8u 8u 8u
+
+Five numbers that are all of type `8u`. We can choose any size for the array, so long
+it is not negative or zero (that wouldn't make any sense).
+
+What's really cool about arrays is that they can be nested! We can actually put arrays
+inside of arrays! Look at the next type, `[5, [3, 8u]]`
+
+This can be visualized as:
+
+	8u 8u 8u 8u 8u
+	8u 8u 8u 8u 8u
+	8u 8u 8u 8u 8u
+
+Five long, and three down. The type of `f` is the same type, `[5, 3, 8u]` means the
+same as `[5, [3, 8u]]`, it's just a simpler and cleaner way of writing it.
+
+Now for floats and doubles. Floats and doubles are quite the same in many aspects.
+floats stand for 'floating point value'. This means that they can store decimals.
+Doubles are the same, except that they have a higher precision (they can hold more
+precise floats).
+
+We also have the `ptr` type. The `ptr` type stands for 'pointer'. It means that it
+refers to another variable. `ptr 8u i` means that `i` is a pointer (it is the address
+of) to an `8u` variable.
+
+Finally, we have `ref`. This is the same as pointer, except that it is automatically
+dereferenced. Maybe this sounds unfamiliar, but this will become clear in the next
+chapter. For now, take away from all this the basic types, and how one declares them.
+
+*/

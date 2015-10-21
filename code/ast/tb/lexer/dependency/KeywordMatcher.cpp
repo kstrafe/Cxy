@@ -27,6 +27,7 @@ protocols::TokenType KeywordMatcher::getKeyword(const std::string &lexeme)
 	else if (lexeme == "destructor") return TokenType::KEYWORD_DESTRUCTOR;
 	else if (lexeme == "restricted") return TokenType::KEYWORD_RESTRICTED;
 	else if (lexeme == "construct") return TokenType::KEYWORD_CONSTRUCT;
+	else if (lexeme == "foreach") return TokenType::KEYWORD_FOREACH;
 	else if (lexeme == "private") return TokenType::KEYWORD_PRIVATE;
 	else if (lexeme == "delete") return TokenType::KEYWORD_DELETE;
 	else if (lexeme == "double") return TokenType::KEYWORD_DOUBLE;
@@ -51,6 +52,7 @@ protocols::TokenType KeywordMatcher::getKeyword(const std::string &lexeme)
 	else if (lexeme == "goto") return TokenType::KEYWORD_GOTO;
 	else if (lexeme == "hack") return TokenType::KEYWORD_HACK;
 	else if (lexeme == "pure") return TokenType::KEYWORD_PURE;
+	else if (lexeme == "size") return TokenType::KEYWORD_SIZE;
 	else if (lexeme == "this") return TokenType::KEYWORD_THIS;
 	else if (lexeme == "type") return TokenType::KEYWORD_TYPE;
 	else if (lexeme == "when") return TokenType::KEYWORD_WHEN;
@@ -62,6 +64,7 @@ protocols::TokenType KeywordMatcher::getKeyword(const std::string &lexeme)
 	else if (lexeme == "var") return TokenType::KEYWORD_VAR;
 	else if (lexeme == "do") return TokenType::KEYWORD_DO;
 	else if (lexeme == "if") return TokenType::KEYWORD_IF;
+	else if (lexeme == "in") return TokenType::KEYWORD_IN;
 	else return protocols::TokenType::UNIDENTIFIED;
 }
 
