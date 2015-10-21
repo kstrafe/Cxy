@@ -1085,8 +1085,11 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 				[39 12, a = -2];
 			}
 		)");
-
-
+		doValidation(R"(
+			(:) enter {
+				var [2:3:4, 32u] a;
+			}
+		)");
 	}
 	#undef doValidation
 	#undef doInvalidation
