@@ -16,15 +16,12 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with schdl.  If not, see <http://www.gnu.org/licenses/>.
 */
-
-
 // Headers
 #include "arg/Argument.hpp"
 
 
 namespace ttl
 {
-
 	void Argument::setSingleCharFlags
 	(
 		const std::string &argument,

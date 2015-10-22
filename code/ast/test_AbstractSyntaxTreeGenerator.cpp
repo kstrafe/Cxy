@@ -97,8 +97,7 @@ TEST_CASE("AbstractSyntaxTreeGenerator must validate the grammar.", "[test-Abstr
 	)");
 
 	doValidation(R"(
-		(:) doStuff
-		{}
+		(:) doStuff {}
 		grant Aa {
 			(:) a;
 		}

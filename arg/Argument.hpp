@@ -16,18 +16,15 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with TTL.  If not, see <http://www.gnu.org/licenses/>.
 */
-
-
 #ifndef ARGUMENT_HPP_INCLUDED
 #define ARGUMENT_HPP_INCLUDED
 
 // Headers
-#include <string>
 #include <map>
 #include <set>
-#include <vector>
 #include <stack>
-
+#include <string>
+#include <vector>
 
 
 namespace ttl

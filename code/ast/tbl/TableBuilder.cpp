@@ -24,11 +24,43 @@ along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace tul { namespace tbl {
 
+// This one gets a tree for a single class/file.
+/*
+	Let's think about how to process that tree into a table.
+	First of all, we need to create a list of grants. Let's do that.
+	Also, we know that the last child of enter is the next 'sub part'.
+*/
 bool TableBuilder::runOn (
 	protocols::ConcreteSyntaxTree *ct_root,
 	const std::string &qualified_name
 ) {
-	return false;
+	using namespace protocols;
+	#define nodeIs(x) ct_root->node_type == CrossTerminal::x
+	#define childNIs(x, n) ct_root->children.at(n)->node_type == CrossTerminal::x
+	#define childNLex(n) ct_root->children.at(n)->token.accompanying_lexeme
+	#define child1Is(x) childNIs(x, 0)
+	#define child2Is(x) childNIs(x, 1)
+	#define child3Is(x) childNIs(x, 2)
+	#define child2Lex childNLex(1)
+	#define last (ct_root->children.end() - 1)
+	#define lastIs(x) (*(last))->node_type == CrossTerminal::x
+	if (nodeIs(ENTER)) {
+		if (child1Is(KEYWORD_GRANT)) {
+			if (child2Is(IDENTIFIER_CONSTEXPR)) {
+				std::cout << child2Lex << std::endl;
+			} else if (child2Is(IDENTIFIER_CLASS)) {
+				std::cout << child2Lex << std::endl;
+			}
+		}
+	}
+	if (lastIs(ENTER)) {
+		runOn(*last, qualified_name);
+	}
+	#undef child3Is
+	#undef child2Is
+	#undef child1Is
+	#undef childNIs
+	#undef nodeIs
 }
 
 }}
