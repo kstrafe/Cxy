@@ -23,17 +23,32 @@ along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace tul { namespace protocols {
 
-	ConcreteSyntaxTree::ConcreteSyntaxTree()
+	void ConcreteSyntaxTree::initToken()
 	{
 		token.entry_type = EntryType::WHITESPACE;
 		token.line_number = 0;
 		token.column_number = 0;
 	}
 
+	ConcreteSyntaxTree::ConcreteSyntaxTree()
+	{
+		initToken();
+	}
+
 	ConcreteSyntaxTree::ConcreteSyntaxTree(CrossTerminal ct)
 	:
 		node_type(ct)
-	{}
+	{
+		initToken();
+	}
+
+	ConcreteSyntaxTree::ConcreteSyntaxTree(CrossTerminal ct, std::initializer_list<ConcreteSyntaxTree *> subtrees)
+	:
+		node_type(ct),
+		children(subtrees)
+	{
+		initToken();
+	}
 
 	ConcreteSyntaxTree::~ConcreteSyntaxTree()
 	{
