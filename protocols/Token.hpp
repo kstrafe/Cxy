@@ -26,8 +26,9 @@ namespace tul { namespace protocols {
 
 	struct Token
 	{
-		int line_number;
-		int column_number;
+		std::size_t
+			line_number,
+			column_number;
 		EntryType entry_type;
 		TokenType token_type;
 		std::string accompanying_lexeme;
