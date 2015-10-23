@@ -16,22 +16,3 @@ You should have received a copy of the GNU General Public License
 along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 */
 #pragma once
-
-#include "EntryType.hpp"
-#include "TokenType.hpp"
-
-#include <string>
-
-namespace tul { namespace protocols {
-
-	struct Token
-	{
-		std::size_t
-			line_number,
-			column_number;
-		EntryType entry_type;
-		TokenType token_type;
-		std::string accompanying_lexeme;
-	};
-
-}}

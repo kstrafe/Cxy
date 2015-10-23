@@ -21,6 +21,7 @@ along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 #include "Token.hpp"
 
 #include <deque>
+#include <initializer_list>
 #include <string>
 
 
@@ -33,11 +34,14 @@ namespace tul { namespace protocols {
 		*/
 		struct ConcreteSyntaxTree
 		{
+			void initToken();
 			ConcreteSyntaxTree();
 			ConcreteSyntaxTree(CrossTerminal ct);
+			ConcreteSyntaxTree(CrossTerminal ct, std::initializer_list<ConcreteSyntaxTree *> subtrees);
 			~ConcreteSyntaxTree();
 			std::string toString(int indent = 0);
 
+			ConcreteSyntaxTree *setLexeme(const std::string &lexeme);
 			Token token;
 			CrossTerminal node_type;
 			std::deque<ConcreteSyntaxTree *> children;
