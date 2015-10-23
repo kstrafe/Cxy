@@ -1090,6 +1090,8 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 				var [2:3:4, 32u] a;
 				var {[2:3:4:5, 32u] b; 32u c;}
 			}
+			(sml.String out : sml.String in) check return : `Dude` + in;
+			(sml.String out : sml.String {in}) check return : `Dude` + in;
 		)");
 	}
 	#undef doValidation
