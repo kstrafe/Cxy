@@ -1,13 +1,13 @@
 # Demeter's Second Laws #
-Demeter's Second Laws are an evolution of the original `Laws of Demeter`. For reference,
-the Law of Demeter is given here:
+Demeter's Second Law is an evolution of the original `Law of Demeter`. For reference,
+the Law of Demeter (LoD) is given here:
 
 	* Your method can call other methods in its class directly.
 	* Your method can call methods on its own fields directly (but not on the fields' fields).
 	* When your method takes parameters, your method can call methods on those parameters directly.
 	* When your method creates local objects, that method can call methods on the local objects.
 
-This is not completely practical and ideal. To improve this system, we edit the laws
+This is not completely practical and ideal. To improve this system, we edit the law
 slightly:
 
 	* You can invoke all methods on all types that are visible to you.
@@ -34,4 +34,4 @@ Here is a file hierarchy:
 				Bbb.cxy
 
 This allows global types to exist and be used. This allows global variables as well.
-Practicality and theoretical safety are the main focus of Demeter's Second Laws.
+Practicality and theoretical safety are the main focus of Demeter's Second Law.
