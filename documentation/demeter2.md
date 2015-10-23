@@ -1,4 +1,4 @@
-# Demeter's Second Laws #
+# Demeter's Second Law #
 Demeter's Second Law is an evolution of the original `Law of Demeter`. For reference,
 the Law of Demeter (LoD) is given here:
 
