@@ -7,15 +7,13 @@ the Law of Demeter (LoD) is given here:
 * When your method takes parameters, your method can call methods on those parameters directly.
 * When your method creates local objects, that method can call methods on the local objects.
 
-This is not completely practical and ideal. To improve this system, transform the law
-slightly:
+This is not completely practical and ideal. To improve this system, transform the law:
 
-* You can invoke all methods on all types that are visible to you.
-* An accessible type is a class in a subdirectory of the current directory, and the
-subdirectories of the root directory.
+* A visible type is a class (file) in a subdirectory of the current directory, and the subdirectories of the root directory.
+* You can invoke all methods on all types that are visible the current class.
 * Transitive subdirectories are not accessible.
 
-## Examples ##
+## Example ##
 Here is a file hierarchy:
 
 	root/
