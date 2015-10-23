@@ -7,7 +7,7 @@ the Law of Demeter (LoD) is given here:
 * When your method takes parameters, your method can call methods on those parameters directly.
 * When your method creates local objects, that method can call methods on the local objects.
 
-This is not completely practical and ideal. To improve this system, we edit the law
+This is not completely practical and ideal. To improve this system, transform the law
 slightly:
 
 * You can invoke all methods on all types that are visible to you.
