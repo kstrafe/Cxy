@@ -56,6 +56,12 @@ namespace tul { namespace protocols {
 			delete child;
 	}
 
+	ConcreteSyntaxTree *ConcreteSyntaxTree::setLexeme(const std::string &lexeme)
+	{
+		token.accompanying_lexeme = lexeme;
+		return this;
+	}
+
 	std::string ConcreteSyntaxTree::toString(int indent)
 	{
 		std::stringstream str_strm;

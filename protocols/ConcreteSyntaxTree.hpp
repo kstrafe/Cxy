@@ -41,6 +41,7 @@ namespace tul { namespace protocols {
 			~ConcreteSyntaxTree();
 			std::string toString(int indent = 0);
 
+			ConcreteSyntaxTree *setLexeme(const std::string &lexeme);
 			Token token;
 			CrossTerminal node_type;
 			std::deque<ConcreteSyntaxTree *> children;

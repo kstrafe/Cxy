@@ -22,16 +22,26 @@ along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 
 TEST_CASE("Test the semantic analyzer", "[test-SemanticAnalyzer]")
 {
-	#define var(a, b, c, d, e) new ConcreteSyntaxTree(CrossTerminal::KEYWORD_VAR, {a, b, c, d, e})
+	#define ncst(a) (new ConcreteSyntaxTree(CrossTerminal::a))
+	#define var(a, b, c, d, e, f) new ConcreteSyntaxTree(CrossTerminal::KEYWORD_VAR, {a, b, c, d, e, f})
+	#define varname(a) ncst(DATA_NAMES)->setLexeme(#a)
+	#define apublic ncst(KEYWORD_PUBLIC)
+	#define arestricted ncst(KEYWORD_RESTRICTED)
+	#define aprivate ncst(KEYWORD_PRIVATE)
+	#define aglobal ncst(KEYWORD_GLOBAL)
+	#define type(a, b) (new ConcreteSyntaxTree(CrossTerminal::TYPE, {a, b}))
+	#define eps ncst(EPSILONATE)
+	#define uint(n) ncst(PRIMITIVE_UNSIGNED)->setLexeme(#n)
 	SECTION("Basic validation")
 	{
 		using namespace tul::protocols;
 		ConcreteSyntaxTree *top = var(
-			new ConcreteSyntaxTree,
-			new ConcreteSyntaxTree,
-			new ConcreteSyntaxTree,
-			new ConcreteSyntaxTree,
-			new ConcreteSyntaxTree
+			apublic,
+			aglobal,
+			type(eps, uint(4)),
+			varname(myname),
+			ncst(EPSILONATE),
+			ncst(EPSILONATE)
 		);
 		std::cout << top->toString();
 	}
