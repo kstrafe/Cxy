@@ -32,19 +32,19 @@ namespace tul { namespace protocols {
 			It contains the type of node, token information, and productions (
 			children).
 		*/
-		struct SyntaxTree
-		{
-			void initToken();
-			SyntaxTree();
-			SyntaxTree(CrossTerminal ct);
-			SyntaxTree(CrossTerminal ct, std::initializer_list<SyntaxTree *> subtrees);
-			~SyntaxTree();
-			std::string toString(int indent = 0);
+struct SyntaxTree
+{
+	void initToken();
+	SyntaxTree();
+	SyntaxTree(CrossTerminal ct);
+	SyntaxTree(CrossTerminal ct, std::initializer_list<SyntaxTree *> subtrees);
+	~SyntaxTree();
+	std::string toString(int indent = 0);
 
-			SyntaxTree *setLexeme(const std::string &lexeme);
-			Token token;
-			CrossTerminal node_type;
-			std::deque<SyntaxTree *> children;
-		};
+	SyntaxTree *setLexeme(const std::string &lexeme);
+	Token token;
+	CrossTerminal node_type;
+	std::deque<SyntaxTree *> children;
+};
 
 }}

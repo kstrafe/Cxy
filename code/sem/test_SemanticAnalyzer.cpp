@@ -34,7 +34,6 @@ TEST_CASE("Test the semantic analyzer", "[test-SemanticAnalyzer]")
 	#define uint(n) ncst(PRIMITIVE_UNSIGNED)->setLexeme(#n)
 	#define gen (new SyntaxTree(CrossTerminal::UNIDENTIFIED, {
 	#define neg }))
-	#
 	SECTION("Basic validation")
 	{
 		using namespace tul::protocols;
