@@ -22,18 +22,40 @@ along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 
 TEST_CASE("Test the semantic analyzer", "[test-SemanticAnalyzer]")
 {
-	#define ncst(a) (new SyntaxTree(CrossTerminal::a))
-	#define var(a, b, c, d) new SyntaxTree(CrossTerminal::KEYWORD_VAR, {a, b, c, d})
-	#define varname(a) ncst(DATA_NAMES)->setLexeme(#a)
-	#define apublic ncst(KEYWORD_PUBLIC)
-	#define arestricted ncst(KEYWORD_RESTRICTED)
-	#define aprivate ncst(KEYWORD_PRIVATE)
-	#define aglobal ncst(KEYWORD_GLOBAL)
-	#define type(a, b) (new SyntaxTree(CrossTerminal::TYPE, {a, b}))
-	#define eps ncst(EPSILONATE)
-	#define uint(n) ncst(PRIMITIVE_UNSIGNED)->setLexeme(#n)
-	#define gen (new SyntaxTree(CrossTerminal::UNIDENTIFIED, {
-	#define neg }))
+	using namespace tul::protocols;
+	using St = tul::protocols::SyntaxTree;
+
+	// Various building procedures
+	auto var = [](St *access, St *globality, St *type, St *declaration)
+		-> St *
+		{
+			return new St(
+				CrossTerminal::KEYWORD_VAR,
+				{access, globality, type, declaration});
+		};
+	auto global = [](){ return new St(CrossTerminal::KEYWORD_GLOBAL); };
+	auto tprivate = []()
+		{ return new St(CrossTerminal::KEYWORD_PRIVATE); };
+	auto tpublic = []()
+		{ return new St(CrossTerminal::KEYWORD_PUBLIC); };
+	auto trestricted = []()
+		{ return new St(CrossTerminal::KEYWORD_RESTRICTED); };
+	auto type = [](St *modifier, St *type)
+		{ return new St(CrossTerminal::TYPE, {modifier, type}); };
+	auto eps = [](){ return new St(CrossTerminal::EPSILONATE); };
+	auto intu = [](std::size_t size){ St *a = new St(CrossTerminal::PRIMITIVE_UNSIGNED); a->setLexeme(std::to_string(size)); return a; };
+	auto intuw = [](std::size_t size){ St *a = new St(CrossTerminal::PRIMITIVE_UNSIGNED_WRAPPED); a->setLexeme(std::to_string(size)); return a; };
+	auto ints = [](std::size_t size){ St *a = new St(CrossTerminal::PRIMITIVE_SIGNED); a->setLexeme(std::to_string(size)); return a; };
+	auto intsw = [](std::size_t size){ St *a = new St(CrossTerminal::PRIMITIVE_SIGNED_WRAPPED); a->setLexeme(std::to_string(size)); return a; };
+	auto namelist = [](const std::string &varname,
+		St *expression, St *namelist2)
+		{
+			St *a = new St(CrossTerminal::DATA_NAMES, {expression, namelist2});
+			a->setLexeme(varname);
+			return a;
+		};
+	auto enter = [](St *first, St *tail) { return new St(CrossTerminal::ENTER, {first, tail}); };
+
 	SECTION("Basic validation")
 	{
 		using namespace tul::protocols;
@@ -43,15 +65,26 @@ TEST_CASE("Test the semantic analyzer", "[test-SemanticAnalyzer]")
 			var ::= access globality type varlist
 			varlist ::= name optexpr varlist
 				| eps
+
+			To process this, we iterate the top of the tree. For
+			each recursive definition, we just call recursive functions.
+			Suppose enter has var and an enter node (enter takes 2 children).
+			Then, we can process both individually. First the var node.
+			This node sets up a table of variables...
+
+			If we have a global/glocal, we need to pass a table of available
+			glo(b|c)als down to the classes we are processing.
 		*/
-		SyntaxTree *top = var(
-			apublic,
-			aglobal,
-			type(eps, uint(4)),
-			(gen
-				varname(cool), eps, eps
-			neg)
-		);
+		SyntaxTree *top = enter(
+			var(
+				tpublic(),
+				global(),
+				type(eps(), intu(10)),
+				namelist("test", eps(),
+					eps())),
+			enter(
+				eps(),
+				eps()));
 		std::cout << top->toString();
 	}
 }
