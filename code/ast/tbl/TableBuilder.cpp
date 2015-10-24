@@ -47,9 +47,9 @@ bool TableBuilder::runOn (
 	if (nodeIs(ENTER)) {
 		if (child1Is(KEYWORD_GRANT)) {
 			if (child2Is(IDENTIFIER_CONSTEXPR)) {
-				std::cout << child2Lex << std::endl;
+				// std::cout << child2Lex << std::endl;
 			} else if (child2Is(IDENTIFIER_CLASS)) {
-				std::cout << child2Lex << std::endl;
+				// std::cout << child2Lex << std::endl;
 			}
 		}
 	}
