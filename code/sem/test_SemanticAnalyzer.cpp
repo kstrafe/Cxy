@@ -74,6 +74,29 @@ TEST_CASE("Test the semantic analyzer", "[test-SemanticAnalyzer]")
 
 			If we have a global/glocal, we need to pass a table of available
 			glo(b|c)als down to the classes we are processing.
+			We also need to remember context. var being the
+			child of an enter node needs to be considered an
+			object variable.
+
+			var being the child of a function node needs to be considered a local variable.
+			In any case, we need to pass down context to the processor.
+			Context *contextl
+			ContextProxy *proxy(context);
+			proxy->setProcessClass();
+			Processor::process(top, proxy);
+
+			Then, from within the processor, it calls the following:
+
+			St *first_child = ...;
+			if (first_child->isMethod())
+			{
+				proxy->setProcessMethod();
+			Processor::process(first_child, proxy);
+			proxy->setProcessClass();
+			Processor::process(second_child, proxy);
+
+			This way (using proxies), allows us to delegate the correct functions inside
+			the proxy, in addition to allowing parallel processing.
 		*/
 		SyntaxTree *top = enter(
 			var(
