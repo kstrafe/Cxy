@@ -17,6 +17,7 @@ along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "libraries/catch.hpp"
 #include "protocols/SyntaxTree.hpp"
+#include "SemanticAnalyzer.hpp"
 
 #include <iostream>
 
@@ -104,6 +105,8 @@ TEST_CASE("Test the semantic analyzer", "[test-SemanticAnalyzer]")
 				namelist("test", eps(),
 					eps())),
 			eps());
-		std::cout << top->toString();
+
+		tul::sem::SemanticAnalyzer semant;
+		REQUIRE(semant.checkTree(top));
 	}
 }

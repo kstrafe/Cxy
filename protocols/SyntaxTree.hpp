@@ -39,7 +39,7 @@ struct SyntaxTree
 	SyntaxTree(CrossTerminal ct);
 	SyntaxTree(CrossTerminal ct, std::initializer_list<SyntaxTree *> subtrees);
 	~SyntaxTree();
-	std::string toString(int indent = 0);
+	std::string toString(int indent = 0) const;
 
 	SyntaxTree *setLexeme(const std::string &lexeme);
 	Token token;

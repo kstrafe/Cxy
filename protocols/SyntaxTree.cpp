@@ -62,7 +62,7 @@ namespace tul { namespace protocols {
 		return this;
 	}
 
-	std::string SyntaxTree::toString(int indent)
+	std::string SyntaxTree::toString(int indent) const
 	{
 		std::stringstream str_strm;
 		str_strm << std::setfill('0') << std::setw(3) << indent << ':';

@@ -17,6 +17,9 @@ along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "SemanticAnalyzer.hpp"
 
+#include <algorithm>
+#include <iostream>
+
 namespace tul { namespace sem {
 
 template <typename F>
@@ -34,10 +37,75 @@ bool isAnyOf(protocols::CrossTerminal a, F f, Fs ...fs)
 bool SemanticAnalyzer::checkTree(const protocols::SyntaxTree *tree) const
 {
 	using namespace protocols;
-	auto child = [&](std::size_t child_number){ return tree->children.at(child_number)->node_type; };
+	bool correct = true;
+	auto assertNoChildren = [&]() { return tree->children.size() == 0; };
+	auto runs = [&]()
+		{
+			for (std::size_t i = 0; (i < tree->children.size()) && correct; ++i)
+			{
+				correct = checkTree(tree->children.at(i));
+				if (correct == false)
+					std::cout << tree->children.at(i)->toString() << std::endl;
+			}
+			return correct;
+		};
+	auto child = [&](std::size_t child_number)
+		{ return tree->children.at(child_number)->node_type; };
+
+	auto lexIsNum = [&]()
+		{
+			const std::string &lx = tree->token.accompanying_lexeme;
+			return std::all_of(lx.begin(), lx.end(), ::isdigit);
+		};
+	auto lexIsData = [&]()
+		{
+			const std::string &lx = tree->token.accompanying_lexeme;
+			return lx.find_first_not_of
+				("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_")
+				== std::string::npos;
+		};
+
 	switch (tree->node_type)
 	{
-		case CrossTerminal::ENTER: isAnyOf(child(0), CrossTerminal::KEYWORD_VAR);
+		// Internal (non-leaf) nodes
+		case CrossTerminal::ENTER:
+			correct &= isAnyOf(child(0), CrossTerminal::KEYWORD_VAR);
+			return runs();
+		case CrossTerminal::KEYWORD_VAR:
+			correct &= isAnyOf(child(0), CrossTerminal::EPSILONATE,
+				CrossTerminal::KEYWORD_PUBLIC, CrossTerminal::KEYWORD_PRIVATE,
+				CrossTerminal::KEYWORD_RESTRICTED);
+			correct &= isAnyOf(child(1), CrossTerminal::EPSILONATE, CrossTerminal::KEYWORD_GLOBAL);
+			correct &= isAnyOf(child(2), CrossTerminal::TYPE);
+			return runs();
+		case CrossTerminal::TYPE:
+			correct &= isAnyOf(child(0), CrossTerminal::EPSILONATE);
+			correct &= isAnyOf(child(1), CrossTerminal::PRIMITIVE_UNSIGNED,
+				CrossTerminal::PRIMITIVE_SIGNED, CrossTerminal::PRIMITIVE_UNSIGNED_WRAPPED,
+				CrossTerminal::PRIMITIVE_SIGNED_WRAPPED, CrossTerminal::TYPE);
+			return runs();
+		case CrossTerminal::DATA_NAMES:
+			correct &= isAnyOf(child(0), CrossTerminal::EPSILONATE);
+			correct &= isAnyOf(child(1), CrossTerminal::DATA_NAMES, CrossTerminal::EPSILONATE);
+			correct &= lexIsData();
+			return runs();
+
+		// Leaf nodes
+		case CrossTerminal::PRIMITIVE_SIGNED:
+		case CrossTerminal::PRIMITIVE_UNSIGNED:
+		case CrossTerminal::PRIMITIVE_SIGNED_WRAPPED:
+		case CrossTerminal::PRIMITIVE_UNSIGNED_WRAPPED:
+			correct &= lexIsNum();
+			return runs();
+
+		// These cases never have children.
+		case CrossTerminal::EPSILONATE:
+		case CrossTerminal::KEYWORD_GLOBAL:
+		case CrossTerminal::KEYWORD_PRIVATE:
+		case CrossTerminal::KEYWORD_PUBLIC:
+		case CrossTerminal::KEYWORD_RESTRICTED:
+			return assertNoChildren();
+
 		default: return false;
 	}
 }
