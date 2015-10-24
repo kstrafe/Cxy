@@ -214,6 +214,24 @@ I think my language looks clean actually.
 		// ...
 	}
 
+=== Kevin R. Stavers -- Sat 24 Oct 2015 01:48:55 PM CEST
+
+The problem with alias is that it may obfuscate a lot of stuff that we may want to
+automate
+
+	alias ab = aaaabbbb;
+	alias Ab = ab.AaaaBbbb;
+
+Whenever we do a `sed -i 's/aaaabbbb.AaaaBbbb/aaaabbbb.AaaaCccc/g'`. We won't get correct
+results all the time. In fact, it may be very difficult to patch this up. I'd like to
+inspect whether the current alias declaration is useful or not. Say I want to replace
+only the class name, then this will work. But what if there are other classes in other
+namespaces? That will make the compiler throw up. Hopefully, people will avoid nameclashes.
+I can still allow this kind of transitive alias application. After all, you already
+have a well functioning definition of the type so it shouldn't be a problem.
+
+===
+
 Neat. I can't think of anything to criticize it right now :(
 
 	(: sml.String in) print {
