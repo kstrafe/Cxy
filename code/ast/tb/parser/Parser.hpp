@@ -17,7 +17,7 @@ along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "dependency/CrossTerminalParser.hpp"
-#include "protocols/ConcreteSyntaxTree.hpp"
+#include "protocols/SyntaxTree.hpp"
 #include "protocols/CrossTerminal.hpp"
 #include "protocols/Token.hpp"
 
@@ -30,7 +30,7 @@ namespace tul { namespace parser {
 
 /**
 	Implement a simple LL(1) parser for our language. This is a mathematical model of
-	a parser. It runs in O(n) time. The protocols used will be the Token and ConcreteSyntaxTree.
+	a parser. It runs in O(n) time. The protocols used will be the Token and SyntaxTree.
 
 	The parser will be table/state based as it has to be re-entrant. The mealy machine can be of
 	use here.
@@ -52,16 +52,16 @@ public:
 	~Parser();
 	bool isEmpty();
 	bool parseSymbol(const protocols::Token &input_token);
-	std::unique_ptr<protocols::ConcreteSyntaxTree> getConcreteSyntaxTree();
+	std::unique_ptr<protocols::SyntaxTree> getSyntaxTree();
 
 	std::vector<std::string> formulateExpectedTokens() const;
 
 private:
 
-	static protocols::ConcreteSyntaxTree end_of_input_tree;
+	static protocols::SyntaxTree end_of_input_tree;
 	dependency::CrossTerminalParser cross_parser;
-	std::unique_ptr<protocols::ConcreteSyntaxTree> syntax_tree_root;
-	std::stack<protocols::ConcreteSyntaxTree *> symbol_stack;
+	std::unique_ptr<protocols::SyntaxTree> syntax_tree_root;
+	std::stack<protocols::SyntaxTree *> symbol_stack;
 
 };
 

@@ -70,9 +70,9 @@ bool TreeBuilder::endInput()
 }
 
 
-std::unique_ptr<protocols::ConcreteSyntaxTree> TreeBuilder::getConcreteSyntaxTree()
+std::unique_ptr<protocols::SyntaxTree> TreeBuilder::getSyntaxTree()
 {
-	return parser_object.getConcreteSyntaxTree();
+	return parser_object.getSyntaxTree();
 }
 
 

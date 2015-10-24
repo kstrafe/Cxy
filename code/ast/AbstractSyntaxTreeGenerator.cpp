@@ -17,7 +17,7 @@ along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "AbstractSyntaxTreeGenerator.hpp"
 #include "tp/TreePruner.hpp"
-#include "protocols/ConcreteSyntaxTree.hpp"
+#include "protocols/SyntaxTree.hpp"
 
 #include <iostream>
 
@@ -48,7 +48,7 @@ namespace tul { namespace ast {
 
 	bool AbstractSyntaxTreeGenerator::generateSemantics(const std::string &qualified_name)
 	{
-		std::unique_ptr<protocols::ConcreteSyntaxTree> tree = tree_builder.getConcreteSyntaxTree();
+		std::unique_ptr<protocols::SyntaxTree> tree = tree_builder.getSyntaxTree();
 		tp::TreePruner::pruneTree(tree.get());
 		tp::TreePruner::pruneTree(tree.get());
 		table_builder.runOn(tree.get(), qualified_name);

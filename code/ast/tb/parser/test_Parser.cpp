@@ -28,7 +28,7 @@ TEST_CASE("Test parser", "[test-Parser]")
 	SECTION("Make sure that the root object has ENTER as type")
 	{
 		tul::parser::Parser parser;
-		std::unique_ptr<tul::protocols::ConcreteSyntaxTree> tree = parser.getConcreteSyntaxTree();
+		std::unique_ptr<tul::protocols::SyntaxTree> tree = parser.getSyntaxTree();
 		REQUIRE(tree->node_type == tul::protocols::CrossTerminal::ENTER);
 	}
 	SECTION("Try parsing simple a simple expression")

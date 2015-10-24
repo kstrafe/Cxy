@@ -31,7 +31,7 @@ namespace tul { namespace tbl {
 	Also, we know that the last child of enter is the next 'sub part'.
 */
 bool TableBuilder::runOn (
-	protocols::ConcreteSyntaxTree *ct_root,
+	protocols::SyntaxTree *ct_root,
 	const std::string &qualified_name
 ) {
 	using namespace protocols;

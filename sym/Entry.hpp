@@ -17,7 +17,7 @@ along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 */
 #pragma once
 
-#include "protocols/ConcreteSyntaxTree.hpp"
+#include "protocols/SyntaxTree.hpp"
 
 #include <string>
 #include <utility>
@@ -75,7 +75,7 @@ public:
 		method_returns, method_arguments;
 	std::string method_identifier;
 
-	ConcreteSyntaxTree *sub_tree;  // May contain statements if this entry is a
+	SyntaxTree *sub_tree;  // May contain statements if this entry is a
 	// function
 
 };

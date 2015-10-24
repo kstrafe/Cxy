@@ -18,7 +18,7 @@ along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 #include "sym/SymbolTable.hpp"
-#include "protocols/ConcreteSyntaxTree.hpp"
+#include "protocols/SyntaxTree.hpp"
 
 
 namespace tul { namespace tbl {
@@ -29,7 +29,7 @@ namespace tul { namespace tbl {
 
 		bool runOn
 		(
-			protocols::ConcreteSyntaxTree *ct_root,
+			protocols::SyntaxTree *ct_root,
 			const std::string &qualified_name
 		);
 

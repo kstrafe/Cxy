@@ -25,14 +25,14 @@ along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace tul { namespace tp {
 
-void TreePruner::pruneTree(protocols::ConcreteSyntaxTree *ct)
+void TreePruner::pruneTree(protocols::SyntaxTree *ct)
 {
 	// Instead of manually pruning trees, we can add an annotation to the grammar so that
 	// it can generate a pruner for us.
 	// Assume ct is the root of the tree.
 	// Perform the following actions.
 	// For each node, decide which can stay, recurse
-	for (protocols::ConcreteSyntaxTree *child : ct->children)
+	for (protocols::SyntaxTree *child : ct->children)
 		pruneTree(child);
 
 	ct->children.erase
@@ -40,7 +40,7 @@ void TreePruner::pruneTree(protocols::ConcreteSyntaxTree *ct)
 		std::remove_if
 		(
 			ct->children.begin(), ct->children.end(),
-			[&](protocols::ConcreteSyntaxTree *child)
+			[&](protocols::SyntaxTree *child)
 			{
 				assert(child != nullptr);
 				#define caze(x) child->node_type == protocols::CrossTerminal::x ||
@@ -77,7 +77,7 @@ void TreePruner::pruneTree(protocols::ConcreteSyntaxTree *ct)
 	auto popfirst = [&](CrossTerminal cte) {
 		for (std::size_t i = 0; i < ct->children.size(); ++i)
 		{
-			ConcreteSyntaxTree *child = ct->children.at(i);
+			SyntaxTree *child = ct->children.at(i);
 			if ( child->node_type == cte) {
 				assert(child->children.size() == 1);
 				decltype(child) trans_child = child->children.at(0);
@@ -104,10 +104,10 @@ void TreePruner::pruneTree(protocols::ConcreteSyntaxTree *ct)
 
 	auto popup = [&](CrossTerminal left, CrossTerminal right) {
 		for (std::size_t i = 0; i < ct->children.size(); ++i) {
-			ConcreteSyntaxTree *child = ct->children.at(i);
+			SyntaxTree *child = ct->children.at(i);
 			if ( child->node_type == left ) {
 				for (std::size_t j = 0; j < child->children.size(); ++j) {
-					ConcreteSyntaxTree *child2 = child->children.at(j);
+					SyntaxTree *child2 = child->children.at(j);
 					if ( child2->node_type == right ) {
 						for (std::size_t x = 0; x < j; ++x)
 							child2->children.push_front(child->children.at(x));
@@ -125,10 +125,10 @@ void TreePruner::pruneTree(protocols::ConcreteSyntaxTree *ct)
 
 	auto moveup = [&](CrossTerminal left, CrossTerminal right) {
 		for (std::size_t i = 0; i < ct->children.size(); ++i) {
-			ConcreteSyntaxTree *child = ct->children.at(i);
+			SyntaxTree *child = ct->children.at(i);
 			if ( child->node_type == left ) {
 				for (std::size_t j = 0; j < child->children.size(); ++j) {
-					ConcreteSyntaxTree *child2 = child->children.at(j);
+					SyntaxTree *child2 = child->children.at(j);
 					if ( child2->node_type == right ) {
 						for (std::size_t x = 0; x < j; ++x)
 							child2->children.push_front(child->children.at(x));
@@ -273,12 +273,12 @@ void TreePruner::pruneTree(protocols::ConcreteSyntaxTree *ct)
 			assert(ct->children[i]->children[0]->node_type != protocols::CrossTerminal::EPSILONATE);
 			// How do we bring that child up? We must make it a proper child of this node. How do we do this?
 			// Detach it from the child:
-			protocols::ConcreteSyntaxTree *transitive_child = ct->children[i]->children[0];
+			protocols::SyntaxTree *transitive_child = ct->children[i]->children[0];
 			ct->children[i]->children.erase(ct->children[i]->children.begin());
 			// Now make sure that that child doesn't get deleted
 			for (std::size_t j = 0; j < ct->children[i]->children.size(); ++j)
 			{
-				//protocols::ConcreteSyntaxTree *child = ct->children[i]->children[j];
+				//protocols::SyntaxTree *child = ct->children[i]->children[j];
 				// std::cout << protocols::CrossTerminalTools::toString(child->node_type) << j << std::endl;
 				delete ct->children[i]->children[j];
 			}

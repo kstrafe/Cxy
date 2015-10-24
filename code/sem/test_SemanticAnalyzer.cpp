@@ -16,23 +16,23 @@ You should have received a copy of the GNU General Public License
 along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "libraries/catch.hpp"
-#include "protocols/ConcreteSyntaxTree.hpp"
+#include "protocols/SyntaxTree.hpp"
 
 #include <iostream>
 
 TEST_CASE("Test the semantic analyzer", "[test-SemanticAnalyzer]")
 {
-	#define ncst(a) (new ConcreteSyntaxTree(CrossTerminal::a))
-	#define var(a, b, c, d) new ConcreteSyntaxTree(CrossTerminal::KEYWORD_VAR, {a, b, c, d})
+	#define ncst(a) (new SyntaxTree(CrossTerminal::a))
+	#define var(a, b, c, d) new SyntaxTree(CrossTerminal::KEYWORD_VAR, {a, b, c, d})
 	#define varname(a) ncst(DATA_NAMES)->setLexeme(#a)
 	#define apublic ncst(KEYWORD_PUBLIC)
 	#define arestricted ncst(KEYWORD_RESTRICTED)
 	#define aprivate ncst(KEYWORD_PRIVATE)
 	#define aglobal ncst(KEYWORD_GLOBAL)
-	#define type(a, b) (new ConcreteSyntaxTree(CrossTerminal::TYPE, {a, b}))
+	#define type(a, b) (new SyntaxTree(CrossTerminal::TYPE, {a, b}))
 	#define eps ncst(EPSILONATE)
 	#define uint(n) ncst(PRIMITIVE_UNSIGNED)->setLexeme(#n)
-	#define gen (new ConcreteSyntaxTree(CrossTerminal::UNIDENTIFIED, {
+	#define gen (new SyntaxTree(CrossTerminal::UNIDENTIFIED, {
 	#define neg }))
 	#
 	SECTION("Basic validation")
@@ -45,7 +45,7 @@ TEST_CASE("Test the semantic analyzer", "[test-SemanticAnalyzer]")
 			varlist ::= name optexpr varlist
 				| eps
 		*/
-		ConcreteSyntaxTree *top = var(
+		SyntaxTree *top = var(
 			apublic,
 			aglobal,
 			type(eps, uint(4)),

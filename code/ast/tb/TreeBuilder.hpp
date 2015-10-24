@@ -18,7 +18,7 @@ along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 #include "lexer/Lexer.hpp"
 #include "parser/Parser.hpp"
-#include "protocols/ConcreteSyntaxTree.hpp"
+#include "protocols/SyntaxTree.hpp"
 
 #include <string>
 #include <vector>
@@ -35,7 +35,7 @@ public:
 
 	bool endInput();
 
-	std::unique_ptr<protocols::ConcreteSyntaxTree> getConcreteSyntaxTree();
+	std::unique_ptr<protocols::SyntaxTree> getSyntaxTree();
 
 	std::vector<std::string> getExpectedTokens() const;
 	std::string getExpectedTokensGrammar() const;

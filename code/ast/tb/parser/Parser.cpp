@@ -27,12 +27,12 @@ Parser::Parser()
 	using namespace protocols;
 	symbol_stack.emplace(&end_of_input_tree);
 
-	syntax_tree_root.reset(new ConcreteSyntaxTree);
+	syntax_tree_root.reset(new SyntaxTree);
 	symbol_stack.emplace(syntax_tree_root.get());
 	syntax_tree_root->node_type = CrossTerminal::ENTER;
 }
 
-protocols::ConcreteSyntaxTree Parser::end_of_input_tree = protocols::ConcreteSyntaxTree(protocols::CrossTerminal::END_OF_MODULE);
+protocols::SyntaxTree Parser::end_of_input_tree = protocols::SyntaxTree(protocols::CrossTerminal::END_OF_MODULE);
 
 Parser::~Parser()
 {
@@ -45,7 +45,7 @@ bool Parser::isEmpty()
 }
 
 
-std::unique_ptr<protocols::ConcreteSyntaxTree> Parser::getConcreteSyntaxTree()
+std::unique_ptr<protocols::SyntaxTree> Parser::getSyntaxTree()
 {
 	return std::move(syntax_tree_root);
 }
@@ -81,11 +81,11 @@ bool Parser::parseSymbol(const protocols::Token &input_token)
 				continue;
 			case ParseReturn<CrossTerminal>::Action::CONTINUE:
 			{
-				ConcreteSyntaxTree *tree_ptr = symbol_stack.top();
+				SyntaxTree *tree_ptr = symbol_stack.top();
 				symbol_stack.pop();
 				for (std::size_t i = parse_return.child_symbols->size() - 1; i >= 0; --i)
 				{
-					ConcreteSyntaxTree *child = new ConcreteSyntaxTree;
+					SyntaxTree *child = new SyntaxTree;
 					child->node_type = (*parse_return.child_symbols)[i];
 
 					symbol_stack.push(child);

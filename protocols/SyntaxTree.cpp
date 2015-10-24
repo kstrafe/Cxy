@@ -15,7 +15,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "ConcreteSyntaxTree.hpp"
+#include "SyntaxTree.hpp"
 
 #include <iomanip>
 #include <sstream>
@@ -23,26 +23,26 @@ along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace tul { namespace protocols {
 
-	void ConcreteSyntaxTree::initToken()
+	void SyntaxTree::initToken()
 	{
 		token.entry_type = EntryType::WHITESPACE;
 		token.line_number = 0;
 		token.column_number = 0;
 	}
 
-	ConcreteSyntaxTree::ConcreteSyntaxTree()
+	SyntaxTree::SyntaxTree()
 	{
 		initToken();
 	}
 
-	ConcreteSyntaxTree::ConcreteSyntaxTree(CrossTerminal ct)
+	SyntaxTree::SyntaxTree(CrossTerminal ct)
 	:
 		node_type(ct)
 	{
 		initToken();
 	}
 
-	ConcreteSyntaxTree::ConcreteSyntaxTree(CrossTerminal ct, std::initializer_list<ConcreteSyntaxTree *> subtrees)
+	SyntaxTree::SyntaxTree(CrossTerminal ct, std::initializer_list<SyntaxTree *> subtrees)
 	:
 		node_type(ct),
 		children(subtrees)
@@ -50,19 +50,19 @@ namespace tul { namespace protocols {
 		initToken();
 	}
 
-	ConcreteSyntaxTree::~ConcreteSyntaxTree()
+	SyntaxTree::~SyntaxTree()
 	{
-		for (ConcreteSyntaxTree *child : children)
+		for (SyntaxTree *child : children)
 			delete child;
 	}
 
-	ConcreteSyntaxTree *ConcreteSyntaxTree::setLexeme(const std::string &lexeme)
+	SyntaxTree *SyntaxTree::setLexeme(const std::string &lexeme)
 	{
 		token.accompanying_lexeme = lexeme;
 		return this;
 	}
 
-	std::string ConcreteSyntaxTree::toString(int indent)
+	std::string SyntaxTree::toString(int indent)
 	{
 		std::stringstream str_strm;
 		str_strm << std::setfill('0') << std::setw(3) << indent << ':';
