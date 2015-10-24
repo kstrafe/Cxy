@@ -23,7 +23,7 @@ along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 TEST_CASE("Test the semantic analyzer", "[test-SemanticAnalyzer]")
 {
 	#define ncst(a) (new ConcreteSyntaxTree(CrossTerminal::a))
-	#define var(a, b, c, d, e, f) new ConcreteSyntaxTree(CrossTerminal::KEYWORD_VAR, {a, b, c, d, e, f})
+	#define var(a, b, c, d) new ConcreteSyntaxTree(CrossTerminal::KEYWORD_VAR, {a, b, c, d})
 	#define varname(a) ncst(DATA_NAMES)->setLexeme(#a)
 	#define apublic ncst(KEYWORD_PUBLIC)
 	#define arestricted ncst(KEYWORD_RESTRICTED)
@@ -32,16 +32,26 @@ TEST_CASE("Test the semantic analyzer", "[test-SemanticAnalyzer]")
 	#define type(a, b) (new ConcreteSyntaxTree(CrossTerminal::TYPE, {a, b}))
 	#define eps ncst(EPSILONATE)
 	#define uint(n) ncst(PRIMITIVE_UNSIGNED)->setLexeme(#n)
+	#define gen (new ConcreteSyntaxTree(CrossTerminal::UNIDENTIFIED, {
+	#define neg }))
+	#
 	SECTION("Basic validation")
 	{
 		using namespace tul::protocols;
+		// The IR of variables is given
+		/*
+			using the grammar:
+			var ::= access globality type varlist
+			varlist ::= name optexpr varlist
+				| eps
+		*/
 		ConcreteSyntaxTree *top = var(
 			apublic,
 			aglobal,
 			type(eps, uint(4)),
-			varname(myname),
-			ncst(EPSILONATE),
-			ncst(EPSILONATE)
+			(gen
+				varname(cool), eps, eps
+			neg)
 		);
 		std::cout << top->toString();
 	}
