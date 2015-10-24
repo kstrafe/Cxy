@@ -96,7 +96,8 @@ bool SemanticAnalyzer::checkTree(const protocols::SyntaxTree *tree) const
 		case CrossTerminal::PRIMITIVE_SIGNED_WRAPPED:
 		case CrossTerminal::PRIMITIVE_UNSIGNED_WRAPPED:
 			correct &= lexIsNum();
-			return runs();
+			correct &= assertNoChildren();
+			return correct;
 
 		// These cases never have children.
 		case CrossTerminal::EPSILONATE:
