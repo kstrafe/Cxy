@@ -34,14 +34,10 @@ TEST_CASE("Test the semantic analyzer", "[test-SemanticAnalyzer]")
 				{access, globality, type, declaration});
 		};
 	auto global = [](){ return new St(CrossTerminal::KEYWORD_GLOBAL); };
-	auto tprivate = []()
-		{ return new St(CrossTerminal::KEYWORD_PRIVATE); };
-	auto tpublic = []()
-		{ return new St(CrossTerminal::KEYWORD_PUBLIC); };
-	auto trestricted = []()
-		{ return new St(CrossTerminal::KEYWORD_RESTRICTED); };
-	auto type = [](St *modifier, St *type)
-		{ return new St(CrossTerminal::TYPE, {modifier, type}); };
+	auto tprivate = []() { return new St(CrossTerminal::KEYWORD_PRIVATE); };
+	auto tpublic = []() { return new St(CrossTerminal::KEYWORD_PUBLIC); };
+	auto trestricted = []() { return new St(CrossTerminal::KEYWORD_RESTRICTED); };
+	auto type = [](St *modifier, St *type) { return new St(CrossTerminal::TYPE, {modifier, type}); };
 	auto eps = [](){ return new St(CrossTerminal::EPSILONATE); };
 	auto intu = [](std::size_t size){ St *a = new St(CrossTerminal::PRIMITIVE_UNSIGNED); a->setLexeme(std::to_string(size)); return a; };
 	auto intuw = [](std::size_t size){ St *a = new St(CrossTerminal::PRIMITIVE_UNSIGNED_WRAPPED); a->setLexeme(std::to_string(size)); return a; };
@@ -97,17 +93,17 @@ TEST_CASE("Test the semantic analyzer", "[test-SemanticAnalyzer]")
 
 			This way (using proxies), allows us to delegate the correct functions inside
 			the proxy, in addition to allowing parallel processing.
+
+			The question is; is it proper to use CrossTerminals as the node types?
 		*/
 		SyntaxTree *top = enter(
 			var(
 				tpublic(),
 				global(),
-				type(eps(), intu(10)),
+				type(eps(), intu(32)),
 				namelist("test", eps(),
 					eps())),
-			enter(
-				eps(),
-				eps()));
+			eps());
 		std::cout << top->toString();
 	}
 }

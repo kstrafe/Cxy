@@ -16,3 +16,28 @@ You should have received a copy of the GNU General Public License
 along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 */
 #pragma once
+
+#include "protocols/SyntaxTree.hpp"
+
+namespace tul { namespace sem {
+
+class SemanticAnalyzer
+{
+public:
+
+	////////////////////////////////////////////////////////////
+	// \brief Check the tree for validity in consistency
+	//
+	// Check if the tree of a class is in the standard form.
+	// Please use this only to debug a tree generator.
+	// After the check, all functions assume that the
+	// tree is in its correct form.
+	// Note that this function does not check semantics.
+	////////////////////////////////////////////////////////////
+	bool checkTree(const protocols::SyntaxTree *tree) const;
+
+private:
+
+};
+
+}}
