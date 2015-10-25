@@ -79,7 +79,7 @@ bool SemanticAnalyzer::checkTree(const protocols::SyntaxTree *tree) const
 			correct &= isAnyOf(child(2), CrossTerminal::TYPE);
 			return runs();
 		case CrossTerminal::TYPE:
-			correct &= isAnyOf(child(0), CrossTerminal::EPSILONATE);
+			correct &= isAnyOf(child(0), CrossTerminal::EPSILONATE, CrossTerminal::AND_EXPRESSION);
 			correct &= isAnyOf(child(1), CrossTerminal::PRIMITIVE_UNSIGNED,
 				CrossTerminal::PRIMITIVE_SIGNED, CrossTerminal::PRIMITIVE_UNSIGNED_WRAPPED,
 				CrossTerminal::PRIMITIVE_SIGNED_WRAPPED, CrossTerminal::TYPE);
