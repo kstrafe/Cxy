@@ -52,7 +52,8 @@ TEST_CASE("Test the semantic analyzer", "[test-SemanticAnalyzer]")
 			return a;
 		};
 	auto enter = [](St *first, St *tail) { return new St(CrossTerminal::ENTER, {first, tail}); };
-
+	auto and_expr = [](St *first, St *second) { return new St(CrossTerminal::AND_EXPRESSION, {first, second}); };
+	auto integer = [](std::string literal) { return (new St(CrossTerminal::INTEGER_LITERAL))->setLexeme(literal); };
 	SECTION("Basic validation")
 	{
 		using namespace tul::protocols;
@@ -104,7 +105,7 @@ TEST_CASE("Test the semantic analyzer", "[test-SemanticAnalyzer]")
 				type(eps(), intu(32)),
 				namelist(
 					"test",
-					eps(),
+					integer("100"),
 					eps())),
 			eps());
 

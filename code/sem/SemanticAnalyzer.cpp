@@ -83,7 +83,11 @@ bool SemanticAnalyzer::checkTree(const protocols::SyntaxTree *tree) const
 				CrossTerminal::CAST_EXPRESSION,
 				CrossTerminal::MEMBER_EXPRESSION,
 				CrossTerminal::SIZE_EXPRESSION,
-				CrossTerminal::UNARY_OPERATOR);
+				CrossTerminal::UNARY_EXPRESSION,
+
+				CrossTerminal::MEMBER_EXPRESSION,
+				CrossTerminal::INTEGER_LITERAL
+				);
 		};
 
 	switch (tree->node_type)
@@ -96,12 +100,14 @@ bool SemanticAnalyzer::checkTree(const protocols::SyntaxTree *tree) const
 			correct &= isAnyOf(child(0), CrossTerminal::EPSILONATE,
 				CrossTerminal::KEYWORD_PUBLIC, CrossTerminal::KEYWORD_PRIVATE,
 				CrossTerminal::KEYWORD_RESTRICTED);
-			correct &= isAnyOf(child(1), CrossTerminal::EPSILONATE, CrossTerminal::KEYWORD_GLOBAL);
+			correct &= isAnyOf(child(1), CrossTerminal::EPSILONATE,
+				CrossTerminal::KEYWORD_GLOBAL);
 			correct &= isAnyOf(child(2), CrossTerminal::TYPE);
 			correct &= isAnyOf(child(3), CrossTerminal::DATA_NAMES);
 			return runs();
 		case CrossTerminal::TYPE:
-			correct &= isAnyOf(child(0), CrossTerminal::EPSILONATE, CrossTerminal::AND_EXPRESSION);
+			correct &= isAnyOf(child(0), CrossTerminal::EPSILONATE,
+				CrossTerminal::AND_EXPRESSION);
 			correct &= isAnyOf(child(1), CrossTerminal::PRIMITIVE_UNSIGNED,
 				CrossTerminal::PRIMITIVE_SIGNED, CrossTerminal::PRIMITIVE_UNSIGNED_WRAPPED,
 				CrossTerminal::PRIMITIVE_SIGNED_WRAPPED, CrossTerminal::TYPE);
@@ -113,7 +119,14 @@ bool SemanticAnalyzer::checkTree(const protocols::SyntaxTree *tree) const
 			correct &= lexIsData();
 			return runs();
 
+		case CrossTerminal::AND_EXPRESSION:
+			correct &= anyExpression(child(0));
+			correct &= anyExpression(child(1));
+			return runs();
+
+
 		// Leaf nodes
+		case CrossTerminal::INTEGER_LITERAL:
 		case CrossTerminal::PRIMITIVE_SIGNED:
 		case CrossTerminal::PRIMITIVE_UNSIGNED:
 		case CrossTerminal::PRIMITIVE_SIGNED_WRAPPED:
