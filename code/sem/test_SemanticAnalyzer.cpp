@@ -102,7 +102,9 @@ TEST_CASE("Test the semantic analyzer", "[test-SemanticAnalyzer]")
 				tpublic(),
 				global(),
 				type(eps(), intu(32)),
-				namelist("test", eps(),
+				namelist(
+					"test",
+					eps(),
 					eps())),
 			eps());
 
