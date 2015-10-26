@@ -55,9 +55,11 @@ TEST_CASE("Test the semantic analyzer", "[test-SemanticAnalyzer]")
 	auto and_expr = [](St *first, St *second) { return new St(CrossTerminal::AND_EXPRESSION, {first, second}); };
 	auto unary_expr = [](St *symbol, St *underexpression) { return new St(CrossTerminal::UNARY_EXPRESSION, {symbol, underexpression}); };
 	auto dereference = []() { return new St(CrossTerminal::SYMBOL_APETAIL); };
+	auto minus = []() { return new St(CrossTerminal::SYMBOL_MINUS); };
 	auto addressof = []() { return new St(CrossTerminal::SYMBOL_DOLLAR); };
 	auto constaddressof = []() { return new St(CrossTerminal::SYMBOL_DOLLAR__DOLLAR); };
 	auto integer = [](std::string literal) { return (new St(CrossTerminal::INTEGER_LITERAL))->setLexeme(literal); };
+	tul::sem::SemanticAnalyzer semant;
 	SECTION("Basic validation")
 	{
 		using namespace tul::protocols;
@@ -81,9 +83,25 @@ TEST_CASE("Test the semantic analyzer", "[test-SemanticAnalyzer]")
 						eps()
 					))),
 			eps()));
-
-		tul::sem::SemanticAnalyzer semant;
 		REQUIRE(semant.checkTree(top.get()));
-		std::cout << top->toString();
+		/* var 32u a = 1; */
+		top.reset(enter(
+			var(
+				eps(), eps(), type(eps(), intu(32)),
+				namelist( "a", unary_expr( minus(),
+					integer("1")), eps())), eps()));
+		REQUIRE(semant.checkTree(top.get()));
+		top.reset(enter(
+			var(
+				eps(),
+				eps(),
+				type(eps(), intu(32)),
+				namelist( "a",
+					and_expr(
+						integer("2"),
+						integer("1")),
+					eps())),
+			eps()));
+		REQUIRE(semant.checkTree(top.get()));
 	}
 }

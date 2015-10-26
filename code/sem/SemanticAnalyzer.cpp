@@ -125,7 +125,7 @@ bool SemanticAnalyzer::checkTree(const protocols::SyntaxTree *tree) const
 			return runs();
 
 		case CrossTerminal::UNARY_EXPRESSION:
-			correct &= isAnyOf(child(0), CrossTerminal::SYMBOL_APETAIL, CrossTerminal::SYMBOL_DOLLAR, CrossTerminal::SYMBOL_DOLLAR__DOLLAR, CrossTerminal::SYMBOL_EXCLAMATION_MARK, CrossTerminal::SYMBOL_EXCLAMATION_MARK__EXCLAMATION_MARK);
+			correct &= isAnyOf(child(0), CrossTerminal::SYMBOL_APETAIL, CrossTerminal::SYMBOL_MINUS, CrossTerminal::SYMBOL_DOLLAR, CrossTerminal::SYMBOL_DOLLAR__DOLLAR, CrossTerminal::SYMBOL_EXCLAMATION_MARK, CrossTerminal::SYMBOL_EXCLAMATION_MARK__EXCLAMATION_MARK);
 			correct &= isAnyOf(child(1), CrossTerminal::CAST_EXPRESSION, CrossTerminal::DELETE_EXPRESSION, CrossTerminal::MEMBER_EXPRESSION, CrossTerminal::NEW_EXPRESSION, CrossTerminal::SIZE_EXPRESSION, CrossTerminal::UNARY_EXPRESSION, CrossTerminal::INTEGER_LITERAL);
 			return runs();
 
@@ -150,6 +150,7 @@ bool SemanticAnalyzer::checkTree(const protocols::SyntaxTree *tree) const
 		case CrossTerminal::SYMBOL_APETAIL:
 		case CrossTerminal::SYMBOL_DOLLAR:
 		case CrossTerminal::SYMBOL_DOLLAR__DOLLAR:
+		case CrossTerminal::SYMBOL_MINUS:
 			return assertNoChildren();
 
 		default: return false;
