@@ -53,52 +53,19 @@ TEST_CASE("Test the semantic analyzer", "[test-SemanticAnalyzer]")
 		};
 	auto enter = [](St *first, St *tail) { return new St(CrossTerminal::ENTER, {first, tail}); };
 	auto and_expr = [](St *first, St *second) { return new St(CrossTerminal::AND_EXPRESSION, {first, second}); };
+	auto unary_expr = [](St *symbol, St *underexpression) { return new St(CrossTerminal::UNARY_EXPRESSION, {symbol, underexpression}); };
+	auto dereference = []() { return new St(CrossTerminal::SYMBOL_APETAIL); };
+	auto addressof = []() { return new St(CrossTerminal::SYMBOL_DOLLAR); };
+	auto constaddressof = []() { return new St(CrossTerminal::SYMBOL_DOLLAR__DOLLAR); };
 	auto integer = [](std::string literal) { return (new St(CrossTerminal::INTEGER_LITERAL))->setLexeme(literal); };
 	SECTION("Basic validation")
 	{
 		using namespace tul::protocols;
-		// The IR of variables is given
 		/*
-			using the grammar:
-			var ::= access globality type varlist
-			varlist ::= name optexpr varlist
-				| eps
-
-			To process this, we iterate the top of the tree. For
-			each recursive definition, we just call recursive functions.
-			Suppose enter has var and an enter node (enter takes 2 children).
-			Then, we can process both individually. First the var node.
-			This node sets up a table of variables...
-
-			If we have a global/glocal, we need to pass a table of available
-			glo(b|c)als down to the classes we are processing.
-			We also need to remember context. var being the
-			child of an enter node needs to be considered an
-			object variable.
-
-			var being the child of a function node needs to be considered a local variable.
-			In any case, we need to pass down context to the processor.
-			Context *contextl
-			ContextProxy *proxy(context);
-			proxy->setProcessClass();
-			Processor::process(top, proxy);
-
-			Then, from within the processor, it calls the following:
-
-			St *first_child = ...;
-			if (first_child->isMethod())
-			{
-				proxy->setProcessMethod();
-			Processor::process(first_child, proxy);
-			proxy->setProcessClass();
-			Processor::process(second_child, proxy);
-
-			This way (using proxies), allows us to delegate the correct functions inside
-			the proxy, in addition to allowing parallel processing.
-
-			The question is; is it proper to use CrossTerminals as the node types?
+			public global var 32u test = 100, abc = 10000;
 		*/
-		SyntaxTree *top = enter(
+		std::unique_ptr<SyntaxTree> top;
+		top.reset(enter(
 			var(
 				tpublic(),
 				global(),
@@ -108,12 +75,15 @@ TEST_CASE("Test the semantic analyzer", "[test-SemanticAnalyzer]")
 					integer("100"),
 					namelist(
 						"abc",
-						integer("10000"),
+						unary_expr(
+							addressof(),
+							integer("10000")),
 						eps()
 					))),
-			eps());
+			eps()));
 
 		tul::sem::SemanticAnalyzer semant;
-		REQUIRE(semant.checkTree(top));
+		REQUIRE(semant.checkTree(top.get()));
+		std::cout << top->toString();
 	}
 }
