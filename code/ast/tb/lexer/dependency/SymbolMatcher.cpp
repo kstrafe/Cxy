@@ -25,11 +25,11 @@ protocols::TokenType SymbolMatcher::getSymbol(const std::string &lexeme)
 	using namespace protocols;
 	if (lexeme == "&&=") return TokenType::SYMBOL_AMPERSAND__AMPERSAND__EQUAL;
 	else if (lexeme == "||=") return TokenType::SYMBOL_BAR__BAR__EQUAL;
+	else if (lexeme == "!!=") return TokenType::SYMBOL_EXCLAMATION_MARK__EXCLAMATION_MARK__EQUAL;
 	else if (lexeme == ">>=") return TokenType::SYMBOL_GREATER_THAN__GREATER_THAN__EQUAL;
 	else if (lexeme == "<<=") return TokenType::SYMBOL_LESS_THAN__LESS_THAN__EQUAL;
 	else if (lexeme == "&&") return TokenType::SYMBOL_AMPERSAND__AMPERSAND;
 	else if (lexeme == "&=") return TokenType::SYMBOL_AMPERSAND__EQUAL;
-	else if (lexeme == "@@") return TokenType::SYMBOL_APETAIL__APETAIL;
 	else if (lexeme == "||") return TokenType::SYMBOL_BAR__BAR;
 	else if (lexeme == "|=") return TokenType::SYMBOL_BAR__EQUAL;
 	else if (lexeme == "^=") return TokenType::SYMBOL_CARET__EQUAL;

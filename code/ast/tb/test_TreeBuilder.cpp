@@ -588,7 +588,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 			(:) enter
 			{
 				var 32u a = 1;
-				var ptr (:) b = lambda [a $a @a $$a @@a](:){ sml.Out.print(:"Hi"); };
+				var ptr (:) b = lambda [a $a @a $$a @a](:){ sml.Out.print(:"Hi"); };
 			}
 		)");
 		doValidation(R"(
@@ -596,7 +596,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 			{
 				var 32u a = 1;
 				var ptr (:) b =
-					lambda [a$a@a$$a@@a](:)
+					lambda [a$a@a$$a@a](:)
 					{
 						sml.Out.print(:"Hi");
 						for (32u i = 1; i < 3; ++i;)

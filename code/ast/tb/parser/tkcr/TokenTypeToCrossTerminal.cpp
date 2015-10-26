@@ -92,7 +92,6 @@ protocols::CrossTerminal TokenTypeToCrossTerminal::convertToCrossTerminal(protoc
 		case protocols::TokenType::SYMBOL_AMPERSAND__AMPERSAND__EQUAL: return protocols::CrossTerminal::SYMBOL_AMPERSAND__AMPERSAND__EQUAL;
 		case protocols::TokenType::SYMBOL_AMPERSAND__EQUAL: return protocols::CrossTerminal::SYMBOL_AMPERSAND__EQUAL;
 		case protocols::TokenType::SYMBOL_APETAIL: return protocols::CrossTerminal::SYMBOL_APETAIL;
-		case protocols::TokenType::SYMBOL_APETAIL__APETAIL: return protocols::CrossTerminal::SYMBOL_APETAIL__APETAIL;
 		case protocols::TokenType::SYMBOL_BAR: return protocols::CrossTerminal::SYMBOL_BAR;
 		case protocols::TokenType::SYMBOL_BAR__BAR: return protocols::CrossTerminal::SYMBOL_BAR__BAR;
 		case protocols::TokenType::SYMBOL_BAR__BAR__EQUAL: return protocols::CrossTerminal::SYMBOL_BAR__BAR__EQUAL;
@@ -109,6 +108,7 @@ protocols::CrossTerminal TokenTypeToCrossTerminal::convertToCrossTerminal(protoc
 		case protocols::TokenType::SYMBOL_EXCLAMATION_MARK: return protocols::CrossTerminal::SYMBOL_EXCLAMATION_MARK;
 		case protocols::TokenType::SYMBOL_EXCLAMATION_MARK__EQUAL: return protocols::CrossTerminal::SYMBOL_EXCLAMATION_MARK__EQUAL;
 		case protocols::TokenType::SYMBOL_EXCLAMATION_MARK__EXCLAMATION_MARK: return protocols::CrossTerminal::SYMBOL_EXCLAMATION_MARK__EXCLAMATION_MARK;
+		case protocols::TokenType::SYMBOL_EXCLAMATION_MARK__EXCLAMATION_MARK__EQUAL: return protocols::CrossTerminal::SYMBOL_EXCLAMATION_MARK__EXCLAMATION_MARK__EQUAL;
 		case protocols::TokenType::SYMBOL_FORWARD_SLASH: return protocols::CrossTerminal::SYMBOL_FORWARD_SLASH;
 		case protocols::TokenType::SYMBOL_FORWARD_SLASH__EQUAL: return protocols::CrossTerminal::SYMBOL_FORWARD_SLASH__EQUAL;
 		case protocols::TokenType::SYMBOL_GREATER_THAN: return protocols::CrossTerminal::SYMBOL_GREATER_THAN;
