@@ -124,6 +124,10 @@ bool SemanticAnalyzer::checkTree(const protocols::SyntaxTree *tree) const
 			correct &= anyExpression(child(1));
 			return runs();
 
+		case CrossTerminal::UNARY_EXPRESSION:
+			correct &= isAnyOf(child(0), CrossTerminal::SYMBOL_APETAIL, CrossTerminal::SYMBOL_DOLLAR, CrossTerminal::SYMBOL_DOLLAR__DOLLAR, CrossTerminal::SYMBOL_EXCLAMATION_MARK, CrossTerminal::SYMBOL_EXCLAMATION_MARK__EXCLAMATION_MARK);
+			correct &= isAnyOf(child(1), CrossTerminal::CAST_EXPRESSION, CrossTerminal::DELETE_EXPRESSION, CrossTerminal::MEMBER_EXPRESSION, CrossTerminal::NEW_EXPRESSION, CrossTerminal::SIZE_EXPRESSION, CrossTerminal::UNARY_EXPRESSION);
+			return runs();
 
 		// Leaf nodes
 		case CrossTerminal::INTEGER_LITERAL:

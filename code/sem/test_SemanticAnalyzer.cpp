@@ -106,7 +106,11 @@ TEST_CASE("Test the semantic analyzer", "[test-SemanticAnalyzer]")
 				namelist(
 					"test",
 					integer("100"),
-					eps())),
+					namelist(
+						"abc",
+						integer("10000"),
+						eps()
+					))),
 			eps());
 
 		tul::sem::SemanticAnalyzer semant;

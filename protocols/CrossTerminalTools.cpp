@@ -126,7 +126,6 @@ bool CrossTerminalTools::isUselessSymbol(const CrossTerminal &ct_)
 		case CrossTerminal::SYMBOL_AMPERSAND__AMPERSAND__EQUAL: return true;
 		case CrossTerminal::SYMBOL_AMPERSAND__EQUAL: return true;
 		case CrossTerminal::SYMBOL_APETAIL: return true;
-		case CrossTerminal::SYMBOL_APETAIL__APETAIL: return true;
 		case CrossTerminal::SYMBOL_BAR: return true;
 		case CrossTerminal::SYMBOL_BAR__BAR: return true;
 		case CrossTerminal::SYMBOL_BAR__BAR__EQUAL: return true;
@@ -143,6 +142,7 @@ bool CrossTerminalTools::isUselessSymbol(const CrossTerminal &ct_)
 		case CrossTerminal::SYMBOL_EXCLAMATION_MARK: return true;
 		case CrossTerminal::SYMBOL_EXCLAMATION_MARK__EQUAL: return true;
 		case CrossTerminal::SYMBOL_EXCLAMATION_MARK__EXCLAMATION_MARK: return true;
+		case CrossTerminal::SYMBOL_EXCLAMATION_MARK__EXCLAMATION_MARK__EQUAL: return true;
 		case CrossTerminal::SYMBOL_FORWARD_SLASH: return true;
 		case CrossTerminal::SYMBOL_FORWARD_SLASH__EQUAL: return true;
 		case CrossTerminal::SYMBOL_GREATER_THAN: return true;
@@ -367,7 +367,6 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::SYMBOL_AMPERSAND__AMPERSAND__EQUAL: return "SYMBOL_AMPERSAND__AMPERSAND__EQUAL";
 		case protocols::CrossTerminal::SYMBOL_AMPERSAND__EQUAL: return "SYMBOL_AMPERSAND__EQUAL";
 		case protocols::CrossTerminal::SYMBOL_APETAIL: return "SYMBOL_APETAIL";
-		case protocols::CrossTerminal::SYMBOL_APETAIL__APETAIL: return "SYMBOL_APETAIL__APETAIL";
 		case protocols::CrossTerminal::SYMBOL_BAR: return "SYMBOL_BAR";
 		case protocols::CrossTerminal::SYMBOL_BAR__BAR: return "SYMBOL_BAR__BAR";
 		case protocols::CrossTerminal::SYMBOL_BAR__BAR__EQUAL: return "SYMBOL_BAR__BAR__EQUAL";
@@ -384,6 +383,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::SYMBOL_EXCLAMATION_MARK: return "SYMBOL_EXCLAMATION_MARK";
 		case protocols::CrossTerminal::SYMBOL_EXCLAMATION_MARK__EQUAL: return "SYMBOL_EXCLAMATION_MARK__EQUAL";
 		case protocols::CrossTerminal::SYMBOL_EXCLAMATION_MARK__EXCLAMATION_MARK: return "SYMBOL_EXCLAMATION_MARK__EXCLAMATION_MARK";
+		case protocols::CrossTerminal::SYMBOL_EXCLAMATION_MARK__EXCLAMATION_MARK__EQUAL: return "SYMBOL_EXCLAMATION_MARK__EXCLAMATION_MARK__EQUAL";
 		case protocols::CrossTerminal::SYMBOL_FORWARD_SLASH: return "SYMBOL_FORWARD_SLASH";
 		case protocols::CrossTerminal::SYMBOL_FORWARD_SLASH__EQUAL: return "SYMBOL_FORWARD_SLASH__EQUAL";
 		case protocols::CrossTerminal::SYMBOL_GREATER_THAN: return "SYMBOL_GREATER_THAN";
