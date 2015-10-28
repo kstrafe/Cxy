@@ -53,6 +53,10 @@ TEST_CASE("Test the semantic analyzer", "[test-SemanticAnalyzer]")
 		};
 	auto enter = [](St *first, St *tail) { return new St(CrossTerminal::ENTER, {first, tail}); };
 	auto and_expr = [](St *first, St *second) { return new St(CrossTerminal::AND_EXPRESSION, {first, second}); };
+	auto or_expr = [](St *first, St *second) { return new St(CrossTerminal::OR_EXPRESSION, {first, second}); };
+	auto band_expr = [](St *first, St *second) { return new St(CrossTerminal::BITWISE_AND_EXPRESSION, {first, second}); };
+	auto bor_expr = [](St *first, St *second) { return new St(CrossTerminal::BITWISE_OR_EXPRESSION, {first, second}); };
+	auto bxor_expr = [](St *first, St *second) { return new St(CrossTerminal::BITWISE_XOR_EXPRESSION, {first, second}); };
 	auto unary_expr = [](St *symbol, St *underexpression) { return new St(CrossTerminal::UNARY_EXPRESSION, {symbol, underexpression}); };
 	auto dereference = []() { return new St(CrossTerminal::SYMBOL_APETAIL); };
 	auto minus = []() { return new St(CrossTerminal::SYMBOL_MINUS); };
@@ -103,5 +107,18 @@ TEST_CASE("Test the semantic analyzer", "[test-SemanticAnalyzer]")
 					eps())),
 			eps()));
 		REQUIRE(semant.checkTree(top.get()));
+		top.reset(enter(
+			var(
+				eps(),
+				eps(),
+				type(eps(), intu(32)),
+				namelist("a",
+					or_expr(
+						integer("2"),
+						integer("1")),
+					eps())),
+			eps()));
+		REQUIRE(semant.checkTree(top.get()));
+
 	}
 }
