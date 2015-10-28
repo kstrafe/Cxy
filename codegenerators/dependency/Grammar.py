@@ -1,19 +1,19 @@
 
 # This file is part of Cxy Compiler Reference Implementation (Cxy CRI).
-# 
+#
 # Cxy CRI is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # Cxy CRI is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
-# 
+#
 # # ACCESS_SPECIFIER: 1
 # ACCESS_SPECIFIER_READABLE: 2
 # ADDITIVE_EXPRESSION: 3
@@ -181,7 +181,7 @@
 # OPTIONAL_SHIFT_EXPRESSION: 1
 # OPTIONAL_TEMPLATE: 3
 # OPTIONAL_TEMPLATE_LIST: 5
-# OR_EXPRESSION: 33
+# OR_EXPRESSION: 32
 # PARAMETER_LIST: 1
 # PRIMITIVE_SIGNED: 1
 # PRIMITIVE_SIGNED_WRAPPED: 1
@@ -205,6 +205,7 @@
 # SYMBOL_AMPERSAND__AMPERSAND__EQUAL: 1
 # SYMBOL_AMPERSAND__EQUAL: 1
 # SYMBOL_APETAIL: 1
+# SYMBOL_APETAIL__APETAIL: 1
 # SYMBOL_BAR: 1
 # SYMBOL_BAR__BAR: 1
 # SYMBOL_BAR__BAR__EQUAL: 1
@@ -221,7 +222,6 @@
 # SYMBOL_EXCLAMATION_MARK: 1
 # SYMBOL_EXCLAMATION_MARK__EQUAL: 3
 # SYMBOL_EXCLAMATION_MARK__EXCLAMATION_MARK: 1
-# SYMBOL_EXCLAMATION_MARK__EXCLAMATION_MARK__EQUAL: 1
 # SYMBOL_FORWARD_SLASH: 2
 # SYMBOL_FORWARD_SLASH__EQUAL: 2
 # SYMBOL_GREATER_THAN: 2
@@ -935,5 +935,5 @@ productions = {
 		[],
 		['ASSIGNMENT_EXPRESSION', 'OPTIONAL_ARRAY_ACCESS_EXPRESSION'],
 	],
-	
+
 }

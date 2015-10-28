@@ -127,6 +127,28 @@ bool SemanticAnalyzer::checkTree(const protocols::SyntaxTree *tree) const
 			correct &= anyExpression(child(0));
 			correct &= anyExpression(child(1));
 			return runs();
+		case CrossTerminal::BITWISE_AND_EXPRESSION:
+			correct &= anyExpression(child(0));
+			correct &= anyExpression(child(1));
+			return runs();
+		case CrossTerminal::BITWISE_XOR_EXPRESSION:
+			correct &= anyExpression(child(0));
+			correct &= anyExpression(child(1));
+			return runs();
+		case CrossTerminal::BITWISE_OR_EXPRESSION:
+			correct &= anyExpression(child(0));
+			correct &= anyExpression(child(1));
+			return runs();
+		case CrossTerminal::EQUALITY_EXPRESSION:
+			correct &= isAnyOf(child(0), CrossTerminal::SYMBOL_EQUAL__EQUAL, CrossTerminal::SYMBOL_EXCLAMATION_MARK__EQUAL);
+			correct &= anyExpression(child(1));
+			correct &= anyExpression(child(2));
+			return runs();
+		case CrossTerminal::MULTIPLICATIVE_EXPRESSION:
+			correct &= isAnyOf(child(0), CrossTerminal::SYMBOL_STAR, CrossTerminal::SYMBOL_FORWARD_SLASH);
+			correct &= anyExpression(child(1));
+			correct &= anyExpression(child(2));
+			return runs();
 
 		case CrossTerminal::UNARY_EXPRESSION:
 			correct &= isAnyOf(child(0), CrossTerminal::SYMBOL_APETAIL, CrossTerminal::SYMBOL_MINUS, CrossTerminal::SYMBOL_DOLLAR, CrossTerminal::SYMBOL_DOLLAR__DOLLAR, CrossTerminal::SYMBOL_EXCLAMATION_MARK, CrossTerminal::SYMBOL_EXCLAMATION_MARK__EXCLAMATION_MARK);
@@ -154,7 +176,9 @@ bool SemanticAnalyzer::checkTree(const protocols::SyntaxTree *tree) const
 		case CrossTerminal::SYMBOL_APETAIL:
 		case CrossTerminal::SYMBOL_DOLLAR:
 		case CrossTerminal::SYMBOL_DOLLAR__DOLLAR:
+		case CrossTerminal::SYMBOL_FORWARD_SLASH:
 		case CrossTerminal::SYMBOL_MINUS:
+		case CrossTerminal::SYMBOL_STAR:
 			return assertNoChildren();
 
 		default: return false;

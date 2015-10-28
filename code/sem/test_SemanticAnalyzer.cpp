@@ -57,6 +57,14 @@ TEST_CASE("Test the semantic analyzer", "[test-SemanticAnalyzer]")
 	auto band_expr = [](St *first, St *second) { return new St(CrossTerminal::BITWISE_AND_EXPRESSION, {first, second}); };
 	auto bor_expr = [](St *first, St *second) { return new St(CrossTerminal::BITWISE_OR_EXPRESSION, {first, second}); };
 	auto bxor_expr = [](St *first, St *second) { return new St(CrossTerminal::BITWISE_XOR_EXPRESSION, {first, second}); };
+	auto eq_expr = [](St *first, St *second) { return new St(CrossTerminal::EQUALITY_EXPRESSION, {new St(CrossTerminal::SYMBOL_EQUAL__EQUAL), first, second}); };
+	auto neq_expr = [](St *first, St *second) { return new St(CrossTerminal::EQUALITY_EXPRESSION, {new St(CrossTerminal::SYMBOL_EXCLAMATION_MARK__EQUAL), first, second}); };
+	auto rel_expr = [](St *first, St *second) { return new St(CrossTerminal::RELATIONAL_EXPRESSION, {first, second}); };
+	auto shift_left = [](St *left, St *right) { return new St(CrossTerminal::SYMBOL_LESS_THAN__LESS_THAN, {left, right}); };
+	auto shift_right = [](St *left, St *right) { return new St(CrossTerminal::SYMBOL_GREATER_THAN__GREATER_THAN, {left, right}); };
+	auto add_expr = [](St *first, St *second) { return new St(CrossTerminal::ADDITIVE_EXPRESSION, {first, second}); };
+	auto mul_expr = [](St *first, St *second) { return new St(CrossTerminal::MULTIPLICATIVE_EXPRESSION, {new St(CrossTerminal::SYMBOL_STAR), first, second}); };
+	auto div_expr = [](St *first, St *second) { return new St(CrossTerminal::MULTIPLICATIVE_EXPRESSION, {new St(CrossTerminal::SYMBOL_FORWARD_SLASH), first, second}); };
 	auto unary_expr = [](St *symbol, St *underexpression) { return new St(CrossTerminal::UNARY_EXPRESSION, {symbol, underexpression}); };
 	auto dereference = []() { return new St(CrossTerminal::SYMBOL_APETAIL); };
 	auto minus = []() { return new St(CrossTerminal::SYMBOL_MINUS); };
@@ -113,7 +121,7 @@ TEST_CASE("Test the semantic analyzer", "[test-SemanticAnalyzer]")
 				eps(),
 				type(eps(), intu(32)),
 				namelist("a",
-					or_expr(
+					div_expr(
 						integer("2"),
 						integer("1")),
 					eps())),
