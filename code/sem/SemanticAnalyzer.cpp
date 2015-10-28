@@ -178,6 +178,7 @@ bool SemanticAnalyzer::checkTree(const protocols::SyntaxTree *tree) const
 		case CrossTerminal::SYMBOL_DOLLAR__DOLLAR:
 		case CrossTerminal::SYMBOL_FORWARD_SLASH:
 		case CrossTerminal::SYMBOL_MINUS:
+		case CrossTerminal::SYMBOL_PLUS:
 		case CrossTerminal::SYMBOL_STAR:
 			return assertNoChildren();
 

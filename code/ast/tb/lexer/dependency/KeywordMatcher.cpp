@@ -27,6 +27,7 @@ protocols::TokenType KeywordMatcher::getKeyword(const std::string &lexeme)
 	else if (lexeme == "destructor") return TokenType::KEYWORD_DESTRUCTOR;
 	else if (lexeme == "restricted") return TokenType::KEYWORD_RESTRICTED;
 	else if (lexeme == "construct") return TokenType::KEYWORD_CONSTRUCT;
+	else if (lexeme == "continue") return TokenType::KEYWORD_CONTINUE;
 	else if (lexeme == "foreach") return TokenType::KEYWORD_FOREACH;
 	else if (lexeme == "private") return TokenType::KEYWORD_PRIVATE;
 	else if (lexeme == "delete") return TokenType::KEYWORD_DELETE;
@@ -37,6 +38,7 @@ protocols::TokenType KeywordMatcher::getKeyword(const std::string &lexeme)
 	else if (lexeme == "return") return TokenType::KEYWORD_RETURN;
 	else if (lexeme == "static") return TokenType::KEYWORD_STATIC;
 	else if (lexeme == "alias") return TokenType::KEYWORD_ALIAS;
+	else if (lexeme == "break") return TokenType::KEYWORD_BREAK;
 	else if (lexeme == "catch") return TokenType::KEYWORD_CATCH;
 	else if (lexeme == "const") return TokenType::KEYWORD_CONST;
 	else if (lexeme == "debug") return TokenType::KEYWORD_DEBUG;

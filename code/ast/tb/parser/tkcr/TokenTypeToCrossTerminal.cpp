@@ -41,11 +41,13 @@ protocols::CrossTerminal TokenTypeToCrossTerminal::convertToCrossTerminal(protoc
 		case protocols::TokenType::IDENTIFIER_VARIABLE: return protocols::CrossTerminal::IDENTIFIER_VARIABLE;
 		case protocols::TokenType::INTEGER_LITERAL: return protocols::CrossTerminal::INTEGER_LITERAL;
 		case protocols::TokenType::KEYWORD_ALIAS: return protocols::CrossTerminal::KEYWORD_ALIAS;
+		case protocols::TokenType::KEYWORD_BREAK: return protocols::CrossTerminal::KEYWORD_BREAK;
 		case protocols::TokenType::KEYWORD_CAST: return protocols::CrossTerminal::KEYWORD_CAST;
 		case protocols::TokenType::KEYWORD_CATCH: return protocols::CrossTerminal::KEYWORD_CATCH;
 		case protocols::TokenType::KEYWORD_CONST: return protocols::CrossTerminal::KEYWORD_CONST;
 		case protocols::TokenType::KEYWORD_CONSTRUCT: return protocols::CrossTerminal::KEYWORD_CONSTRUCT;
 		case protocols::TokenType::KEYWORD_CONSTRUCTOR: return protocols::CrossTerminal::KEYWORD_CONSTRUCTOR;
+		case protocols::TokenType::KEYWORD_CONTINUE: return protocols::CrossTerminal::KEYWORD_CONTINUE;
 		case protocols::TokenType::KEYWORD_DEBUG: return protocols::CrossTerminal::KEYWORD_DEBUG;
 		case protocols::TokenType::KEYWORD_DEFER: return protocols::CrossTerminal::KEYWORD_DEFER;
 		case protocols::TokenType::KEYWORD_DELETE: return protocols::CrossTerminal::KEYWORD_DELETE;
