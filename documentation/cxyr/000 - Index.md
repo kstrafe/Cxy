@@ -51,3 +51,5 @@ It can be peppered in anywhere. The following list is an index over all rational
 * 26 - Solidifying Grants and other Grammatical Entities
 * 27 - As A Lisp
 * 28 - Lambda
+* 29 - String Types
+* 30 - Abstract Syntax Tree Standard
