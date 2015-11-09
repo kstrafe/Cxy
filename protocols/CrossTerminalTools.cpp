@@ -72,11 +72,13 @@ bool CrossTerminalTools::isKeyword(const CrossTerminal &ct_)
 	switch (ct_)
 	{
 		case CrossTerminal::KEYWORD_ALIAS: return true;
+		case CrossTerminal::KEYWORD_BREAK: return true;
 		case CrossTerminal::KEYWORD_CAST: return true;
 		case CrossTerminal::KEYWORD_CATCH: return true;
 		case CrossTerminal::KEYWORD_CONST: return true;
 		case CrossTerminal::KEYWORD_CONSTRUCT: return true;
 		case CrossTerminal::KEYWORD_CONSTRUCTOR: return true;
+		case CrossTerminal::KEYWORD_CONTINUE: return true;
 		case CrossTerminal::KEYWORD_DEBUG: return true;
 		case CrossTerminal::KEYWORD_DEFER: return true;
 		case CrossTerminal::KEYWORD_DELETE: return true;
@@ -194,6 +196,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::BITWISE_AND_EXPRESSION: return "BITWISE_AND_EXPRESSION";
 		case protocols::CrossTerminal::BITWISE_OR_EXPRESSION: return "BITWISE_OR_EXPRESSION";
 		case protocols::CrossTerminal::BITWISE_XOR_EXPRESSION: return "BITWISE_XOR_EXPRESSION";
+		case protocols::CrossTerminal::BREAK_STATEMENT: return "BREAK_STATEMENT";
 		case protocols::CrossTerminal::CAPTURE_LIST: return "CAPTURE_LIST";
 		case protocols::CrossTerminal::CAST_EXPRESSION: return "CAST_EXPRESSION";
 		case protocols::CrossTerminal::CATCH_LIST: return "CATCH_LIST";
@@ -204,6 +207,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::COLON_LIST: return "COLON_LIST";
 		case protocols::CrossTerminal::CONSTRUCT_LIST: return "CONSTRUCT_LIST";
 		case protocols::CrossTerminal::CONSTRUCT_STATEMENT: return "CONSTRUCT_STATEMENT";
+		case protocols::CrossTerminal::CONTINUE_STATEMENT: return "CONTINUE_STATEMENT";
 		case protocols::CrossTerminal::DATA_DECLARATION_LIST: return "DATA_DECLARATION_LIST";
 		case protocols::CrossTerminal::DATA_DECLARATION_LIST_GRANT: return "DATA_DECLARATION_LIST_GRANT";
 		case protocols::CrossTerminal::DATA_DECLARATION_STATEMENT: return "DATA_DECLARATION_STATEMENT";
@@ -251,11 +255,13 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::INTEGER_LITERAL: return "INTEGER_LITERAL";
 		case protocols::CrossTerminal::ITER_STATEMENT: return "ITER_STATEMENT";
 		case protocols::CrossTerminal::KEYWORD_ALIAS: return "KEYWORD_ALIAS";
+		case protocols::CrossTerminal::KEYWORD_BREAK: return "KEYWORD_BREAK";
 		case protocols::CrossTerminal::KEYWORD_CAST: return "KEYWORD_CAST";
 		case protocols::CrossTerminal::KEYWORD_CATCH: return "KEYWORD_CATCH";
 		case protocols::CrossTerminal::KEYWORD_CONST: return "KEYWORD_CONST";
 		case protocols::CrossTerminal::KEYWORD_CONSTRUCT: return "KEYWORD_CONSTRUCT";
 		case protocols::CrossTerminal::KEYWORD_CONSTRUCTOR: return "KEYWORD_CONSTRUCTOR";
+		case protocols::CrossTerminal::KEYWORD_CONTINUE: return "KEYWORD_CONTINUE";
 		case protocols::CrossTerminal::KEYWORD_DEBUG: return "KEYWORD_DEBUG";
 		case protocols::CrossTerminal::KEYWORD_DEFER: return "KEYWORD_DEFER";
 		case protocols::CrossTerminal::KEYWORD_DELETE: return "KEYWORD_DELETE";
@@ -333,8 +339,10 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::OPTIONAL_EXTRACTOR_EXPRESSION: return "OPTIONAL_EXTRACTOR_EXPRESSION";
 		case protocols::CrossTerminal::OPTIONAL_FUNCTION_NAME_LIST: return "OPTIONAL_FUNCTION_NAME_LIST";
 		case protocols::CrossTerminal::OPTIONAL_GRANT_LIST: return "OPTIONAL_GRANT_LIST";
+		case protocols::CrossTerminal::OPTIONAL_LOOP_NAME: return "OPTIONAL_LOOP_NAME";
 		case protocols::CrossTerminal::OPTIONAL_MEMBER_EXPRESSION: return "OPTIONAL_MEMBER_EXPRESSION";
 		case protocols::CrossTerminal::OPTIONAL_MULTIPLICATIVE_EXPRESSION: return "OPTIONAL_MULTIPLICATIVE_EXPRESSION";
+		case protocols::CrossTerminal::OPTIONAL_NAME: return "OPTIONAL_NAME";
 		case protocols::CrossTerminal::OPTIONAL_NEW_LIST: return "OPTIONAL_NEW_LIST";
 		case protocols::CrossTerminal::OPTIONAL_OR_EXPRESSION: return "OPTIONAL_OR_EXPRESSION";
 		case protocols::CrossTerminal::OPTIONAL_PARAMETER_LIST: return "OPTIONAL_PARAMETER_LIST";
