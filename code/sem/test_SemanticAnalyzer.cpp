@@ -139,5 +139,20 @@ TEST_CASE("Test the semantic analyzer", "[test-SemanticAnalyzer]")
 					eps())),
 			eps()));
 		REQUIRE(semant.checkTree(top.get()));
+		top.reset(enter(
+			var(
+				eps(),
+				eps(),
+				type(eps(), intu(32)),
+				namelist("a",
+					div_expr(
+						integer("2"),
+						integer("1")),
+					namelist("b",
+						integer("3"),
+						eps()))),
+			eps()));
+		REQUIRE(semant.checkTree(top.get()));
+
 	}
 }
