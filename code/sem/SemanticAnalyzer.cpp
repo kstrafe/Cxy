@@ -90,6 +90,8 @@ bool SemanticAnalyzer::checkTree(const protocols::SyntaxTree *tree) const
 				);
 		};
 
+	////////////////////////////////////////////////////////////
+
 	switch (tree->node_type)
 	{
 		// Internal (non-leaf) nodes

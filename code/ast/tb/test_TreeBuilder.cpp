@@ -1101,11 +1101,11 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 		)");
 		doValidation(R"(
 			(:) enter {
-				foreach [c] (32u a in b)
+				foreach c (32u a in b)
 					break c;
-				while [a] (a)
-					while [b] (b)
-						while [c] (c)
+				while a (a)
+					while outer_loop (b)
+						while c (c)
 							if (d)
 								break b;
 			}
