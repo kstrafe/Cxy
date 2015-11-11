@@ -114,6 +114,10 @@ Note that the comma-array-access-notation is syntactic sugar. If only that
 notation is used then the compiler may be able to lay them in memory as a single
 array. This often aids efficiency.
 
+How do we declare floating point variables? This is a problem that needs to be addressed.
+An initial idea is to simply allow one to say `32f`, but that doesn't include the
+size of the mantissa and the exponent.
+
 *Tangent*: See `Reference Types`.
 
 *Conclusion*:
