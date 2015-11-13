@@ -116,7 +116,20 @@ array. This often aids efficiency.
 
 How do we declare floating point variables? This is a problem that needs to be addressed.
 An initial idea is to simply allow one to say `32f`, but that doesn't include the
-size of the mantissa and the exponent.
+size of the mantissa and the exponent. How do we semantically define the operations
+on any-sized floats? What is the essence of these data types? We could argue that
+these floats are just rational with an exponent. They actually are (in a sense), but
+does that help?
+
+	var 24f8es myfloat;
+
+The thing is that we also have decimal float types. Instead of creating a big type
+out of it, we could simply class them:
+
+	var Decimal[:32] myfloat;
+
+The second option specifies the type of float. For consistency reasons, a float that
+is of the standard IEEE754 type could just be denoted '16f', 32f, 64f, 128f,...
 
 *Tangent*: See `Reference Types`.
 
