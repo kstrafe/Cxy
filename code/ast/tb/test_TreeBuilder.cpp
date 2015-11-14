@@ -905,7 +905,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 		)");
 		doValidation(R"(
 			(:) enter {
-				var {32u a, b;}
+				var {32u a: g, b;} = h();
 
 				function({a: a, b: b,}: g(),);
 				function({derp: herp, g: z,}: h() - j(), {a: a, b: b,}: g(),);
