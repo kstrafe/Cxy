@@ -905,7 +905,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 		)");
 		doValidation(R"(
 			(:) enter {
-				var {32u a: g, b;} = h();
+				var {32u a: g, b; 1u a: b;} = h();
 				/// What to do about multiassignment?
 
 				function({a: a, b: b,}: g(),);
