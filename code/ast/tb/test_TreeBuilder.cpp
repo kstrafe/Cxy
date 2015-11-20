@@ -1111,6 +1111,14 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 								break b;
 			}
 		)");
+		doValidation(R"(
+			(:) enter {
+				foreach (32u a in b)
+					foreach a (32u a in b)
+						break;
+			}
+		)");
+
 	}
 	#undef doValidation
 	#undef doInvalidation
