@@ -68,4 +68,206 @@ would look like
 
 	EXPRESSION '=>' NAMELIST ';'
 
+We gotta remember that expressions are often far longer:
 
+	f(:g()~a, control: true, expr: SYMBOLIC_EXPRESSION) + 3
+		=> 32u d;
+
+What if this is used to express assignment? It would make the language far more elegant,...
+I kinda,.. like this idea. It would also avoid the use of the 'var' statement. Although
+that kinda goes against the idea of making the code readable. I guess we can always
+just search for => if necessary. I like this idea a lot. It fixes the issues that we're
+currently facing. Removing the var keyword and all.
+
+	plot(:f, style: DASHED_LINES, color: [127, 0, 0]) => math.Plot g: out;
+
+Oh wait, isn't there a problem with math.Plot there? The namespaces will collide with
+the actualy variable names! This means that we don't have LL(1) parsability. To solve
+this issue, let's examine how var can be used.
+
+	var math.Plot a;  // Generate an empty plot object
+	{a: out} = plot(:f, style: DASHED_LINES, color: [127, 0, 0]);  // Generate the plot
+
+The problem is that {} is a 'code-block', unless we make those only possible inside
+while/for/if,... The problem is that the following is ambiguous:
+
+	if (a > b)
+		{a: out} = f();
+
+To rememdy this problem, we can use the => but prevent object creation therein. Let's
+also look at something else.
+
+	extract {a: out} = f();
+
+The exception here is the expression evaluating to a single outcome:
+
+	a = f();
+
+My problem with this is that it is not at all elegant. It's a hacky solution. I don't
+particularly enjoy it. We can also make everything an extraction. Python's way is nice
+and we want explicit (named) returns for readability reasons.
+
+	= {a: out}: f();
+	var {32u a: out}: f();
+	[5, 32u].size;
+
+We can't use [] to denote an assignment list. Neither can {} or () be used. What if
+the operators are reversed?
+
+	] 8u y [;
+	] 32u x: a, y: b [ = f();
+
+	var {Type x: a, y: b; 32u z: c} = f();
+
+An alternative is to just force the => notation, but I'm afraid that this is not how
+we start writing an assignment nor think about the logic.
+
+	f() => var 32u x: a, y: b;
+	sin(0.3) => total;
+	total += sin(0.3);
+
+As can be seen, it doesn't fit that nicely. How do we solve this yet keep the grammar
+LL(1)? Can the left side be made into an actual expression?
+
+	x: a = f();
+	32u y: b;
+	Type z: c, w: d = g();
+
+In the last two cases, the types notify that we're in a data declaration statement.
+What is the grammar?
+
+	EXPR [':' name] {',' EXPR ':' name} ['=' EXPR] ';'
+
+The problem with this is that it appears to allow all kinds of weird grammars. For
+example:
+
+	a + b: c = f();
+
+Wait, that's not weird at all, that makes perfect sense! Why not allow an assignable
+expression on the left side?! Madness! So how can it be made even better? Let's try
+out something:
+
+	EXPR [EXPR] [':' name] {',' EXPR [EXPR] ':' name} ['=' EXPR] ';'
+
+So in this case, we can think of any type expression to be an expression in itself.
+
+	Type x: a, Type y: b = f();
+
+A preferable situation is to allow Type to be mentioned once.
+
+	Type {x: a, y: b} = f();
+
+This fits very well with the currently used method for arguments in functions. The
+grammar would need to look like.
+
+	{EXPR '{' RETLIST '}'}+ ['=' EXPR] ';'
+
+This allows:
+
+	32u {x: a, y: b}, z: c, Type w: d = f()~g()~h()~j(: 10);
+
+The problem with this kind of assignment statement that it becomes impossible to decide
+the production if we aren't already done with most of the production. We'd need to
+scan to the '=' in order to know that this is an assignment. That's the biggest issue
+with this idea. We need an LR(1) parser for this. I much prefer not to.
+
+Of course, all statements can be generalized as this. This can only be done by merging
+the {} and aforementioned method into a single grammar:
+
+	EXPR ('{' NAMELIST '}'|[EXPR] [':' name]) {',' EXPR ('{' NAMELIST '}'|[EXPR] ':' name)} ['=' EXPR] ';'
+
+This should conclude the truly general expression. It's short, LL(1), concise, and
+elegant. I like it! Is this it? Is this the end?
+
+	a: v, b: w += f();
+
+The compound operators also work on it. That is because the 'name' section doesn't
+at all bind to the += expression. The nice thing about this grammar is that we can
+simply add multiple variables in the same statement in this elegant manner. Can operators
+outside the compound assignments be used here?
+
+	32u x = 0, y = 1;
+	32u {z: a, w: b} = x: a, y: b - f();  // Still uses the names 'a' and 'b'.
+
+I guess you could say x - f()~a and y - f()~b are called, returning a new 'return set'.
+I'm not so sure about this. I'm thinking "let's keep it in the realm of practicality".
+
+	f({x: a, y: b}: x: a...
+
+I'm starting to think that the above is just too impractical. The grammar will hardly
+be remembered and it's just not easy to read. There need to be limitations. Just like
+the limitation on the depth of conceptualization (1). A nice and practical depth.
+This depth saves us from overly engineered complexity. Hell, if you really need an
+advanced feature you can use a codegenerator, that's what this language should excell
+at. The thing is though, we need named multiple returns as well as multiple arguments.
+The argument problem is resolved in a very nice manner, but the variable creation
+problem is not. An idea is to use 'var', but it makes the language ugly. Another is
+to generalize the expression itself to support it. Instead of allowing one to write
+a multitude of complexities like above, let's do something simpler:
+
+	32u {x = 0, y = 1};
+	32u {z: a, w: b} = f();
+	z: a, w: b -= x, y;
+
+Hmmm... that shouldn't work either. I could say that static methods are simply avoided
+altogether, then types can not be used in expressions without some surrounding information.
+
+	32u.size;  // No
+	size[32u];  // Yes
+	Type.method  // Yes
+
+The parser breaks down at Type.method, because we don't know if the current line is
+a variable declaration or part of an expression. As stated, expressions could just
+be generalized and we can use that. Semantic analysis then needs to check each expression.
+
+	f({x: a, y: b, z: c}: g(:10 + 3 * 2 - u)~h());
+
+The above is nice, it works and it's very general. In many cases, maybe we want to
+process the returning data just a little. What if c needs an added integer? I'm thinking
+of adding named lists - in a sense:
+
+	f({x: a, y: b, z: c}: {c: 1} + g(:10 + 3 * 2 - u)~h());
+
+This matches the c value with the corresponding set returned, and adds one to it.
+I think this is beautiful. Absolutely beautiful. Terse. Powerful. Fierce. The ideas
+of named lists are born. They're static and at compile-time only. Nevertheless, useful.
+The issue at hand is the use of {}. It's overused, and named lists just can't be used
+anywhere outside function arguments because it's unknown whether either production
+is to be used.
+
+To remedy this, we can think of using the diamond <> operator instead. Maybe. Maybe,..
+
+	Type.run() = 0;
+
+could be used together with the general form of an expression. A full expression.
+An fexpr! Finally. Am I starting to see? Am I starting to wake up?
+
+	32u {x: a, y: c} = {out: -100} - {c: 1 + 3} * {c: 100} + {a: 200};
+	sml.Out << x;
+
+The problem with this is that it differentiates the expression on the left from the
+expression on the right. I think it fits the generalized expression form though. That's
+a good thing...
+From there, the semantic analyzer can find out that the statement actually does. This
+will not be too easy. There needs to be a fexpr in the basic grammar. fexprs can not
+be nested. The fexprs are truly elegant! Such elegance!
+
+	FEXPR ::= EXPR ('{' NAMELIST '}'|[name] [':' name]) {',' EXPR ('{' NAMELIST '}'|[name] [':' name])} ['=' EXPR] ';'
+	NAMELIST ::= {name [':' name|'=' EXPR]}  // Names are optional.
+
+basically implies that a second (non-epsilon) expression becomes the new name. That's
+actually very clever.
+
+	a + b + c + d;  // Just fill in the first EXPR, leave all optionals empty.
+	Type.doSomething();  // Just fill out the first expr.
+	Type myname;  // Both filled out, declare a new variable.
+	Type {a = x, b = y};  // Both filled out, declare.
+	Type {a: x, b: y} = {x: Type(:1).get()} + f();  // Three elements filled out. Declare.
+	a: x, b: y = {x: Type(:1).get()} + f();  // Two elements filled, just assign.
+	32u {x: a, y = 100} = f();
+
+This plays out very nicely. Expressions can be expressions. 32u.size can be used freely.
+And above all, we avoid 'var' or 'static'. The part inside `{x: Type(:1).get()}` is
+to be an atom. It must never consist of multiple variables. This way, we manage complexity.
+The distinction between = and : in the {} lists is to distinguish an expression and
+direct assignment. This is useful in larger expressions.
