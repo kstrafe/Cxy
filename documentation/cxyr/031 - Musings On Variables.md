@@ -271,3 +271,146 @@ And above all, we avoid 'var' or 'static'. The part inside `{x: Type(:1).get()}`
 to be an atom. It must never consist of multiple variables. This way, we manage complexity.
 The distinction between = and : in the {} lists is to distinguish an expression and
 direct assignment. This is useful in larger expressions.
+
+An idea that popped into my head just now is that I need to imagine a library where
+a method returns some structure or class. In this case, both the callee and caller
+need to have that structure as visible space:
+
+	Main.cxy
+	a/
+	|-- Aa.cxy
+	|-- b/
+	    |-- Bb.cxy
+
+Suppose A contains a method that returns the class Bb. How is this made visible to
+Main? One method is to put it in the global scope with respect to the program itself.
+
+	Main.cxy
+	a/
+	|-- Aa.cxy
+	|-- Bb.cxy
+
+Both elements are now visible since Bb is a root object. What if we have some deeper
+hierarchy where we don't want that?
+
+	Main.cxy
+	a/
+	|-- Aa.cxy
+	|-- b/
+	    |-- Bb.cxy
+	    |-- c/
+	        |-- Cc.cxy
+
+Bb wants to return Cc to Aa, but it can't! Aa doesn't want to let Main know what it
+uses internally, so Cc has to remain hidden to Main. How does Aa do this? We can use
+concepts for this:
+
+	Main.cxy
+	a/
+	|-- Aa.cxy
+	|-- b/
+	    |-- Bb.cxy
+	    |-- Cc.cxy
+
+With the code in Bb being:
+
+	grant Cc {
+		(:) performOperation;
+		// ...
+	}
+
+Aa:
+
+	(:) myAOperation {
+		Bb[Cc: Cc] b;
+		Cc c = b.getSomething();
+	}
+
+With the idea of allowing super expressions, the meaning of class names diminishes
+somewhat. Maybe it isn't that useful. I'd still enforce it for the reader's sake though.
+Another thing is that the language doesn't have implicit casting like Java, C, or
+C++. There is no `(void *)` cast.
+
+Regarding exceptions, let's just idealize them as long unwinding gotos, this way they
+can be used for control flow without the pesky overhead. If you need error handling,
+create a glocal and assign some string during runtime. The rules still stand.
+
+	CAPITAL for constants
+	UNDERSCORED_CAPITALS for anonymous enumerations
+	lowercase for namespaces, variables, methods
+	camelCase for methods
+	PascalCase for classes
+
+	(:) enter {
+		alias {
+			Key = crypto.Key;
+			Encrypt = crypto.Encrypt;
+		}
+		while (true) {
+			try {
+				sml.Out << "Write your new key: " << sml.Out.FLUSH_BUFFER;
+				sml.String read = sml.In.getLine();                         // Read a single line
+				Key key;                                                    // Create a new key object
+				key.set(read);                                              // read the key into a key object
+
+				sml.File file("to_encrypt.txt");                            // Open the file to encrypt
+				sml.String encrypted = Encrypt[Stream: sml.File].encrypt(   // Encrypt the file into a string
+					key: key, stream: file);
+				file.open("encrypted.txt");                                 // Open a new file, this closes the other file
+				file.write(encrypted);                                      // Write the encrypted data
+			}
+			catch Key.NO_KEY_GIVEN
+				sml.Out << "The key was empty, please try again";
+			catch Key.KEY_TOO_SHORT
+				sml.Out << "The key given was too short, please try again";
+			catch sml.In.END_OF_FILE {
+				sml.Out << "End of the stream reached, aborting";
+				sml.Application.exit(1);
+			}
+			catch sml.File.FILE_NOT_FOUND {
+				sml.Out << "The input file is not present";
+				sml.Application.exit(1);
+			}
+			catch sml.File.NO_PERMISSION {
+				sml.Out << "There are no sufficient permissions to operate on files";
+				sml.Application.exit(1);
+			}
+
+			// Warnings will show up for uncaught exceptions
+		}
+	}
+
+Note how I've removed the `:` from function calls with a single argument. I'm thinking
+of allowing expressions in arguments to be of the form:
+
+	ARG ::= EXPR [':' EXPR]
+	ARGS ::= ARG {',' ARG} | []
+
+This will remove the ugly `:` from calls where it is simply not needed. We can let
+the semantic analyzer figure this out for us. I think in most cases, a comma is not
+even necessary. I need to add some experimental features. To avoid conflicts, the
+parser can just use a lookahead for now. Later on, this lookahead can be removed.
+This extends the classes into expressions. Quite interesting. The catch expression
+is also quite obnoxious. Scala uses the => operator, but I'd rather not. I'm thinking:
+
+	try {
+		// Code here
+	} catch {
+		// Common catch code
+		Key.NO_KEY_GIVEN {
+			sml.Out << caught.toString();
+		}
+		sml.File.FILE_NOT_FOUND
+			sml.Out << caught.toString();
+	} catch {
+		// Other common catch code
+		sml.File.NO_PERMISSION
+			;
+	}
+
+This just has the grammatical form:
+
+	CATCH_BLOCK ::= 'catch' '{' {ENUM BLOCK_OR_STATEMENT} '}'
+
+This is much more elegant and allows using a single line as well. It also allows you
+to put common catch code. I like the idea.
