@@ -709,3 +709,38 @@ to worry about the types. What if the caller calls a method on the returned item
 It would be very beneficial for the caller to be aware of the type, so that it is
 always sure that the correct type is given. Consider the case where a different type
 is given that has the same methods. Would this be acceptable?
+
+Ideally, we'd love to remove redundancy as much as possible. For example, some new
+ideas:
+
+	new-statement: newptr[3] newptr[4] 32u x;
+
+This implicitly creates a variable without having the syntax like:
+
+	ptr ptr 32u x = new[ptr 32u](6){new[32u](8){0}};
+
+The anonymous object:
+
+	anon x = object.getSomething();
+	otherobject.sendSomething(x);
+
+The anonymous object can't be manipulated from this context. It's anonymous. No known
+operations on it, the size is unknown, everything is unknown. The compiler will figure
+out the type. The anon object is just a message that you can pass on. That's all.
+The internet agrees that type inference is only useful where the type is already redundant.
+Therefore, we need a new-statement (instead of new-expression) to remove redundancy.
+The anonymous objects can be used so a higher class can pass around data without knowing
+what it is.
+
+With the addition of the anonymous object, the whole language becomes a lot easier.
+What about extracting elements though? We have this pseudo-type with tuples when returned.
+The same goes for arguments to functions. We could just say the following:
+
+	tuple x = f();
+	g(x~a);
+
+This would solve all problems, although it wouldn't allow an easy change in value.
+I'm a fan of the fexpr types. They're powerful and versatile! Let's keep those. What
+about anonymous tuples, just like anon? Can that be used? I don't know to be honest.
+I wonder what can be done. Would we like some kind of type inference on the tuples?
+That's an interesting question.
