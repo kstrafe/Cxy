@@ -1132,6 +1132,12 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 					a = g();
 				experimental
 					x: a, y: b, Zz z: c, w: d = f();
+				experimental
+					Class.name = f() = g();
+
+				experimental
+					v: out, e: error = sin(:0.4328);
+				sml.Out << v << "with error" << e;
 			}
 		)");
 

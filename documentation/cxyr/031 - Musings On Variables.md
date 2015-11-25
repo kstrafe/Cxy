@@ -577,3 +577,135 @@ this looks rather confusing. Maybe there's a way to avoid this entirely. We don'
 want newcomers to be utterly confused by complicated grammar. We don't want to limit
 a single data type per declaration, that would not make you able to extract all return
 parameters in one sentence. So what else can be done? Do we just roll with it?
+
+I've just implemented this entire scheme and it appears to work quite well. No trouble
+so far. It's a slightly complicated grammar, but I think it can be understood quite
+easily. So this is how we create expressions. Quite simple. For scopes I think I'll
+just use `label { ... }`. Seems to be the simplest way to do it. This way we'll avoid
+the problem with the FIRST set of {} on the expressions. In addition, {} needs to
+be added to expressions.
+
+Instead of thinking about specific assignments, why not create a general syntax for
+expression fetching?
+
+
+	v: out, e: error = sin(:0.4328);
+	sml.Out << v << "with error" << e;
+
+Should be something like:
+
+	(sml.Out << :out << "with error" << :error;): sin(:0.4328);
+
+This avoids temporaries. Maybe something like EXPR =>?
+
+	sin(:0.4328), {c: 33} => sml.Out << :out << "With error: " << :error << " message: " << :c;
+
+This can keep function return names anonymous: they're not assigned to variables.
+In addition, it is easily generalized to, say, assignment statements or declarations:
+
+	sin(:0.4328), sin(:85) => 32u {x = out[0], e = error[0], x2 = out[1]};
+
+We can just say that the return values shadow the surrounding values.
+
+	sin(:0.4328), sin(:85) => sml.Out << out[0] << error[0] << out[1];
+
+Looks nice to me. I like the idea of local manipulations like this. We can then avoid
+having to assign the returns. How about naming the commas? Or what about naming the
+returns as collectives?
+
+	getWindow(): x, getViewport(): y => sml.Out << x.getSize()~width / y.getSize()~width + y.getSize()~height;
+
+As you can see here, getViewport is only called once, assigns all returns to a struct
+'y' which is later used in the expression. I like the idea because it's powerful. Maybe
+all expressions can be of this form...
+
+	100: x, 32 * 10: y => 32u {x, y};
+	getWindow(): x => 32u {h = x.getHeight(), w = x.getWidth()}, 32f r = x.getRatio();
+
+	// The classical approach
+	ref Window x = getWindow(); 32u h = x.getheight(), w = x.getWidth(); 32f r = x.getRatio();
+
+What this syntax does is that it allows you to use type inference. Something that
+I consider somewhat dangerous. Luckily it's only for a single statement, this limits
+the damage that can be done by recklessly inferring. I think I need to stick with
+the 'experimental' method. It does not allow type inference. Neither does it allow
+you to recklessly get values. I think all returned items should be checked against
+some type. Unless you send it to another object directly. In that case, the above
+method is actually pretty good. getWindow().getHeight() is legal, why not allow it
+to be easier to write? We could say we limit a single depth of the function call,
+but that seems rather extreme. This would not allow joys like
+
+	sml.Out << currentWindow->getWindow().getHeight();
+
+That's non-sensical. I therefore think it's fair to have the inferring syntax for
+a single statement. The value will not be reused or changed. Maybe multiple returns
+are a mistake... Maybe it just complicates too much. We could always just accept a
+tuple back. Anyways, no, type inference can go away, we _need_ explicit types badly.
+They keep code correct, and prevent bugs when erroneous edits are made. We could also
+go overboard (I've talked about this before) and do not allow inline expressions.
+That would be incredibly interesting. While not extremely safe, it would eliminate
+all kinds of type errors.
+
+	32u a = f() + 3129/31 + sin(923)~error;  // Expressions like this only allowed after = sign.
+	sml.Out << a;  // Can't do anything other than use variables directly.
+
+	// sml.Out << a + 1;  // Error!
+	type[a] b = a + 1;
+	sml.Out << b;
+
+How practical is this? There's a fine line between type inference and being extremely
+explicit. Maybe even too explicit! Let's look at some possibilities. Another possibility
+is to avoid types in normal statements completely, but to allow them anonymously like
+so:
+
+	312/3 * 5: x => sml.Out << x;
+	f(): y => 32u y;
+	new ClassObject: obj => ptr ClassObject;
+	vector.get(): v ==> v.x: x, v.y: y, v.z: z => sml.Out << x << y << z;
+	1: a ==> a + 1: a ==> a * 3: a => sml.Out << a;  // Any idea what a prints? 6 sml.Out << (1+1)*3;
+
+I don't know.
+I don't know if I can like this. Doesn't seem too practical. It's clean though. That's
+the one positive thing. Mhm. I can't enjoy this kind of syntax. I do wish for there
+to be a limit to nesting of calls though. Doesn't seem very productive, and it's nigh
+unreadable. If we ban any kind of recursion we are at risk for being too cocky about
+it. If we have to store every intermediary... phew that's going to be a pain in the
+ass I tell you what.
+
+	label {
+		ref Window window = getWindow();
+		< 32u h = window.getHeight();
+		32u w = window.getWidth();
+		< 32f r = h.divide(w);  // Can't do h.divide(window.getWidth())
+	}
+
+Where the < operator exports the declaration out of the scope. We wanted to use height
+and ratio, but never w. Basically, the whole idea with allowing expressions to be
+nested is an implicit type inference. Although the types match, the programmer never
+sees the actual types:
+
+	give(buffer.getValue());  // What does getValue() return? What does give take?
+
+While elegant and short, the following sets the types in stone:
+
+	InterestingLong x = buffer.getValue();
+	give(x);
+
+My initial idea was to implement type checks inside expressions. The problem with
+these is that they increase coding noise a lot. Something that distracts the programmer
+and makes him work less efficient. I just can't decide. It's difficult. What can I
+do? I know. I need to objectively measure. Certain traits need to be quantified. Then
+I can make informed choices.
+
+Definitions:
+* Noise - The amount of characters-to-goal ratio (code-golfing languages win here)
+* Readability/Clarity: Inverse of Noise
+* Simplicity: One divided by the amount of possible sentences (152 sentences => 0.658%)
+
+I want to minimize noise but also have high readability. These two go against eachother.
+Maybe passing around function returns directly is not that bad. Considering that the
+callee will type check the incoming messages. This means that the caller doesn't need
+to worry about the types. What if the caller calls a method on the returned item?
+It would be very beneficial for the caller to be aware of the type, so that it is
+always sure that the correct type is given. Consider the case where a different type
+is given that has the same methods. Would this be acceptable?
