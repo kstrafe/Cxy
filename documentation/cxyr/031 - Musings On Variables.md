@@ -479,3 +479,81 @@ And that's it. Nothing more, nothing less. Even if it's only used somewhere. I'm
 entirely sure if this is desirable. On one hand we don't particularly enjoy name mangling.
 On the other hand, name mangling is useful. I just wish I could make the language
 simpler.
+
+I have just devised a solution to the whole variable problem! Instead of letting the
+parser do the work, we let the lexer do the work. We exploit the fact that namespace
+accesses are no more than 1 in depth. A buffer is created with three slots. If the
+first slot is a namespace, the second a dot, and the third a class, then that constitutes
+a single type. Another slot can be added to make sure we don't have a pure type. The
+reason for this is so that member expressions aren't mistaken for types.
+
+	my.Type.getSomething();
+	my.Type element;
+
+So the entirety of `my.Type.` is turned into a single token. The reason we need to
+do so is because the parser can't look ahead to the dot. In the former case, we have
+TYPEEXPR, the second being a TYPENAME. This requires another lexer stage. This will
+be awesome! There are no limitations now. Static overloads of operators are not allowed,
+neither are static -> operator on a type. Maybe I need my::Type just like C++, but
+I'm quite unsure.
+
+	my::Type::getSomething();
+	my::Type element;
+
+It does look quite different though. I like the quickness of the dot operator. It's
+fast to write compared to ::. Actually :: isn't too bad either. I like the idea. It
+disambiguates clearly, although the compiler will have no problem recognizing the
+correct variable. It's more friendly to the human eye. Maybe that's just my C++ bias
+showing though. I have an idea:
+
+	my::sin(0.3)
+
+Can be valid, we create a standard class per namespace called "construct" or something.
+This class will be implied by the :: sign. This allows the wonderful syntax:
+
+	math::Standard::cos(math::Standard::pi);
+	math::cos(math::pi);
+
+Are equivalent. The name of the class though, we need to be able to send the class
+into some kind of template:
+
+	MyType[math::Standard] mytype;
+
+Because that's useful. We can also call it the Default class:
+
+	Accum[math::Default] accumulator;
+	mytype.cos(math::pi);
+
+I really like this idea. It gives the :: operator purpose. It allows for smooth libraries
+to exist.
+
+	sf::drawToWindow(sf::RenderWindow...);
+
+I really enjoy the idea. The single depth of the namespaces also mandates that this
+becomes completely possible. One issue I have with this is that the default class
+can't really evaluate other members of the package. By that I mean that it can only
+observe modules lower than itself. Those methods should probably be implemented in
+the respective classes then. Say we have a collection package:
+
+	col::Array[32u] a(7), b(9);
+	a.fill(3);
+	a <> b;  // Swap operator
+	sml::out << b.toString();
+
+Instead of using col::swap or anything, we could either do a '.swap' on the objects
+or just implement a swapping operator. Another thing is that now, [] can be a type,
+and we don't yet know if it will be an expression or not. That's a big problem, since
+arrays can be nested indefinitely.
+
+	[5, 3, 1u]::size;  // How can we know this is an expression and not a declaration?
+
+We can use the parser to evaluate this. If we have:
+
+	Type name  // We have a declaration
+	Type ::  // We have a member method
+
+The problem with this is that we can't decide this before we're inside the expression.
+An LR(1) parser could handle it, but not our LL(1) parser, unfortunately. How can
+this be remedied? The same goes for templated types btw, it's not possible to use
+a simple 3-buffer to find out if we have a declaration or not. It seems like we have
+to stick to the fexpr in order to avoid var.
