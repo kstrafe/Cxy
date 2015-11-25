@@ -556,4 +556,24 @@ The problem with this is that we can't decide this before we're inside the expre
 An LR(1) parser could handle it, but not our LL(1) parser, unfortunately. How can
 this be remedied? The same goes for templated types btw, it's not possible to use
 a simple 3-buffer to find out if we have a declaration or not. It seems like we have
-to stick to the fexpr in order to avoid var.
+to stick to the fexpr in order to avoid var. Another question pops up: what is the
+standardized way of assigning variables? Surely we can allow the following:
+
+	32u {a: x, b: y, c = 3}, 8u d: z = f();
+
+Or should this be split up into
+
+	32u c = 3;
+	32u {a: x, b: y}, 8u d: z = f();
+
+The idea is to create 'assignment lists'. This means that anything of the form `x: y`
+will have x be assigned to the y in the rightmost expression. To disambiguate the
+above example with `z = f()`, we ... oh, it's already good.
+
+	8u a: b, 32u c = g() = f();
+
+This will bind the result of g to c, but f is assigned to the entire group. I think
+this looks rather confusing. Maybe there's a way to avoid this entirely. We don't
+want newcomers to be utterly confused by complicated grammar. We don't want to limit
+a single data type per declaration, that would not make you able to extract all return
+parameters in one sentence. So what else can be done? Do we just roll with it?
