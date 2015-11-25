@@ -1119,6 +1119,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 			}
 		)");
 		doValidation(R"(
+			var 32u a = 4 * 9 - d;
 			(:) enter {
 				experimental Class a;
 				experimental

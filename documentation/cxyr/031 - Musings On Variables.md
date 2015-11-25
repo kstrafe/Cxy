@@ -751,3 +751,69 @@ I like this, new basically infers the type from its context. The outermost new i
 the type to be ptr ptr 32u, the inner one has one ptr stripped. That's a very interesting
 syntax. It's simple. Elegant. Nice. This does however posit that these must be on
 the exact same line as a declaration.
+
+One thing I'd like to have - which consistently fails - is to have a unified grammar.
+
+	ENTER ::= { UNITS }
+
+	UNITS ::=
+		ACCESS '(' [PARAM {',' PARAM}] ':' [PARAM {',' PARAM}] [':'  ATTRIB ] ')' functionName '{' { STAT } '}'
+		| ACCESS TYPE variableName = EXPR ';'
+		| 'granted' ClassName ( '{' { TYPE name ';' } '}' | 'pass' )
+		| 'granted' variableName TYPE
+		;
+
+	ACCESS ::= [ 'public' | 'private' | 'restricted' ] [ 'global' ];
+	PARAM ::=
+		TYPE '{' { variableName [',']} '}'
+		| TYPE variableName
+		;
+	ATTRIB ::= [ 'const' ] [ 'pure' ] [ 'safe' ];
+	STAT ::= FEXPR | IF | GOTO | CONSTRUCT;
+
+	TYPE ::=
+		primitive                                                  // 32u, 64s, 1u
+		| '[' EXPRESSION ',' TYPE ']'                              // [8, [3, 8u]] arrays
+		| ('const' | 'ref' | 'ptr') TYPE                           // const/ref/ptr prefixes
+		| [ namespace '::'] class [ '[' GARG {',' GARG} ']' ]      // my::Type[Con: 32u]
+		;
+
+	GARG ::=
+		TYPE
+		| className ':' TYPE
+		| variableName ':' EXPR
+		;
+
+The big idea is to allow a similar setup to Java and C++ classes. Methods need to
+be added, as well as data. The data follows a similar pattern of TYPE name = EXPR.
+The thing is that function signatures are types as well. Ideally, such signatures
+should signal that we have an actual method and not a 'function value' or function
+pointer.
+
+	alias St = sml::out;
+	grant Name {
+		32u a, b, c;
+		(:) control;
+	}
+
+	grant va 32u;
+
+	// Per-object member
+	ptr (:) x lambda { sml::out << "x!" << sml::endl; ++counter };
+
+	// Per-object member, e meaning 'exception' on overflow.
+	64ue counter = 0;
+
+	// Per-class member
+	(:) enter {
+		x();  // print 'x!'
+		x = lambda(:){ sml::out << "y!" << sml::endl; };
+		x();  // print 'y!'
+	}
+
+Maybe the declaration statement can be unified.
+
+	MEMBER ::=
+		TYPE name '{' { STAT } '}'
+		| TYPE name ['=' EXPR] ';'
+		;
