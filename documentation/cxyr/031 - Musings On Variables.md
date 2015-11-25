@@ -414,3 +414,68 @@ This just has the grammatical form:
 
 This is much more elegant and allows using a single line as well. It also allows you
 to put common catch code. I like the idea.
+
+Name mangling is important. With name mangling, a lot can be achieved. The programmer
+gets notified if a name mangles. That's ultimately a good thing. I like the idea of
+underscores and big letters being used for enumerations, all the while enumerations
+are also used to jump in code. This allows nonlocal gotos to exist. I really enjoy that.
+Something I've never seen in a language is the ability to throw in such a way that
+you return from multiple functions. That's extremely pleasant. I think it would be
+interesting to construct a kernel language. The current problems that are still in
+the language is that the grammar is too large to handle for a normal human being.
+Maybe this is inevitable, but it's rather annoying. How would be construct a kernel
+language?
+
+	START ::= { FUNCTION }
+	FUNCTION ::= '(' { PARAMS } ':' { PARAMS } [ ':' ATTRIBS ] ')' fname ( STAT | '{' STAT '}' )
+	PARAM ::= TYPE EXPR
+
+Gets big pretty fast. We have static and strong typing, so types will make so much
+more difficult. I think the grammar is fine. A nice cleaning should make it nice. Hell,
+I bet I could change most type thinys to EXPR and get away with it. Let's keep the
+grammar specific though. So it's pretty clear that enums must have underscores. What
+about completely CAPITAL values? We could make those 'constant', but it seems rather
+boring. We can do a whole lot of different things. What about glo(b|c)als? I like
+that idea. It makes it clear what is global and what isn't. Do we differentiate between
+glocals and globals though? There's a big difference. We might as well write:
+
+	32u global[name] = 300;
+
+	(:) enter {
+		global[name] += 3;
+		f(global[name]);
+	}
+
+Thus making the expression 'global' part of the name. This keeps globals very clean
+in our code.
+
+	// Class Person
+	(: this) constructor {
+		glocal[objectCounter] += 1;
+	}
+
+	(: this) destructor {
+		glocal[objectCounter] -= 1;
+	}
+
+As used in
+
+	32u glocal[objectCounter] = 0;
+
+	(:) overFunction {
+		Person person;
+		sml.Out << glocal[objectCounter];
+	}
+
+Alright, so that's the name mangling for globals. Why not expand it to enums as well?
+
+	Classname.enum[enumname];
+
+Then, inside the class, we write:
+
+	enum[enumname];
+
+And that's it. Nothing more, nothing less. Even if it's only used somewhere. I'm not
+entirely sure if this is desirable. On one hand we don't particularly enjoy name mangling.
+On the other hand, name mangling is useful. I just wish I could make the language
+simpler.
