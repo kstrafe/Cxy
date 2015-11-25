@@ -1124,7 +1124,10 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 				experimental
 					Class {a: x, b, c: d}, Other e: f = cool();
 				experimental
-					Class a: b, c = g(), d = sin(:3*5) + -5 = f();
+					Class {a: b, b: a}, c = g(),
+						Ff d = sin(:3*5) + -5,
+						Muh x: e
+							= f();
 			}
 		)");
 
