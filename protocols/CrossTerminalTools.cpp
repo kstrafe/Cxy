@@ -347,6 +347,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::OPTIONAL_MULTIPLICATIVE_EXPRESSION: return "OPTIONAL_MULTIPLICATIVE_EXPRESSION";
 		case protocols::CrossTerminal::OPTIONAL_NAME: return "OPTIONAL_NAME";
 		case protocols::CrossTerminal::OPTIONAL_NEW_LIST: return "OPTIONAL_NEW_LIST";
+		case protocols::CrossTerminal::OPTIONAL_NEW_TYPE: return "OPTIONAL_NEW_TYPE";
 		case protocols::CrossTerminal::OPTIONAL_OR_EXPRESSION: return "OPTIONAL_OR_EXPRESSION";
 		case protocols::CrossTerminal::OPTIONAL_PARAMETER_LIST: return "OPTIONAL_PARAMETER_LIST";
 		case protocols::CrossTerminal::OPTIONAL_PARAMETER_LIST_AFTER_COMMA: return "OPTIONAL_PARAMETER_LIST_AFTER_COMMA";

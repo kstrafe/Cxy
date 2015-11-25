@@ -736,7 +736,7 @@ With the addition of the anonymous object, the whole language becomes a lot easi
 What about extracting elements though? We have this pseudo-type with tuples when returned.
 The same goes for arguments to functions. We could just say the following:
 
-	tuple x = f();
+	anon x = f();
 	g(x~a);
 
 This would solve all problems, although it wouldn't allow an easy change in value.
@@ -744,3 +744,10 @@ I'm a fan of the fexpr types. They're powerful and versatile! Let's keep those. 
 about anonymous tuples, just like anon? Can that be used? I don't know to be honest.
 I wonder what can be done. Would we like some kind of type inference on the tuples?
 That's an interesting question.
+
+	ptr ptr 32u x = new(100){new(30)}
+
+I like this, new basically infers the type from its context. The outermost new infers
+the type to be ptr ptr 32u, the inner one has one ptr stripped. That's a very interesting
+syntax. It's simple. Elegant. Nice. This does however posit that these must be on
+the exact same line as a declaration.

@@ -1138,6 +1138,8 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 				experimental
 					v: out, e: error = sin(:0.4328);
 				sml.Out << v << "with error" << e;
+				experimental
+					Class name new(3){:0};
 			}
 		)");
 

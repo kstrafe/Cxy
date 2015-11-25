@@ -1,19 +1,19 @@
 
 # This file is part of Cxy Compiler Reference Implementation (Cxy CRI).
-#
+# 
 # Cxy CRI is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-#
+# 
 # Cxy CRI is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-#
+# 
 # You should have received a copy of the GNU General Public License
 # along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
-#
+# 
 # # ACCESS_SPECIFIER: 1
 # ACCESS_SPECIFIER_READABLE: 2
 # ADDITIVE_EXPRESSION: 3
@@ -145,7 +145,7 @@
 # MULTIPLICATIVE_EXPRESSION: 3
 # NAMEKIND: 2
 # NAMES_SYMBOL: 1
-# NEW_EXPRESSION: 1
+# NEW_EXPRESSION: 2
 # NO_SEMICOLON_STATEMENT: 2
 # OPTIONAL_ADDITIVE_EXPRESSION: 1
 # OPTIONAL_AND_EXPRESSION: 1
@@ -182,6 +182,7 @@
 # OPTIONAL_MULTIPLICATIVE_EXPRESSION: 1
 # OPTIONAL_NAME: 2
 # OPTIONAL_NEW_LIST: 1
+# OPTIONAL_NEW_TYPE: 1
 # OPTIONAL_OR_EXPRESSION: 1
 # OPTIONAL_PARAMETER_LIST: 3
 # OPTIONAL_PARAMETER_LIST_AFTER_COMMA: 9
@@ -785,6 +786,7 @@ productions = {
 	],
 	'OPT_COLON_ASGN': [
 		[],
+		['NEW_EXPRESSION'],
 		['SYMBOL_COLON', 'DATA_NAMES'],
 		['SYMBOL_EQUAL', 'OR_EXPRESSION'],
 	],
@@ -813,6 +815,9 @@ productions = {
 		[],
 		['CONSTRUCT_LIST'],
 	],
+	'NEW_EXPRESSION': [
+		['KEYWORD_NEW', 'OPTIONAL_NEW_TYPE', 'OPTIONAL_NEW_LIST', 'OPTIONAL_CONSTRUCTOR_LIST'],
+	],
 	'OPTIONAL_COLON_LIST_AFTER_COMMA': [
 		[],
 		['COLON_LIST'],
@@ -825,6 +830,18 @@ productions = {
 		['SYMBOL_AMPERSAND', 'BITWISE_AND_EXPRESSION'],
 	],
 	############################################################
+	'OPTIONAL_NEW_TYPE': [
+		[],
+		['GROUPER_LEFT_BRACKET', 'TYPE', 'GROUPER_RIGHT_BRACKET'],
+	],
+	'OPTIONAL_NEW_LIST': [
+		[],
+		['GROUPER_LEFT_PARENTHESIS', 'ASSIGNMENT_EXPRESSION', 'OPTIONAL_EXPRESSION', 'GROUPER_RIGHT_PARENTHESIS'],
+	],
+	'OPTIONAL_CONSTRUCTOR_LIST': [
+		[],
+		['GROUPER_LEFT_BRACE', 'OPTIONAL_PARAMETER_LIST_AFTER_COMMA', 'GROUPER_RIGHT_BRACE'],
+	],
 	'RELATIONAL_EXPRESSION': [
 		['SHIFT_EXPRESSION', 'OPTIONAL_RELATIONAL_EXPRESSION'],
 	],
@@ -834,6 +851,10 @@ productions = {
 		['SYMBOL_EXCLAMATION_MARK__EQUAL', 'EQUALITY_EXPRESSION'],
 	],
 	############################################################
+	'OPTIONAL_EXPRESSION': [
+		[],
+		['SYMBOL_COMMA', 'ASSIGNMENT_EXPRESSION'],
+	],
 	'SHIFT_EXPRESSION': [
 		['ADDITIVE_EXPRESSION', 'OPTIONAL_SHIFT_EXPRESSION'],
 	],
@@ -898,9 +919,6 @@ productions = {
 		['IDENTIFIER_VARIABLE', 'OPTIONAL_MEMBER_EXPRESSION'],
 		['RESOURCE', 'OPTIONAL_MEMBER_EXPRESSION'],
 	],
-	'NEW_EXPRESSION': [
-		['KEYWORD_NEW', 'GROUPER_LEFT_BRACKET', 'TYPE', 'GROUPER_RIGHT_BRACKET', 'OPTIONAL_NEW_LIST', 'OPTIONAL_CONSTRUCTOR_LIST'],
-	],
 	'SIZE_EXPRESSION': [
 		['KEYWORD_SIZE', 'GROUPER_LEFT_BRACKET', 'TYPE', 'GROUPER_RIGHT_BRACKET'],
 	],
@@ -939,14 +957,6 @@ productions = {
 		['STRING'],
 		['WHEN_EXPRESSION'],
 	],
-	'OPTIONAL_NEW_LIST': [
-		[],
-		['GROUPER_LEFT_PARENTHESIS', 'ASSIGNMENT_EXPRESSION', 'OPTIONAL_EXPRESSION', 'GROUPER_RIGHT_PARENTHESIS'],
-	],
-	'OPTIONAL_CONSTRUCTOR_LIST': [
-		[],
-		['GROUPER_LEFT_BRACE', 'OPTIONAL_PARAMETER_LIST_AFTER_COMMA', 'GROUPER_RIGHT_BRACE'],
-	],
 	############################################################
 	'CLASS_MEMBER': [
 		['IDENTIFIER_ENUMERATION'],
@@ -974,10 +984,6 @@ productions = {
 	'WHEN_EXPRESSION': [
 		['KEYWORD_WHEN', 'GROUPER_LEFT_PARENTHESIS', 'OR_EXPRESSION', 'GROUPER_RIGHT_PARENTHESIS', 'OR_EXPRESSION', 'KEYWORD_ELSE', 'OR_EXPRESSION'],
 	],
-	'OPTIONAL_EXPRESSION': [
-		[],
-		['SYMBOL_COMMA', 'ASSIGNMENT_EXPRESSION'],
-	],
 	############################################################
 	'OPTIONAL_ARRAY_ACCESS_EXPRESSION': [
 		[],
@@ -993,5 +999,5 @@ productions = {
 		[],
 		['ASSIGNMENT_EXPRESSION', 'OPTIONAL_ARRAY_ACCESS_EXPRESSION'],
 	],
-
+	
 }
