@@ -1118,6 +1118,13 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 						break;
 			}
 		)");
+		doValidation(R"(
+			(:) enter {
+				experimental Class a;
+				experimental Class.getLong() b MyClass c:d = cool();
+			}
+		)");
+
 
 	}
 	#undef doValidation

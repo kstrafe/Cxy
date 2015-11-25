@@ -87,6 +87,7 @@ bool CrossTerminalTools::isKeyword(const CrossTerminal &ct_)
 		case CrossTerminal::KEYWORD_DOUBLE: return true;
 		case CrossTerminal::KEYWORD_ELSE: return true;
 		case CrossTerminal::KEYWORD_ENUM: return true;
+		case CrossTerminal::KEYWORD_EXPERIMENTAL: return true;
 		case CrossTerminal::KEYWORD_FLOAT: return true;
 		case CrossTerminal::KEYWORD_FOR: return true;
 		case CrossTerminal::KEYWORD_FOREACH: return true;
@@ -229,6 +230,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::EPSILONATE: return "EPSILONATE";
 		case protocols::CrossTerminal::EQUALITY_EXPRESSION: return "EQUALITY_EXPRESSION";
 		case protocols::CrossTerminal::EXPRESSION_LIST: return "EXPRESSION_LIST";
+		case protocols::CrossTerminal::EXP_STATEMENT: return "EXP_STATEMENT";
 		case protocols::CrossTerminal::FOREACH_STATEMENT: return "FOREACH_STATEMENT";
 		case protocols::CrossTerminal::FOR_DATA_DECLARATION: return "FOR_DATA_DECLARATION";
 		case protocols::CrossTerminal::FOR_STATEMENT: return "FOR_STATEMENT";
@@ -270,6 +272,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::KEYWORD_DOUBLE: return "KEYWORD_DOUBLE";
 		case protocols::CrossTerminal::KEYWORD_ELSE: return "KEYWORD_ELSE";
 		case protocols::CrossTerminal::KEYWORD_ENUM: return "KEYWORD_ENUM";
+		case protocols::CrossTerminal::KEYWORD_EXPERIMENTAL: return "KEYWORD_EXPERIMENTAL";
 		case protocols::CrossTerminal::KEYWORD_FLOAT: return "KEYWORD_FLOAT";
 		case protocols::CrossTerminal::KEYWORD_FOR: return "KEYWORD_FOR";
 		case protocols::CrossTerminal::KEYWORD_FOREACH: return "KEYWORD_FOREACH";
@@ -351,6 +354,10 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::OPTIONAL_SHIFT_EXPRESSION: return "OPTIONAL_SHIFT_EXPRESSION";
 		case protocols::CrossTerminal::OPTIONAL_TEMPLATE: return "OPTIONAL_TEMPLATE";
 		case protocols::CrossTerminal::OPTIONAL_TEMPLATE_LIST: return "OPTIONAL_TEMPLATE_LIST";
+		case protocols::CrossTerminal::OPT_ASGN: return "OPT_ASGN";
+		case protocols::CrossTerminal::OPT_COLON_ASGN: return "OPT_COLON_ASGN";
+		case protocols::CrossTerminal::OPT_DATA_NAMES: return "OPT_DATA_NAMES";
+		case protocols::CrossTerminal::OPT_EXP_STATEMENT: return "OPT_EXP_STATEMENT";
 		case protocols::CrossTerminal::OR_EXPRESSION: return "OR_EXPRESSION";
 		case protocols::CrossTerminal::PARAMETER_LIST: return "PARAMETER_LIST";
 		case protocols::CrossTerminal::PRIMITIVE_SIGNED: return "PRIMITIVE_SIGNED";

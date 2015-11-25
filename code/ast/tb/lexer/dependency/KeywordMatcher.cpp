@@ -23,7 +23,8 @@ namespace tul { namespace dependency {
 protocols::TokenType KeywordMatcher::getKeyword(const std::string &lexeme)
 {
 	using namespace protocols;
-	if (lexeme == "constructor") return TokenType::KEYWORD_CONSTRUCTOR;
+	if (lexeme == "experimental") return TokenType::KEYWORD_EXPERIMENTAL;
+	else if (lexeme == "constructor") return TokenType::KEYWORD_CONSTRUCTOR;
 	else if (lexeme == "destructor") return TokenType::KEYWORD_DESTRUCTOR;
 	else if (lexeme == "restricted") return TokenType::KEYWORD_RESTRICTED;
 	else if (lexeme == "construct") return TokenType::KEYWORD_CONSTRUCT;

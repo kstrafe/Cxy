@@ -252,7 +252,7 @@ From there, the semantic analyzer can find out that the statement actually does.
 will not be too easy. There needs to be a fexpr in the basic grammar. fexprs can not
 be nested. The fexprs are truly elegant! Such elegance!
 
-	FEXPR ::= EXPR ('{' NAMELIST '}'|[name] [':' name]) {',' EXPR ('{' NAMELIST '}'|[name] [':' name])} ['=' EXPR] ';'
+	FEXPR ::= EXPR ('{' NAMELIST '}'|name [':' name]|) {',' EXPR ('{' NAMELIST '}'|name [':' name]|)} ['=' EXPR] ';'
 	NAMELIST ::= {name [':' name|'=' EXPR]}  // Names are optional.
 
 basically implies that a second (non-epsilon) expression becomes the new name. That's
