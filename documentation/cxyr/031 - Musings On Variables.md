@@ -1081,5 +1081,135 @@ The equivalent in C++:
 	f(a, b);
 
 The latter has one more character. Mainly due to named-x of my language. So what should
-be done?
+be done? You know, the return value should be quite obvious. An idea is to create an
+inline-documentation generator. For example what types some arguments are. This aids
+development and readability, whilst avoiding writing this tedious documentation during
+coding. Hand-written documentation is often times lacking and is neglected when changes
+occur. It's important to let the compiler do a lot of the work.
 
+	32u {a, r: remainder} = 300 \ 200;
+	sml::out << a << ' ' << r << sml::endl;
+
+Should output `1 100`. This will probably be fine. So we've got fexpr, functions, modules,
+methods, access, statics, purity, io,... seems like everything is in place. At least
+I hope so. The semantics of constexprs and enums need to be made. All enums are `LIKE_THIS`.
+
+	MY_ENUM;
+	ERROR_IN_DEPTH;
+	IO_READ_ERROR = 3;
+
+	(:) enter {
+		try {
+			throw IO_READ_ERROR;
+		} catch {
+			IO_READ_ERROR {
+				debug sml::err << "io reading error, aborting";
+				sml.abort();
+			}
+		}
+	}
+
+All enums are thusly declared in the same class. Parents can access them by writing
+
+	SubClass.IO_READ_ERROR
+
+Which can be thrown. The subclass's enum is not visible to superclasses. A program
+wide mechanism should be in place. The enums can also be placed in the grant list.
+
+	grant Aa {
+		IO_READ_ERROR;
+	}
+
+	(:) myFunc {
+		throw Aa.IO_READ_ERROR;
+	}
+
+The enums have to be generated in the class where they are defined, of course. You
+can't state `sml::Main::IO_READ_ERROR = 5`. It would be nice to automatically propagate
+a class to the lower classes such that reading is easy, but this breaks demeter's
+law. It would be really useful to have internal enumerations for - say - a library.
+Then again, it would also be incredibly useful if you can nest the library where it
+is needed instead of making it global. Grants solve this issue. A possiblity is to
+allow grants to 'pass' at all times:
+
+	grant MyClass;
+
+This will just pull out whatever's needed without stating the requirements. If the
+class does not present any requirements, compilation fails. This can be useful for
+further propagation into the system, using successive grants. We could also state that
+the sml library is always automatically granted, and not allow global access to the
+top level.
+
+	::Main::doSomething();
+
+is not allowed anymore. Should this be changed to be so? I like the purity of it. That's
+for sure. Eh, grant merely becomes a comment then.
+
+	// Grant the class Aa, it uses .substring(from: 32u, to: 32u);
+
+Then, the callee (creator parent) uses:
+
+	ThatClass[Aa: sml::String] myclass;
+
+Should grants always be forced? By not allowing global access, we can actually force
+a very clean paradigm of programming. Where copying one folder structure simply doesn't
+affect the correctness of all containing classes. As long as all grants are given,
+the program will behave correctly. What can be done is to let the compiler generate
+a message upon "ungranted class". The compiler can probably also state what the grants
+are using static analysis. Hmm, is there then any use for the grant list? Well, it
+can be used to actually see what the grants are. It is redundant information isn't
+it? Why not just allow the compiler to do something like
+
+	cxyc --grant lib/something/deeper/My.cxy
+
+And get a list over the grants. It can even read deeper into other classes that get
+grants. So you get all the information necessary. Yeah it's redundant. Out with it!
+The only problem is that the semantics of the grants is still unexplained. Other items
+as purity luckily come through. This also destroys the idea of globals by global positioning.
+What happens instead is that we just send in a class with a static variable. What if
+we want to send the variable directly?
+
+	static 32u myglobal = 3;
+
+	(:) enter {
+		SubClass[global: $myglobal] a;
+		a.increment();
+		sml::out << myglobal;
+	}
+
+	// SubClass (granted)
+	(: this) increment {
+		@global += 1;
+	}
+
+Should output 4. Wait, doesn't that make everything pure? Can we send in a package?
+I think that's wrong to do at the moment. That seems too powerful. In most cases, who
+needs the entire package? Even if, maybe the design should've been different. Another
+thing is that the type of the `myglobal` variable or `global` is not specified in the
+SubClass class. That's actually quite nice. Because we don't mandate specifics of the
+type, the type can be a wide range of different variables. For example in the above
+I sent in the pointer to the `myglobal` variable. This means that 'global' is a variable
+of that class of the exact same type 'ptr 32u'. This seems extremely powerful. Just
+imagine what you can send in there. You can send any references with similar semantics
+as the 32u.
+
+	static math::SuperInteger myglobal = 3;
+
+	(:) enter {
+		// SubClass[global: myglobal] Fail because you can't derefence.
+		SubClass[global: $myglobal] a;
+		a.increment();
+		sml::out << myglobal;
+	}
+
+The interesting thing is that this can only be permitted when using compile-time static
+variables. For normal class-local variables, this is not permitted. Is the function
+using it still pure though? It gets a variable as an extra parameter, in a sense. Interestingly,
+this allows you allows you to substitute pretty much all variables. So what is an impure
+function? Anything using a static granted? That seems pretty accurate actually. sml::out
+is an automatically static-granted variable. We all know that it changes state. So
+are static variables that are sent in also impure? This would suggest yes. Are there
+any cases where sending in variables via concepts is not desired? A deeply nested structure
+where the second-top and the deepest levels both need something. You now need to feed
+the entire chain downwards. That's rather tedious. Luckily, you should specify what
+you need from the start (bottom-up coding). Even then, it's only a one-time-thing.
