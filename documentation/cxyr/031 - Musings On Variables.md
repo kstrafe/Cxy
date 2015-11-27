@@ -977,4 +977,109 @@ That should be sufficient.
 	// Terse extraction
 	32f {a: out, e: error} = math::sin(math::PI);
 
+For an extractor, we can apply a rule that states that only extractions can occur inside
+the extractor, assignments can not occur.
+
+	32u {value, counter: change, nice = 3} = f();
+
+Instead, the correct form will be:
+
+	32u {value, counter: change} = someobj.getDiffs();
+	32u nice = 3;
+	// 32u nice(3);
+
+So all values are assigned when we perform an extraction. It does mean that only a
+single function call is allowed on the right side. We can't really operate on the tuple
+directly. What if we want to return by proxy?
+
+	(32f {out, error} : 32f in : pure) sin {
+		out, error: error = sin(in, error: 0f);
+	}
+
+	(32f {out, error} : 32f {in, error} : pure) sin {
+		// Use maclaurin to compute the value
+		out = in - pow(in, exponent: 3)/6 +
+			pow(in, exp: 5)/120 - pow(in, exp: 7)/5040;
+		error = pow(x, exp: 9)/326880;
+	}
+
+In the case of the sine function, the error is taken to be the largest possible error.
+Ideally, it ought to be computed from x itself, which is an expression of cosine, which
+translates into a sine (so back into this expression). The above shows an interesting
+return method. We just let the values be assigned. The end of the scope returns. This
+also allows returning unallocated objects. For example, an unallocated integer:
+
+	(32u {out, other} : : pure) get {
+		out = 1;
+	}
+
+Will not assign a value to other. This means that the callee:
+
+	32u {out, a: other} = get();
+	sml::out << a;  // Undefined behavior
+
+This may be a good argument for making returns explicit, but there's a very good use
+for not making them so. This specifically allows us to return unallocated PODs, something
+that can save time.
+
+So if you can only use a single call on the right side of an extraction, we get some
+interesting grammar...
+
+	// Using a different get
+	{32u {out, other: something}, 8u e: error} = get();
+
+This can in fact be done with a { lookahead, but that will clash with the single-statement
+branches. So it's undesirable. The grammar becomes a lot more straightforward though.
+
+	extract 32u {out, other: something}, 8u e: error = get();
+
+I don't like extract, it isn't elegant. I like the former fexpr method better than
+this.
+
+	32u out, a: something = get().doSomething();
+
+Works nicely in combination with both new variables and replacing old variables. This
+looks stunning! Allowing arbitrary expressions should be fine, as they merely act on
+the 'out' variable anyways. Yeah, should be just fine. The question that remains is
+how the semantics of get().doSomething() are. Suppose both return tuples of (Class out, 32u a).
+Then we should get multiple a. The first out (from get) is used when we did .doSomething.
+Let's just say that the call that didn't use the .. hold on. Isn't + technically a
+member call? Well, should that exclude the following?
+
+	32f {a, error: error} = sin(PI) + 1f;
+
+Since the 1f is the last call, no other items are returned. This is difficult. What
+can be done? We can limit the right side to a single member expression. The `+` expression
+will return a single 'out' that can be used. So since it has the highest prevalence,
+that out will be used.
+
+	32f a = sin(PI) + 1f;  // Single out there anyways
+
+	32f {a, e: error} = sin(PI);
+	a += 1f;
+
+If you still want the error, you can extract it like the above. Hey I can't handle
+every single use case. There are too many of them. Should the same be done for function
+calls? As in:
+
+	f(g());
+
+I'm thinking this just binds g's out to f's in. That's fine.
+
+	f({x: a, y: b}: g());
+
+I'm wonderinf if the above should instead be:
+
+	Type {x: a, y: b} = g();
+	f(x: x, y: y);
+
+This does impose one limitation that may be useful: we get to know what the types are.
+The equivalent in C++:
+
+	TypeA a = g1();
+	TypeB b = g2();
+	f(a, b);
+
+The latter has one more character. Mainly due to named-x of my language. So what should
+be done?
 
