@@ -1262,3 +1262,34 @@ IO in the first place by calling the system. Finally! We have something concrete
 interesting tidbit is the standard module library (sml). This will be passed implicitly
 everywhere. Its IO 'global' variables will be impure to access. This separates truly
 pure Cxy from the hacky Cxy. I like it!
+
+	// Main.cxy
+	32u counter = 0;
+	(:: pure) constructor {
+		construct counter(0);
+	}
+
+	(:) enter {
+		32u CO = 3;
+		sub::Class[Type: This, AFF: CO] value;
+		value.go();  // Would fail if CO != 3
+	}
+
+	// sub/Class.cxy
+	if [AFF == 3] {
+		(:) go {
+			sml::out << "Woah, what's going on?!";
+		}
+	}
+
+Would be cool if we could send in namespaces. That'd make a big difference I think.
+Unfortunately, namespaces have the same names as variables. Most of the time at least.
+The problem with allowing namespaces is that it obfuscates local folders. What if one
+overlaps with the given namespace? No, that's ugly and you then need to consider the
+subfolders. That is ugly. Let's not do that. So we stick with normal variables, classes,
+and constexprs. Any pure function should be computable during compile-time. This allows
+the compiler to make sure that constexprs solely use other constexprs and pure functions.
+
+	ComplicatedClass CLASSNAME;  // Valid as long as the constructor is pure
+
+This is often not so trivial in C++, where basically only PODs can be constexpr.
