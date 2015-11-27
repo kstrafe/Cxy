@@ -817,3 +817,164 @@ Maybe the declaration statement can be unified.
 		TYPE name '{' { STAT } '}'
 		| TYPE name ['=' EXPR] ';'
 		;
+
+This simplifies the parser a bit. To solidify the inline-redundancy-avoidance: we
+can specify the proper grammar.
+
+	DECL ::=
+		TYPE name = EXPR
+
+I'm thinking that when we process the right side, a context is sent to the expr. This
+context will bind to operators as 'new' or lambda such that they do not need to be
+stated explicitly:
+
+	ptr MyClass a = new(20);
+	ptr (ref MyClass b : ) f = lambda [old] {
+		return b: old;
+	};
+	ptr MyClass {x: a, y: b} = {a: new} + f();
+
+One problem that is still not fully resolved is that I may want an expression in the
+name section:
+
+	32u x: a + 3 = f();
+
+I'm thinking that this is rather confusing, I like the idea of keeping the left side
+clean from expressions.
+
+	32u x: a = {a: 3} + f();
+
+Will add 3 to a. I'm really not sure what's preferable. The former seems more terse.
+
+	32u {x: a, y: b} = f() + {a: 1, b: 3};
+
+Not liking it too much.
+
+	32u {x: a, y: b} = f();
+	x += 1;
+	y += 3;
+
+That's a lot more clear to be honest. The problem of casting also comes up. How do
+I do the following?
+
+	8u {x: a, y: b} = f();
+
+Should I cast inside the left side? Should I create a special cast operator?
+
+	8u {x: cast[8u](a), y: cast[8u](b)}, 32u z: c = f();
+	x: cast[8u](a), b: cast[8u](b), z: error += g();
+
+	is the same as
+	anon o = f();
+	8u x = cast[8u](o~a);
+	8u y = cast[8u](o~b);
+	32u z = (o~c);
+
+	anon o = g();
+	x += cast[8u](o~a);
+	y += cast[8u](o~b);
+	z += o~error;
+
+Maybe that is the most elegant solution! Because we turn multiple variables into single
+variables on the left side... but it does obfuscate the code a lot. The readability
+is just horrendous.
+
+	32f {x, y} = {0, 0};
+	x, y += {1, 3};
+
+This idea uses placed names instead. It's syntactic sugar for:
+
+	32f {x: 1, y: 2} = {1: 0, 2: 0};
+
+Not sure if I like this. Maybe a Vector class is more useful in this case. I need to
+make up my mind on this. I can simplify this by a lot. I think... Let's say we have
+the following syntax:
+
+	32u {x: a, y: b} = cast[32u](f());
+
+Which for each case translates to the name wherever it is encountered
+
+	32u x: a = cast[32u](f()~a);
+	32u y: b = cast[32u](f()~b);
+
+and NOT
+
+	32u x: a = cast[32u](f())~a;
+	32u y: b = cast[32u](f())~b;
+
+The latter makes no sense, you can't cast an entire list of variables. What if we have
+multiple types of variables and do not want to cast them all? Well too bad I guess.
+Same goes for decls of this kind:
+
+	32u x: a = f() + g();
+
+is equivalent to
+
+	32u x = f()~a + g()~a;
+
+It doesn't allow me to asses each variable individually.
+
+	32f {value: out, error: error} = sin(math::PI);
+	if (error == 0)
+		debug sml::err << "Algorithm doesn't correctly calculate error";
+	out += 3;
+
+I kinda like the idea of allowing expressions on the left side. It feels like the
+arguments:
+
+	f({x: cast[32u](a), y: b}: g());
+
+On the other hand, the KISS principle tells me I should only use it to extract values
+and that's it, so the above becomes
+
+	64u {a: a, b: b} = g();
+	32u n = cast[32u](a);
+	f(x: n, y: b);
+
+I think I need to stick with the KISS principle. The only thing I definitely like
+is that function arguments can be directly substituted by expressions from the returns
+from other functions. Or should that be illegal as well? The entire issue lies with
+the 'anonymous' tuples. How we define operations on these. How these are created in
+expressions. Maybe I should just do away with the whole complication of the grammar.
+I don't particularly enjoy it myself. It's terse but it seems like a waste of effort.
+
+I mean, what language actually does this in a practical manner? In most cases, we
+define a class and the operations on it. The class is basically a very well-defined
+tuple with well-defined operations.
+
+	64f {a = 0, b = 0}, 64f c = 0;
+	label { a: x, b: y, c: z += diag(); }  // Add the vector.
+
+Yeah, in most cases, specific classes will be made to describe the return value type.
+The above will most likely be:
+
+	Vector vector;
+	vector += diag();
+
+Much simpler to understand. Where no such thing is desired is e.g. the calculation
+of the sine or cosine values, where we may be interested in the error of the approximation.
+In other cases, some kind of flag can also be passed down the returns, which is useful.
+
+	1u t: timeout, 32u count: out = performActions();
+	if (timeout)
+		return ...;
+
+This prevents us from making classes for every single return. C++ solves the conundrum
+using std::tuple. I'd rather stay away from such functionality. Let's just say we
+do it as follows: we can declare-and-extract values (using assignment and other compound
+operators. And we leave it at that. No special syntax. There's just extraction, then
+you can do whatever you want. with the results. A tuple has the following semantics:
+
+All operations on a tuple redirect to the variable named 'out'.
+An exception is the ~ extractor. It extracts the proper name.
+
+That should be sufficient.
+
+	// Manual extraction
+	32f a = math::sin(math::PI);
+	32f e = math::sin(math::PI)~error;
+
+	// Terse extraction
+	32f {a: out, e: error} = math::sin(math::PI);
+
+
