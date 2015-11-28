@@ -1292,4 +1292,54 @@ the compiler to make sure that constexprs solely use other constexprs and pure f
 
 	ComplicatedClass CLASSNAME;  // Valid as long as the constructor is pure
 
-This is often not so trivial in C++, where basically only PODs can be constexpr.
+This is often not so trivial in C++, where basically only PODs can be constexpr. So
+what can be done now? I think I just need to shear off the excess fat from the grammar.
+Currently, the grammar is quite big. I'd like to make it more elegant. Where do I start?
+I guess we could take a look at the type expressions and expressions in general. Hopefully
+the lexer can aid us here. What I actually not really like is the non-separation of
+variable names, functions, and namespaces. There's just something that irks me deeply.
+A possibility is to prefix all namespaces with :: or another operator. Methods are
+variables so those are probably fine, although they have wildly different semantics.
+
+	static (:) something lambda { sml::out << "hey you"; };
+	static ptr 32u value new(10){3};
+
+	method (:) enter {
+		something();
+		value[3] += 4;
+		sml::out << value[3];
+	}
+
+Yeah that's the nice thing about variable declaration. It's that you have a single
+name followed by something else. This can easily be exploited. I think the grammar
+needs a beautification of some sort. How do we cleanly define methods and values of
+a class?
+
+	method (:) enter { }
+	member (:) renter lambda { };
+
+It makes sense though, although 'method' and 'member' are quite annoying to have to
+write all the time. That's why I like the more context-sensitive syntax.
+
+	Signature (Type)
+	|   Name
+	|   |          Method code
+	|   |          |
+	(:) methodName { /* code */ }
+
+	Signature
+	|   Name     Initializer
+	|   |        |
+	32u variable = 0;
+
+As can be seen, the method code can be considered an implicit lambda-initializer.
+This seems far-fetched. I'd like to have a general syntax that can also infer the
+type.
+
+	ptr 32u a = new(10){0};
+	(:) m = lambda[a]{ sml::out << a[9]; };
+
+I like this more. It's cleaner and doesn't require any special syntax. All that's
+needed is for the right side to be aware of the right side. It just infers the type
+from the left side. I hope that's manageable. Now, as for methods. What should be done
+there?
