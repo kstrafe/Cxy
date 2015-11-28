@@ -1342,4 +1342,223 @@ type.
 I like this more. It's cleaner and doesn't require any special syntax. All that's
 needed is for the right side to be aware of the right side. It just infers the type
 from the left side. I hope that's manageable. Now, as for methods. What should be done
-there?
+there? We know that we always have one class per file. This makes programming easier.
+We know that top-level types will be class members. Now, there ought to be a distinction
+between methods and variables. Scala uses 'var' (or val) and 'def' to distinguish them.
+My main issue is that the syntax seems to be incompatible. For example, for normal
+variables we use '=' or a constructor. For methods we use a direct { sign. I think
+this needs to be changed
+
+	32u a = 3;
+	(:) enter = {
+
+	};
+
+The problem with this is that it's actually quite ugly. It requires a semicolon and
+treats methods as variables (which they are not). We could summarize using the following
+rules:
+
+	Each member that has a direct function type is a method.
+	Each member that is not a direct function type is a variable.
+
+Ideally, the distinction between variable and method should be minimized.
+
+	MY_ENUM; ANOTHER_ENUM = 3;
+	32u CONST = 391 + ANOTHER_ENUM;
+
+	static 32u varname = 3;
+	(:) enter {
+		++varname;
+	}
+
+What about static and non-static members? We could just say that: if never accessed
+in a certain way, they are static/non-static. I think the best thing to do is to move
+`(:)` up in the 'type' hierarchy. Let it be its own 'function signature'. With this,
+we can easily distinguish between methods and members. Let's look at an example:
+
+	static ptr (:) fptr = {};  // Function type inferred
+
+	(:) enter {
+		fptr = lambda[](:){};  // Function type specifically stated
+
+		// Illegal, no expressions in type[name]!
+		// fptr = lambda[]type[@fptr]{};
+	}
+
+The lambda should always return a ptr to the signature it's using. This way, we can
+ensure that the correct type is given. This also implies that the signature isn't a
+type directly, but merely a specific side-thingy. I don't know how to explain it. It's
+nice really. I'm thinking static may also be used on functions. The reason is that
+'this' really makes it more ambiguous. Hell if you wanna cast it you can just add the
+'this' variable if you want:
+
+	(::pure) doStuff {
+		debug sml::out << "Hello!" << sml::endl;
+	}
+
+	static (:) enter {
+		This object;
+		object.doStuff();
+		ptr (: this : pure) fptr = doStuff;
+		fptr(this: object);
+	}
+
+There's something I don't really like here. First of all we're disconnecting the signature
+from its original intent: to convey the actual signature. Yeah, static just belongs
+inside the signature.
+
+	(: this : pure) doStuff {
+		debug sml::out << "Hello!" << sml::endl;
+	}
+
+	(:) enter {
+		This object;
+		object.doStuff();
+		ptr (: this : pure) fptr = doStuff;
+		fptr(this: object);
+	}
+
+There, much better. Not the most elegant solution, but pretty elegant. Like in the
+middle of elegance on the scale of elegance,.. right? Anyways, this is how I like it.
+What if the class is from a subclass?
+
+	(:) enter {
+		SubClass subclass;
+		subclass.doStuff();
+		ptr (: SubClass this : pure) fptr = SubClass::doStuff;
+		fptr(this: subclass);
+	}
+
+That works out quite wonderful. Yeah, I'm starting to really like this. It's also easily
+parsable. We can always distinguish between TYPE and SIGNATURE. That's really freaking
+nice. I hope I can continue with this. Okay, so that's out of the way. What about actual
+static variables though? Those aren't addressed yet. Do we still need the static keyword?
+Perhaps. I'm not sure. It doesn't really affect the type of the variable. Maybe name
+mangling could work for static variables... Imagine a mangled static name:
+
+	32u {MANGLED, local};
+
+	(: this) run {
+		local = MANGLED;
+	}
+
+	(:) run2 {
+		MANGLED = 34;
+	}
+
+Just that the CAPITALS are already taken by constexprs. If only there was an alternative.
+Yeah maybe static is the best bet for variables.
+
+	static 32u unit_counter = 30;
+	32u current_id;
+
+	(:) constructor {
+		++unit_counter;
+		sml::out << unit_counter << sml::endl;
+		construct current_id = unit_counter;
+	}
+
+Looks pretty much fine actually. And I can always add `static { ... };` if needed.
+Yeah, compromise. There's no name mangling for statics apparently. I guess that's fine.
+The only name manglers are pretty much enums and CONSTEXPRs. Well, classes and variables
+also mangle their names, but not as strictly. We could also just say to hell with static
+variables and just create an object instead. That's actually very elegant! Just imagine:
+
+	32u counter = 0;
+
+	(: this) constructor {
+		construct counter = 0;
+	}
+
+	(:) enter {
+		This local;  // Always alive during the program anyways.
+		SubClass[counter: local.counter] subclass;
+		// ...
+	}
+
+That is so elegant... I love it! That's absolutely fantastic. It also allows scalability
+since we can just clone the object and repeat the previous run. I think this concludes
+the search for 'statics'. Any other topics to consider? We've removed grants altogether
+and now just use direct substitution. There are variables and methods, functions can
+also exist. CONSTEXPR and `ENUMERATED_VALUES`. What more? Alias of course. I think
+it's for the best to just do away with alias altogether. I mean it may be nice for
+a short time but we can hardly do any direct substitution with it. Well, it kinda removes
+the hell of large namespaces/class names, which is nice really, but I don't think that
+it will pay off in the end. The reason is that we just cheat ourselves of the true
+variables. Especially with the alias statements that allow this:
+
+	alias ClassName = namespace::ClassNameName;
+
+We'd start looking at the granted ClassName whenever we'd see it. That's what I don't
+like about it. Secondly if we allow
+
+	alias nm::Cn = namespace:: ClassNameName;
+
+then whenever we encounter "nm::Cn", we'll be looking for that folder, it may even
+clash with the folder name. That's definitely not desirable in a language that is
+supposed to be easily readable. Yeah, let's avoid that ugly mess! Then, the language
+becomes quite simply actually...
+
+	methods
+	variables
+	grants
+	static ifs
+
+Using static ifs for code generation seems very appealing, but it doesn't bring out
+the full capacity of code generators. I'd love to see the code generator that was discussed
+in the beginning in place. But that comes later. First we need to implement this. Well,
+basically de-plement what has been implemented. Expressions need to be cleaned. What
+ties types to expressions is the ability for arrays to contain expressions of CONSTEXPR
+types. They can't contain non-constexpr expressions. So yeah, I just need to deplement
+some of the stuff and that should be the end of the grammar.
+
+	8ue counter = 0;
+
+	(:) enter {
+		sml::out << "sample program" << sml::endl;
+		This object;
+		try {
+			while (true) {
+				object.counter += 1;
+			}
+		} catch {
+			sml::UNSIGNED_OVERFLOW
+				sml::out << "Unsigned integer overflow detected"
+					<< sml::endl;
+			sml::SIGNED_OVERFLOW
+				sml::out << "Signed integer overflow detected"
+					<< sml::endl;
+			any
+				sml::out << "Caught an unknown signal!" << sml::endl;
+		}
+
+		sub::Class[counter: object.counter] object2;
+		try {
+			object2.check();
+		} catch {
+			sml::UNSIGNED_OVERFLOW
+				sml::out << "Exactly what we expected" << sml::endl;
+			any
+				sml::out << "Caught an unknown signal!" << sml::endl;
+	}
+
+	// sub/Class.cxy
+	(: this : pure) check {
+		counter += 1;
+	}
+
+I really like the idea. It's clean and tractable. I really like it. Really really like
+it.
+
+	private 32u {a, b, c}, [100, 8u] buffer, sml::String holder;
+	public ...
+
+Those look nice as well, goes hand-in-hand with the variable declaration syntax. Even
+the extraction syntax!
+
+	restricted 32f {value, error: error} = sml::sin(sml::PI);
+
+	(: this, 1u test: pure) constructor {
+		if (test)
+			construct value, error: error = sml::cos(sml::PI);
+	}
