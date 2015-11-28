@@ -1562,3 +1562,32 @@ the extraction syntax!
 		if (test)
 			construct value, error: error = sml::cos(sml::PI);
 	}
+
+I've been thinking. I don't like restricted/public/private that much actually. So an
+idea popped into my mind: every non-method is private. Every method is public. However,
+every `ptr SIGNATURE CONSTEXPR = { ... };` is considered a private method. Hmmm...
+it does look kinda ugly to be honest.
+
+	ptr (32f out : this : pure) COMPUTEINTERNAL = {
+		out = sml::sin(0.1);
+		out += 1.0;
+	}
+
+	(32f out : this) get {
+		out = this.COMPUTEINTERNAL();
+	}
+
+Nah, there has to be something better than this.
+
+
+	private (32f out : this : pure) computeInternal {
+		out = sml::sin(0.1);
+		out += 1.0;
+	}
+
+	public (32f out : this) get {
+		out = this.COMPUTEINTERNAL();
+	}
+
+Actually this looks pretty much fine... doesn't look bad at all, but perhaps it'd be
+best to put the access specifier somewhere else. I'm thinking after the type signature.
