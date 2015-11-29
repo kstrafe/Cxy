@@ -1831,14 +1831,11 @@ type information is awesome.
 
 	EXPR ::=
 		'(' EXPR ')'
-		EXPR BINOP EXPR                  # Arithmetic: a + b, c % d, e * f, precedence implied
+		| EXPR BINOP EXPR                # Arithmetic: a + b, c % d, e * f, precedence implied
 		| UNOP MEMBEREXPR                # @dereference, $$const_ptr, -negative
-		| MEMBEREXPR '(' ARGLIST ')'           # Calling a method
-
-	MEMBEREXPR ::=
+		| EXPR '(' ARGLIST ')'           # Calling a method, very high precedence
 		| [ namespace '::' ] [ classname '::' ] member   # Static member expression
-		| '(' EXPR ')' '.' member                # Getting a member
 		| EXPR '.' member                # Getting a member
-		| MEMBEREXPR '~' member                # Getting a return parameter
+		| EXPR '~' name                  # Extracting from a tuple
 
 I'll continue the grammar later.
