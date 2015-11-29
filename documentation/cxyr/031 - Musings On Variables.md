@@ -1586,8 +1586,259 @@ Nah, there has to be something better than this.
 	}
 
 	public (32f out : this) get {
-		out = this.COMPUTEINTERNAL();
+		out = this.computeInternal();
 	}
 
 Actually this looks pretty much fine... doesn't look bad at all, but perhaps it'd be
 best to put the access specifier somewhere else. I'm thinking after the type signature.
+But honestly, it doesn't look bad. We can just say everything is public by default
+such that enter becomes easy to learn (upon being introduced to the language). The
+nice thing about not putting access in the signature is that it doesn't actually matter
+to the semantics of the program:
+
+	(:) enter {
+		(::private) name = This::staticFunction;
+		name();
+	}
+
+If you can return the function, then it loses all forms of specification. It's absolutely
+unnecessary. Alright.
+
+	ACCESS TYPE namelist [More] = EXPR ';'
+	ACCESS SIGNATURE name '{' code '}'
+
+Is the basic setup of a class. Simple? Yes. Elegant? Yes. Short? Yes I'd say so. For
+a strongly and statically typed language. Then, the bodies of functions are like:
+
+	STATEMENT
+	{ EXPR [name ':' name] }+ ['=' EXPR] ';'
+
+I need to really capture the essence of the grammar, let's try again:
+
+	ACCESS { TYPE (
+	               name [ ':' name | '=' EXPR ]
+	               | '{' { name [ ':' name | '=' EXPR ] }+ \{ ',' } '}'
+	              )
+	       }+ \{ ',' } [ = EXPR ] ';'
+
+Good, that's out of the way. I think that's exactly what I want! Now for the methods
+
+	SIGNATURE ::= '('
+	                (
+	                 { TYPE (
+	                         name
+	                         | '{' { name }+ \{ ',' } '}'
+	                        )
+	                 } \{ ',' } [ ',' ]
+	                )
+	                 ':' $1 ':' ['const'] ['pure']
+	              ')'
+	ACCESS SIGNATURE name (
+	                       '{' { statement }* '}'
+	                       | statement
+	                      )
+
+Our enums:
+
+	[ ACCESS ] { ENUMNAME ['=' EXPR] }+ \{ ',' } [ ',' ] ';'
+
+Where $1 denotes the first capturing group. The regex, not what has actually been
+captured. So the regex is just copied there. `\{}` means to interpolate the previous
+`{}` group wtih the sequence within. `{ 'a' } \{ ',' }` would accept:
+
+	(nothing)
+	a
+	a, a
+	a, a, a
+
+And so on. The trailing comma is not allowed since we don't have lists like most other
+programming languages. C++ for example allows the trailing comma in enums:
+
+	enum A {
+		a,
+		b,
+		c,
+	};
+
+But we don't have enumerations in that sense. Our enumerations are ended by a ';',
+which makes the use of trailing commas not worth anything. And trailing commans in
+arguments are just ugly. The trailing comma is not necessary. The only reason they
+are in enums is that you can easily copy the last line and add an entry. For expressions
+containing raw arrays, we may allow a trailing comma. Let's look at the use case:
+
+	[8, 32u] a = [
+		1,
+		2,
+		4,
+		8,
+		16,
+		32,
+		64,
+		0,
+	];
+
+Longer lists are even more complicated. It's always nice to have the ability to trail
+the comma. But only for lists like these. We don't need them in arguments. Or do we?
+
+	myFunctionName(
+		a: this.something()~height,
+		somecomplicatedname: alfa + beta / gamma \ THETA,
+		[3, 4, 5, 6, 7],
+		control: [1, 2, 3],
+	);
+
+Yeah,... that's actually pleasant to have. Just in case you need to add another argument.
+Are commas really necessary for lists though? I suppose they can always be optional.
+I still have unanswered questions. For example, isn't [ the start of a type? And types
+can be evaluated in expressions for having static members. Hold on... wait a second...
+can it be solved by... no. Creating an object?! This would create a name but solve
+the entire conundrum... hold the fk on man :O.
+
+	ClassName name;
+	name.doSomething();
+
+That doesn't really aid readability though. As in, you have a static local object
+and you're not using it that much. What about a class-local constexpr one?
+
+	Classname NAME;
+
+	(:) enter {
+		NAME.doSomething();
+	}
+
+No I think it's more useful to be able to call statics directly. But how do we reconcile
+the use of [] inside an expression? [8, 32u]::size could be useful... right? C solves
+it by using the sizeof operator. I think it's an interesting approach. It works on
+any class. '::size' looks more like some static method. I think we need an operator
+for this just to solve the entire problem. Secondly, we need to look at other topics.
+
+	[3, 32u] a = [size[type[a]], 4, 6];
+
+Should give an array that's `[96, 4, 6]`, because `3*32` is 96 bits of information.
+I mean, what information can you get out of primitives? Well you can get the maximum
+number from 32f, or 32u, or 50u. But you can also calculated that using size:
+
+	32u MAX = math::pow(2, size[type[MAX]]);
+	32u MIN = cast[type[MIN]](cast[32uo](MAX) + 1);  // Overflow back to the least
+
+We'd like to know the size of something, the maximum, minimum, whether it's a primitive,
+what kind of primitive. This is useful for generating code.
+
+	if [sml::primitive[GIVEN]] {
+		// ...
+	}
+
+It also makes me think that perhaps, it'd be a good thing to have nestable grants.
+With this I mean that you can send in partial grants. I'd love for unit tests to be
+incorporated in the compiler. The idea is that every class that gets instantiated has
+a set of tests:
+
+	test myTest {
+		if [size[GrantedType] < 8]
+			fail "Granted Type has a size less than 8 bits";
+	}
+
+The compiler can run the test for each distinct subtype. This can be very useful in
+removing errors and applying your own semantic checks to the class. We should obviously
+run the lowest classes first.
+I guess that's solved then, the primitive types don't really fit into expressions.
+So we can still have the array syntax without a problem!
+
+	if [has[Granted, (:) enter]];
+	if [has[Granted, public 32u a]];
+
+I'm not sure about the above. Weird things happen in metaprogramming. Instead of SFINAE
+I'd like to use something that's more direct (and takes considerably less time). So
+how about metaprogramming? Most issues have now been cleared up, grants are easier,
+expressions are simpler, statics are resolved. I'm still wondering if we can eliminate
+types from expressions and encapsulate them in "size" or other operators.
+
+	# Main
+	CLASS ::=
+		{ DATA | ENUM | METHOD | STATIC_IF }*;
+
+	DATA ::=
+		[ ACCESS ] { TYPE (
+		                   name [ ':' name | '=' EXPR ]
+		                   | '{' { name [ ':' name | '=' EXPR ] }+ \{ ',' } '}'
+		                  )
+		           }+ \{ ',' } [ = EXPR ] ';'
+
+	ENUM ::=
+		[ ACCESS ] { ENUMNAME ['=' EXPR] }+ \{ ',' } [ ',' ] ';'
+
+	METHOD ::=
+		[ ACCESS ] SIGNATURE name (
+		                           '{' { STATEMENT }* '}'
+		                           | STATEMENT
+		                          )
+
+	STATIC_IF ::=
+		'if' '[' EXPR ']' '{' CLASS '}' { 'else' 'if' '[' EXPR ']' '{' CLASS '}' }* 'else' '{' CLASS '}'
+
+	# Auxiliary:
+	SIGNATURE ::= '('
+	                (
+	                 { TYPE (
+	                         name
+	                         | '{' { name }+ \{ ',' } '}'
+	                        )
+	                 } \{ ',' } [ ',' ]
+	                )
+	                 ':' $1 ':' ['const'] ['pure']
+	              ')'
+
+	STATEMENT ::=
+		FEXPR
+		| WHILE_STATEMENT
+		| IF_STATEMENT
+
+I've got an idea for type information! WOOT! Let's go:
+
+	type[Name]~size
+	type[Name]~name
+	type[Name]~max
+	type[Name]~is_primitive
+	type[Name]~is_class
+
+That's absolutely beautiful! The static ifs allow us to conditionally exclude and include
+code. This is very useful.
+
+	32u ISVALUE = 33, OUTVAL = 5;
+
+	if [ISVALUE == 34] {
+
+		(:) enter {
+			sml::out << "It's 34" << sml::endl;
+			if [OUTVAL == 5]
+				sml::out << "Also outval is 5" << sml::endl;
+			else
+				sml::out << "Outval isn't 5" << sml::endl;
+		}
+
+	} else {
+
+		(:) enter {
+			sml::out << "It's 33" << sml::endl;
+		}
+
+	}
+
+As can be seen, conditional compilation simply removes anything that isn't worth adding.
+This means that there are no semantic checks on the code that is being eradicated.
+There are however syntactic checks, since that never changes. `type` being used for
+type information is awesome.
+
+	EXPR ::=
+		'(' EXPR ')'
+		EXPR BINOP EXPR                  # Arithmetic: a + b, c % d, e * f, precedence implied
+		| UNOP MEMBEREXPR                # @dereference, $$const_ptr, -negative
+		| MEMBEREXPR '(' ARGLIST ')'           # Calling a method
+
+	MEMBEREXPR ::=
+		| [ namespace '::' ] [ classname '::' ] member   # Static member expression
+		| '(' EXPR ')' '.' member                # Getting a member
+		| EXPR '.' member                # Getting a member
+		| MEMBEREXPR '~' member                # Getting a return parameter
+
+I'll continue the grammar later.
