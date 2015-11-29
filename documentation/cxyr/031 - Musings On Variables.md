@@ -1834,9 +1834,56 @@ type information is awesome.
 		| EXPR BINOP EXPR                                # Arithmetic: a + b, c % d, e * f, precedence implied  P: 1
 		| UNOP EXPR                                      # @dereference, $$const_ptr, -negative                 P: 2
 		| EXPR '(' ARGLIST ')'                           # Calling a method, very high precedence               P: 3
-		| [ namespace '::' ] [ classname '::' ] member   # Static member expression                             P: 6
+		| [ namespace '::' ] [ classname '::' ] member   # Static member expression
 		| EXPR '.' member                                # Getting a member                                     P: 5
 		| EXPR '->' member                               # Getting a member                                     P: 5
 		| EXPR '~' name                                  # Extracting from a tuple                              P: 4
 
 I'll continue the grammar later.
+Interestingly enough, new can be considered an automatic function class:
+
+	(ptr Type out : ) new {
+		32u {bits, rem: remainder} = type[Type].size \ BITSPERWORD;
+		hack("malloc " + (bits + rem));
+		out = hack("last");
+	}
+
+Something along those lines. I need some kind of pseudo-pure class for new. Anything
+that returns a ptr to something could be considered pure, if it calls new it's no
+problem. Just comparing the pointer in a non-equality way should be impure. New is
+an operator so perhaps it's cool, but I'd still like to have a class for this.
+
+	(ptr Type out :: pseudopure) new ...
+
+Could be it, a method that we declare 'pure' solely on the basis of trusting us (the
+programmer). Another idea is to let exceptions be pure. This way, exceptions that
+aren't pure are only caught in the impure section. Normally, if a pure method throws,
+then it's based on the input arguments. However, new may throw as it implicitly links
+itself to a global store or memory. We could say that memory is implicit and always
+supplied automatically though. This would make new pure. Yeah, we don't need specific
+pure/impure enums, since the impure functions can only throw in such a way that enums
+are already caught in impure code. Let's just say that new is indeed pure.
+
+	private POINTERS_TRUE;
+
+	(:: pure) enterPure {
+		try {
+			ptr 32u {a = new{0}, b = new{0}};
+			// if (a > b)  // Impure
+			if (a == b)  // Pure
+				throw POINTERS_TRUE;
+		} catch {
+			new::OUT_OF_MEMORY {
+				throw;
+			}
+	}
+
+	(:) enter {
+		try {
+			enterPure();
+		} catch {
+			POINTERS_TRUE {
+				sml::out << "Pointers have the same values" << sml::endl;
+			}
+	}
+
