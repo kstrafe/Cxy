@@ -1873,9 +1873,10 @@ are already caught in impure code. Let's just say that new is indeed pure.
 			if (a == b)  // Pure
 				throw POINTERS_TRUE;
 		} catch {
-			new::OUT_OF_MEMORY {
+			sml::OUT_OF_MEMORY {
 				throw;
 			}
+		}
 	}
 
 	(:) enter {
@@ -1885,5 +1886,243 @@ are already caught in impure code. Let's just say that new is indeed pure.
 			POINTERS_TRUE {
 				sml::out << "Pointers have the same values" << sml::endl;
 			}
+			sml::SIGINT {
+				sml::out << "Interrupt signal caught" << sml::endl;
+			}
 	}
 
+I like the cleanliness of the above. Only issue I have is that I can't assign a variable
+to the enum. The enum has no name. Perhaps `This::Enum` could do. Or `enum[This]`
+with `enum` being an alias for `enum[This]`.
+
+	private SYSTEM_ON, SYSTEM_OFF, FAILED_TO_START;
+	(:) enter {
+		enum a = SYSTEM_OFF;
+		try
+			startSystem($a);
+		catch {
+			FAILED_TO_START
+				sml::out << "Failed to start the system" << sml::endl;
+		}
+
+		if (a == SYSTEM_OFF)
+			sml::abort();
+
+		// ...
+	}
+
+Creating an object in order to use static functions seems very appealing actually.
+
+	(:) enter {
+		math::MathematicsEnginge me;
+		sml::out << me::sin(me::PI) << sml::endl;
+	}
+
+It'd remove the grammar lookahead ambiguity as well. It also solves the idea of using
+different subspaces:
+
+	(:) enter {
+		sml::Mathematics m;
+		sml::out << m::sin(m::PI);
+	}
+
+I like the form of the assignment operator using captures:
+
+	expr: name, expr: name, exrp: name = expr;
+
+It's very powerful and simple. With types it becomes slightly more complex. Although
+I suppose with a type in the beginning we know what the form of the code is going
+to be. So we don't need an fexpr like the extremely versatile one. For expressions
+starting with a namespace name:
+
+	(:) enter {
+		sml::Mathematics m;
+		m::sin(m::PI);
+	}
+
+Using a three-sized lexer buffer we can identify [name '::' name]. And state that
+this is in fact a 'static member', and turn that into a single token. I'm a little
+unsure. To remedy the problem, we could say that sml is both an object as well as
+a package. This way we can allow using sml::out, whilst also support sml::Vector.
+
+	math::Mathematics math;
+	math::computeSomething(math::PI);
+
+Should be allowed. Depending on the token directly after the name, we can just see
+if it's a type or not. What I don't like about it is the following:
+
+	math::Mathematics math;  // How do I know this doesn't hold state?
+	(:) enter {
+		math::doSomething();
+	}
+
+I need to actually look at all invocations of math::function in order to see if there
+are any '.' operators used on it. The biggest problem for me is that if the object
+has any constructors, those will be called on the declaration of the object.
+
+	(:) enter {
+		sml::Mathematics M;
+		M::sin(M::PI);
+	}
+
+Oh,.. oh. Doesn't look bad. I like this. It uses the object as a constexpr. This
+means that non-static `(: this)` methods can't be called on it. It should also
+make all members static. The members that are used, at least. Hell I bet I could get
+away with just using the dot operator, but that won't show I'm using a static method
+if we are using an actual object.
+
+	(:) enter {
+		sml::Mathematics M, m;
+		m::sin(M::PI);
+		M::cos(m::PI);
+	}
+
+The semantics of a constexpr variable are such that you can't change any member variables.
+What happens to sml::out though? It doesn't exactly hold state, it just outputs to
+the given system stream.
+
+	(:) enter {
+		OUT << "Hello World!";
+	}
+
+Where OUT is a constexpr granted to the main class. That could be powerful. OUT could
+also be a granted object like:
+
+	out << "...";
+
+or even
+
+	sml.out << "...";
+
+Where sml is a global object that contains the out object. I think this is the most
+correct version. This makes me consider whether it'd be good to just say we pass
+everything down, even sml classes.
+
+	// Main.cxy
+	(:) enter {
+		sub::Class[String: sml::String, Vector: sml::Vector] subclass;
+		sml::out << subclass.doSomething();
+	}
+	// sub/Class.cxy
+	Vector[32u] control;
+
+	(:) constructor {
+		construct control([1 2 3 4]);
+	}
+
+	(String out :) doSomething {
+		out = control.toString();
+	}
+
+I don't know, seems a little tough. It does keep each class very sustainable though.
+As in, you can easily find out requirements for any class. Luckily you can use `type[name]`
+to alleviate some of the troubles.
+
+	(:) enter {
+		sub::Class[
+			String: sml::String,
+			Vector: sml::Vector,
+			Control: sml::Logger,
+			Graphics: gl::GraphicsHandler,
+			]
+			SUBCLASS;
+
+		type[SUBCLASS] alpha;
+	}
+
+This does give quite a convincing case for whole-namespace insertions though. I'd
+love to be able to make the language as clean as possible. The problem I have with
+C++ is that you need to define a global library. I like it when it's more local.
+Imagine classes just giving arbitrary types downward. That's so awesome. The primitives
+are of course very important. One thing that can be done is to make sets, maps, and
+similar utilities primitives.
+
+	(:) enter {
+		set[32u] a;
+		a += 3;
+		a += 6;
+		if (a[6]) {
+			sml::out << "a contains 6";
+		}
+		a -= a;  // Remove all elements
+
+		map[32u, 1u] b;
+		string c;
+	}
+
+Another idea:
+
+	private LOG_BOUNCE;
+	(:: pure) enterPure {
+		32u a = 5;
+		bounce LOG_BOUNCE a;
+		++a;
+		bounce LOG_BOUNCE a;
+	}
+
+	(:) enter {
+		try {
+			enterPure();
+		} bounce {
+			LOG_BOUNCE name {
+				sml::out << name;
+			}
+	}
+
+What this does is that it allows enterPure to to continue after the bounce without
+directly calling any impure functions.
+
+I mean, just think of the classes when they have their grants. You just compile --grant
+and get a list of all necessities. You know that this class will work. Of course,
+100% likely when all the methods in the class are pure. This is excellent for building
+libraries. What if a library wants to use a vector internally? They can just pass
+it from the top level downwards. It doesn't seem very practical though. I mean I
+get that primitives are defined everywhere, but there are so many important data
+structures that should also be everywhere. An example is the array. Incredibly important
+to have that accessible at all times. The thing is though, most library authors use
+an internal version of their own array, because the provided one wasn't good enough.
+Heard that story time and time again. Another thing is the allocator that will be
+used. For example, having a fixed-size array for std::vector instead of a dynamically
+growing one. Of course, one could also just create a specific version of vector using
+
+	(ptr Type out :: new) create {
+		32u {size, remainder: remainder} = type[Type]~size \ OCTETSIZE;
+		if (remainder)
+			size += 1;
+		hack("void *a = malloc(" + size + ");");
+		hack("assign", "out a");
+	}
+
+We can say this is an allocator, it just allocates some memory. It could also be
+a cyclic allocator that overwrites previous bytes, but I'm a little uncertain. Perhaps
+it's best if the allocator is implemented in a custom class instead. This will solve
+a lot of trouble. Even then, a custom allocator appropriating class can easily be
+built.
+
+	[1024, 1u] bits;
+	10u at = 0;
+
+	(ptr Type out : this, 32u in, ptr any location : pure) allocate {
+		if (location < at)
+			throw INACCESSIBLE_LOCATION;
+		out = cast[type[Type]](at);
+		at += Type~size;
+	}
+
+	(:) enter {
+		col::Vector[Alloc: This] vector;
+		col::Map[Alloc: This] map;
+	}
+
+This way, we can create cheap and simple allocator classes and pass them on to the
+appropriate subclasses. In a loop, we can do:
+
+	Allocator[32u] allocator;
+	while (some_condition) {
+		ptr 32u a = allocator.allocate();
+		@a = 130 + condition_variable;
+		// ...
+	}
+
+Basically a garbage collected loop. We allocate a large amount on the stack, and
+use the allocator as an abstraction for 'allocating' objects.
