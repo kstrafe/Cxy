@@ -2203,3 +2203,53 @@ different than statement-scope.
 I'd like to get to the core of the language. This would remove a lot of statements.
 The only ones left are assignment, declarations, expressions, and if/goto/label.
 
+Man I just wanna have this all neat and finished. I feel like it's come a long way
+already. Just an idea about minimalism though. Why not remove enums altogether and
+instead just throw random names as you like?
+
+	throw whatever_i_want_dude;
+	throw myError;
+
+Or just do not find it necessary to declare enums. This would simplify catching the
+errors as well. How is the grammar fully LL(1)?
+
+	Type member;
+
+	(: this) constructor {
+		construct {
+			member(1 * 8);
+		}
+	}
+
+	const ptr (: this) function = lambda (: this) {
+		// Statements
+	};
+
+The interesting thing is, making methods constants, then we have a very 'pure' model,
+meaning that the approach is minimal. We can idealize the signature-first syntax
+as syntactic sugar :).
+
+	sub::TypeA {a, aa}, sub::TypeB b;
+	32u length = 0;
+
+	(: this) constructor {
+		// Statements
+	}
+
+Yeah, I think that's about right.
+
+	try {
+		32ue a = 32ue~max + 1;
+	} catch {
+		NUMERIC_OVERFLOW
+			sml::out << "overflown integer!";
+	}
+
+I think I can roll with this. The syntactic sugar, yeah. Looks fine. Just need to
+polish the semantics a little and the language will be done. Especially the enumerations.
+Those are important. So an enumeration is associated with some specific class. What
+about primitives? I've though about this a bit. I think it's best too keep primitives
+just the basic units (integers, floats), and add arrays to the mix. Pointers are
+also included. So if you have a super awesome custom vector, then just return the
+pointer to the array with the size, or turn it into a suitable array. Hell you can
+even return a nested array. Should be easy. Yeah that's feasible.
