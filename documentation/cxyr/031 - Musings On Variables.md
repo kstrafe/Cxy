@@ -2126,3 +2126,80 @@ appropriate subclasses. In a loop, we can do:
 
 Basically a garbage collected loop. We allocate a large amount on the stack, and
 use the allocator as an abstraction for 'allocating' objects.
+
+An interesting aspect of any sorted array is that the addresses of the objects could
+be used to sort the elements. This is currently an impure operation. new has always
+been pseudopure, but I'm considering just making it pure. Really keeping it to 'hack'
+to be impure:
+
+	SortedArray[ptr 32u] sorted;
+	(: this : pure) myfun {
+		for (32u i = 0; i < 1000; ++i) {
+			ptr 32u x = new{0};
+			sorted.insert(x);
+		}
+	}
+
+Could give different arrays each time. That should be fine. Hell we accept side effects
+due to glocals, why not allow this indeterminism? The action of taking a value's
+pointer and comparing it shows something that is not deterministic. One can base
+decisions on those values. We can just imply that the system is given as an argument.
+Yeah, that solves it. We just give an instance of the memory to the program. If the
+same instance is given, then we should also get the same values. Of course we never
+get the same instance. Oh well. Compromise.
+
+I think the semantics for functions {} need to be inspected.
+
+	new[32u](10, address: delete(old)){0 + 1};
+	lambda[a](:){ /* code */ }
+
+I think the syntax for these expressions could just be special.
+
+	(:) name { /* code */ }
+	32u name2 {0};
+	32u {x: a, y: b} {a: 0, b: 0};
+
+I think perhaps these rules are for themselves. Do I have everything then? Is this
+sufficient?
+
+	public (: this : pure) inc {
+	}
+
+Oh, idea, instead of having some functions, why not just use 'restricted' on methods?
+
+	restricted (: this : pure) myMethod {
+
+	}
+
+If a method is restricted, that means that it can not be changed. This makes all
+methods true lambdas. The problem with that is that the methods can be changed from
+the inside. In that case, the method would need to be const.
+
+	const (:) myFunction = {
+		// Why use an equals? Because it's seen as a variable.
+	}
+
+I really would like to unify the whole semantics game into a simple system. Every
+file is a class, every instantiation creates an object. The object contains data
+and methods. Or it contains just data, but methods are specialized data.
+
+	(:) enter {
+		32u a = 0;
+		ptr (:) x = lambda [$a] { @a = 10; };
+	}
+
+There has to be something called "class-scope", for which the semantics are slightly
+different than statement-scope.
+
+	name::Type {x: a, y: b}, 32u z: c = f();
+	(: this) method {
+		this.z = 10;
+		label name;
+			--z;
+		if (this.z > 3)
+			goto name;
+	}
+
+I'd like to get to the core of the language. This would remove a lot of statements.
+The only ones left are assignment, declarations, expressions, and if/goto/label.
+
