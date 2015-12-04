@@ -1615,6 +1615,7 @@ a strongly and statically typed language. Then, the bodies of functions are like
 
 I need to really capture the essence of the grammar, let's try again:
 
+	DATA ::=
 	ACCESS { TYPE (
 	               name [ ':' name | '=' EXPR ]
 	               | '{' { name [ ':' name | '=' EXPR ] }+ \{ ',' } '}'
@@ -1633,14 +1634,22 @@ Good, that's out of the way. I think that's exactly what I want! Now for the met
 	                )
 	                 ':' $1 ':' ['const'] ['pure']
 	              ')'
-	ACCESS SIGNATURE name (
-	                       '{' { statement }* '}'
-	                       | statement
-	                      )
+	ACCESS SIGNATURE name STATEMENT
 
 Our enums:
 
 	[ ACCESS ] { ENUMNAME ['=' EXPR] }+ \{ ',' } [ ',' ] ';'
+
+Statements:
+
+	STATEMENT ::=
+		'if' '(' EXPRESSION ')' STATEMENT
+		| '{' { STATEMENT } '}'
+		| 'goto' name ';'
+		| 'label' name ';'
+		| 'try' STATEMENT 'catch' ...
+		| 'while' '(' EXPRESSION ')' STATEMENT
+		| 'for' '(' STATEMENT ';' EXPR ';' STATEMENT ')' STATEMENT
 
 Where $1 denotes the first capturing group. The regex, not what has actually been
 captured. So the regex is just copied there. `\{}` means to interpolate the previous
@@ -2253,3 +2262,94 @@ just the basic units (integers, floats), and add arrays to the mix. Pointers are
 also included. So if you have a super awesome custom vector, then just return the
 pointer to the array with the size, or turn it into a suitable array. Hell you can
 even return a nested array. Should be easy. Yeah that's feasible.
+
+I've been thinking about purity. It's nice to have, absolutely. The problem in making
+hack impure is that we can't do awesome floating point optimizations in some cases.
+For example, the fast inverse square root may want to use hack in order to speed
+up the computation. In addition, the code is already 'pure' since things are explicitly
+granted to the lower class.
+
+	(:) enter {
+		32u value;
+		hack("asm
+			movl $10, %eax;
+			movl $20, %ebx;
+			addl %ebx, %eax;
+			out: value, %eax"
+		);
+		print value;
+	}
+
+Maybe we just need the most basic of io, just printing, errorring, and file handling.
+It is desirable to be able to do some assembly programming deeper down. Also, the
+grants kinda destroy some of the purity that was thought of. In C++ you can include
+whatever you want and it will work. I'm thinking that's not in line with Demeter's
+laws. How is this solved? Knowing that an algorithm is pure is a very nice thing.
+
+I just want to see a library with a top class being 'pure'. That would be very comforting.
+It lets me know that this library, when given the same input, never diverges from
+that input. This is why I believe bounce handlers should be given. No. Instead, let's
+make impure grants be callable from pure code! Genius? Let's examine.
+
+	(:) enter {
+		name::Class INVERSE;
+		sub::Class[fast: INVERSE::fsqrt] myclass;
+		myclass.run();
+	}
+
+That looks actually pretty neat. You inject impure code where it is requested. Not
+only does this keep the impurity at the top level, it also allows you to inject optimizations
+and other niceties. As long as the subclass doesn't use hack directly, it's fine.
+It's just like going out to enter, getting the result, and then inputting that result
+back into the class.
+
+This means that the subtree is pure, it doesn't use anything machine-dependent, meaning
+that cutting the subtree off and using it elsewhere should always work. I think that's
+it. Are we done? Defaults of course. So the [] allows us to override definitions?
+Seems like something nice. I mean, if it's desirable then sure, why not? Meaning
+that not using the fast inverse square root will just fallback on the pure algorithm.
+I like that idea. It's very clean. Hmm, you could basically inject anything then.
+
+	private (:) cool {
+		sml::out << "Hey!";
+	}
+
+	(:) enter {
+		sub::Class[myFunction: cool] a;
+		a.myFunction();
+	}
+
+That would be scary, I suppose it's best to make any grants only accessible inside
+that class. If you want a reference, just create a function for it.
+
+	project/
+		Main.cxy
+		code/
+		impure/
+
+Having projects like this basically makes code your free world. Impure code is separated
+from pure code. I think this will work out very nicely. The compiler also needs to
+grant something to Main:
+
+	(:) compilerEnter {
+		project::Enter[File: internal::File] ENTER;
+		ENTER.enter();
+	}
+
+We could idealize the output stream as a file too.
+
+	(:) enter {
+		Io a(Io::STDOUT_FLAG);
+		a << "output";
+		Io b(Io::STDIN_FLAG);
+		b.readLine();
+	}
+
+Wait, are grants of Io downward pure? Io can just be labeled impure. But does this
+make printing and file operations in granted classes 'pure'? Well yes! The hacks
+were granted. I guess enter can also be pure then! So long it doesn't have hack in
+its hierarchy, all is well. This seems so clean. I love it! Io is a granted class
+then. Nice. Granted by the compiler for a specific machine. This makes the writers
+of the compiler only liable for a tiny IO library. That's it. The Io library should
+support stdout, stdin, and files. stdout/in are files, essentially.
+We just define a simple io library and we're done. Cool.
