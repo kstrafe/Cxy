@@ -2353,3 +2353,60 @@ then. Nice. Granted by the compiler for a specific machine. This makes the write
 of the compiler only liable for a tiny IO library. That's it. The Io library should
 support stdout, stdin, and files. stdout/in are files, essentially.
 We just define a simple io library and we're done. Cool.
+
+So to finalize the grammar,... let's bring back what was written before. A final
+grammar. Let's do it.
+
+	// Class-Scope
+	CLASS ::= { [ ACCESS ] ( DATA | ENUM | METHOD ) } ;
+	ACCESS ::= 'private' | 'public' | 'restricted' ;
+	DATA ::=
+		{ TYPE (
+		        name [ ':' name | '=' EXPR | CONSTR ]
+		        | '{' { name [ ':' name | '=' EXPR | CONSTR ] }+ \{ ',' } '}'
+		       )
+		}+ \{ ',' } [ ',' ] [ = EXPR ] ';' ;
+	ENUM ::= { enum  ['=' EXPR] }+ \{ ',' } [ ',' ] ';' ;
+	METHOD ::= SIGNATURE name STATEMENT ;
+	SIGNATURE ::= '('
+	                (
+	                 { 'this' | TYPE (
+	                                  name
+	                                  | '{' { name }+ \{ ',' } '}'
+	                                 )
+	                 } \{ ',' } [ ',' ]
+	                )
+	                 ':' $1 [':' ['const'] ['pure']]
+	              ')' ;
+	TYPE ::=
+		'type' '[' name ']' | 'ptr' TYPE | 'ref' TYPE | 'const' TYPE
+		| '[' { EXPR }+ \{ ',' } ',' TYPE ']'
+		| 'enum' '[' TYPE ']
+		| typename '[' { TYPE [ ':' TYPE ] | EXPR [ ':' EXPR ] } ']'
+		| primitive ;                     // 32u, 8ue, 16so, 3sb, 32f
+	STATEMENT ::=
+		'if' '(' EXPR ')' STATEMENT
+		| '{' { STATEMENT } '}'
+		| 'goto' name ';'
+		| 'label' name ';'
+		| 'try' STATEMENT 'catch' '{' { STATEMENT } { enum STATEMENT } '}'
+		| '++' EXPR ';' | '--' EXPR ';' | 'hack' '(' STR ')' ';'
+		| ;
+	FEXPR ::=
+		{ EXPR [ [EXPR] ':' name | '{' { name [ ':' name ] } '}' ] } \{ ',' } [ '=' EXPR ] ';' ;
+	EXPR ::= // Precedence decreasing
+		EXPR '.' name
+		| EXPR ( '+' | '-' ) EXPR
+		| EXPR ( '*' | '/' | '\' ) EXPR
+		| EXPR '..' EXPR ;
+
+So ideally, we'd have everything pre-determined by using an LL(1) lookahead, instead
+of determining things after-the-fact. Maybe ':' needs to be brought back. We aren't
+an LR(1) parser! Ech! Post-processing. Post processing fixes it. A current problem
+is that type expressions with type~something aren't processed correctly. Man that
+automatic passing mechanism gives a lot of butthurt. It's just annoying to work with.
+Let's say you can't use types directly in expressions, this means that whatever starts
+with a type becomes a valid assignment. I'm considering not allowing field-initializers
+since I'm afraid they can cause confusion. Say you have a variable set to 1, but
+the constructor says to construct with 0. What is used? How does it relate to other
+operations and impure operations?

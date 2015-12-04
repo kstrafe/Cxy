@@ -61,8 +61,6 @@ void TreePruner::pruneTree(protocols::SyntaxTree *ct)
 					caze(SYMBOL_COLON)
 					caze(SYMBOL_COMMA)
 					caze(SYMBOL_SEMICOLON)
-					cazeself(ALIAS_TRAIL, SYMBOL_EQUAL)
-					cazeself(ALIAS_TRAILS, EPSILONATE)
 					false;
 				#undef caze
 				if (predicate)
@@ -240,13 +238,6 @@ void TreePruner::pruneTree(protocols::SyntaxTree *ct)
 	popud(NAMEKIND, DATA_NAMES);
 	popud(NAMEKIND, IDENTIFIER_PACKAGE);
 	popud(DATA_NAMES, IDENTIFIER_PACKAGE);
-
-	popud(ALIAS_CORE, ALIAS_TRAIL);
-	popud(ALIAS_CORE, ALIAS_TRAILS);
-	popud(ALIAS_TRAILS, ALIAS_TRAILS);
-	popud(ALIAS_TRAILS, ALIAS_TRAIL);
-	popud(ALIAS_TRAIL, ALIAS_TRAIL);
-	popud(ENTER, ALIAS_STATEMENT);
 
 	// If this is an expression, and the second child is an expression, and it has two children, bring that child all the way up.
 

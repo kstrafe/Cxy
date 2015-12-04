@@ -71,7 +71,6 @@ bool CrossTerminalTools::isKeyword(const CrossTerminal &ct_)
 {
 	switch (ct_)
 	{
-		case CrossTerminal::KEYWORD_ALIAS: return true;
 		case CrossTerminal::KEYWORD_BREAK: return true;
 		case CrossTerminal::KEYWORD_CAST: return true;
 		case CrossTerminal::KEYWORD_CATCH: return true;
@@ -180,10 +179,6 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::ACCESS_SPECIFIER: return "ACCESS_SPECIFIER";
 		case protocols::CrossTerminal::ACCESS_SPECIFIER_READABLE: return "ACCESS_SPECIFIER_READABLE";
 		case protocols::CrossTerminal::ADDITIVE_EXPRESSION: return "ADDITIVE_EXPRESSION";
-		case protocols::CrossTerminal::ALIAS_CORE: return "ALIAS_CORE";
-		case protocols::CrossTerminal::ALIAS_STATEMENT: return "ALIAS_STATEMENT";
-		case protocols::CrossTerminal::ALIAS_TRAIL: return "ALIAS_TRAIL";
-		case protocols::CrossTerminal::ALIAS_TRAILS: return "ALIAS_TRAILS";
 		case protocols::CrossTerminal::AND_EXPRESSION: return "AND_EXPRESSION";
 		case protocols::CrossTerminal::ARGUMENT: return "ARGUMENT";
 		case protocols::CrossTerminal::ARGUMENT_LIST: return "ARGUMENT_LIST";
@@ -256,7 +251,6 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::IF_STATEMENT: return "IF_STATEMENT";
 		case protocols::CrossTerminal::INTEGER_LITERAL: return "INTEGER_LITERAL";
 		case protocols::CrossTerminal::ITER_STATEMENT: return "ITER_STATEMENT";
-		case protocols::CrossTerminal::KEYWORD_ALIAS: return "KEYWORD_ALIAS";
 		case protocols::CrossTerminal::KEYWORD_BREAK: return "KEYWORD_BREAK";
 		case protocols::CrossTerminal::KEYWORD_CAST: return "KEYWORD_CAST";
 		case protocols::CrossTerminal::KEYWORD_CATCH: return "KEYWORD_CATCH";

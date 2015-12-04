@@ -104,11 +104,6 @@ TEST_CASE("AbstractSyntaxTreeGenerator must validate the grammar.", "[test-Abstr
 		public var Aa a;
 	)");
 	doValidation(R"(
-		alias {
-			st = stiti;
-			dude = what;
-			Smh = what.Cool;
-		}
 		grant Aa = sml.String {
 			(:) >;
 			var ptr 1u dude;

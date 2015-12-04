@@ -645,9 +645,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 			}
 		)");
 		doValidation(R"(
-			alias c = complicatedlibrary;
 			(:) enter {
-				alias d = anotherlonglibraryname;
 				var c.Curve curve(
 					:lambda(float out:float in){return :sml.Math.sin(:in);},
 					from: -3,
@@ -667,7 +665,6 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 		doValidation(R"(
 			(:) enter
 			{
-				alias sf = simplefastmedialibrary;
 				var sf.RenderWindow window(title: "Main window", width: 800, height: 600);
 				var sf.Circle circle(radius: 5.f, x: 0, y: 0);
 				window.clear();
@@ -695,7 +692,6 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 		)");
 
 		doValidation(R"(
-			alias Aa = [100, ptr ref const 32u];
 			(:(:) in) call { in(); }
 
 			(:) enter {
@@ -704,21 +700,19 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 		)");
 		doValidation(R"(
 			(:) enter {
-				alias Out = sml.Out;
 				var (: String in) print = cast[(: String in)](Out.print);
 				print(:"Anything");
 			}
 		)");
 		doValidation(R"(
 			(:) enter {
-				alias Long = [5, ptr [8, ref const 32u]];
 				var Long a, b, c;
 				// ...
 			}
 		)");
 		doInvalidation(R"(
 			(:) enter {
-				alias Long = ptr 1;
+				a
 			}
 		)");
 		doValidation(R"(
@@ -803,12 +797,7 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 			public (: 32u a(:5)) enter { }
 		)");
 		doValidation(R"(
-			alias {}
-			alias { Aa = type[a]; Bb = type[b]; }
 			(:) enter {
-				alias { sf = sfml; Aa = type[a]; Bb = type[b]; }
-				alias abc = alphabet;
-				alias Abc = abc.Alphabet;
 			}
 		)");
 		doValidation(R"(
@@ -844,10 +833,6 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 		)");
 		doValidation(R"(
 			(:) enter {
-				alias {
-					St = sml.String;
-					Ot = sml.Out;
-				}
 				var St x = "x";
 				throw;
 				throw OUT_OF_BOUNDS;
@@ -885,8 +870,6 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 				var String string = sml.In.read()~string;
 				var 4u converted = cast[4u](string.to32u());
 				sml.Out << "derp";
-				alias Math = sml.Math;
-				alias Out = sml.Out;
 
 				Out << Math.pi + Math.e / Math;  // makes no sense but if the operators exist, it must be accepted.
 			}
