@@ -560,17 +560,8 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 			}
 		)");
 		doValidation(R"(
-			grant Name {
-				var 32u a, b, c;
-				(32u a : 32u b : pure) d, e, f;
-			}
 		)");
 		doValidation(R"(
-			grant String
-			{
-				var 64u length;
-				(String out : String left, String right) +;
-			}
 
 			(:) a
 			{
@@ -817,15 +808,9 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 
 			(1u c,:1u a,) b { }
 
-			grant Aa {
-				public (:) a;
-				restricted var 64u b;
-			}
 		)");
 		doInvalidation(R"(
-			grant Aa {
-				private var 5u a;
-			}
+			a
 		)");
 		doValidation(R"(
 			(1u {a, b(:0)}, String e = "e",: type[e]{f, g, h,},) d {}
@@ -940,14 +925,6 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 			}
 		)");
 		doValidation(R"(
-			grant Aa {
-				(:) kill;
-				var {32u a, b, c; 64s d, e, f;}
-				restricted static {Type g, h, i;}
-				static Type j, k,;
-				public var sml.String l,;
-			}
-
 			(:this) tell {
 				var type[this] now(:this);
 				var ptr Aa local = new[Aa];
@@ -1017,7 +994,6 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 			}
 		)");
 		doValidation(R"(
-			grant MYWISH 32u;
 		)");
 		doValidation(R"(
 			(:) enter
@@ -1038,10 +1014,6 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 			}
 		)");
 		doValidation(R"(
-			grant MYWISH 32u = 100;
-			grant MyClass = sml.String {
-				(: this) getLength;
-			}
 			(: this) constructor {
 				var ptr type[this][MYWISH: 3] a;
 				a->MYWISH + size[Type] - size[32u];
@@ -1050,14 +1022,12 @@ TEST_CASE("TreeBuilder must validate input", "[test-TreeBuilder]")
 			}
 		)");
 		doValidation(R"(
-			global var 32u a;
-			global static 32u b;
 			(: this) constructor {
 				++a;
 				++b;
 			}
 
-			global (32u out : 32u in) add {
+			(32u out : 32u in) add {
 				return : in + 1;
 			}
 		)");

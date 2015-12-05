@@ -45,17 +45,11 @@ bool TableBuilder::runOn (
 	#define last (ct_root->children.end() - 1)
 	#define lastIs(x) (*(last))->node_type == CrossTerminal::x
 	if (nodeIs(ENTER)) {
-		if (child1Is(KEYWORD_GRANT)) {
-			if (child2Is(IDENTIFIER_CONSTEXPR)) {
-				// std::cout << child2Lex << std::endl;
-			} else if (child2Is(IDENTIFIER_CLASS)) {
-				// std::cout << child2Lex << std::endl;
-			}
+	}
+	if (ct_root->children.size() > 0)
+		if (lastIs(ENTER)) {
+			runOn(*last, qualified_name);
 		}
-	}
-	if (lastIs(ENTER)) {
-		runOn(*last, qualified_name);
-	}
 	#undef child3Is
 	#undef child2Is
 	#undef child1Is

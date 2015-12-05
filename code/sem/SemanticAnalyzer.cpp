@@ -102,10 +102,8 @@ bool SemanticAnalyzer::checkTree(const protocols::SyntaxTree *tree) const
 			correct &= isAnyOf(child(0), CrossTerminal::EPSILONATE,
 				CrossTerminal::KEYWORD_PUBLIC, CrossTerminal::KEYWORD_PRIVATE,
 				CrossTerminal::KEYWORD_RESTRICTED);
-			correct &= isAnyOf(child(1), CrossTerminal::EPSILONATE,
-				CrossTerminal::KEYWORD_GLOBAL);
-			correct &= isAnyOf(child(2), CrossTerminal::TYPE);
-			correct &= isAnyOf(child(3), CrossTerminal::DATA_NAMES);
+			correct &= isAnyOf(child(1), CrossTerminal::TYPE);
+			correct &= isAnyOf(child(2), CrossTerminal::DATA_NAMES);
 			return runs();
 		case CrossTerminal::TYPE:
 			correct &= isAnyOf(child(0), CrossTerminal::EPSILONATE,
@@ -171,7 +169,6 @@ bool SemanticAnalyzer::checkTree(const protocols::SyntaxTree *tree) const
 		case CrossTerminal::EPSILONATE:
 		case CrossTerminal::KEYWORD_DOUBLE:
 		case CrossTerminal::KEYWORD_FLOAT:
-		case CrossTerminal::KEYWORD_GLOBAL:
 		case CrossTerminal::KEYWORD_PRIVATE:
 		case CrossTerminal::KEYWORD_PUBLIC:
 		case CrossTerminal::KEYWORD_RESTRICTED:

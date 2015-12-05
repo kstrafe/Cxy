@@ -27,14 +27,13 @@ TEST_CASE("Test the semantic analyzer", "[test-SemanticAnalyzer]")
 	using St = tul::protocols::SyntaxTree;
 
 	// Various building procedures
-	auto var = [](St *access, St *globality, St *type, St *declaration)
+	auto var = [](St *access, St *type, St *declaration)
 		-> St *
 		{
 			return new St(
 				CrossTerminal::KEYWORD_VAR,
-				{access, globality, type, declaration});
+				{access, type, declaration});
 		};
-	auto global = [](){ return new St(CrossTerminal::KEYWORD_GLOBAL); };
 	auto tprivate = []() { return new St(CrossTerminal::KEYWORD_PRIVATE); };
 	auto tpublic = []() { return new St(CrossTerminal::KEYWORD_PUBLIC); };
 	auto trestricted = []() { return new St(CrossTerminal::KEYWORD_RESTRICTED); };
@@ -82,7 +81,6 @@ TEST_CASE("Test the semantic analyzer", "[test-SemanticAnalyzer]")
 		top.reset(enter(
 			var(
 				tpublic(),
-				global(),
 				type(eps(), intu(32)),
 				namelist(
 					"test",
@@ -99,13 +97,12 @@ TEST_CASE("Test the semantic analyzer", "[test-SemanticAnalyzer]")
 		/* var 32u a = 1; */
 		top.reset(enter(
 			var(
-				eps(), eps(), type(eps(), intu(32)),
+				eps(), type(eps(), intu(32)),
 				namelist( "a", unary_expr( minus(),
 					integer("1")), eps())), eps()));
 		REQUIRE(semant.checkTree(top.get()));
 		top.reset(enter(
 			var(
-				eps(),
 				eps(),
 				type(eps(), intu(32)),
 				namelist( "a",
@@ -118,7 +115,6 @@ TEST_CASE("Test the semantic analyzer", "[test-SemanticAnalyzer]")
 		top.reset(enter(
 			var(
 				eps(),
-				eps(),
 				type(eps(), intu(32)),
 				namelist("a",
 					div_expr(
@@ -130,7 +126,6 @@ TEST_CASE("Test the semantic analyzer", "[test-SemanticAnalyzer]")
 		top.reset(enter(
 			var(
 				eps(),
-				eps(),
 				type(eps(), intu(32)),
 				namelist("a",
 					div_expr(
@@ -141,7 +136,6 @@ TEST_CASE("Test the semantic analyzer", "[test-SemanticAnalyzer]")
 		REQUIRE(semant.checkTree(top.get()));
 		top.reset(enter(
 			var(
-				eps(),
 				eps(),
 				type(eps(), intu(32)),
 				namelist("a",

@@ -98,17 +98,9 @@ TEST_CASE("AbstractSyntaxTreeGenerator must validate the grammar.", "[test-Abstr
 
 	doValidation(R"(
 		(:) doStuff {}
-		grant Aa {
-			(:) a;
-		}
 		public var Aa a;
 	)");
 	doValidation(R"(
-		grant Aa = sml.String {
-			(:) >;
-			var ptr 1u dude;
-		}
-		grant EBBA [EBBA + DERP, ptr [3, 8u]];
 	)");
 	#undef doValidation
 }

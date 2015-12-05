@@ -33,7 +33,6 @@ protocols::TokenType KeywordMatcher::getKeyword(const std::string &lexeme)
 	else if (lexeme == "private") return TokenType::KEYWORD_PRIVATE;
 	else if (lexeme == "delete") return TokenType::KEYWORD_DELETE;
 	else if (lexeme == "double") return TokenType::KEYWORD_DOUBLE;
-	else if (lexeme == "global") return TokenType::KEYWORD_GLOBAL;
 	else if (lexeme == "lambda") return TokenType::KEYWORD_LAMBDA;
 	else if (lexeme == "public") return TokenType::KEYWORD_PUBLIC;
 	else if (lexeme == "return") return TokenType::KEYWORD_RETURN;
@@ -44,7 +43,6 @@ protocols::TokenType KeywordMatcher::getKeyword(const std::string &lexeme)
 	else if (lexeme == "debug") return TokenType::KEYWORD_DEBUG;
 	else if (lexeme == "defer") return TokenType::KEYWORD_DEFER;
 	else if (lexeme == "float") return TokenType::KEYWORD_FLOAT;
-	else if (lexeme == "grant") return TokenType::KEYWORD_GRANT;
 	else if (lexeme == "label") return TokenType::KEYWORD_LABEL;
 	else if (lexeme == "throw") return TokenType::KEYWORD_THROW;
 	else if (lexeme == "while") return TokenType::KEYWORD_WHILE;

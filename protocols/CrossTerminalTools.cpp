@@ -90,9 +90,7 @@ bool CrossTerminalTools::isKeyword(const CrossTerminal &ct_)
 		case CrossTerminal::KEYWORD_FLOAT: return true;
 		case CrossTerminal::KEYWORD_FOR: return true;
 		case CrossTerminal::KEYWORD_FOREACH: return true;
-		case CrossTerminal::KEYWORD_GLOBAL: return true;
 		case CrossTerminal::KEYWORD_GOTO: return true;
-		case CrossTerminal::KEYWORD_GRANT: return true;
 		case CrossTerminal::KEYWORD_HACK: return true;
 		case CrossTerminal::KEYWORD_IF: return true;
 		case CrossTerminal::KEYWORD_IN: return true;
@@ -177,7 +175,6 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 	switch (cross_terminal)
 	{
 		case protocols::CrossTerminal::ACCESS_SPECIFIER: return "ACCESS_SPECIFIER";
-		case protocols::CrossTerminal::ACCESS_SPECIFIER_READABLE: return "ACCESS_SPECIFIER_READABLE";
 		case protocols::CrossTerminal::ADDITIVE_EXPRESSION: return "ADDITIVE_EXPRESSION";
 		case protocols::CrossTerminal::AND_EXPRESSION: return "AND_EXPRESSION";
 		case protocols::CrossTerminal::ARGUMENT: return "ARGUMENT";
@@ -205,10 +202,8 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::CONSTRUCT_STATEMENT: return "CONSTRUCT_STATEMENT";
 		case protocols::CrossTerminal::CONTINUE_STATEMENT: return "CONTINUE_STATEMENT";
 		case protocols::CrossTerminal::DATA_DECLARATION_LIST: return "DATA_DECLARATION_LIST";
-		case protocols::CrossTerminal::DATA_DECLARATION_LIST_GRANT: return "DATA_DECLARATION_LIST_GRANT";
 		case protocols::CrossTerminal::DATA_DECLARATION_STATEMENT: return "DATA_DECLARATION_STATEMENT";
 		case protocols::CrossTerminal::DATA_DECLARATION_TYPE: return "DATA_DECLARATION_TYPE";
-		case protocols::CrossTerminal::DATA_DECLARATION_TYPE_GRANT: return "DATA_DECLARATION_TYPE_GRANT";
 		case protocols::CrossTerminal::DATA_NAMES: return "DATA_NAMES";
 		case protocols::CrossTerminal::DATA_NAMES_LIST: return "DATA_NAMES_LIST";
 		case protocols::CrossTerminal::DEBUG_STATEMENT: return "DEBUG_STATEMENT";
@@ -232,9 +227,6 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::FUNCTION_NAMES: return "FUNCTION_NAMES";
 		case protocols::CrossTerminal::FUNCTION_SIGNATURE: return "FUNCTION_SIGNATURE";
 		case protocols::CrossTerminal::GOTO_STATEMENT: return "GOTO_STATEMENT";
-		case protocols::CrossTerminal::GRANT_LIST: return "GRANT_LIST";
-		case protocols::CrossTerminal::GRANT_LIST_ACCESS: return "GRANT_LIST_ACCESS";
-		case protocols::CrossTerminal::GRANT_TYPE: return "GRANT_TYPE";
 		case protocols::CrossTerminal::GROUPER_LEFT_BRACE: return "GROUPER_LEFT_BRACE";
 		case protocols::CrossTerminal::GROUPER_LEFT_BRACKET: return "GROUPER_LEFT_BRACKET";
 		case protocols::CrossTerminal::GROUPER_LEFT_PARENTHESIS: return "GROUPER_LEFT_PARENTHESIS";
@@ -270,9 +262,7 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::KEYWORD_FLOAT: return "KEYWORD_FLOAT";
 		case protocols::CrossTerminal::KEYWORD_FOR: return "KEYWORD_FOR";
 		case protocols::CrossTerminal::KEYWORD_FOREACH: return "KEYWORD_FOREACH";
-		case protocols::CrossTerminal::KEYWORD_GLOBAL: return "KEYWORD_GLOBAL";
 		case protocols::CrossTerminal::KEYWORD_GOTO: return "KEYWORD_GOTO";
-		case protocols::CrossTerminal::KEYWORD_GRANT: return "KEYWORD_GRANT";
 		case protocols::CrossTerminal::KEYWORD_HACK: return "KEYWORD_HACK";
 		case protocols::CrossTerminal::KEYWORD_IF: return "KEYWORD_IF";
 		case protocols::CrossTerminal::KEYWORD_IN: return "KEYWORD_IN";
@@ -296,7 +286,6 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::KEYWORD_WHEN: return "KEYWORD_WHEN";
 		case protocols::CrossTerminal::KEYWORD_WHILE: return "KEYWORD_WHILE";
 		case protocols::CrossTerminal::LABEL_STATEMENT: return "LABEL_STATEMENT";
-		case protocols::CrossTerminal::LOCALITY_SPECIFIER: return "LOCALITY_SPECIFIER";
 		case protocols::CrossTerminal::MEMBER_DEFINITION: return "MEMBER_DEFINITION";
 		case protocols::CrossTerminal::MEMBER_EXPRESSION: return "MEMBER_EXPRESSION";
 		case protocols::CrossTerminal::METHOD_DECL_OR_DEF: return "METHOD_DECL_OR_DEF";
@@ -321,10 +310,8 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::OPTIONAL_BITWISE_OR_EXPRESSION: return "OPTIONAL_BITWISE_OR_EXPRESSION";
 		case protocols::CrossTerminal::OPTIONAL_BITWISE_XOR_EXPRESSION: return "OPTIONAL_BITWISE_XOR_EXPRESSION";
 		case protocols::CrossTerminal::OPTIONAL_CAPTURE_LIST: return "OPTIONAL_CAPTURE_LIST";
-		case protocols::CrossTerminal::OPTIONAL_CLASS_GRANT_DEFAULT: return "OPTIONAL_CLASS_GRANT_DEFAULT";
 		case protocols::CrossTerminal::OPTIONAL_COLON_LIST: return "OPTIONAL_COLON_LIST";
 		case protocols::CrossTerminal::OPTIONAL_COLON_LIST_AFTER_COMMA: return "OPTIONAL_COLON_LIST_AFTER_COMMA";
-		case protocols::CrossTerminal::OPTIONAL_CONSTEXPR_GRANT_DEFAULT: return "OPTIONAL_CONSTEXPR_GRANT_DEFAULT";
 		case protocols::CrossTerminal::OPTIONAL_CONSTRUCTOR_LIST: return "OPTIONAL_CONSTRUCTOR_LIST";
 		case protocols::CrossTerminal::OPTIONAL_CONSTRUCT_LIST: return "OPTIONAL_CONSTRUCT_LIST";
 		case protocols::CrossTerminal::OPTIONAL_DATA_DECLARATION: return "OPTIONAL_DATA_DECLARATION";
@@ -334,8 +321,6 @@ std::string CrossTerminalTools::toString(protocols::CrossTerminal cross_terminal
 		case protocols::CrossTerminal::OPTIONAL_EQUALITY_EXPRESSION: return "OPTIONAL_EQUALITY_EXPRESSION";
 		case protocols::CrossTerminal::OPTIONAL_EXPRESSION: return "OPTIONAL_EXPRESSION";
 		case protocols::CrossTerminal::OPTIONAL_EXTRACTOR_EXPRESSION: return "OPTIONAL_EXTRACTOR_EXPRESSION";
-		case protocols::CrossTerminal::OPTIONAL_FUNCTION_NAME_LIST: return "OPTIONAL_FUNCTION_NAME_LIST";
-		case protocols::CrossTerminal::OPTIONAL_GRANT_LIST: return "OPTIONAL_GRANT_LIST";
 		case protocols::CrossTerminal::OPTIONAL_LOOP_NAME: return "OPTIONAL_LOOP_NAME";
 		case protocols::CrossTerminal::OPTIONAL_MEMBER_EXPRESSION: return "OPTIONAL_MEMBER_EXPRESSION";
 		case protocols::CrossTerminal::OPTIONAL_MULTIPLICATIVE_EXPRESSION: return "OPTIONAL_MULTIPLICATIVE_EXPRESSION";
