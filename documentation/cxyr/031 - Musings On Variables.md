@@ -2362,10 +2362,10 @@ grammar. Let's do it.
 	ACCESS ::= 'private' | 'public' | 'restricted' ;
 	DATA ::=
 		{ TYPE (
-		        name [ ':' name | '=' EXPR | CONSTR ]
-		        | '{' { name [ ':' name | '=' EXPR | CONSTR ] }+ \{ ',' } '}'
+		        name [ ':' name | '=' EXPR | ARG ]
+		        | '{' { name [ ':' name | '=' EXPR | ARG ] }+ \{ ',' } '}'
 		       )
-		}+ \{ ',' } [ ',' ] [ = EXPR ] ';' ;
+		}+ \{ ',' } [ ',' ] [ '=' EXPR ] ';' ;
 	ENUM ::= { enum  ['=' EXPR] }+ \{ ',' } [ ',' ] ';' ;
 	METHOD ::= SIGNATURE name STATEMENT ;
 	SIGNATURE ::= '('
@@ -2376,10 +2376,16 @@ grammar. Let's do it.
 	                                 )
 	                 } \{ ',' } [ ',' ]
 	                )
-	                 ':' $1 [':' ['const'] ['pure']]
+	                 ':' $1 [ ':' [ 'const' ] [ 'pure' ] ]
 	              ')' ;
+	ARG ::= '(' { EXPR [ ':' EXPR ]
+	            | '{' { name ':' name }* \{ ',' } '}' ':' EXPR
+	            }* \{ ',' } [ ',' ]
+	        ')'
+
+	// Type and Expressions
 	TYPE ::=
-		'type' '[' name ']' | 'ptr' TYPE | 'ref' TYPE | 'const' TYPE
+		[ TYPE ] 'type' '[' name ']' | 'ptr' TYPE | 'ref' TYPE | 'const' TYPE
 		| '[' { EXPR }+ \{ ',' } ',' TYPE ']'
 		| 'enum' '[' TYPE ']
 		| typename '[' { TYPE [ ':' TYPE ] | EXPR [ ':' EXPR ] } ']'
@@ -2409,4 +2415,76 @@ Let's say you can't use types directly in expressions, this means that whatever 
 with a type becomes a valid assignment. I'm considering not allowing field-initializers
 since I'm afraid they can cause confusion. Say you have a variable set to 1, but
 the constructor says to construct with 0. What is used? How does it relate to other
-operations and impure operations?
+operations and impure operations? Let's just say the constructors must not branch
+and will simply create a new object. In the beginning, the object is not constructed
+at all. This allows us to save computing time. The nice thing about field initializers
+is that they're so well understood, languages use them. People love them. They're
+fast and easy. What about the ambiguity:
+
+	a, b = f();
+
+We could disallow the = per unit. I really don't want the := operator in the language.
+My solution is to not allow combinations of ':' and '='. The method of using:
+
+	EXPR '=>' { TYPE name [ ':' name] | EXPR } ';'
+
+Could be interesting, but we get the same problem with EXPR/type confusion. This
+is the core of the issue. EXPR can have the same FIRST set as TYPE. How is this solved?
+One could have a universal type prefix for types inside exprs.
+
+	type[[32, 64se]]~
+	::[32, 5, 1, 8u]~size + ...
+
+I like the use of '::'
+
+	::MyClass::coolFunction(300);
+	::Io::write(::MyClass::coolFunction(300));
+	::name::Space~size + 9;
+
+Some kind of element that differentiates the FIRST sets. '::' is rather large. It
+can be shortened to '?', or some other token.
+
+	<MyClass>~size
+	<name::Space[32u]>
+
+I kinda like that. You're never going to nest these, the only trouble are the <>
+operators, these will clash. Yeah I can just say that types aren't allowed in expressions
+and that everything must be an object in an expression. The initial solution. I really
+wish to be able to separate types from expressions. That would be beautiful. The
+problem is just having this FIRST set being incompatible. Ugh,..
+
+Now ARG is clashing with the lists {}.... I really need to revise the grammar so
+it doesn't have these lookahead clashes. Hopefully the grammar can be augmented.
+It's the idea that matters (the design of the language). Not so much the syntax.
+At the heart of the issue lie expressions and types. Types can be a part of an expression,
+types may include expressions (arrays, grants). Expressions may include types. This
+leads to a clash. Yeah I think the solution is just to remove types from expressions
+altogether. Let's just use CONSTEXPR objects instead.
+
+	auto x = f();
+	32u a = x~a, b = x~d;
+	type[a] A;
+	A + 3;  // Not a type because of the CONSTEXPR
+
+Now the remaining conflict is the {} and {} list in arguments. Using [] would clash
+with arrays:
+
+	[ ...  // Array declaration or expression?
+	array[32u, size: 10]  // Clear as day.
+	[] 100 20 [] 5 32u a;
+	[10, 32u] a = array { 1 3 9, 9 };
+
+I like that last one. It's a special operator of sorts. Why not allow {}? Because
+it clashes with scope. Maybe expressions should not be allowed all alone on a line.
+Maybe var is the true solution to all problems. But it does not justify extraction.
+
+	= f() =>
+		Type {a, b}, c: d;
+	[3, 32u] a = {1 2 3};
+
+I really wish to make all operations easy to parse by using an appropriate lookahead.
+
+	var 32u d;
+	var {Type {a: x, b: y}, my::Class c: z}, d = f();
+
+This kinda does var a favor. By forcing var, we're giving a strong enough hint.
