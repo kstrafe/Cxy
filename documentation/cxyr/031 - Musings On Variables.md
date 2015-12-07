@@ -2487,4 +2487,152 @@ I really wish to make all operations easy to parse by using an appropriate looka
 	var 32u d;
 	var {Type {a: x, b: y}, my::Class c: z}, d = f();
 
-This kinda does var a favor. By forcing var, we're giving a strong enough hint.
+This kinda does var a favor. By forcing var, we're giving a strong enough hint. So
+we could just idealize using that.
+
+	10u a, b(130), c;
+	a, b, c = f();  // { EXPR }+ \{ ',' } [ '=' EXPR ] ;
+	a: derp, b: out, c: control = f();  // { EXPR [ ':' name ] }+ \{ ',' } [ '=' EXPR ] ;
+
+I really like that last one. It's so clean. It also filters initialization from actual
+expressions (assignment). By disallowing '=',... we could still salvage the fexpr:
+
+	Type {a, b: c}, d: y, 10u e: x = f();
+
+I think that's quite hard to read. I'm skilled in reading Cxy but I find this hard
+to decode
+
+	Type {a, b: c},
+		d: y,
+		10u e: x
+		= f();
+
+No, I don't like this at all.
+
+	f() {
+		Type a = control;
+		32u b = out;
+		c = d;
+	};
+
+What about that extractor syntax? Just ... no? `EXPR '{' { STAT } '}'`. Nah man.
+The extraction syntax is very much liked:
+
+	x[3 + i]: my_name, extractor.name: controller = name.getClassMember()~ground()~holdUp();
+
+I really enjoy that syntax. It's just python but with names. I want to make the language
+more simple. Especially with the variable declaration syntax as it is.
+
+	Type mytype, yourtype(0.3), ourtype(399, count: 50);
+	32u a(30);
+	ptr 800u(new(20){123});
+
+This would make the grammar a whole lot simpler. Also we can prefix types with '::'
+to make them usable in expressions:
+
+	::Type::CONSTANT  ...
+	for (32ue i(0); i < ::name::Space[Aa]::CONSTANT; ++i) {
+	}
+
+To be honest, using i(0) feels awkward. Not being allowed to assign upon creation
+feels slightly awkward. I think I can get used to it though. It's better practice.
+
+	Type mytype;
+	mytype = ::Type(0.3);
+
+So what about arrays? `[` vs { vs (. array{} is something I like.
+
+	// Class-Scope
+	CLASS ::= { [ ACCESS ] ( DATA | ENUM | METHOD ) } ;
+	ACCESS ::= 'private' | 'public' | 'restricted' ;
+	DATA ::= TYPE { name [ ARG ] }+ ';' ;
+	ENUM ::= { enum [ ARG ] }+ ';' ;
+	METHOD ::= SIGNATURE name STATEMENT ;
+	SIGNATURE ::= '(' ( { DATA | 'this' } )
+	                   ':' $1 [ ':' [ 'const' ] [ 'pure' ] ]
+	              ')' ;
+	ARG ::= '(' { EXPR [ ':' EXPR ]
+	            | '{' { name ':' name }* \{ ',' } '}' ':' EXPR
+	            }* \{ ',' } [ ',' ]
+	        ')'
+	TYPE ::=
+	FEXPR ::= { EXPR [ ':' name ] }+ [ '=' EXPR ] ;  // A statement
+	EXPR ::= { EXPR }+ ;
+
+Some of the changes that are planned. As can be seen, typedecls are very simple now.
+What I don't like is that signatures may contain `Type {a, b, c}`. This is dissimilar
+compared to the `DATA` clause.
+
+	(Type a, b, c; 32u out; 32f e(0.34);  :  anon in, second; 8u cool;) doSomething {
+		cool: out, out: something = passOn(anon);
+	}
+
+I like it! The only ugliness is that the colon is barely visible. Also this means
+I can use the 'data' declaration inside the signature. Awesome! Oh, and guess what,
+the constructor is included in that, so standard variables! Smooth. That's really
+smooth man. I'd suggest just putting in two spaces around the ':' marker. To make
+it clear where it is. That's easier to scan. Another idea I have is to let everything
+you pass as a [] argument to classes - passthrough automatically, such that libraries
+are easier to integrate. Nobody likes just passing around mindlessly. However, it's
+still possible to overwrite the classes in the lower subclasses:
+
+	Type my type from(0.9);  // Local type decl.
+	32u control variable three(50) ABSOLUTE(10);  // Local and constexpr variable
+	HAS_CONTROL NO_CONTROL LOST_CONTROL TOTAL_CONTROL(4);  // Enumeration
+
+	(:: pure) enter {
+		Io out(::Io::STDOUT_FLAG);
+		out << "Simplify!";  // Simplify is of type `ptr 8u`, and is null-terminated.
+		String myString("Simplify!");
+		out << myString;  // Simplify is of type `String`, and is not null-terminated.
+		out << myString * 2;
+	}
+
+	(32f out;  :  32f a b c x y z;) dotProduct {
+		out = a*x + b*y + c*z;
+	}
+
+Looks pretty nice without the commas as well, maybe I'll keep that, and replace the
+semicolons with commas? Maybe. No. This is beautiful. I absolutely love it. It looks
+so clean and refreshing compared to C++. Just spaces. Easier to write, easier to
+read, easier to organize. So arrays, what about them? `{}` is out of the question
+as it clashes. `[` is out of the question, it clashes. `(` is out of the question,
+it clashes. What's left? Any groupers? Anybody?
+
+	[10, 8u] wow hey you;
+	(:) enter {
+		wow = ('a' 'b' 'c');
+		hey = ('h' 'e' 80 10+48*3 0-3*8);
+		you = (0-3 0-6 0-9);
+	}
+
+Only thing I dislike is that - expressions clash with the unary minus operator. It's
+still pretty darn clean though. I like that.
+
+	EXPR ::= '(' { EXPR }+ ')' ;
+
+Becomes a rule. Maybe '--' can be a prefix operator. But that mixes badly with the
+iterative -- already. `%-` can be seen as the 'blocking negation'.
+
+	[10, 8u] wow hey you;
+	(:) enter {
+		wow = ('a' 'b' 'c');
+		hey = ('h' 'e' !+80 !-10+48*3 !-3*8);
+		you = (0-3 0-6 0-9);
+		wow = 'a' 'b' 30 0 !-3;
+	}
+
+Using % is kinda ugly though. Maybe \ will do. Hey! It's also an escape sequence?
+But it doesn't do well for expressions, because we expect a binary operator. Perhaps
+something like # could be used. I like ! though. It also gives a nice delimiting
+feel to the expressions.
+
+	(: ptr 8u ar; 32u length; 8u in) doSomething {
+		// do something
+	}
+
+	(:) enter {
+		doSomething(ar, length: length = 1 2 3 4 5 6 7 8; 8+9;);
+	}
+
+Using FEXPR inside arguments... I don't know anymore. It's ... beautiful.
