@@ -2546,18 +2546,27 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 	CLASS ::= { [ ACCESS ] ( DATA | ENUM | METHOD ) } ;
 	ACCESS ::= 'private' | 'public' | 'restricted' ;
 	DATA ::= TYPE { name [ ARG ] }+ ';' ;
-	ENUM ::= { enum [ ARG ] }+ ';' ;
-	METHOD ::= SIGNATURE name STATEMENT ;
+	ENUM ::= { ename [ ARG ] }+ ';' ;
+	METHOD ::= SIGNATURE mname STATEMENT ;
 	SIGNATURE ::= '(' ( { DATA | 'this' } )
 	                   ':' $1 [ ':' [ 'const' ] [ 'pure' ] ]
 	              ')' ;
-	ARG ::= '(' { EXPR [ ':' EXPR ]
-	            | '{' { name ':' name }* \{ ',' } '}' ':' EXPR
-	            }* \{ ',' } [ ',' ]
-	        ')'
-	TYPE ::=
-	FEXPR ::= { EXPR [ ':' name ] }+ [ '=' EXPR ] ;  // A statement
-	EXPR ::= { EXPR }+ ;
+	ARG ::= '(' { FEXPR }* ')'
+	FEXPR ::= { EXPR [ ':' mname ] }+ \{ ',' } [ '=' EXPR ] ';' ;  // A statement
+
+	EXPR ::= { EXPR }+  // a || b.c(d=e;) + f / ::Io::G;
+		| EXPR ( '||' | '&&' | '|' | '^' | '&' | '==' | '!=' | '>' | '<' | '>=' | '<='
+		       | '<<' | '>>' | '+' | '-' | '*' | '/' | '%' | '\'
+		       ) EXPR
+		| ( '!+' | '!-' | '!!' | '!' | '@' | '$' | '$$' ) EXPR
+		| 'cast' '[' EXPR ']' | '(' EXPR ')'
+		| EXPR ARR | EXPR ARG EXPR
+		| [ '::' [ pname '::' ] cname '::' ] name | EXPR [ MEMBER ]
+		| ;
+	MEMBER ::= ( '.' | '->' | '~' ) name [ ARG | ARR ] [ MEMBER ] ;
+	TYPE ::= primitive | ptr TYPE | ref TYPE | const TYPE | ptr SIGNATURE | '[' EXPR TYPE ']' |
+		[ pname '::' ] cname [ GRANT ] | 'type' '[' mname ']' ;
+	GRANT ::= '[' { cname '=' TYPE ';' | FEXPR }+ ']'
 
 Some of the changes that are planned. As can be seen, typedecls are very simple now.
 What I don't like is that signatures may contain `Type {a, b, c}`. This is dissimilar
@@ -2633,6 +2642,12 @@ feel to the expressions.
 
 	(:) enter {
 		doSomething(ar, length: length = 1 2 3 4 5 6 7 8; 8+9;);
+		32f a, b;
+		a, b: error = sin(0.321;);
+		ptr 32u a; 32u l;
+		a, l: length = 1 2 9 7 !-2384 'd';
+		for (32ue i(0); i < l; ++i)
+			::Io << a[l];
 	}
 
 Using FEXPR inside arguments... I don't know anymore. It's ... beautiful.
