@@ -2548,25 +2548,24 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 	DATA ::= TYPE { name [ ARG ] }+ ';' ;
 	ENUM ::= { ename [ ARG ] }+ ';' ;
 	METHOD ::= SIGNATURE mname STATEMENT ;
-	SIGNATURE ::= '(' ( { DATA | 'this' } )
-	                   ':' $1 [ ':' [ 'const' ] [ 'pure' ] ]
-	              ')' ;
-	ARG ::= '(' { FEXPR }* ')'
-	FEXPR ::= { EXPR [ ':' mname ] }+ \{ ',' } [ '=' EXPR ] ';' ;  // A statement
-
-	EXPR ::= { EXPR }+  // a || b.c(d=e;) + f / ::Io::G;
+	SIGNATURE ::= '(' ( { DATA | 'this' } ) ':' $1 [ ':' [ 'const' ] [ 'ctor' ] [ 'dtor' ] [ 'pure' ] ] ')' ;
+	ARG ::= '(' { FEXPR }* \{ ';' } ')'
+	FEXPR ::= { EXPR [ ':' mname ] }+ \{ ',' } [ '=' EXPR ] ;  // A FEXRP statement
+	EXPR ::= { EXPR }+  // Increasing precedence downward
 		| EXPR ( '||' | '&&' | '|' | '^' | '&' | '==' | '!=' | '>' | '<' | '>=' | '<='
 		       | '<<' | '>>' | '+' | '-' | '*' | '/' | '%' | '\'
 		       ) EXPR
 		| ( '!+' | '!-' | '!!' | '!' | '@' | '$' | '$$' ) EXPR
 		| 'cast' '[' EXPR ']' | '(' EXPR ')'
 		| EXPR ARR | EXPR ARG EXPR
-		| [ '::' [ pname '::' ] cname '::' ] name | EXPR [ MEMBER ]
+		| EXPR ( '~' | '.' | '->' ) EXPR
+		| '::' TYPE
+		| EXPR '::' EXPR
+		| name | number | string
 		| ;
-	MEMBER ::= ( '.' | '->' | '~' ) name [ ARG | ARR ] [ MEMBER ] ;
 	TYPE ::= primitive | ptr TYPE | ref TYPE | const TYPE | ptr SIGNATURE | '[' EXPR TYPE ']' |
 		[ pname '::' ] cname [ GRANT ] | 'type' '[' mname ']' ;
-	GRANT ::= '[' { cname '=' TYPE ';' | FEXPR }+ ']'
+	GRANT ::= '[' { TYPE | cname '=' TYPE ';' | FEXPR }+ ']'
 
 Some of the changes that are planned. As can be seen, typedecls are very simple now.
 What I don't like is that signatures may contain `Type {a, b, c}`. This is dissimilar
@@ -2651,3 +2650,265 @@ feel to the expressions.
 	}
 
 Using FEXPR inside arguments... I don't know anymore. It's ... beautiful.
+
+	[10 32u] a(1 2 3 4 A+B f() c()~d+3/GNUM ::math::exp(::math::EULER, power: 3) 0 0);
+
+I kinda like it. It's easy to type. I suppose it's not recommended to put several
+big expressions inside. Also what about the array size type? Use zero for automatic
+detection? Or just leave out the number altogether?
+
+	[32u] a ( 1 2 3 );  // Size 3.
+	(:: pure) enter {
+		a[1], a[2]: second = f();
+	}
+
+The comma in the expression list is to avoid writing an array (since that's a valid
+expression). I think we're pretty far now. FEXPR inside arguments. I like it! This
+will be so clean holy shit. I think I need to write some more example code in it
+though:
+
+	public (113ue out : 5ue in) factorial {
+		out = in;
+		--in;
+		while (in > 1)
+			out *= in;
+	}
+
+	private (String out : 113u in) toString {
+		out = ::String::parse(cast[128u](in));
+	}
+
+	private (32ue out : Array[32ue] in) sum {
+
+		out = 0;
+		Array[32ue] partial_sum(size=in.size);
+		partial_sum[0] = 0;
+		for (32ue counter(0); counter < in.size; ++counter) {
+			out += in[counter];
+			if (counter > 0)
+				partial_sum[counter] = partial_sum[counter - 1] + in[counter];
+		}
+
+	}
+
+	(:) enter {
+		try {
+			sml.out << factorial(30);
+			debug "what's going on man";
+		} catch {
+			::Sml::INTEGER_OVERFLOW {
+			}
+		}
+	}
+
+Where sml is a granted object. Since grants are automatically down-propagated, there
+is no problem in just using this all over the place. So we got everything that's
+needed for a practical language! Good. Though, I find it kinda verbose to be honest.
+Maybe I should compare code to the C++ equivalent or Python equiv.
+
+	# The above
+	fun factorial(n):
+		m = n
+		n -= 1
+		while (n > 1)
+			m *= n
+		return m
+
+	fun sum(arr):
+		out = 0
+		arr = [0] * len(arr)
+		partial_sum = [0] * len(arr)
+		for i in range(0, len(arr)):
+			out += arr[i]
+			if i > 0:
+				partial_sum[i] = partial_sum[i-1] + arr[i]
+		return out, partial_sum
+
+My code is somewhat bigger in size. It's somewhat more verbose. Then again, it has
+types. Types add a lot of information. Now to polish the grammar. We have statements,
+these are independent of the 'core' of the language, which only has 3 statements:
+
+	STAT ::= FEXPR ';' ;
+		| 'label' name ';'
+		| 'goto' name EXPR ';'
+
+Where the expr in goto is an integer or boolean result. This allows all kinds of
+things like loops to exist. So the core of the language is really:
+
+	Data declaration + Granting
+	Method declaration
+	Assignment/FEXPRs
+	Gotos
+
+That's pretty minimal if you ask me. I just need to work a little on the FEXPRs.
+I really like them, that's for sure. Now let's look at function calls:
+
+	object.myFunctionName(name="do whatever you want"; size=3; control, inside: out = cool());
+
+That looks really smooth actually. Really smooth. I like it. What about default arguments?
+These tend to look like:
+
+	(: 32u a(1023) b(40), ptr Type c(new)) doSomething { ... }
+
+Now, what's unnerving is that the initialization is inside the type of the function.
+I'd really like to have it on the outside, but it gives us such useful information
+about the function. In addition, it's really useful when calling a function and you
+just want to add a single parameter, suppose I start with the following:
+
+	(32f out : (32f out : 32f in) in, 32f from, to ) integrate {
+		...
+	}
+
+Which is called using
+
+	integrate(
+	          lambda (32f out : 32f in) { out = ::Math::exp(!-::Math::pow(in, power: 2)); };
+	          from=0;
+	          to=10
+	         );
+
+But one day we want to add a parameter which is the following
+
+	(32f out : (32f out : 32f in) in, 32f from, to, enum[Math] method) integrate {
+		...
+	}
+
+Now you can't use the function because method has to be given. Instead, this is desirable:
+
+
+	(32f out : (32f out : 32f in) in, 32f from, to,
+		enum[Math] method(::Math::SIMPSONS_METHOD)) integrate {
+		...
+	}
+
+This makes the default argument be simpsons method (it's a method to numerically
+integrate a function. I really like the idea of having this ultra simple unifying
+syntax. The thickness of it! Maybe overloads will do though. How will casts affect
+overloads?
+
+	ptr (: 32u takes, these, arguments; 32f with, these, names)
+		a(cast[(: ...)](myObj.memberFun));
+
+Where the cast expansion ... is the same as in the signature of a. Should a be auto?
+My intuition says 'yes!'. How do I formalize the method of automated casting for
+initializers? Any initializer will cast to the appropriate type (or try to). Problem
+with that is that I could assign an integer to the type and it would fail at call
+time. Difficult decisions... What if we don't allow overloading? What if we just
+say that each function has only one signature. But, you can of course avoid setting
+an argument. This means that the argument wasn't passed. The function can use that
+information to specialize certain cases. This does however bar us from using different
+types for the function signature. That's rather sad, I'd love to see the following:
+
+	(: 32f in) name ...
+	(: 64f in) name ...
+
+Just depending on the in parameter. I like the idea of overloading. Just gotta keep
+in mind how casting affects it. So overloading is fine. Is it sufficiently elegant?
+Anyways, as we know, the top-level class-signature is syntactic sugar for just declaring
+a CONSTEXPR member variable to the object. That's the equivalent of what it does.
+Granting is a powerful system as well. You can't really fight it. I'm concerned about
+the manageability though. The thing is, sometimes you won't really know where a class
+comes from. It's just there. You know it doesn't come from directly above, it may
+come from multiple levels up. You gotta scout the class out. Rather annoying actually.
+What about constructor semantics? I'd like to see that come to fruition. Just call
+
+	MyClass myobject;
+	myobject.construct();  // Actually initialize the object
+
+This will require no 'construct' syntax or anything similar. I like it. It's simple.
+But what about the destruction? Will destruction always take place even if the object
+has not been constructed? That's rather antiintuitive. An explicit destructor goes
+against the point of having a destructor at all. I think it's fair to say that all
+new objects call the default constructor. What about const-initialization in the
+constructor though? Well, we could do like Java does and just leave that the constructor
+free to change any const member. Also, do we need to call all composite constructors
+before the constructor starts? What if we want to construct them with something interesting?
+Say a const or something like that. How is that done? Do we just need to re-call
+the appropriate constructor on it? Wouldn't that be a waste?
+
+The whole language is syntactic sugar for a class-definition language with lambdas.
+That's the deal. DDL, Data-Definition Language.
+
+	DATA ::= TYPE { name [ ARG ] }+ ';' ;
+
+Simple. Then we have the MDL, Method-Definition Language.
+
+	METHOD ::= SIGNATURE mname STATEMENT ;
+
+Also quite easy to grasp. Really, I just need to define the semantics of enumerations,
+constructors and various other entities. Going back to constructors. The default
+constructor is always called for a local object (or new). For PODs, it'll just default
+to a garbage value. Shouldn't be a problem. Ok. Now, the body of the constructor.
+Do we allow 'construct' statements? I think it's fine. As long as they're not in
+branches. In a sense C++ has the right idea about initializing _all_ variables in
+the beginning. This means that you won't use initialized variables in the constructor.
+Although I reckon it's easy to catch, if we use anything involving that name before
+its 'construct' invocation, then we have an error. One option is to simply say we
+individually 'init' every composition.
+
+	Array[32u] a(size: 10);
+	(: this; 32u newsize(10)) construct {
+		a.resize(newsize);
+	}
+
+This is a vastly simplified model. Does not require special semantics or syntax.
+Well except for allowing setting of references and consts inside the constructor.
+A possibility is to call whatever method or set whatever whilst being a const method.
+We could introduce the 'ctor' word:
+
+	Type member(0);
+	(: this : ctor) {
+		member.setConstMember(1000);
+	}
+
+With that, a 'create' function can only be called by a data declaration or by another
+create function. This allows cascading downward in compositional problems. I suppose
+the dtor doesn't need this functionality. The dtor can just look at its own class
+and decide. Perhaps it can do some internal cleanup, but that should not be necessary.
+The dtor does need to be called implicitly though. 'delete' won't do, but using a
+method might.
+
+	3912u a(cast[3192u](::Object()));
+
+Maybe we have a big class and just cast it into an unsigned. Not really sure if this
+is possible though. I suppose the 'dtor' tag could be introduced. I suppose a constructor
+'returns' an object, although it more so builds it in-place. I guess the ctor has
+an implicit this on both in and outputs. So using a 'dtor' tag just gets called at
+the end of an object's lifetime. Objects casted into, say, unsigneds, won't destruct
+at all. That is, if the bits are totally exchanged. Or are they? Since interchanging
+them essentially means to completely destroy the old object. If a ctor method has
+a name, then it is not a constructor, but it needs to be called by a ctor method.
+
+So we've got everything I think. const-member assignment... wait. Why not just call
+the ctor and dtor 'construct' and 'destruct'? This would mean that the ctor and dtors
+are callable from anywhere. Full freedom. This brings a dilemma though. Where does
+the chain start? I guess the var decl invokes. Then, that ctor can call different
+ctors. That seems reasonable I suppose.
+
+What about enumerations? Do we use ::Class::enum or something to denote the type?
+I like `enum[ClassName]`. I suppose each class has its own 'signals' that it can
+throw. Or it can throw any other signal. But I think it's preferred if a class throws
+its own signals. Should we allow throwing others' signals?
+
+I really like the simplified language. It gives me a kind of peace that I did not
+have before. It's really nice... I just need to internalize the language as it is.
+
+	Type a b c(damage=10) d(enchanted=::Type::RARE_ITEM);
+	ptr Array[32u] e(new{in, size: size=1 3 5 7 9 11});
+	a: control, b = myFunction();
+	try {
+		b.runTests(c);
+	} catch {
+		::Type::RARE_ITEM {
+			b.increment();
+			c.strengthen(2);
+			retry;  // Jump back to the start of the try block
+		}
+	}
+
+	(:) enter {
+		::Io << "This is a message";
+	}
+
+One thing that does annoy me is that there is no way of getting a ~size from an array
+expression.
