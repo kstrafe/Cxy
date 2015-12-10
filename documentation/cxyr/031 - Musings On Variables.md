@@ -2551,7 +2551,7 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 	SIGNATURE ::= '(' ( { DATA | 'this' } ) ':' $1 [ ':' [ 'const' ] [ 'ctor' ] [ 'dtor' ] [ 'pure' ] ] ')' ;
 	ARG ::= '(' { FEXPR }* \{ ';' } ')'
 	FEXPR ::= { EXPR [ ':' mname ] }+ \{ ',' } [ '=' EXPR ] ;  // A FEXRP statement
-	EXPR ::= { EXPR }+  // Increasing precedence downward
+	EXPR ::= { '[' EXPR ']' }+  // Increasing precedence downward
 		| EXPR ( '||' | '&&' | '|' | '^' | '&' | '==' | '!=' | '>' | '<' | '>=' | '<='
 		       | '<<' | '>>' | '+' | '-' | '*' | '/' | '%' | '\'
 		       ) EXPR
@@ -2563,9 +2563,9 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 		| EXPR '::' EXPR
 		| name | number | string
 		| ;
-	TYPE ::= primitive | ptr TYPE | ref TYPE | const TYPE | ptr SIGNATURE | '[' EXPR TYPE ']' |
-		[ pname '::' ] cname [ GRANT ] | 'type' '[' mname ']' ;
-	GRANT ::= '[' { TYPE | cname '=' TYPE ';' | FEXPR }+ ']'
+	TYPE ::= const TYPECONST | TYPECONST ;
+	TYPECONST ::= primitive | ptr TYPE | ptr SIGNATURE | 'array' EXPR TYPE ;
+	GRANT ::= '[' { ( TYPE | cname '=' TYPE | FEXPR ) ';' }+ ']'
 
 Some of the changes that are planned. As can be seen, typedecls are very simple now.
 What I don't like is that signatures may contain `Type {a, b, c}`. This is dissimilar
@@ -2911,4 +2911,159 @@ have before. It's really nice... I just need to internalize the language as it i
 	}
 
 One thing that does annoy me is that there is no way of getting a ~size from an array
-expression.
+expression. Should be possible with parentheses. I suppose if I want an empty double
+array I'd just write
+
+	(() ())~size
+
+Where we expect the outer array to contain only one element, and be castable from
+and to the expected types. Maybe C did it right. It doesn't try and protect you using
+consts constructors like I have. I like ctors and dtors and all, but it seems to
+be a waste to spend too many resources on something. I like to see the current enums
+as 'signals'. We're back at 'undeclared enums' again. I'm thinking let every class
+throw what it wants, and it'll be seen as a signal. What about enums? Enums are very
+useful, but I think they deserve a different spot in the language. We can use constants
+for enums. The problem with that is that there is no designated enum type then. There
+are only integers. I want to make coding in this go as buttery-smooth as possible.
+Not having to declare the signal is pretty nice. Of course, if you want to raise
+a different signal you'll have to trigger that signal. Probably by going into a class
+and just raising it from there. Suppose we don't have enums, only signals. What now?
+What's left to add?
+
+Enums? Enums are so incredibly useful for programmers. I really enjoy them.
+
+	(:) myMethod {
+		raise CAN_NOT_CONTROL_THIS_AWESOME;
+		raise I_JUST_CREATED_A_NEW_SIGNAL_NOTHING_YOU_CAN_DO;
+	}
+
+It's an interesting concept, but it removes enums from the equation. I'm thinking
+a code generator is perfect for an enum. Just imagine the following:
+
+	#Enum(VALUE NAME NAME2 NAME3 NAME4 NAME5)
+
+Just expands into:
+
+	private 3u value;
+	public This VALUE(0) NAME(1) NAME2(2) NAME3(3) NAME4(4) NAME5(5);
+
+	private (: 3u in : ctor pure) constructor {
+		value = in;
+	}
+
+	public (: This in : ctor pure) constructor {
+		value = in.value;
+	}
+
+	(1u out : this; This rhs : const pure) == {
+		out = this.value == rhs.value;
+	}
+
+	(String out : this : const pure) name {
+		switch (this.value) {
+			case 0: out = "VALUE"; break;
+			case 1: out = "NAME"; break;
+			case 2: out = "NAME2"; break;
+			case 3: out = "NAME3"; break;
+			case 4: out = "NAME4"; break;
+			case 5: out = "NAME5"; break;
+		}
+	}
+
+	(: this : pure) setVALUE ...
+
+Etc. Should be working. I just wanna clean up the grammar a bit. We've got a pretty
+simple language with few productions. I like the simplicity of it. Although some
+of the semantics irk me just slightly.
+
+	def x(32u a b c  :  32f d e f)
+		sml.out << "Control message" + d + e + f;
+
+We could create a 'macro' like this:
+
+	def <a> <sig>
+		<statement>
+
+Gets turned into
+
+	const ptr const <sig> <a> = lambda [@] <sig> <statement> ;
+
+I like the idea. But I also like the cleanliness of the former method of just writing
+
+	<sig> <a> <statement>
+
+
+	Set[String] set;
+	set.add("cat");
+	set.add("dog");
+	set.add("human");
+	if set.has("cat")
+		::Io << "set has the cat element";
+
+Hmm... because expressions can't really spill into anything, we can just avoid the
+() around ifs at all. They can be completely optional. I like that.
+
+	while 1 > 4 and set.has("cat")~out
+		debug "I think I may prefer 'and' over '&&'";
+
+I do enjoy 'and' and 'or'. They're far easier to write as well.
+
+	if a and b and c and d
+		::Io << "cool!";
+
+The problem with an expression like this is that array expressions must be parenthesized.
+
+	if 1 2 3
+		::Io << "what";
+
+That's a problem, so how can it be resolved? Perhaps it's best to just add an array
+operator of some sort.
+
+	call(1 2 3);
+	if 1 2 3
+		call(1 2 3);
+
+	if #(#(1 2 3) #(4 5 6) #(7 8 9))
+		::Io << "I think [] can be much nicer actually.";
+	::[::[ 1 2 3 ] ::[ 4 5 6 ]];
+
+I just want to remove the :: from them though. Maybe we need to rethink the entire
+array declaration syntax. Perhaps it's best to just write:
+
+	Array[32u, 10] a([1 2 3]);
+	Array[Array[32u, 10], 10] b([[1 2 3 4 5 6 7 8 9 10] [...] ...]);
+
+What I like about this is that it allows us to write the [] freely in expressions.
+
+	if 1 2 3
+		debug `won't work because 2 and 3 are taken to be a statement, which is syntactically
+		flawed.`
+
+	ptr 32u a; 32u len;
+	a, len: length = [1 2 3 8 9+3 getSome()];
+	[10; 32u] c;
+
+So we don't allow cross-linking operators, which prevents the need for a comma. What
+I mean is that we don't allow dual unary and binary operators. This allows us to
+write lists without using commas. Something I find very pleasant. There's just this
+clash between actual data declaration and type specification.
+
+	array 100 array 10 MyType a b c d;
+
+I like 'array'. It assumes that arrays are of the form: 'number type' This simplifies
+the array type declaration significantly. What can also be done is to allow any number
+of expressions to be under array:
+
+	array 10 3 10 MyType a;
+
+This allows you to define multidimensional arrays.
+
+	array[10 30 10 ptr MyType]
+
+The above looks too much like a grant. I'd rather avoid it. So suppose we use this
+syntax for arrays. Then we can use [] anywhere else
+
+	myCall(in=[1 2 3]);
+	myCall(in, length: size=[1 2 3]);
+
+Wonderful.
