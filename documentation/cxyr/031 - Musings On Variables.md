@@ -2546,7 +2546,6 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 	CLASS ::= { [ ACCESS ] ( DATA | ENUM | METHOD ) } ;
 	ACCESS ::= 'private' | 'public' | 'restricted' ;
 	DATA ::= TYPE { name [ ARG ] }+ ';' ;
-	ENUM ::= { ename [ ARG ] }+ ';' ;
 	METHOD ::= SIGNATURE mname STATEMENT ;
 	SIGNATURE ::= '(' ( { DATA | 'this' } ) ':' $1 [ ':' [ 'const' ] [ 'ctor' ] [ 'dtor' ] [ 'pure' ] ] ')' ;
 	ARG ::= '(' { FEXPR }* \{ ';' } ')'
@@ -2559,13 +2558,20 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 		| 'cast' '[' EXPR ']' | '(' EXPR ')'
 		| EXPR ARR | EXPR ARG EXPR
 		| EXPR ( '~' | '.' | '->' ) EXPR
-		| '::' TYPE
+		| '::' TYPE '::' EXPR
 		| EXPR '::' EXPR
 		| name | number | string
 		| ;
 	TYPE ::= const TYPECONST | TYPECONST ;
-	TYPECONST ::= primitive | ptr TYPE | ptr SIGNATURE | 'array' EXPR TYPE ;
+	TYPECONST ::= primitive | ptr TYPE | ptr SIGNATURE | 'array' EXPR TYPE | [ pname '::' ] cname [ GRANT ] ;
 	GRANT ::= '[' { ( TYPE | cname '=' TYPE | FEXPR ) ';' }+ ']'
+
+	// Statements
+	STAT ::=
+		'ifgoto' name EXPR ';'
+		| 'label' name STAT
+		| DATA ';' | FEXPR ';'
+		| '{' { STAT } '}' ;
 
 Some of the changes that are planned. As can be seen, typedecls are very simple now.
 What I don't like is that signatures may contain `Type {a, b, c}`. This is dissimilar
@@ -3066,4 +3072,205 @@ syntax for arrays. Then we can use [] anywhere else
 	myCall(in=[1 2 3]);
 	myCall(in, length: size=[1 2 3]);
 
-Wonderful.
+Wonderful. Is this it? We have arrays, we have ::Type to avoid expr and statement
+overlap. What else is there to do? The thing is though, var would prevent the need
+for both of these.
+
+	var [8 32u] a([1 2 3 4 5 6 7 8]);
+	[1 2 3] + [3 4 5];
+	array 8 32u a([1 2 3 4 5 6 7 8]);
+
+We also need an automated cast from the array to an unnumbered ptr.
+
+	ptr 32u a; 32u len;
+	a, len: length = [18 19 !-32 !+39 !+get()];
+	32u sum(0);
+	for (32ue c(0); c < len; ++c)
+		sum += a[c];
+
+Is size inference a desirable thing? Perhaps not. Perhaps it is. Maybe we should
+just use ptr if the size is indeterminate. The above syntax is actually pretty nice
+isn't it? It's short and not that complicated. Contrary to previous endeavours. The
+current paradigm is for simplicity. Oh, and for a case where we want to manually
+call the ctor/dtor:
+
+	ptr 1u a(new(::MyType~size));
+	cast[ptr MyType](a)->construct();
+	// ...
+	cast[ptr MyType](a)->destruct();
+
+This can be useful, when we create some kind of factory pattern. There is a collision
+between the :: and the expression syntax though. Take for example:
+
+	[::A::b() ::C::d()]
+
+How do we know :: doesn't bind to the previous element? We could enfore is in the
+grammar by making :: Type just like that, since type only contains :: internally,
+it won't clash with other elements.
+
+	32u a(2) b(1);
+	32u c(::32u::+(this: $$a; right: $$b));
+
+We could also say:
+
+	@Type::CPTR;
+
+But would that fall under @() or @(Type)::CTPR? I'd prefer the latter, but it mixes
+badly with the former. In that case, @ needs a higher precedence than ::. Also,
+. needs a higher precedence than @, which makes . a higher precedence than ::. Isn't
+that odd?
+
+	@MyType::A.b.c()
+	(@MyType)::A.b.c()
+
+No man I think @ will just be confusing to people. :: also nicely encloses types:
+
+	::ptr const ptr array 100 32u::SIZE
+	::namespace::Type[Control; name="Raven"; EDGE=23]::SIZE
+
+I really like that one. It acts as a delimiter.
+
+	debug ::String::getInfo();
+
+I really like that one. Okay, so are we do I agree with myself on the array syntax?
+
+	if ::array 1000 32u::SIZE == 32000
+		debug "Test correct";
+
+This means that arrays are created by writing []. Arrays are declared by writing
+the keyword 'array'. How can we cast arrays to run-time objects?
+
+	array 32u a( [1 2 3 exp expr() intef()~g] );
+	array 6 32u a( [1 2 3 exp expr() intef()~g] );
+
+What's the difference? The former stores the size of the array. a.length is possible
+to use. The second type is a definitely-static array. It will always have the same
+size. I guess we can allow partial array setting:
+
+	array 10 32u a([1 2 3 4]);
+	sml.out << a[4];  // Undefined behaviour, as a[4] is not set yet.
+
+The array can't grow. We could make array an object. The thing is, it'd be best if
+it were a class. The problem is we need a basic type for [] to use. I like the array
+syntax, but maybe it's best to check out other languages.
+
+	array 32u a([1 2 3]);  // Normal initializer
+	array 32u a[1 2 3];  // Array-initializer
+	MyType[] a = new MyType[123]();  // Java
+	a = [1, 2, 3]  // Python
+	a = [1 2 3];  // Matlab
+	int a[] = {1, 2, 3};  // C++
+	$a = array(1, 2, 3);  // PHP
+	A = [1 2 3]  // Oz
+	a = (1, 2, 3);  // PERL
+	(make-array '(1 2 3))
+
+I kinda like the [] start. It's shorter than array and easy to type []. array is
+probably fine too. I suppose we can poll the type of a after creation to check the
+size. The size is static so it should be fine. Can we pass an array into a method?
+An array is a pointer to the start of a set of elements. It contains size data as
+well (static, compile-time). We can't always know the length of the array given to
+a method. So a method assumes the length zero.
+
+	(: array 32u a) control {
+		for (32ue i(0); i < ::type[a]::LENGTH; ++i) {
+			sml.out << a[i];
+		}
+	}
+	(:) enter {
+		control([1 2 3]);
+	}
+
+Should print by using the size 0. An uninitialized array is just an empty array.
+It's a pointer. array 32u = ptr 32u. What about signatures?
+
+	(: 32u a(10) b c(0)) fun { ... }
+
+	(:) enter {
+		ptr (: 32u a b) a(fun);  // assumes argument c is automatic (zero).
+	}
+
+In this case, the function overload is not called, but the default argument is cast
+away. Maybe default arguments should be a thing, and not overloading. I like that
+idea. The cool thing about it is that static code analysis can remove code that isn't
+called anyways.
+
+	(: 1u a b c(true) d(false) e(true)) something {
+		if a
+			...;
+		if c
+			...;
+	}
+
+The nice thing is that the function `(: 1u a b)` casted from the above will remove
+the if c clause completely and just run the code. What is the type of an overload
+though? Well not an overload but more so standard params. This also makes the entry
+point unambiguous. What about types though? Different type overloads would be necessary
+I think... Man this is hard. I realize that methods like print may benefit from overloading,
+but on closer inspection we can just write "print(mynumber.toString())". Since you
+can only print strings. What about args of the same name?
+
+	(: this; 32u in; 32f in) add {
+		this.sum += cast[32u](in);
+	}
+
+I don't know how this is supposed to work. Code generators?
+
+	#print(a);
+
+Just gets turned into:
+
+	print((a).toString);
+
+Or basically:
+
+	#print(a + b);
+
+is
+
+	sml.out << (a+b).toString();
+
+I'm not sure if overloading is the way to go. C doesn't use it and that language
+does pretty fine. Overloading can be extremely useful, suppose I have a class called
+matrix and I want to either multiply by a vector or a constant. Both have different
+semantics but it's still a multiplication. My main concern is that it'll be hard
+to find the overloaded function, because you need to look at all the types of the
+inputs. Maybe it brings more trouble than it solves. Hell you can still 'overload':
+
+	(: 1u a() b() c(); Type d() e() f()) myFun {
+		if d.is_default {
+			// Do stuff without d, e, and f
+		} else {
+			// Do stuff with d, e, and f
+		}
+	}
+
+	(:) enter {
+		myFun(a=1; b=0; c=false);
+		myFun(d=::Type(0.3); e=::Type(0); f=::Type(0.6));
+	}
+
+The nice thing is that static checking can remove the ifs, so no real value is lost.
+This does not apply to operators though. I'd love to have operator overloading for
+operators. Maybe operators should just keep to their own types. Where it makes sense.
+
+	(Type out : const this; ref const Type in : const) + {
+		32u partial_sum = this.computeTotal() + in.computeTotal();
+		out.setCumulativeSum(partial_sum);
+	}
+
+I like the idea. Keeps the language clean. No need to abuse operators. Plus the method
+names hint what's going on:
+
+	datatype.addVector(vectorname);
+	datatype.addSet(mys);
+	// Alternatively
+	datatype.add(set=mys);
+	datatype.add(vector=myv);
+
+I think this can work. I think I'm almost done with the entire language. Is there
+anything else? I've worked through arrays, overloading, expressions, grants,....
+I could inspect statements. As of now, the only statements are fexpr and datadecl.
+The core of the statements have been added. It's actually really simple. ifgoto,
+and labels. Mix in the FEXPRs and DATA declarations, and the language is complete.
+Also added the scope. So you can have multiple consecutive statements.
