@@ -2542,6 +2542,8 @@ feels slightly awkward. I think I can get used to it though. It's better practic
 
 So what about arrays? `[` vs { vs (. array{} is something I like.
 
+	#GRAMMAR
+
 	// Class-Scope
 	CLASS ::= { [ ACCESS ] ( DATA | ENUM | METHOD ) } ;
 	ACCESS ::= 'private' | 'public' | 'restricted' ;
@@ -2561,15 +2563,19 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 		| '::' TYPE '::' EXPR
 		| EXPR '::' EXPR
 		| name | number | string
+		| 'lambda' [ '[' CAPTURE ']' ] [ SIGNATURE ] STAT
 		| ;
 	TYPE ::= const TYPECONST | TYPECONST ;
-	TYPECONST ::= primitive | ptr TYPE | ptr SIGNATURE | 'array' EXPR TYPE | [ pname '::' ] cname [ GRANT ] ;
+	TYPECONST ::= primitive | ( 'ref' | 'ptr' ) ( TYPE | SIGNATURE )
+		| 'array' EXPR TYPE | [ pname '::' ] cname [ GRANT ] ;
 	GRANT ::= '[' { ( TYPE | cname '=' TYPE | FEXPR ) ';' }+ ']'
 
 	// Statements
 	STAT ::=
-		'ifgoto' name EXPR ';'
-		| 'label' name STAT
+		'goto' name EXPR ';'
+		| 'label' name ';'
+		| 'try' STAT | 'catch' STAT | 'raise' ename ';'
+		| 'hack' '(' string ')' ';'
 		| DATA ';' | FEXPR ';'
 		| '{' { STAT } '}' ;
 
@@ -3273,4 +3279,23 @@ anything else? I've worked through arrays, overloading, expressions, grants,....
 I could inspect statements. As of now, the only statements are fexpr and datadecl.
 The core of the statements have been added. It's actually really simple. ifgoto,
 and labels. Mix in the FEXPRs and DATA declarations, and the language is complete.
-Also added the scope. So you can have multiple consecutive statements.
+Also added the scope. So you can have multiple consecutive statements. I'm wondering
+if lambdas are really necessary. They're big and bloaty. They do stay confined to
+a single method though. What I mean is that if they are defined therein, you know
+that the lambda is used in that method.
+
+	ref (64ue out(0) : array 64u in; 64u length) sum(lambda {
+		for (64u i(0); i < cast[64u](length); ++i) {
+			out += in[i];
+		}
+	});
+	sml.out << sum(in, length: length=[1 2 9 8 4 3 6 7]).toString();
+	// Prints "40"
+
+Could be kinda useful. Maybe I should write a full grammar. But am I satisfied? Is
+everything in-place? Am I missing anything? We've got construction, destruction,
+purity, const-correctness, references, ptrs, const variables, arrays, type and size
+of a type, signals, hacks, loop constructs, objects, default parameters. CONSTEXPRs,
+no enums... We can add some conveniences to the language. While, for, static ifs.
+Wait, what kind of statements does C++ have? Expressions, declarations, calls (part
+of expressions), for/while/do, switch, return, break, continue, label.
