@@ -2550,8 +2550,25 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 	DATA ::= TYPE { name [ ARG ] }+ ';' ;
 	METHOD ::= SIGNATURE mname STATEMENT ;
 	SIGNATURE ::= '(' ( { DATA | 'this' } ) ':' $1 [ ':' [ 'const' ] [ 'ctor' ] [ 'dtor' ] [ 'pure' ] ] ')' ;
-	ARG ::= '(' { FEXPR }* \{ ';' } ')'
+	ARG ::= '(' { FEXPR }* \{ ';' } ')' ;
 	FEXPR ::= { EXPR [ ':' mname ] }+ \{ ',' } [ '=' EXPR ] ;  // A FEXRP statement
+
+	EXPR ::= AND_EXPR [ 'or' EXPR ] ;
+	AND_EXPR ::= BOR_EXPR [ 'and' AND_EXPR ] ;
+	BOR_EXPR ::= BXOR_EXPR [ '|' BOR_EXPR ] ;
+	BXOR_EXPR ::= BAND_EXPR [ '^' BXOR_EXPR ] ;
+	BAND_EXPR ::= EQ_EXPR [ '&' BAND_EXPR ] ;
+	EQ_EXPR ::= REL_EXPR [ ( '==' | '!=' ) EQ_EXPR ] ;
+	REL_EXPR ::= SHF_EXPR [ ( '<=' | '>=' | '<' | '>' ) REL_EXPR ] ;
+	SHF_EXPR ::= ADD_EXPR [ ( '<<' | '>>' ) SHF_EXPR ] ;
+	ADD_EXPR ::= MUL_EXPR [ ( '+' | '-' ) ADD_EXPR ] ;
+	MUL_EXPR ::= POW_EXPR [ ( '*' | '/' ) MUL_EXPR ] ;
+	POW_EXPR ::= UNA_EXPR [ '**' POW_EXPR ] ;
+	UNA_EXPR ::= ( '@' | '$' | '$$' | '!-' | '!+' ) PAC_EXPR ;
+	PAC_EXPR ::= [ '::' TYPE '::' ] MEM_EXPR ;
+	MEM_EXPR ::= RES_EXPR [ ( '~' | '.' | '->' ) MEM_EXPR ] ;
+	RES_EXPR ::= ( name | fname ) [ ARG ] | string | integer | float | '[' { EXPR } ']' ;
+
 	EXPR ::= { '[' EXPR ']' }+  // Increasing precedence downward
 		| EXPR ( '||' | '&&' | '|' | '^' | '&' | '==' | '!=' | '>' | '<' | '>=' | '<='
 		       | '<<' | '>>' | '+' | '-' | '*' | '/' | '%' | '\'
@@ -3299,3 +3316,39 @@ of a type, signals, hacks, loop constructs, objects, default parameters. CONSTEX
 no enums... We can add some conveniences to the language. While, for, static ifs.
 Wait, what kind of statements does C++ have? Expressions, declarations, calls (part
 of expressions), for/while/do, switch, return, break, continue, label.
+
+I just noticed that I'm retarded. I haven't noticed this before. The right-recursion
+for most of the expressions are actually forcing right-associativity. This is annoying.
+Luckily, it's nothing that tree-reordering can't solve! The algorithm for reordering
+summing negatives is as follows:
+
+	1) Make the end of the summation chain the root.
+	2) Make all right children the parent
+	3) Make all right children's right node the current right node
+
+	-
+		1
+		-
+			2
+			3
+
+Is a tree for 1 - 2 - 3, it must become
+
+	-
+		3
+		-
+			1
+			2
+
+Likewise for 1-2-3-4-5+6-7+9-1
+
+	-
+	1 -
+	  2 -
+	    3 -
+			  4 -
+				  5 +
+					  6 -
+							7 +
+								9 -
+								  1 eps
