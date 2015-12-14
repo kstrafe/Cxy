@@ -2567,7 +2567,7 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 	UNA_EXPR ::= ( '@' | '$' | '$$' | '!-' | '!+' ) PAC_EXPR ;
 	PAC_EXPR ::= [ '::' TYPE '::' ] MEM_EXPR ;
 	MEM_EXPR ::= RES_EXPR [ ( '~' | '.' | '->' ) MEM_EXPR ] ;
-	RES_EXPR ::= ( name | fname ) [ ARG ] | string | integer | float | '[' { EXPR } ']' ;
+	RES_EXPR ::= ( name | fname ) { [ ARG ] } | '(' EXPR ')' | string | integer | float | '[' { EXPR } ']' ;
 
 	EXPR ::= { '[' EXPR ']' }+  // Increasing precedence downward
 		| EXPR ( '||' | '&&' | '|' | '^' | '&' | '==' | '!=' | '>' | '<' | '>=' | '<='
@@ -3346,9 +3346,68 @@ Likewise for 1-2-3-4-5+6-7+9-1
 	1 -
 	  2 -
 	    3 -
-			  4 -
-				  5 +
-					  6 -
-							7 +
-								9 -
-								  1 eps
+			  4 +
+				  5 -
+					  6 +
+							7 -
+								9 1
+
+It's annoying that this happened. Oh well. I almost feel like going full LISP-style
+again.
+
+	a, b: c = d();
+	a += 34;
+	b.something(a: b);
+	a.+(b).*(3)
+
+This would get parsed very easily, because exprs would be reduced to very simple
+
+	memberexpr = member [ '.' memberexpr ]
+
+It's just not practical. So how can left-associativity be handled? It can be observed
+that the tree can be evaluated top-to-bottom wise. This will create a stack. However,
+it doesn't represent the correct semantics. Is it possible to find the correct tree
+after parsing with an LL(1) parser?
+
+	*[+[1 2 3 -[8]] 100]  // -2 * 100
+
+	(:) enter {
+		32u a(+[100 1 2 3 4 5]);
+		a = +(1 2);
+		a +=
+	}
+
+What if we only allow compound operators?
+
+	(:) enter {
+		a, b = f();
+		b = !-100;
+		b += g();
+		a -= b;
+		// a, b = f();
+		// a -= !-100 + g();
+	}
+
+That's actually really nasty. Maybe longer variable names are more useful. It also
+muddies the distinction between '.' expressions and other expressions.
+
+	(:) enter {
+		32u sum(0);
+		sum += f(10);
+		sum += ((1-3)+2);
+		sum += 1.-(3).+(2)
+	}
+
+I feel lost. Maybe using them as members is the best thing. Associativity will be
+rather destroyed though. A right child of the same order, that child must become
+the parent. The child's left child, will become the new child's right child. Tested
+it out for a bit. Seems to work... Maybe expressions are safe. I think they are.
+I just require post-processing of the parse tree. Well that was easy. What's left?
+Maybe there's a collision with lists and actual expressions. You see:
+
+	[a [b]];  // Clash of a[b] with a [b]
+	[[1] [2]];
+
+Maybe it's not severe, but imagine a function returning an array, and suddenly you
+get `[a() [1 2]]`. That should fail catastrophically. The parser doesn't take into
+account that this may happen.
