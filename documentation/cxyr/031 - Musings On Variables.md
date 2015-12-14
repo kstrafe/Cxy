@@ -2551,10 +2551,11 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 	METHOD ::= SIGNATURE mname STATEMENT ;
 	SIGNATURE ::= '(' ( { DATA | 'this' } ) ':' $1 [ ':' [ 'const' ] [ 'ctor' ] [ 'dtor' ] [ 'pure' ] ] ')' ;
 	ARG ::= '(' { FEXPR }* \{ ';' } ')' ;
-	FEXPR ::= { EXPR [ ':' mname ] }+ \{ ',' } [ '=' EXPR ] ;  // A FEXRP statement
+	FEXPR ::= { EXPR [ ':' mname ] }+ \{ ',' } [ COMPOUND EXPR ] ;  // A FEXRP statement
+	COMPOUND ::= [ '||' | '&&' | '|' | '^' | '&' | '<<' | '>>' | '+' | '-' | '*' | '/' | '%' | '\' | '**' ] '=' ;
 
-	EXPR ::= AND_EXPR [ 'or' EXPR ] ;
-	AND_EXPR ::= BOR_EXPR [ 'and' AND_EXPR ] ;
+	EXPR ::= AND_EXPR [ '||' EXPR ] ;
+	AND_EXPR ::= BOR_EXPR [ '&&' AND_EXPR ] ;
 	BOR_EXPR ::= BXOR_EXPR [ '|' BOR_EXPR ] ;
 	BXOR_EXPR ::= BAND_EXPR [ '^' BXOR_EXPR ] ;
 	BAND_EXPR ::= EQ_EXPR [ '&' BAND_EXPR ] ;
@@ -2562,26 +2563,14 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 	REL_EXPR ::= SHF_EXPR [ ( '<=' | '>=' | '<' | '>' ) REL_EXPR ] ;
 	SHF_EXPR ::= ADD_EXPR [ ( '<<' | '>>' ) SHF_EXPR ] ;
 	ADD_EXPR ::= MUL_EXPR [ ( '+' | '-' ) ADD_EXPR ] ;
-	MUL_EXPR ::= POW_EXPR [ ( '*' | '/' ) MUL_EXPR ] ;
+	MUL_EXPR ::= POW_EXPR [ ( '%' | '*' | '/' ) MUL_EXPR ] ;
 	POW_EXPR ::= UNA_EXPR [ '**' POW_EXPR ] ;
-	UNA_EXPR ::= ( '@' | '$' | '$$' | '!-' | '!+' ) PAC_EXPR ;
+	UNA_EXPR ::= { '@' | '$' | '$$' | '!-' | '!+' | '!!' | '!' } PAC_EXPR ;
 	PAC_EXPR ::= [ '::' TYPE '::' ] MEM_EXPR ;
 	MEM_EXPR ::= RES_EXPR [ ( '~' | '.' | '->' ) MEM_EXPR ] ;
-	RES_EXPR ::= ( name | fname ) { [ ARG ] } | '(' EXPR ')' | string | integer | float | '[' { EXPR } ']' ;
+	RES_EXPR ::= ( name | fname ) { ARG } { '[' EXPR ']' }  | '(' EXPR ')' | string | integer | float | '[' { EXPR } ']'
+		| 'lamda' [ '[' { name } ']' ] [ SIGNATURE ] STAT ;
 
-	EXPR ::= { '[' EXPR ']' }+  // Increasing precedence downward
-		| EXPR ( '||' | '&&' | '|' | '^' | '&' | '==' | '!=' | '>' | '<' | '>=' | '<='
-		       | '<<' | '>>' | '+' | '-' | '*' | '/' | '%' | '\'
-		       ) EXPR
-		| ( '!+' | '!-' | '!!' | '!' | '@' | '$' | '$$' ) EXPR
-		| 'cast' '[' EXPR ']' | '(' EXPR ')'
-		| EXPR ARR | EXPR ARG EXPR
-		| EXPR ( '~' | '.' | '->' ) EXPR
-		| '::' TYPE '::' EXPR
-		| EXPR '::' EXPR
-		| name | number | string
-		| 'lambda' [ '[' CAPTURE ']' ] [ SIGNATURE ] STAT
-		| ;
 	TYPE ::= const TYPECONST | TYPECONST ;
 	TYPECONST ::= primitive | ( 'ref' | 'ptr' ) ( TYPE | SIGNATURE )
 		| 'array' EXPR TYPE | [ pname '::' ] cname [ GRANT ] ;
@@ -3410,4 +3399,4 @@ Maybe there's a collision with lists and actual expressions. You see:
 
 Maybe it's not severe, but imagine a function returning an array, and suddenly you
 get `[a() [1 2]]`. That should fail catastrophically. The parser doesn't take into
-account that this may happen.
+account that this may happen. How is this solved?
