@@ -2545,7 +2545,7 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 	#GRAMMAR
 
 	// Class-Scope
-	CLASS ::= { [ ACCESS ] ( DATA | ENUM | METHOD ) } ;
+	CLASS ::= { [ ACCESS ] ( DATA | METHOD ) } ;
 	ACCESS ::= 'private' | 'public' | 'restricted' ;
 	DATA ::= TYPE { name [ ARG ] }+ ';' ;
 	METHOD ::= SIGNATURE mname STATEMENT ;
@@ -2568,8 +2568,8 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 	UNA_EXPR ::= { '@' | '$' | '$$' | '!-' | '!+' | '!!' | '!' } PAC_EXPR ;
 	PAC_EXPR ::= [ '::' TYPE '::' ] MEM_EXPR ;
 	MEM_EXPR ::= RES_EXPR [ ( '~' | '.' | '->' ) MEM_EXPR ] ;
-	RES_EXPR ::= ( name | fname ) { ARG } { '[' EXPR ']' }  | '(' EXPR ')' | string | integer | float | '[' { EXPR } ']'
-		| 'lamda' [ '[' { name } ']' ] [ SIGNATURE ] STAT ;
+	RES_EXPR ::= ( name | fname ) { [ ARG ] [ '[' EXPR ']' ] }  | '(' EXPR ')' | string | integer | float
+		| '[' { EXPR \{ ',' } } ']' | 'lamda' [ '[' { name } ']' ] [ SIGNATURE ] STAT ;
 
 	TYPE ::= const TYPECONST | TYPECONST ;
 	TYPECONST ::= primitive | ( 'ref' | 'ptr' ) ( TYPE | SIGNATURE )
@@ -3399,4 +3399,43 @@ Maybe there's a collision with lists and actual expressions. You see:
 
 Maybe it's not severe, but imagine a function returning an array, and suddenly you
 get `[a() [1 2]]`. That should fail catastrophically. The parser doesn't take into
-account that this may happen. How is this solved?
+account that this may happen. How is this solved? The same goes for function calls
+`[a() (b+c)]`. What is to say a doesn't return a function? Then b+c would be an argument
+into that returned function. This is obviously a problem. While I like space delimited
+arrays, maybe it's time to bring out the comma again. [1,3,5,7,3,6]. Maybe it's just
+fine. `[a(),(3+5),19]`. I like this. How can array access be made recursive?
+
+	AR ::= RES AR
+	RES ::= name
+	AR ::= [ '[' EXPR ']' AR ]
+
+	>-
+	a <= b;
+	a = a < b;
+	a leq b;
+	a geq b;
+
+Just messing around.. How do I want to code?
+
+	(1u out intersects : const ptr Polygon left right; ptr Axis axis : const pure) findCollision {
+		Vector mainvector(computeSupport(left, axis: axis) -
+			computeSupport(right, axis: -axis));
+		Simplex simplex($mainvector);
+		Vector inverse(-mainvector);
+		while true {
+			mainvector = computeSupport(left, axis: inverse) -
+				computeSupport(right, axis: -inverse);
+			if dot(left: mainvector, right: inverse) < 0
+				intersects = false;
+			simplex.unionAdd(mainvector);
+			simplex, inverse: inverse, out: origin = nearestSimplex(simplex);
+			if out
+				break;
+		}
+	}
+
+I almost feel like expressions should just be removed. It's just something that can
+be mistaken by humans. In addition, it's a whole lot of complexity for the entire
+language added. At least the base of the language seems pretty solid. Not having
+space delimited arrays makes the idea of having space-delimited type declarations
+a little more foreign. `[1 2+4/6 3**4/2.control() 932]`.
