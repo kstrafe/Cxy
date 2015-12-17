@@ -2554,13 +2554,15 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 	FEXPR ::= { EXPR [ ':' mname ] }+ \{ ',' } [ COMPOUND EXPR ] ;  // A FEXRP statement
 	COMPOUND ::= [ '||' | '&&' | '|' | '^' | '&' | '<<' | '>>' | '+' | '-' | '*' | '/' | '%' | '\' | '**' ] '=' ;
 
-	EXPR ::= AND_EXPR [ '||' EXPR ] ;
-	AND_EXPR ::= BOR_EXPR [ '&&' AND_EXPR ] ;
+	EXPR ::= XOR_EXPR [ 'or' EXPR ] ;
+	XOR_EXPR ::= AND_EXPR [ 'xor' XOR_EXPR ] ;
+	AND_EXPR ::= NOT_EXPR [ 'and' AND_EXPR ] ;
+	NOT_EXPR ::= EQ_EXPR [ 'not' NOT_EXPR ] ;
+	EQ_EXPR ::= REL_EXPR [ ( '==' | '!=' ) EQ_EXPR ] ;
+	REL_EXPR ::= BOR_EXPR [ ( '<=' | '>=' | '<' | '>' ) REL_EXPR ] ;
 	BOR_EXPR ::= BXOR_EXPR [ '|' BOR_EXPR ] ;
 	BXOR_EXPR ::= BAND_EXPR [ '^' BXOR_EXPR ] ;
-	BAND_EXPR ::= EQ_EXPR [ '&' BAND_EXPR ] ;
-	EQ_EXPR ::= REL_EXPR [ ( '==' | '!=' ) EQ_EXPR ] ;
-	REL_EXPR ::= SHF_EXPR [ ( '<=' | '>=' | '<' | '>' ) REL_EXPR ] ;
+	BAND_EXPR ::= SHF_EXPR [ '&' BAND_EXPR ] ;
 	SHF_EXPR ::= ADD_EXPR [ ( '<<' | '>>' ) SHF_EXPR ] ;
 	ADD_EXPR ::= MUL_EXPR [ ( '+' | '-' ) ADD_EXPR ] ;
 	MUL_EXPR ::= POW_EXPR [ ( '%' | '*' | '/' ) MUL_EXPR ] ;
@@ -3438,4 +3440,120 @@ I almost feel like expressions should just be removed. It's just something that 
 be mistaken by humans. In addition, it's a whole lot of complexity for the entire
 language added. At least the base of the language seems pretty solid. Not having
 space delimited arrays makes the idea of having space-delimited type declarations
-a little more foreign. `[1 2+4/6 3**4/2.control() 932]`.
+a little more foreign. `[1 2+4/6 3**4/2.control() 932]`. So much could be simplified
+by using LISP-expressions.
+
+	32u result(+ (obj (fun name:1 control:2 nothing:3)) 3);
+	(= result 100);
+	[10 ptr Type] a(new(10));
+	result, a: checkpoint = (f name: "control" world: 15);
+	hack("C++: std::cout << \"Hello er\"");
+	if (< (abs (- x (* guess guess))) tol) {
+
+	}
+
+Expressions do become super simple then. Maybe only make expressions lisp-styled.
+Hmm... That's interesting. Making only expressions lisp-styled kinda fits neatly
+in the language now. Let's experiment a little more.
+
+	(128ue out : 128ue in) factorial {
+		out = in;
+		--in;
+		while (> in 1)
+			out *= in;
+	}
+
+	(32f out : 32f in) qrsqrt {
+		64s i;
+		32f x2 y;
+		const 32f treehalfs(1.5);
+		x2 = (* in 0.5);
+		y = in;
+		i = (@ cast[ptr 64s]($y));
+		i = (- 0x5f3759df (>> i 1));
+		y = (@ cast[ptr 32f]($ i));
+		y = (* y (- threehalfs (* x2 y y)));
+		out = y;
+	}
+
+	(:) enter {
+		This obj;
+		(<< (sml.out) (obj.factorial in: 10)))
+		sml.out << obj.factorial(10);
+		(sml.out.<< "cool");
+		(sml.out.<< (qrsqrt 12));
+	}
+
+There's something otherworldly about this. It's somewhat longer and more tedious.
+But how else can precedence be written like this? The above code simply can't be
+misinterpreted. The () exprs also fit nicely with the idea of constructors. The grammar
+becomes `DATA ::= TYPE { name [ EXPR ] }+ ';'`. The expr simply is the constructor.
+I'm not sure... It looks kinda neat. It also destroys all possible ambiguity. I like
+that. So we keep all statements. It's just that expressions themselves are s-expressions.
+So how can arrays be declared or indexed?
+
+	(:) enter {
+		[10 32u] a([] 1 2 3 4 5 6 7 8 9);
+		(a.[] 9);
+		(a.[] 3) = 100;
+		(createWindow name: "My Window" xsize: 300 ysize: 200
+			x: (/ view.xsize 2) y: (/ view.ysize 2));
+	}
+
+I like it. It does mix the dot operator with a lot of the other operators though.
+Not a fan of that. We could say that all operators except the '.' operator are actual
+operators. This should also count for the builtin $$, $, and @ operator. There is
+precedence if we have `@a.b`. What is evaluated first? @a or a.b? For this, we need
+to make one of them a function: (@ a.b). That looks way better. What about the dot
+operator though? (. a b) ? That just doesn't look nice nor practical.
+
+	(:) enter {
+		32u a(> 3 1);
+		a = (~ (factorial number: (+ 1 5)) derp);
+		Type b(name: "five");
+		Type c(Type::constructor in: 10 control: 0);
+		Type[CONTROL: (+ 1 2)] d;
+		signal OUT_OF_PROGRAM;
+	}
+
+I like the idea. It makes the LL(1) language complete. There is no further need for
+tree post-processing either. Hell, it's not even necessary to prune that much. Expressions
+used to be highly prunable due to precedence. Now it's a cakewalk.
+
+	(:) enter {
+		ptr (100ue out : 100ue in) factorial(lambda { out = when (== n 0) 1 else (factorial (- n 1))});
+	}
+
+How does it mix with the when expression? (((a == b) + 3) * 5240). Another possiblity
+is to simply allow infix expressions, but not expand on their precedence without
+any parentheses.
+
+	(:) enter {
+		32u a(1 + ((3 * 9).size(mult: 10)) );
+		ptr (100ue out : 100ue in) factorial(lambda {
+			out = when (n == 0) 1 else factorial(n - 1)});
+	}
+
+The grammar for such a syntax would simply be `EXPR ::= ATOM [ op EXPR ]`. This would
+be right-associative, but () can group inside ATOM. Very powerful and simple.
+
+	Type name name2(arg);
+	Type2 name3(myarg; control=10) name4 name5;
+	Type3[MyTemplate] name6;
+	Type4[get=myfunction] name7;
+	Type5[MyClass=OtherClass; get=myfunction] name8;
+
+	(:) myfunction {
+		32u a(name.getSomething()) b c;
+		a, b: special, c = getMore();
+		a += 3;
+		ptr 32u d([1,2,8,f(),10]);
+		label x; {
+			array 10 32u e;
+		}
+		goto x 10 < 3;
+	}
+
+It's tempting to just let operators be syntactic sugar for right-to-left evaluated
+`a.+(b).*(c)`. Or should that be done from left-to-right? It's also tempting to just
+allow operators, and fix the tree.
