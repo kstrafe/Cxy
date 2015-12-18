@@ -3557,3 +3557,42 @@ be right-associative, but () can group inside ATOM. Very powerful and simple.
 It's tempting to just let operators be syntactic sugar for right-to-left evaluated
 `a.+(b).*(c)`. Or should that be done from left-to-right? It's also tempting to just
 allow operators, and fix the tree.
+An idea I've been entertaining is coming from my original implementation of Cxy.
+It's the simple 'operation operands' statement list. Very minimalistic and requires
+basically no parser. I'm thinking that that idea may come back again, as a bootstrapping
+mechanism. Here's an outline
+
+	// Core declaration/operations
+	number name  // Declare a new stack-variable. Removed upon exiting scope.
+	operation left right  // Any binary operation, mathematical, or otherwise. Returns to 'ans'
+	// Flow control
+	label name  // Labels this location, to jump/call
+	goto name cond  // Jump to the label 'name' if the condition is not zero
+	call name  // Call the label, returns here.
+	// Dynamic memory
+	new number  // Allocate number bits on the heap.
+	del ref  // Delete the allocated bits
+	// IO
+	read  // Read 1 bit from the standard input.
+	write name  // Write the bits of 'name' to the standard output.
+
+This allows you to create a recursive factorial function:
+
+	label factorial
+	113 myvar
+	= myvar ans
+	-- ans
+	call factorial
+	* ans myvar
+	return
+
+113 myvar allocates 113 bits on the stack. It then copies 'ans' (a global) into the
+variable. It decrements ans, and calls itself recursively. The result of the recursion
+is multiplied by myvar. This result is already stored in 'ans'. The function returns.
+Simple and bulletproof. The language can be made so that overflows fail the program
+with a very clear message. m4 can be used to place other files in there. Why create
+this? Well, maybe it's useful. It'll be a fun little experiment. Hell, even object-
+oriented programming is possible. The idea is to let the programmer decide how many
+bits a data structure uses. He then performs operations on that data structure as
+he wishes. This gives a huge amount of power to the programmer. First, pointer and
+reference semantics have to be defined.
