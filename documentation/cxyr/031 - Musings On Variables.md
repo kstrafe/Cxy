@@ -3595,4 +3595,6 @@ this? Well, maybe it's useful. It'll be a fun little experiment. Hell, even obje
 oriented programming is possible. The idea is to let the programmer decide how many
 bits a data structure uses. He then performs operations on that data structure as
 he wishes. This gives a huge amount of power to the programmer. First, pointer and
-reference semantics have to be defined.
+reference semantics have to be defined. There is also the case of special optimizations
+like vector mathematics. If we intend to perform that operation, the compiler should
+be able to optimize it.
