@@ -3598,3 +3598,7 @@ he wishes. This gives a huge amount of power to the programmer. First, pointer a
 reference semantics have to be defined. There is also the case of special optimizations
 like vector mathematics. If we intend to perform that operation, the compiler should
 be able to optimize it.
+
+I think the language is in its final stage of preprocessing. I don't know what more
+to improve. I can isolate specific algorithms. Especially the reordering one. That
+will be a fun task.
