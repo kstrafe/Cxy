@@ -2552,14 +2552,14 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 	SIGNATURE ::= '(' ( { DATA | 'this' } ) ':' $1 [ ':' [ 'const' ] [ 'ctor' ] [ 'dtor' ] [ 'pure' ] ] ')' ;
 	ARG ::= '(' { FEXPR }* \{ ';' } ')' ;
 	FEXPR ::= { EXPR [ ':' mname ] }+ \{ ',' } [ COMPOUND EXPR ] ;  // A FEXRP statement
-	COMPOUND ::= [ '||' | '&&' | '|' | '^' | '&' | '<<' | '>>' | '+' | '-' | '*' | '/' | '%' | '\' | '**' ] '=' ;
+	COMPOUND ::= [ 'or' | 'xor' | 'and' | '|' | '^' | '&' | '<<' | '>>' | '+' | '-' | '*' | '/' | '%' | '\' | '**' ] '=' ;
 
 	EXPR ::= XOR_EXPR [ 'or' EXPR ] ;
 	XOR_EXPR ::= AND_EXPR [ 'xor' XOR_EXPR ] ;
 	AND_EXPR ::= NOT_EXPR [ 'and' AND_EXPR ] ;
 	NOT_EXPR ::= EQ_EXPR [ 'not' NOT_EXPR ] ;
 	EQ_EXPR ::= REL_EXPR [ ( '==' | '!=' ) EQ_EXPR ] ;
-	REL_EXPR ::= BOR_EXPR [ ( '<=' | '>=' | '<' | '>' ) REL_EXPR ] ;
+	REL_EXPR ::= BOR_EXPR [ ( '=>' | '=<' | '<' | '>' ) REL_EXPR ] ;
 	BOR_EXPR ::= BXOR_EXPR [ '|' BOR_EXPR ] ;
 	BXOR_EXPR ::= BAND_EXPR [ '^' BXOR_EXPR ] ;
 	BAND_EXPR ::= SHF_EXPR [ '&' BAND_EXPR ] ;
@@ -2567,10 +2567,10 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 	ADD_EXPR ::= MUL_EXPR [ ( '+' | '-' ) ADD_EXPR ] ;
 	MUL_EXPR ::= POW_EXPR [ ( '%' | '*' | '/' ) MUL_EXPR ] ;
 	POW_EXPR ::= UNA_EXPR [ '**' POW_EXPR ] ;
-	UNA_EXPR ::= { '@' | '$' | '$$' | '!-' | '!+' | '!!' | '!' } PAC_EXPR ;
+	UNA_EXPR ::= { '@' | '$' | '$$' | '-' | '+' | '!' } PAC_EXPR ;
 	PAC_EXPR ::= [ '::' TYPE '::' ] MEM_EXPR ;
 	MEM_EXPR ::= RES_EXPR [ ( '~' | '.' | '->' ) MEM_EXPR ] ;
-	RES_EXPR ::= ( name | fname ) { [ ARG ] [ '[' EXPR ']' ] }  | '(' EXPR ')' | string | integer | float
+	RES_EXPR ::= name | fname | '(' EXPR ')' | string | integer | float
 		| '[' { EXPR \{ ',' } } ']' | 'lamda' [ '[' { name } ']' ] [ SIGNATURE ] STAT ;
 
 	TYPE ::= const TYPECONST | TYPECONST ;
@@ -3602,3 +3602,7 @@ be able to optimize it.
 I think the language is in its final stage of preprocessing. I don't know what more
 to improve. I can isolate specific algorithms. Especially the reordering one. That
 will be a fun task.
+
+Is the grammar finished? Is everything that has been desired implemented? Expressions
+make up the largest part of the grammar in terms of sentences. I need to make ARG
+and array access recursive. The difficulty lies in that.

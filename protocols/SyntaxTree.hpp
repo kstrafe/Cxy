@@ -42,6 +42,7 @@ struct SyntaxTree
 	std::string toString(int indent = 0) const;
 
 	SyntaxTree *setLexeme(const std::string &lexeme);
+
 	Token token;
 	CrossTerminal node_type;
 	std::deque<SyntaxTree *> children;
