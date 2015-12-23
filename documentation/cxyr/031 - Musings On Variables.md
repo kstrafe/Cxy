@@ -2569,9 +2569,12 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 	POW_EXPR ::= UNA_EXPR [ '**' POW_EXPR ] ;
 	UNA_EXPR ::= { '@' | '$' | '$$' | '-' | '+' | '!' } PAC_EXPR ;
 	PAC_EXPR ::= [ '::' TYPE '::' ] MEM_EXPR ;
-	MEM_EXPR ::= RES_EXPR [ ( '~' | '.' | '->' ) MEM_EXPR ] ;
+	MEM_EXPR ::= CALL_EXPR [ ( '~' | '.' | '->' ) MEM_EXPR ] ;
+	CALL_EXPR ::= RES_EXPR { ARG | LIST } ;
 	RES_EXPR ::= name | fname | '(' EXPR ')' | string | integer | float
-		| '[' { EXPR \{ ',' } } ']' | 'lamda' [ '[' { name } ']' ] [ SIGNATURE ] STAT ;
+		| LIST | 'lamda' [ '[' { name } ']' ] [ SIGNATURE ] STAT ;
+
+	LIST ::= '[' { EXPR \{ ',' } } ']' ;
 
 	TYPE ::= const TYPECONST | TYPECONST ;
 	TYPECONST ::= primitive | ( 'ref' | 'ptr' ) ( TYPE | SIGNATURE )
@@ -2580,9 +2583,7 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 
 	// Statements
 	STAT ::=
-		'goto' name EXPR ';'
-		| 'label' name ';'
-		| 'try' STAT | 'catch' STAT | 'raise' ename ';'
+		'goto' name EXPR ';' | 'label' name ';' | 'try' STAT | 'catch' STAT | 'raise' ename ';'
 		| 'hack' '(' string ')' ';'
 		| DATA ';' | FEXPR ';'
 		| '{' { STAT } '}' ;
@@ -3605,4 +3606,20 @@ will be a fun task.
 
 Is the grammar finished? Is everything that has been desired implemented? Expressions
 make up the largest part of the grammar in terms of sentences. I need to make ARG
-and array access recursive. The difficulty lies in that.
+and array access recursive. The difficulty lies in that. The use of [] and () are
+in themselves left-recursive, so should we view [ and ( as an operator in that context?
+
+	CALL ::= UNDER_CALL [ '(' ARGS ')' CALL ]
+
+This could work. The '(' is merely regarded as an operator just like all the others.
+This gives us
+
+	CALL_EXPR ::= ACC_EXPR { ARG } ;
+	ACC_EXPR ::= RES_EXPR { LIST } ;
+
+Will this work? Imagine the code:
+
+	a[4]()[b];
+	((a[4])())[b];
+
+
