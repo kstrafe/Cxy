@@ -2552,32 +2552,20 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 	SIGNATURE ::= '(' ( { DATA | 'this' } ) ':' $1 [ ':' [ 'const' ] [ 'ctor' ] [ 'dtor' ] [ 'pure' ] ] ')' ;
 	ARG ::= '(' { FEXPR }* \{ ';' } ')' ;
 	FEXPR ::= { EXPR [ ':' mname ] }+ \{ ',' } [ COMPOUND EXPR ] ;  // A FEXRP statement
-	COMPOUND ::= [ 'or' | 'xor' | 'and' | '|' | '^' | '&' | '<<' | '>>' | '+' | '-' | '*' | '/' | '%' | '\' | '**' ] '=' ;
+	COMPOUND ::= [ 'or' | 'xor' | 'and' | '|' | '^' | '&' | '<<' | '>>' | '+' | '-' | '*' | '/' | '%' | '\' | '**' ] . '=' ;
 
-	EXPR ::= XOR_EXPR [ 'or' EXPR ] ;
-	XOR_EXPR ::= AND_EXPR [ 'xor' XOR_EXPR ] ;
-	AND_EXPR ::= NOT_EXPR [ 'and' AND_EXPR ] ;
-	NOT_EXPR ::= EQ_EXPR [ 'not' NOT_EXPR ] ;
-	EQ_EXPR ::= REL_EXPR [ ( '==' | '!=' ) EQ_EXPR ] ;
-	REL_EXPR ::= BOR_EXPR [ ( '=>' | '=<' | '<' | '>' ) REL_EXPR ] ;
-	BOR_EXPR ::= BXOR_EXPR [ '|' BOR_EXPR ] ;
-	BXOR_EXPR ::= BAND_EXPR [ '^' BXOR_EXPR ] ;
-	BAND_EXPR ::= SHF_EXPR [ '&' BAND_EXPR ] ;
-	SHF_EXPR ::= ADD_EXPR [ ( '<<' | '>>' ) SHF_EXPR ] ;
-	ADD_EXPR ::= MUL_EXPR [ ( '+' | '-' ) ADD_EXPR ] ;
-	MUL_EXPR ::= POW_EXPR [ ( '%' | '*' | '/' ) MUL_EXPR ] ;
-	POW_EXPR ::= UNA_EXPR [ '**' POW_EXPR ] ;
-	UNA_EXPR ::= { '@' | '$' | '$$' | '-' | '+' | '!' } PAC_EXPR ;
+	EXPR ::= UNA_EXPR [ symbol EXPR ] ;
+	UNA_EXPR ::= { '@' | '$' | '$$' | '-' | '+' | '!' | '!!' } PAC_EXPR ;
 	PAC_EXPR ::= [ '::' TYPE '::' ] MEM_EXPR ;
 	MEM_EXPR ::= CALL_EXPR [ ( '~' | '.' | '->' ) MEM_EXPR ] ;
-	CALL_EXPR ::= RES_EXPR { ARG | LIST } ;
-	RES_EXPR ::= name | fname | '(' EXPR ')' | string | integer | float
-		| LIST | 'lamda' [ '[' { name } ']' ] [ SIGNATURE ] STAT ;
-
+	CALL_EXPR ::= RES_EXPR TRAIL ;
+	TRAIL ::= [ ( ARG | LIST ) TRAIL ] ;
+	RES_EXPR ::= name | mname | '(' EXPR ')' | string | integer | float | LIST |
+		'lamda' [ '[' { name } ']' ] [ SIGNATURE ] STAT | 'cast' '[' TYPE ']' '(' EXPR ')' ;
 	LIST ::= '[' { EXPR \{ ',' } } ']' ;
 
 	TYPE ::= const TYPECONST | TYPECONST ;
-	TYPECONST ::= primitive | ( 'ref' | 'ptr' ) ( TYPE | SIGNATURE )
+	TYPECONST ::= ( ) | ( 'ref' | 'ptr' ) ( TYPE | SIGNATURE )
 		| 'array' EXPR TYPE | [ pname '::' ] cname [ GRANT ] ;
 	GRANT ::= '[' { ( TYPE | cname '=' TYPE | FEXPR ) ';' }+ ']'
 
@@ -2587,6 +2575,13 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 		| 'hack' '(' string ')' ';'
 		| DATA ';' | FEXPR ';'
 		| '{' { STAT } '}' ;
+
+	// Lexer, names are given in lowercase.
+	digit ::= '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' ;
+	integer ::= { digit }+
+	primitive ::= integer ( 's' | 'se' | 'so' | 'u' | 'ue' | 'uo' )
+	lower ::= 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h' | 'i' | 'j' | 'k' | 'l' | 'm' | 'n' | 'o' | 'p' | 'q' | 'r' | 's' | 't' | 'u' | 'v' | 'w' | 'x' | 'y' | 'z'
+	upper ::= 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H' | 'I' | 'J' | 'K' | 'L' | 'M' | 'N' | 'O' | 'P' | 'Q' | 'R' | 'S' | 'T' | 'U' | 'V' | 'W' | 'X' | 'Y' | 'Z'
 
 Some of the changes that are planned. As can be seen, typedecls are very simple now.
 What I don't like is that signatures may contain `Type {a, b, c}`. This is dissimilar
@@ -3621,5 +3616,129 @@ Will this work? Imagine the code:
 
 	a[4]()[b];
 	((a[4])())[b];
+	(((a(1))[2])[3])
 
+The parentheses denote parse tree. Oh. I also resolved the problem with !! and !.
+Now 'not' is uesd instead. likewise, 'xor' has been added. The words are operators
+used for booleans. They can be created for other types too though. Ugh I'm still
+pondering operator precedence. I really like to have it, but it requires post-processing.
+It's the post-processing that I don't like. I wish the grammar to be easily semantically
+correct. What about simply putting all operators on the same level?
 
+	a + b * d;
+
+Due to right-recursion, the right-most elements will be computed first.
+
+	not a and b;
+
+would be wrong, since not (a and b) would occur. I suppose if we want, we can simply
+do:
+
+	not(a) and (b);
+
+Let's just expand on the idea:
+
+	10 + 3 * 8 - 4 . max;
+
+4 is an integer of size 2s (standard type is signed). Then, the first operation is
+.max. This results in '7'.
+
+	10 + 3 * 8 - 7
+	10 + 3 * 1
+	10 + 3
+	13
+
+This would be simple to implement, and also very friendly. Commoners do not remember
+operator precedence. Professional programmers may remember them. For the longest
+time I have not. People I have worked with have not. Maybe it's for the best. This
+removes ambiguity and possible misinterpretations. How are method parameters affected?
+So far only the unary operators take precedence over everything else. That does shorten
+the grammar significantly.
+
+	3 + @myptr() / 4;
+
+@ binds more strongly, and () binds even stronger. This means that @ will dereference
+the return value out from the myptr() call. It shall be as such. From lowest to highest
+precedence:
+
+	Binary operators
+	Unary operators
+	Type prefixing
+	member/extraction
+	argument/array access
+
+Since everything is right-recursive anyways, there should be no problem with this
+precedence.
+
+	32u a;
+	a = @val[3] + 4;
+
+Where 'val' is of the type `::array 4 ptr 32u::`. Still, lists are not space-delimited.
+The nice thing about all this is that we can still implement operator precedence
+(as in, * before +) post-production, independently of the grammar. Overloading unary
+operators with binary operators is still overloading of methods. This is something
+that was not desired. Should a special function name be created? What about the address
+of an address? Well an address is itself just an rvalue. It has no address except
+some random value on the stack. It therefore makes no sense. I think I've gone over
+this before. Anyways, let's examine the grammar. What about compound assignments?
+
+	if ((a >= b) && c())
+		doSomething();
+	a += 3;
+
+Operators are just methods. Wait, what if names are also operators? What if names
+can take left and right arguments as well?
+
+	Matrix a(inverse=true; eye=true;)
+		b(eye=true) c(100);
+	(3 - 1 * a matmul c())
+	if (a contains 103)
+		.sml.out << "a contains an invalid number";
+
+I'm toying with some interesting stuff here. Allowing one to create custom operators
+is incredibly exciting. Instead of being scala and making operators >>=<< weird symbols,
+the operators are simply words.
+
+	3 mul 8;
+	8 mod 3;
+
+Without precedence anyways, this should be fine. Operators are simply methods. There
+is however one problem. It's pretty useful to have overloading. Without overloading,
+the operators will be a mess. You mean I will have to define two multiplications?
+One for scalar and the other for matrices.
+
+	Matrix a(eye=true);
+	32f b(3102.0);
+
+	a * b;  // Ok, overload for 32f
+	b * a;  // Err, no overload for floats
+	b * b;  // Ok, matrix multiplication with self.
+
+One part of me tells me that it should be fine to define other operators. How can
+the above be resolved?
+
+	a scalmul b;
+	b * b;
+
+It does solve the specificity of operators. I kinda like that. The question is: should
+operators be type-overloadable? Let's examine.
+
+	Mat4 quat(rot=45.0; [1.0,1.0,1.0]);
+	Vec3 pt([2.0,3.4,5.0]);
+	Mat4 newmat(quat vecmul pt);
+
+the case for overloading appears strong. It seems just so useful... I'd think that
+the specific names convey information that is actually important. I really like the
+idea of custom operators. It opens up a whole new avenue of creativity. Without overloading,
+we need to be specific in our method names.
+
+	::Math::colmax(b matscal 1.3 + a matscal 10.0);
+
+In the above cases, only binary operators are eligible for operator use. What about
+unary and even ternary operators? I suppose we need to create a method taking zero
+arguments:
+
+	8.neg() + 3;
+
+Which fits quite naturally. I just dislike that method names can not be used for
+unary operators.
