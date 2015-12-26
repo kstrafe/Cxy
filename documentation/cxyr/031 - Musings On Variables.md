@@ -2554,23 +2554,24 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 	FEXPR ::= { EXPR [ ':' mname ] }+ \{ ',' } [ COMPOUND EXPR ] ;  // A FEXRP statement
 
 	UNOP ::= '@'|'$'|'$$'|'--'|'++'|'!'|'!!' ;
-	BINOP ::= '+'|'-'|'%'|'^'|'&'|'|'|'*'|'**'|'^^'|'&&'|'||' ;
+	BINOP ::= '+'|'-'|'%'|'^'|'&'|'|'|'*'|'**'|'^^'|'&&'|'||'|'>='|'<='|'=='|'!='
+		'>'|'<'|'/'|'\' ;
 	COMPOUND ::= BINOP . '=' ;
-
-	EXPR ::= UNA_EXPR [ OP EXPR ] ;
 	OP ::= 'op' '-' name | BINOP ;
 	UN ::= 'un' '-' name ;
+
+	EXPR ::= UNA_EXPR [ OP EXPR ] ;
 	UNA_EXPR ::= { UNOP | UN } PAC_EXPR ;
 	PAC_EXPR ::= [ '::' TYPE '::' ] MEM_EXPR ;
 	MEM_EXPR ::= CALL_EXPR [ ( '~' | '.' | '->' ) MEM_EXPR ] ;
 	CALL_EXPR ::= RES_EXPR TRAIL ;
 	TRAIL ::= [ ( ARG | LIST ) TRAIL ] ;
 	RES_EXPR ::= name | mname | '(' EXPR ')' | string | integer | float | LIST |
-		'lamda' [ '[' { name } ']' ] [ SIGNATURE ] STAT | 'cast' '[' TYPE ']' '(' EXPR ')' ;
+		'lamda' [ '[' { name } ']' ] [ SIGNATURE ] '{' STAT '}' | 'cast' '[' TYPE ']' '(' EXPR ')' ;
 	LIST ::= '[' { EXPR } ']' ;
 
 	TYPE ::= const TYPECONST | TYPECONST ;
-	TYPECONST ::= ( ) | ( 'ref' | 'ptr' ) ( TYPE | SIGNATURE )
+	TYPECONST ::= ( 'ref' | 'ptr' ) ( TYPE | SIGNATURE )
 		| 'array' EXPR TYPE | [ pname '::' ] cname [ GRANT ] ;
 	GRANT ::= '[' { ( TYPE | cname '=' TYPE | FEXPR ) ';' }+ ']'
 
@@ -3862,4 +3863,18 @@ be the best.
 	array 32u a([1 --4 32 un-square 43]);
 
 Maybe we should just be satisfied with remembering the different operators. Maybe
-that's the way.
+that's the way. Perhaps it's fine.
+
+	private 32u a b c;
+
+	(:) enter {  // CLASS
+		This my_object;
+		my_object.a = 1;
+		my_object.b = 2;
+		my_object.c = 3;
+		debug my_object.a + 1;
+		debug my_object.c + 1;
+		sml.out.print(my_object.a.toString());
+	}
+
+
