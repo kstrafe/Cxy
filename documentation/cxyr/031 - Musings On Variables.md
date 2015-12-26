@@ -2555,14 +2555,14 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 	FEXPR ::= { EXPR [ ':' mname ] }+ \{ ',' } [ COMPOUND EXPR ] ;
 
 	UNOP ::= '@'|'$'|'$$'|'--'|'++'|'!'|'!!' ;
-	BINOP ::= '+'|'-'|'%'|'^'|'&'|'|'|'*'|'**'|'^^'|'&&'|'||'|'>='|'<='|'=='|'!='
+	BINOP ::= '+'|'-'|'%'|'^'|'&'|'|'|'*'|'**'|'>='|'<='|'=='|'!='
 		'>'|'<'|'/'|'\'|'<<'|'>>' ;
 	COMPOUND ::= BINOP . '=' ;
 	OP ::= 'op' '-' name | BINOP ;
-	UN ::= 'un' '-' name ;
+	UN ::= 'un' '-' name | UNOP;
 
 	EXPR ::= UNA_EXPR [ OP EXPR ] ;
-	UNA_EXPR ::= { UN | UNOP } PAC_EXPR ;
+	UNA_EXPR ::= { UN } PAC_EXPR ;
 	PAC_EXPR ::= [ '::' TYPE '::' ] MEM_EXPR ;
 	MEM_EXPR ::= CALL_EXPR [ ( '~' | '.' | '->' ) MEM_EXPR ] ;
 	CALL_EXPR ::= RES_EXPR TRAIL ;
@@ -3881,4 +3881,10 @@ that's the way. Perhaps it's fine.
 		sml.out op-print a.toString();
 	}
 
+Unary operators. Should they all be of a similar 'kind' to remember them correctly?
+Hell, we don't even need boolean or, and, and xor, since using 1u will work the same.
 
+	32u a(100);
+	1u b(a > 50);
+	if b & 1
+		debug "hey!";
