@@ -3887,3 +3887,19 @@ Hell, we don't even need boolean or, and, and xor, since using 1u will work the 
 	1u b(a > 50);
 	if b & 1
 		debug "hey!";
+
+Since no lists are allowed, we could just say that ifs do not require a () around
+the expression. The problem with that is that we still have potential binary operators..
+maybe.. let's try it out:
+
+	if (a + b - c.getSomething op-matmul d) > 320
+		debug --my_value + 3;
+
+Wouldn't it be nice to have a method that can take in expressions and arbitrarily
+call the toString method? Perhaps that's what # can be used for:
+
+	#sml::print(a + b);
+
+It will just call toString around the expression. What should be done,.. I think,
+is to copy the arguments verbatim as a string.
+
