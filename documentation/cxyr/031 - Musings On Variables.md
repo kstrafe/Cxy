@@ -2549,25 +2549,27 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 	ACCESS ::= 'private' | 'public' | 'restricted' ;
 	DATA ::= TYPE { name [ ARG ] }+ ';' ;
 	METHOD ::= SIGNATURE mname STATEMENT ;
-	SIGNATURE ::= '(' ( { DATA | 'this' } ) ':' $1 [ ':' [ 'const' ] [ 'ctor' ] [ 'dtor' ] [ 'pure' ] ] ')' ;
+	SIGNATURE ::= '(' ( { DATA | 'this' ';' } ) ':' $1
+		[ ':' [ 'const' ] [ 'ctor' ] [ 'dtor' ] [ 'pure' ] ] ')' ;
 	ARG ::= '(' { FEXPR }* \{ ';' } ')' ;
-	FEXPR ::= { EXPR [ ':' mname ] }+ \{ ',' } [ COMPOUND EXPR ] ;  // A FEXRP statement
+	FEXPR ::= { EXPR [ ':' mname ] }+ \{ ',' } [ COMPOUND EXPR ] ;
 
 	UNOP ::= '@'|'$'|'$$'|'--'|'++'|'!'|'!!' ;
 	BINOP ::= '+'|'-'|'%'|'^'|'&'|'|'|'*'|'**'|'^^'|'&&'|'||'|'>='|'<='|'=='|'!='
-		'>'|'<'|'/'|'\' ;
+		'>'|'<'|'/'|'\'|'<<'|'>>' ;
 	COMPOUND ::= BINOP . '=' ;
 	OP ::= 'op' '-' name | BINOP ;
 	UN ::= 'un' '-' name ;
 
 	EXPR ::= UNA_EXPR [ OP EXPR ] ;
-	UNA_EXPR ::= { UNOP | UN } PAC_EXPR ;
+	UNA_EXPR ::= { UN | UNOP } PAC_EXPR ;
 	PAC_EXPR ::= [ '::' TYPE '::' ] MEM_EXPR ;
 	MEM_EXPR ::= CALL_EXPR [ ( '~' | '.' | '->' ) MEM_EXPR ] ;
 	CALL_EXPR ::= RES_EXPR TRAIL ;
 	TRAIL ::= [ ( ARG | LIST ) TRAIL ] ;
-	RES_EXPR ::= name | mname | '(' EXPR ')' | string | integer | float | LIST |
-		'lamda' [ '[' { name } ']' ] [ SIGNATURE ] '{' STAT '}' | 'cast' '[' TYPE ']' '(' EXPR ')' ;
+	RES_EXPR ::= name | mname | '(' EXPR ')' | string | integer | float | LIST
+		| 'lamda' [ '[' { name } ']' ] [ SIGNATURE ] '{' { STAT } '}'
+		| 'cast' '[' TYPE ']' '(' EXPR ')' ;
 	LIST ::= '[' { EXPR } ']' ;
 
 	TYPE ::= const TYPECONST | TYPECONST ;
@@ -2578,9 +2580,7 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 	// Statements
 	STAT ::=
 		'goto' name EXPR ';' | 'label' name ';' | 'try' STAT | 'catch' STAT | 'raise' ename ';'
-		| 'hack' '(' string ')' ';'
-		| DATA ';' | FEXPR ';'
-		| '{' { STAT } '}' ;
+		| 'hack' '(' string ')' ';' | DATA ';' | FEXPR ';' | '{' { STAT } '}' ;
 
 	// Lexer, names are given in lowercase.
 	digit ::= '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' ;
@@ -3875,6 +3875,10 @@ that's the way. Perhaps it's fine.
 		debug my_object.a + 1;
 		debug my_object.c + 1;
 		sml.out.print(my_object.a.toString());
+		Matrix a(type=::Matrix::TRIANGULAR; grow=2) b;
+		b = ::Matrix::eye();
+		a = a op-matmul b;
+		sml.out op-print a.toString();
 	}
 
 
