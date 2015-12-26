@@ -2554,8 +2554,9 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 	FEXPR ::= { EXPR [ ':' mname ] }+ \{ ',' } [ COMPOUND EXPR ] ;  // A FEXRP statement
 	COMPOUND ::= [ 'or' | 'xor' | 'and' | '|' | '^' | '&' | '<<' | '>>' | '+' | '-' | '*' | '/' | '%' | '\' | '**' ] . '=' ;
 
-	EXPR ::= UNA_EXPR [ symbol EXPR ] ;
-	UNA_EXPR ::= { '@' | '$' | '$$' | '-' | '+' | '!' | '!!' } PAC_EXPR ;
+	EXPR ::= UNA_EXPR [ OP EXPR ] ;
+	OP ::= 'op' '(' name ')' | symbol ;
+	UNA_EXPR ::= { '@' | '$' | '$$' | '--' | '++' | '!' | '!!' | OP } PAC_EXPR ;
 	PAC_EXPR ::= [ '::' TYPE '::' ] MEM_EXPR ;
 	MEM_EXPR ::= CALL_EXPR [ ( '~' | '.' | '->' ) MEM_EXPR ] ;
 	CALL_EXPR ::= RES_EXPR TRAIL ;
@@ -3741,4 +3742,58 @@ arguments:
 	8.neg() + 3;
 
 Which fits quite naturally. I just dislike that method names can not be used for
-unary operators.
+unary operators. This limits quite a lot. It's always the expressions getting in
+the way. It's quite annoying. What about this method of expressions though? Binary,
+named expressions. It sounds cool. `@getMat().matmul(@getOtherMat());` Why don't
+I just roll with that? I need something simple to implement. Maybe create a lexer
+instead. Not sure anymore.
+
+	op(neg) alpha op(plus) beta op(times) gamma;
+
+Everything except expressions are in place. What if operators are just kept like
+they are? What if we do not allow  defining named operators? Only symbolic operators.
+Any symbolic operators? No, we already concluded that was bad. Named operators seem
+really interesting though. It's basically such that an operator takes the entire
+right side as an argument, whilst a call nests.
+
+	a.plus(b.plus(c.plus(d)));
+	a op(plus) b op(plus) c op(plus) d;
+
+That's actually seemingly useful. Maybe 'op' can be used... That may be a solution.
+When do you actually use these operators? Rarely I reckon.
+
+	a op(matmul) b * 100.0;
+
+Maybe do as python does, by not naming methods the direct symbols, but instead __eq__.
+This avoids any confusion... Maybe 'op - ' is better.
+
+	@myValue() op-matmul secondMatrix();
+
+I like it. This also allows the use of:
+
+	op-square @myMatrix(start=1; increment=3; eye=true) op-matmul beta_matrix;
+
+That is in fact incredibly clear. An identity matrix, created by a pointer, returned
+squared, and matrix multiplied with `beta_matrix`. Yeah I like this. The language
+is extremely simple now. It's easy to discern operators. Operations have to be static
+as well. We can't allow expressions inside the op-name signature. It is merely an
+alias:
+
+	a op-matmul b;
+	a.matmul(b);
+
+Now that that is resolved: how do we declare a new unary - method? -- could do the
+trick, but it's already used for iteration.
+
+	inc a;
+	dec b;
+	--4 + 2
+
+We can instead make inc and dec the incrementors and decrementors. This resolves
+any potential ambiguity. This makes -- and ++ the respective negation and positivation?
+operators. I like the idea.
+
+	op-dec a;
+	op-inc c;
+
+
