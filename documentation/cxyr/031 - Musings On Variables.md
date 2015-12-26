@@ -2553,10 +2553,14 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 	ARG ::= '(' { FEXPR }* \{ ';' } ')' ;
 	FEXPR ::= { EXPR [ ':' mname ] }+ \{ ',' } [ COMPOUND EXPR ] ;  // A FEXRP statement
 
+	UNOP ::= '@'|'$'|'$$'|'--'|'++'|'!'|'!!' ;
+	BINOP ::= '+'|'-'|'%'|'^'|'&'|'|'|'*'|'**'|'^^'|'&&'|'||' ;
+	COMPOUND ::= BINOP . '=' ;
+
 	EXPR ::= UNA_EXPR [ OP EXPR ] ;
-	OP ::= 'op' '-' name | symbol ;
-	UP ::= 'un' '-' name ;
-	UNA_EXPR ::= { '@' | '$' | '$$' | '--' | '++' | '!' | '!!' | UP } PAC_EXPR ;
+	OP ::= 'op' '-' name | BINOP ;
+	UN ::= 'un' '-' name ;
+	UNA_EXPR ::= { UNOP | UN } PAC_EXPR ;
 	PAC_EXPR ::= [ '::' TYPE '::' ] MEM_EXPR ;
 	MEM_EXPR ::= CALL_EXPR [ ( '~' | '.' | '->' ) MEM_EXPR ] ;
 	CALL_EXPR ::= RES_EXPR TRAIL ;
