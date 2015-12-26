@@ -2552,18 +2552,18 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 	SIGNATURE ::= '(' ( { DATA | 'this' } ) ':' $1 [ ':' [ 'const' ] [ 'ctor' ] [ 'dtor' ] [ 'pure' ] ] ')' ;
 	ARG ::= '(' { FEXPR }* \{ ';' } ')' ;
 	FEXPR ::= { EXPR [ ':' mname ] }+ \{ ',' } [ COMPOUND EXPR ] ;  // A FEXRP statement
-	COMPOUND ::= [ 'or' | 'xor' | 'and' | '|' | '^' | '&' | '<<' | '>>' | '+' | '-' | '*' | '/' | '%' | '\' | '**' ] . '=' ;
 
 	EXPR ::= UNA_EXPR [ OP EXPR ] ;
-	OP ::= 'op' '(' name ')' | symbol ;
-	UNA_EXPR ::= { '@' | '$' | '$$' | '--' | '++' | '!' | '!!' | OP } PAC_EXPR ;
+	OP ::= 'op' '-' name | symbol ;
+	UP ::= 'un' '-' name ;
+	UNA_EXPR ::= { '@' | '$' | '$$' | '--' | '++' | '!' | '!!' | UP } PAC_EXPR ;
 	PAC_EXPR ::= [ '::' TYPE '::' ] MEM_EXPR ;
 	MEM_EXPR ::= CALL_EXPR [ ( '~' | '.' | '->' ) MEM_EXPR ] ;
 	CALL_EXPR ::= RES_EXPR TRAIL ;
 	TRAIL ::= [ ( ARG | LIST ) TRAIL ] ;
 	RES_EXPR ::= name | mname | '(' EXPR ')' | string | integer | float | LIST |
 		'lamda' [ '[' { name } ']' ] [ SIGNATURE ] STAT | 'cast' '[' TYPE ']' '(' EXPR ')' ;
-	LIST ::= '[' { EXPR \{ ',' } } ']' ;
+	LIST ::= '[' { EXPR } ']' ;
 
 	TYPE ::= const TYPECONST | TYPECONST ;
 	TYPECONST ::= ( ) | ( 'ref' | 'ptr' ) ( TYPE | SIGNATURE )
@@ -3796,4 +3796,66 @@ operators. I like the idea.
 	op-dec a;
 	op-inc c;
 
+Alright. That's now solved. Let's look at some sample code:
 
+	(:) enter {
+		sml::String string;
+		sml.in op-read string;
+		sml.out op-print factorial(string.to32u()).toString() + " is the number";
+	}
+
+	(113ue out : 5ue in) factorial {
+		out = ::5ue::(in);
+		dec in;
+		while in > 1
+			out *= in;
+	}
+
+! is the binary not, !! is the boolean not. I really like the possibility of coding
+
+	if myset op-has 2
+		debug "Op contains two!";
+
+It really allows the programmer to write beautifully expressive and clear code. That
+is something to strive towards. Now, unary operators are not explicit, so we still
+need the comma in the list. I wish to remove the comma. Maybe have something like
+'uop' or 'up'? This will 'unify' (not exactly, but the word seems nice here) lists
+with the data declaration statement, as it requires no commas either.
+
+	up-inv $getMyMatrix() op-matmul other_matrix;
+
+This seems fitting, as unary operators are supposed to bind more strongly. They have
+higher precedence. Should $$ be changed? I like the consty stuff of it, but it looks
+a lot like !!, --, and ++. What I don't like is that the double characters are both
+in the binary and unary operators. What about the semantic requirement for operators?
+
+I would like to think it automatically takes a const-reference to the argument. That
+seems very useful, because we don't want to write:
+
+	sml op-print $a - $b;
+
+We want to write:
+
+	sml op-print a-b;
+	sml.print($a.-($b));
+	sml op-print a.--();
+	sml op-print --a;
+
+Let ',' not be an operator. That would be incredibly annoying. So should we just
+remember the types of operators? What about smart pointers? C++ allows redefining
+'->' and * (dereference) that allows you to create a class that acts as a smart pointer.
+
+	std::unique_ptr<int> a(new int(0));
+	*a = 4;
+	sml::Sptr[32u] a(new[32u]{0});
+	// @a = 4;  // Not allowed
+	up-dref a = 4;
+
+Instead of using @ we can define up-dref to dereference. If @ is not allowed to be
+overridden, then we have to define our own dereferencing method. I think that may
+be the best.
+
+	array 32u a([1 --4 32 un-square 43]);
+
+Maybe we should just be satisfied with remembering the different operators. Maybe
+that's the way.
