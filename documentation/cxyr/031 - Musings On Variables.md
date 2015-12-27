@@ -3958,3 +3958,37 @@ That's rather odd,... we can assign to an array? Well, maybe it's okay, since we
 can idealize the whole ordeal as if we put the arguments right at the top of the
 function. Maybe that's okay. However, those assignments can only use locally defined
 parameters, and nothing more.
+
+	(:) enter {
+		game::Game[Physics=lib::Physics] instance;
+		instance.enter();
+	}
+
+	// game/Game.cxy:
+	private util::FrameLimit frames(60);
+	private 32u state(START_STATE);
+
+	(: : pure) constructor { }
+	(: : pure) enter {
+		while true {
+			handleInput();
+			doPhysics();
+			draw();
+			frames.limit();
+	}
+
+	(:) doPhysics {
+		switch (state) {
+			START_STATE {
+				...
+			}
+			default signal UNKNOWN_GAME_STATE;
+		}
+	}
+
+We kinda need some strongly typed enumerations. That would make the above easier.
+Maybe `Enum` as a type that is always local... `enum[This]` seems good enough.
+
+	enum[This] game_state(START_STATE);
+
+
