@@ -3991,4 +3991,19 @@ Maybe `Enum` as a type that is always local... `enum[This]` seems good enough.
 
 	enum[This] game_state(START_STATE);
 
+Is this it? Is it over? I feel content. I see no further issues. Perhaps only the
+associativity of the operators:
 
+	a * b;
+
+What if b is the matrix and a is the scalar? a has no member called * that takes
+in a matrix.
+
+	a ro-* b;
+
+Where ro stands for 'Right Operator', so the right element is the 'this' value. Whilst
+the left is the 'in' value. I think that this overcomplicates things unnecessarily.
+Instead, we can just reorganize a bit and keep things simple. I think that's a much
+better solution!
+
+I just need to internalize the current core language.
