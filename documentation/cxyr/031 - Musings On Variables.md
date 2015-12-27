@@ -3923,4 +3923,38 @@ to feel like one language.
 
 The part I don't like is the `::Ctype::()` part, it looks like something that should
 not be. On one hand, I'd love if it were a cast. On the other, this could be a constructor
-call. Either is great.
+call. Either is great. How will that be conveyed in the grammar? Well, there is only
+one constructor. It must automatically return a value that is `This` itself. That
+means that we can simply write:
+
+	a = ::MyType::constructor();
+	// I prefer
+	a = ::MyType::();
+
+So how is this done? We can add a simple grammar rule. Either an ARG or `MEM_EXPR`.
+Unfortunately, this creates a collision of lookaheads with `MEM_EXPR`... So how is
+that resolved?
+
+Why not keep the original grammar? We can detect if the right child of `PAC_EXPR`
+is `(` or not. How elegant. So be it. `::Type::( ... )` is the object creation expression.
+I like it. We already have 'cast' anyways, and casts are more rare than creations.
+
+	32u a;
+	a = cast[32u](::4u::(10));
+	a = 10;  // Also works.
+
+Works perfectly with the grammar, as `::Type::().something();` is perfectly fine.
+This makes `->` not that useful in this case. That is invalid, unless you take the
+pointer of it, which is invalid because it's an rvalue.
+Another interesting aspect is allowing expressions inside calls. That's rather odd.
+What I mean is that the following is perfectly legal Cxy
+
+	(:) enter {
+		32u b(10);
+		:: somewhere::There ::method(a[1] = b);
+	}
+
+That's rather odd,... we can assign to an array? Well, maybe it's okay, since we
+can idealize the whole ordeal as if we put the arguments right at the top of the
+function. Maybe that's okay. However, those assignments can only use locally defined
+parameters, and nothing more.
