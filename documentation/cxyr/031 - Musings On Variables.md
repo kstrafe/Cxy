@@ -2554,7 +2554,7 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 	ARG ::= '(' { FEXPR }* \{ ';' } ')' ;
 	FEXPR ::= { EXPR [ ':' mname ] }+ \{ ',' } [ COMPOUND EXPR ] ;
 
-	UNOP ::= '@'|'$'|'$$'|'--'|'++'|'!' ;
+	UNOP ::= '@'|'$'|'$$'|'--'|'!' ;
 	BINOP ::= '+'|'-'|'%'|'^'|'&'|'|'|'*'|'>='|'<='|'=='|'!='|'>'|'<'|'/'|'\'|'<<'|'>>' ;
 	COMPOUND ::= BINOP . '=' ;
 	OP ::= 'op' '-' name | BINOP ;
@@ -3903,3 +3903,24 @@ call the toString method? Perhaps that's what # can be used for:
 It will just call toString around the expression. What should be done,.. I think,
 is to copy the arguments verbatim as a string.
 
+I just need to solidify the whole idea. Especially now that everything is starting
+to feel like one language.
+
+	Type name name2(args) name3(otherargs; my=23);
+	(Atype a(args) b; Btype c : Ctype d; Etype e f) g {
+		// Recursively calling self
+		g(a=a; b=b; c=c;);  // recursion
+		// Assigning to the output parameters
+		d = ::Ctype::();
+		e = ::EType::();
+		f = e;
+
+		// Add a small, artificial delay
+		util::Counter alpha(0);
+		while alpha.value < 100
+			un-inc alpha;
+	}
+
+The part I don't like is the `::Ctype::()` part, it looks like something that should
+not be. On one hand, I'd love if it were a cast. On the other, this could be a constructor
+call. Either is great.
