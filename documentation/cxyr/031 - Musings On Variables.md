@@ -4006,4 +4006,6 @@ the left is the 'in' value. I think that this overcomplicates things unnecessari
 Instead, we can just reorganize a bit and keep things simple. I think that's a much
 better solution!
 
-I just need to internalize the current core language.
+I just need to internalize the current core language. I think this tree will be easy
+to translate into C or C++. I'll just need to polish the type system and everything
+will be complete.
