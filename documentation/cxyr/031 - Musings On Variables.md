@@ -2561,12 +2561,11 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 	UN ::= 'un' '-' name | UNOP;
 
 	EXPR ::= UNA_EXPR [ OP EXPR ] ;
-	UNA_EXPR ::= { UN } PAC_EXPR ;
-	PAC_EXPR ::= [ '::' TYPE '::' ] MEM_EXPR ;
+	UNA_EXPR ::= { UN } MEM_EXPR ;
 	MEM_EXPR ::= CALL_EXPR [ ( '~' | '.' | '->' ) MEM_EXPR ] ;
 	CALL_EXPR ::= RES_EXPR TRAIL ;
 	TRAIL ::= [ ( ARG | LIST ) TRAIL ] ;
-	RES_EXPR ::= name | mname | '(' EXPR ')' | string | integer | float | LIST
+	RES_EXPR ::= [ '::' TYPE '::' ] ( name | mname | ARG ) | '(' EXPR ')' | string | integer | float | LIST
 		| 'lamda' [ '[' { name } ']' ] [ SIGNATURE ] '{' { STAT } '}'
 		| 'cast' '[' TYPE ']' '(' EXPR ')' ;
 	LIST ::= '[' { EXPR } ']' ;
@@ -2574,10 +2573,8 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 	TYPE ::= [ 'const' ] TYPECONST ;
 	TYPECONST ::= [ 'ref' ] TYPECREF ;
 	TYPECREF ::= [ 'ptr' ] ( TYPE | 'ptr' SIGNATURE )
-		| 'array' [ '[' EXPR \{ ',' } ']' ] TYPE
-		| [ pname ] cname [ GRANT ]
-		| primitive ;
-	GRANT ::= '[' { ( TYPE | cname '=' TYPE | FEXPR ) ';' }+ ']'
+		| 'array' [ '[' EXPR \{ ',' } ']' ] TYPE | primitive
+		| [ pname ] cname [ '[' { ( TYPE | cname '=' TYPE | FEXPR ) ';' }+ ']' ] ;
 
 	// Statements
 	STAT ::=
@@ -2588,6 +2585,7 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 	name ::= lower { lower | upper } ;
 	cname ::= upper lower { lower | upper } ;
 	cnamep ::= cname '(' ;
+	pname ::= { lower }+ '::' ;
 	digit ::= '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' ;
 	integer ::= { digit [ ' ] }+ ;
 	float ::= integer '.' integer ;
@@ -4418,3 +4416,7 @@ up types instead.
 	const (ref ptr (some::Thing)) something;
 	_ (_ ptr ((:))) function;
 
+`PAC_EXPR` currently accepts `::Aa::(1 + 3)`, which doesn't make semantic sense.
+The idea is to make this a constructor, but I imagine it may be better to remove
+the requirement for the trailing '::' altogether. Maybe it needs to be put lower
+in the chain, near `RES_EXPR`?
