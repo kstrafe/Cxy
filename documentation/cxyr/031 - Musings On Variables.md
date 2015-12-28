@@ -2571,9 +2571,12 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 		| 'cast' '[' TYPE ']' '(' EXPR ')' ;
 	LIST ::= '[' { EXPR } ']' ;
 
-	TYPE ::= const TYPECONST | TYPECONST ;
-	TYPECONST ::= ( 'ref' | 'ptr' ) ( TYPE | SIGNATURE )
-		| 'array' TYPE | [ pname '::' ] cname [ GRANT ] ;
+	TYPE ::= [ 'const' ] TYPECONST ;
+	TYPECONST ::= [ 'ref' ] TYPECREF ;
+	TYPECREF ::= [ 'ptr' ] ( TYPE | 'ptr' SIGNATURE )
+		| 'array' [ '[' EXPR \{ ',' } ']' ] TYPE
+		| [ pname ] cname [ GRANT ]
+		| primitive ;
 	GRANT ::= '[' { ( TYPE | cname '=' TYPE | FEXPR ) ';' }+ ']'
 
 	// Statements
@@ -4182,7 +4185,236 @@ of trouble.
 	array 32u a([1 \2 3+3 4 \5]);
 
 This seems fine. It avoids the lookahead with `[` in expressions. This is nice. Let
-the compiler instead infer what the size is. This used in conjunctions with methods.
+the compiler instead infer what the size is. This used in conjunction with methods.
 I feel like I need to define a lexer as well. But am I satisfied with the grammar?
 operators can take in non-const references. Grants can be partial classes. Seems
-like everything is fine.
+like everything is fine. The grammar is pretty short too. Anything else? Well, the
+current grammar needs a big change. It's good for now. A few new sequence recognizers
+need to be added. One for 'cname' '(' in sequence. Another for... Hmm
+Maybe '::' '(' for the constructor call. What about,.. instead of using 'array',
+we use '::' '[' instead for expressions containing arrays? Or is that too ugly? Maybe...
+
+	[[32u]] a(::[::[1*factorial(3) 2 3] ::[4 5 6*f()] ::[7 \8 9-1]]);
+	array array 32u a([[1*factorial(3) 2 3] [4 5 6*f()] [7 \8 9-1]]);
+	ar ar 32u a([[1*factorial(3) 2 3] [4 5 6*f()] [7 \8 9-1]]);
+
+Interestingly enough, this example gives us the exact same size in line length. Is
+either desired over the other? I dislike the ::. It does not look clean. In addition,
+the trailing ]] on the type isn't very appealing. So should I stick with 'array'.
+It probably is the easiest, isn't it? It's clear enough too. Should be anyways. Hmm...
+I wonder if the grammar is done now... For arrays we just imagine as if the size
+is implicitly passed. Oh, arrays of a large size that are not pre-initialized, but
+instead initialized in the runtime. However, the size remains fixed. What about those?
+
+	array[100, 100] 32u my_array;
+
+seems like a nice notation. A comma-separated list denoting the dimensions of the
+array. The same would go for any 'grant', although this being a pseudo-grant. A method
+specifying what grant it wants, will only accept classes that have been granted the
+exact class:
+
+	(: Class[Aa=Xx] a) method {
+		...
+	}
+
+	(:) enter {
+		Class[Aa=Xx] b;
+		method(a=b);
+		Class c;
+		method(a=c);  // Illegal.
+	}
+
+This allows a wide variety of specialization,.. well, using static-ifs that is. Let's
+translate StringFilter from the compiler to Cxy:
+
+	array[2] 8u outstream;
+	8u can_fetch;
+	enum[This] previous(NOTHING_STATE) state(NOTHING_STATE);
+
+	(: : ctor) constructor {}
+
+	(8u out(0) : 8u in : pure) hexToBits
+	{
+		switch (hex)
+		{
+			case '0': out |= 0b0000; break;
+			case '1': out |= 0b0001; break;
+			case '2': out |= 0b0010; break;
+			case '3': out |= 0b0011; break;
+			case '4': out |= 0b0100; break;
+			case '5': out |= 0b0101; break;
+			case '6': out |= 0b0110; break;
+			case '7': out |= 0b0111; break;
+			case '8': out |= 0b1000; break;
+			case '9': out |= 0b1001; break;
+			case 'A': out |= 0b1010; break;
+			case 'B': out |= 0b1011; break;
+			case 'C': out |= 0b1100; break;
+			case 'D': out |= 0b1101; break;
+			case 'E': out |= 0b1110; break;
+			case 'F': out |= 0b1111; break;
+			default: raise INVALID_CODE_POINT; break;
+		}
+	}
+
+
+	(: this; 8u in) push
+	{
+		switch (state)
+		{
+			case NOTHING_STATE:
+				switch (character)
+				{
+					case '\'':
+						state = SINGLE_STATE;
+						outstream[0] = '`'; can_fetch = 1;
+					break;
+					case '"':
+						state = MULTIPLE_STATE;
+						outstream[0] = '`'; can_fetch = 1;
+					break;
+					case '`':
+						state = VERBATIM_STATE;
+						outstream[0] = '`'; can_fetch = 1;
+					break;
+					default: outstream[0] = character; can_fetch = 1; break;
+				}
+			break;
+			case SINGLE_STATE:
+				switch (character)
+				{
+					case '\'':
+						state = NOTHING_STATE;
+						outstream[0] = '`'; can_fetch = 1;
+					break;
+					case '`':
+						can_fetch = 2;
+						outstream[0] = '`';
+						outstream[1] = '`';
+					break;
+					case '\\':
+						previous = state;
+						state = ESCAPE;
+					break;
+					default: outstream[0] = character; can_fetch = 1; break;
+				}
+			break;
+			case MULTIPLE_STATE:
+				switch (character)
+				{
+					case '"':
+						state = NOTHING_STATE;
+						outstream[0] = '`'; can_fetch = 1;
+					break;
+					case '`':
+						can_fetch = 2;
+						outstream[0] = '`';
+						outstream[1] = '`';
+					break;
+					case '\\':
+						previous = state;
+						state = ESCAPE;
+					break;
+					default: outstream[0] = character; can_fetch = 1; break;
+				}
+			break;
+			case VERBATIM_STATE:
+				switch (character)
+				{
+					case '`':
+						state = ESCAPE_VERBATIM;
+					break;
+					default: outstream[0] = character; can_fetch = 1; break;
+				}
+			break;
+			case ESCAPE_VERBATIM:
+				switch (character)
+				{
+					case '`':
+						state = VERBATIM_STATE;
+						can_fetch = 2;
+						outstream[0] = '`';
+						outstream[1] = '`';
+						break;
+					default:
+						state = NOTHING_STATE;
+						can_fetch = 2;
+						outstream[0] = character;
+						outstream[1] = '`';
+					break;
+				}
+			break;
+			case ESCAPE_STATE:
+				switch (character)
+				{
+					case 'a': state = previous; can_fetch = 1; outstream[0] = '\a'; break;
+					case 'b': state = previous; can_fetch = 1; outstream[0] = '\b'; break;
+					case 'c': state = CODE; break;
+					case 'f': state = previous; can_fetch = 1; outstream[0] = '\f'; break;
+					case 'n': state = previous; can_fetch = 1; outstream[0] = '\n'; break;
+					case 'r': state = previous; can_fetch = 1; outstream[0] = '\r'; break;
+					case 't': state = previous; can_fetch = 1; outstream[0] = '\t'; break;
+					case 'v': state = previous; can_fetch = 1; outstream[0] = '\v'; break;
+					case '"': state = previous; can_fetch = 1; outstream[0] = '"'; break;
+					case '\'': state = previous; can_fetch = 1; outstream[0] = '\''; break;
+					default: raise CAN_NOT_ESCAPE_THIS; break;
+				}
+			break;
+			case CODE_FIRST_STATE:
+				outstream[0] = 0;
+				outstream[0] |= hexToBits(character) << 4;
+				state = CODE2;
+			break;
+			case CODE_SECOND_STATE:
+				outstream[0] |= hexToBits(character);
+				if (outstream[0] == '`')
+				{
+					outstream[1] = '`';
+					can_fetch = 2;
+				}
+				else
+					can_fetch = 1;
+				state = previous;
+			break;
+		}
+	}
+
+	(1u out : this : const pure) available
+	{
+		out = can_fetch > 0;
+	}
+
+	(8u out : this : pure) pop
+	{
+		--can_fetch;
+		out = outstream[can_fetch];
+	}
+
+	(: this) end
+	{
+		switch (state)
+		{
+			case ESCAPE_VERBATIM:
+				outstream[0] = '`';
+				can_fetch = 1;
+			default: break;
+		}
+	}
+
+Seems like it expresses just fine. I see no problem with this. The include of the
+string can be modelled as `String(something::String)` if it is to be granted. This
+makes me thing 'why not make everything like this?'. What I mean is that we disallow
+direct type usage of the form `type::Name`, and just make it a 'grant'. Then, by
+using private or public, outsiders can override the types. This solves a whole class
+of trouble. Then again, it's rather annoying to having to name something again. I
+think I'll just keep it as-is. Seems like there about 27 keywords in the language.
+Everything is in place it seems. The lookaheads do not clash. Now it's time to make
+the lexer compliant to the grammar. The question is: is there absolutely nothing
+that can be changed in the grammar that makes it better? Hold up. We don't actually
+have assignment in... wait we do. Ok good. I was thinking that ARG didn't actually
+assign to a parameter, but that information is encoded in the FEXPR... Let's clean
+up types instead.
+
+	const (ref ptr (some::Thing)) something;
+	_ (_ ptr ((:))) function;
+
