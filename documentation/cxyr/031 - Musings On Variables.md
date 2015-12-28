@@ -2554,7 +2554,7 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 	ARG ::= '(' { FEXPR }* \{ ';' } ')' ;
 	FEXPR ::= { EXPR [ ':' mname ] }+ \{ ',' } [ COMPOUND EXPR ] ;
 
-	UNOP ::= '@'|'$'|'$$'|'--'|'!' ;
+	UNOP ::= '@'|'$'|'$$'|'\'|'!' ;
 	BINOP ::= '+'|'-'|'%'|'^'|'&'|'|'|'*'|'>='|'<='|'=='|'!='|'>'|'<'|'/'|'\'|'<<'|'>>' ;
 	COMPOUND ::= BINOP . '=' ;
 	OP ::= 'op' '-' name | BINOP ;
@@ -4064,4 +4064,106 @@ sqrt implementation exists, but wish to implement it themselves as a placeholder
 		x::Maths var;  // The is nice, we can override Sqrt later
 	}
 
+It would be very useful if x::Maths could just implement its own sqrt module so that
+we can focus on optimizations later.
+
+	Sqrt(internal::Sqrt);
+	// methods...
+
+Seems like a nice syntax. It's simple and fits well with the current syntax of the
+language. But it's one more rule. I don't like that. Is the rule ambiguous?
+
+	CLASS ::= { [ ACCESS ] ( DATA | METHOD ) | cname '(' TYPE ')' } ;
+
+The new part is `| cname '(' TYPE ')'`. I think this is rather elegant. It does not
+clash with DATA because the lexer can use a lookahead preprocessor that looks for
+`cname '('`. Heh, that makes our whole parsing solution basically LL(2) or something.
+
+	Sqrt(int::Sqrt);
+	Exp(int::Exp);
+
+	(32f out : 32f in) exp {
+		out = ::Exp::exp(in);
+	}
+
+What other parts of the grammar are LL(2)? Type declarations are! name:: could however
+be considered a 'namespace accessor'. This avoids the LL(2) problem. What about the
+grants?
+
+	Sqrt=internal::Sqrt;  // ?
+
+That doesn't look like an initialization, but rather an assignment. Standard params
+are supposed to be initialized and not assigned, as seen in methods... So how is
+this solved without using LL(2)? Do we say that `cname '('` is a single token? That
+could solve it. When do we see that at all? Let's see... `::Type::()` is a constructor
+call anyways. That means we have an LL(1) grammar with a smart tokenization algorithm.
+Well, not 'smart' per se. More so... useful only for this language.
+
+C++14 has cool stuff like '[[deprecated]]'. Should this be added to the language?
+I think most problems can be solved via statements. One statement I see viable is
+the 'warning' statement. It is used inside a method. Whenever the method is called
+from anywhere, a warning is invoked from the callee's line where it calls the warning
+method.
+'error' can also be a statement, failing compilation. This is useful in partial compilation
+(like static if).
+
+I absolutely abhor -- for the unary minus sign. It's ugly. It disgusts me. I like
+'neg' better.
+
+	[neg 3 neg 5+3 neg 8]
+	[--3 --5+3 --8]
+
+The problem with 'neg' is that it's bigger because it requires a space. `--` also
+displays the space more clearly. Is there anything that can replace the current unary
+minus? \? No that's division... right?
+
+	[\3 \5+3 \8]
+
+It's the shortest version. Do I really need \ as another division?
+
+	a, rem: remainder = 3.14 \ 1.2;  // This could be useful... right?
+
+I like the idea of being able to do floating point division in this manner. Wait.
+This is already encoded in the floating point.
+
+	a = 3.14 / 1.2;
+	b = a - un-floor(a);  // () is an EXPR, so it works just the same.
+	a -= b;
+
+Now, a is the whole number, and b is the fraction. Problem solved. Let's use \ as
+the negation operator! Woohoo! Awesome. What else is there to do? Oh yes, fix the
+lexer. But, am I satisfied with the language? Let's see. Removed the filthy --, oh,
+probably need to reimplement iterator statements with ++ and --. Or just turn them
+into operators anyway... Operators can have side effects, so hmm...
+
+	Type a;
+	f(\a; x=a);
+
+What are the semantics if \ actually modifies a? Do operators always need to take
+in const-references? Is there a case where we need to give them non-const references?
+With all the operators currently in use, I see no use for taking in non-const references.
+So... Hmmm. Wait! Operators have defined... no. Order doesn't count in arguments.
+We could say arguments follow their logical direction. This is a bug source though.
+A developer changes the order and boom, a bug is introduced. Let's avoid that. Instead,
+we can do... Hmm... No we should allow changes. The reason is that arbitrary methods
+can also invoke changes and return something else.
+
+	f(a.pop(); a);
+
+Ouch! What can be done? Making methods take variables is too drastic a change. That
+implies a simpler grammar though... The problem is; people really really like not
+having to name things. It also avoids bugs to be somewhat declarative. Especially
+with the for as given in python or java/c++ `for (auto it : expr)`. So I just can't
+allow removing expressions from method invocations. Even if I did, we'd need to do
+the following before each call:
+
+	32u parama;
+	parama = 1 + 3;
+	f(parama);
+
+The problem with that is that it destroys the original idea of having named parameters.
+Niceties with forcing precalculation is that we avoid any ambiguous order of changes.
+Since expressions are always in a predefined order, and so are statements, we avoid
+the whole problem. I guess I'll have to compromise and say that the statements as
+listed in the method invocation is how the operators are run. That seems fine.
 

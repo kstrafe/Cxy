@@ -48,6 +48,7 @@ class Lexer
 public:
 
 	bool insertCharacter(char character);
+	bool insertString(const char *str);
 	std::vector<protocols::Token> &getTokenStack();
 	const std::vector<protocols::Token> &getTokenStack() const;
 

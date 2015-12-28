@@ -29,6 +29,18 @@ along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace tul { namespace lexer {
 
+bool Lexer::insertString(const char *str)
+{
+	std::size_t it(0);
+	while (str[it] != '\0')
+	{
+		if (insertCharacter(str[it]) == false)
+			return false;
+		++it;
+	}
+}
+
+
 bool Lexer::insertCharacter(char character)
 {
 	if (character == '\n')

@@ -20,6 +20,7 @@ along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 #include "protocols/Token.hpp"
 #include "protocols/TokenType.hpp"
 
+#include <iostream>
 
 TEST_CASE("Test lexer output", "[test-Lexer]")
 {
@@ -349,6 +350,21 @@ TEST_CASE("Test lexer output", "[test-Lexer]")
 			caze(SYMBOL_MINUS__GREATER_THAN);
 			caze(IDENTIFIER_PACKAGE);
 			caze(SYMBOL_MINUS__MINUS);
+		#undef caze
+	}
+
+	SECTION("Check if the name:: lexeme is identified")
+	{
+		using namespace tul::lexer;
+		Lexer lex_eng;
+		lex_eng.insertString("name::Class");
+		std::vector<tul::protocols::Token>
+			&token_stack = lex_eng.getTokenStack();
+		unsigned iterator = 0;
+		using namespace tul::protocols;
+		#define caze(type_name) REQUIRE(token_stack.at(iterator++).token_type == TokenType::type_name)
+			caze(IDENTIFIER_PACKAGE);
+			std::cout << token_stack.at(iterator++).accompanying_lexeme;
 		#undef caze
 	}
 
