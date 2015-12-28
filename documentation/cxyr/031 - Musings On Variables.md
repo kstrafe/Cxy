@@ -4009,3 +4009,59 @@ better solution!
 I just need to internalize the current core language. I think this tree will be easy
 to translate into C or C++. I'll just need to polish the type system and everything
 will be complete.
+
+	(:) enter {
+		sml op-print "Hello world!";
+		sml::String my_string("My string") your_string("Your string");
+		sml op-print my_string + your_string;
+
+		Matrix my_matrix(rows=10; columns=10)
+			eye(identity=true; size=10)
+			other_matrix(my_matrix op-matmul eye);
+
+		32u value(10);
+		64ue other_value(value + 10 >> 2);
+
+		// Pointer manipulation
+		ptr 64ue value_ptr($other_value);
+		@value_ptr = 10;
+
+		sml op-print value->toString();
+		sml op-print (@value).toString();
+		sml op-print other_value;
+	}
+
+I'm rather satisfied. I see no problems. What about a standard value for granted
+classes? I think we should avoid that. Instead, you can create a non-pure glue part
+that will glue the parts together. Then you can override if you choose so... the
+problem with that is that we can't override. We need information on how to override.
+Why is this useful? Say we're given a math library. It implements the sin function.
+What if our processor has a sin function?
+
+	hack("cpu=sin %s0");  // Likely ARM processors, s0 is a register.
+
+Should static ifs be used? Then purity will be broken. Only overriding using....
+wait..
+
+	(32f out : 32f in) sqrt {
+		static if ! cpu_has_sin {
+			32s casted(cast[32s](in));
+			casted = (1 << 29) + (casted >> 1) - (1 << 22);
+			out = cast[32f](casted);
+			out = out + in / out;
+			out = (0.25 * out) + in / out;
+		} else {
+			hack("sqrt");
+		}
+	}
+
+Maybe the ones implementing it should statically if and hack what they're doing.
+That avoids the need for overriding grants. What about new APIs that know an efficient
+sqrt implementation exists, but wish to implement it themselves as a placeholder?
+
+	(:) enter {
+		x::Maths[Sqrt=my::Sqrt] viable;  // This is annoying!
+		x::Maths var;  // The is nice, we can override Sqrt later
+	}
+
+
