@@ -2570,11 +2570,11 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 		| 'cast' '[' TYPE ']' '(' EXPR ')' ;
 	LIST ::= '[' { EXPR } ']' ;
 
-	TYPE ::= [ 'const' ] TYPECONST ;
-	TYPECONST ::= [ 'ref' ] TYPECREF ;
-	TYPECREF ::= [ 'ptr' ] ( TYPE | 'ptr' SIGNATURE )
+	TYPE ::= [ 'ref' ] TYPEREF ;
+	TYPEREF ::= [ 'const' ] TYPECONST ;
+	TYPECONST ::= [ 'ptr' ] TYPE | 'ptr' SIGNATURE
 		| 'array' [ '[' EXPR \{ ',' } ']' ] TYPE | primitive
-		| [ pname ] cname [ '[' { ( TYPE | cname '=' TYPE | FEXPR ) ';' }+ ']' ] ;
+		| [ pname ] cname [ '[' { ( TYPE [ '=' TYPE ] | FEXPR ) ';' }+ ']' ] ;
 
 	// Statements
 	STAT ::=
@@ -4419,4 +4419,20 @@ up types instead.
 `PAC_EXPR` currently accepts `::Aa::(1 + 3)`, which doesn't make semantic sense.
 The idea is to make this a constructor, but I imagine it may be better to remove
 the requirement for the trailing '::' altogether. Maybe it needs to be put lower
-in the chain, near `RES_EXPR`?
+in the chain, near `RES_EXPR`? This new system appears to be incorrect at first,
+but semantics lurks in the shadows...
+
+	::(:)::(lambda(:){})();
+
+The trailing () is a valid executor of this lambda. So the grammar is correct. Semantics
+make a similar statement incorrect.
+
+	::Aa::()();
+
+So this seems correct. It also avoids the expr-after-::-problem. This is now resolved.
+Do the other semantics still work correctly? It seems so. Cool. Now to clean up any
+small errors.
+
+Lambdas will force the use of {} since we can then discern () exprs from ( signatures.
+cast requires the type inside brackets, and the expr explicitly inside (), because
+its precedence is pretty ambiguous.
