@@ -2555,7 +2555,7 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 	FEXPR ::= { EXPR [ ':' mname ] }+ \{ ',' } [ COMPOUND EXPR ] ;
 
 	UNOP ::= '@'|'$'|'$$'|'\'|'!' ;
-	BINOP ::= '+'|'-'|'%'|'^'|'&'|'|'|'*'|'>='|'<='|'=='|'!='|'>'|'<'|'/'|'\'|'<<'|'>>' ;
+	BINOP ::= '+'|'-'|'%'|'^'|'&'|'|'|'*'|'>='|'<='|'=='|'!='|'>'|'<'|'/'|'<<'|'>>' ;
 	COMPOUND ::= BINOP . '=' ;
 	OP ::= 'op' '-' name | BINOP ;
 	UN ::= 'un' '-' name | UNOP;
@@ -2582,11 +2582,16 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 		| 'hack' '(' string ')' ';' | DATA ';' | FEXPR ';' | '{' { STAT } '}' ;
 
 	// Lexer, names are given in lowercase.
-	digit ::= '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' ;
-	integer ::= { digit }+
-	primitive ::= integer ( 's' | 'se' | 'so' | 'u' | 'ue' | 'uo' )
-	lower ::= 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h' | 'i' | 'j' | 'k' | 'l' | 'm' | 'n' | 'o' | 'p' | 'q' | 'r' | 's' | 't' | 'u' | 'v' | 'w' | 'x' | 'y' | 'z'
-	upper ::= 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H' | 'I' | 'J' | 'K' | 'L' | 'M' | 'N' | 'O' | 'P' | 'Q' | 'R' | 'S' | 'T' | 'U' | 'V' | 'W' | 'X' | 'Y' | 'Z'
+	name ::= lower { lower | upper } ;
+	cname ::= upper lower { lower | upper } ;
+	cnamep ::= cname '(' ;
+	digit ::= '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' ;
+	integer ::= { digit [ ' ] }+ ;
+	float ::= integer '.' integer ;
+	string ::= '"' { any | '\"' } '"'
+	primitive ::= integer ('s'|'se'|'so'|'u'|'ue'|'uo') ;
+	lower::='a'|'b'|'c'|'d'|'e'|'f'|'g'|'h'|'i'|'j'|'k'|'l'|'m'|'n'|'o'|'p'|'q'|'r'|'s'|'t'|'u'|'v'|'w'|'x'|'y'|'z' ;
+	upper::='A'|'B'|'C'|'D'|'E'|'F'|'G'|'H'|'I'|'J'|'K'|'L'|'M'|'N'|'O'|'P'|'Q'|'R'|'S'|'T'|'U'|'V'|'W'|'X'|'Y'|'Z' ;
 
 Some of the changes that are planned. As can be seen, typedecls are very simple now.
 What I don't like is that signatures may contain `Type {a, b, c}`. This is dissimilar
@@ -4178,4 +4183,6 @@ of trouble.
 
 This seems fine. It avoids the lookahead with `[` in expressions. This is nice. Let
 the compiler instead infer what the size is. This used in conjunctions with methods.
-
+I feel like I need to define a lexer as well. But am I satisfied with the grammar?
+operators can take in non-const references. Grants can be partial classes. Seems
+like everything is fine.
