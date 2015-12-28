@@ -2573,7 +2573,7 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 
 	TYPE ::= const TYPECONST | TYPECONST ;
 	TYPECONST ::= ( 'ref' | 'ptr' ) ( TYPE | SIGNATURE )
-		| 'array' EXPR TYPE | [ pname '::' ] cname [ GRANT ] ;
+		| 'array' TYPE | [ pname '::' ] cname [ GRANT ] ;
 	GRANT ::= '[' { ( TYPE | cname '=' TYPE | FEXPR ) ';' }+ ']'
 
 	// Statements
@@ -4166,4 +4166,16 @@ Niceties with forcing precalculation is that we avoid any ambiguous order of cha
 Since expressions are always in a predefined order, and so are statements, we avoid
 the whole problem. I guess I'll have to compromise and say that the statements as
 listed in the method invocation is how the operators are run. That seems fine.
+
+I'm still a little annoyed by the type of arrays. Arrays are of a compile-time constant
+size. Yet we induce their sizes from constexpr arrays. But we also pass this type
+information on. But array size can't change... Hmm. That's interesting. Why not make
+the entire array size implicit? This avoids the ugly syntax too. What about methods
+using arrays to iterate? Well, they can use the provided size. This avoids a lot
+of trouble.
+
+	array 32u a([1 \2 3+3 4 \5]);
+
+This seems fine. It avoids the lookahead with `[` in expressions. This is nice. Let
+the compiler instead infer what the size is. This used in conjunctions with methods.
 
