@@ -2545,7 +2545,7 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 	#GRAMMAR
 
 	// Class-Scope
-	CLASS ::= { [ ACCESS ] ( DATA | METHOD ) } ;
+	CLASS ::= { [ ACCESS ] ( DATA | METHOD ) | cnamep TYPE ')' } ;
 	ACCESS ::= 'private' | 'public' | 'restricted' ;
 	DATA ::= TYPE { name [ ARG ] }+ ';' ;
 	METHOD ::= SIGNATURE mname STATEMENT ;
