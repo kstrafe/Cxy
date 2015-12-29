@@ -2565,26 +2565,28 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 	MEM_EXPR ::= CALL_EXPR [ ( '~' | '.' | '->' ) MEM_EXPR ] ;
 	CALL_EXPR ::= RES_EXPR TRAIL ;
 	TRAIL ::= [ ( ARG | LIST ) TRAIL ] ;
-	RES_EXPR ::= [ '::' TYPE '::' ] ( name | mname | ARG ) | '(' EXPR ')' | string | integer | float | LIST
+	RES_EXPR ::= [ '::' TYPE '::' ] ( name | mname | ename | ARG ) | '(' EXPR ')' | string | integer | float | LIST
 		| 'lamda' [ '[' { name } ']' ] [ SIGNATURE ] '{' { STAT } '}'
 		| 'cast' '[' TYPE ']' '(' EXPR ')' ;
-	LIST ::= '[' { EXPR } ']' ;
+	LIST ::= '[' { EXPR }+ ']' ;
 
 	TYPE ::= [ 'ref' ] TYPEREF ;
 	TYPEREF ::= [ 'const' ] TYPECONST ;
 	TYPECONST ::= [ 'ptr' ] TYPE | 'ptr' SIGNATURE
-		| 'array' [ '[' EXPR \{ ',' } ']' ] TYPE | primitive
-		| [ pname ] cname [ '[' { ( TYPE [ '=' TYPE ] | FEXPR ) ';' }+ ']' ] ;
+		| 'array' [ '[' { EXPR } ']' ] TYPE | primitive | 'enum' TYPE
+		| [ pname ] cname [ '[' { ( TYPE | cnameeq TYPE | FEXPR ) ';' }+ ']' ] ;
 
 	// Statements
 	STAT ::=
-		'goto' name EXPR ';' | 'label' name ';' | 'try' STAT | 'catch' STAT | 'raise' ename ';'
+		'goto' name EXPR ';' | 'label' name ';' | 'try' STAT
+		| 'catch' '{' { case EXPR STAT | STAT } '}' | 'raise' ename ';'
 		| 'hack' '(' string ')' ';' | DATA ';' | FEXPR ';' | '{' { STAT } '}' ;
 
 	// Lexer, names are given in lowercase.
 	name ::= lower { lower | upper } ;
 	cname ::= upper lower { lower | upper } ;
 	cnamep ::= cname '(' ;
+	cnameeq ::= cname '=' ;
 	pname ::= { lower }+ '::' ;
 	digit ::= '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' ;
 	integer ::= { digit [ ' ] }+ ;
@@ -4435,4 +4437,59 @@ small errors.
 
 Lambdas will force the use of {} since we can then discern () exprs from ( signatures.
 cast requires the type inside brackets, and the expr explicitly inside (), because
-its precedence is pretty ambiguous.
+its precedence is pretty ambiguous. So that's complete. Changed the grammar for granting
+classes slightly. `'Class' '='` is parsed as a single token called 'cnameeq'. It
+stands for "class name equals". This expression occurs nowhere else in the grammar,
+so it is safe to make this new token. Anything else falls under TYPE and will be
+referenced to the 'In' type.
+
+	Vector[32u] a b c;
+	Vector[In = 32u] a b c;
+
+Are equivalent declarations. Cool. Let's review expressions just to be sure:
+
+	(@(a.c[0])) + (b->d) op-something (@((::Aa::fun)().a.b.c)) * ($(name))
+
+Looks like the precedence is fine. The types also seem fine. What else? Let's see...
+I won't be expanding on the statements, just keeping it to the core language now.
+I'm afraid I'm becoming satisfied with the grammar. Maybe I need to ask my friends
+to take a look at it. Just looking through the enum productions, not entirely satisfied.
+
+	try
+		String a("This is my string");
+	catch {
+		// Common entry code
+		// Handler code
+		case ::String::OUT_OF_MEMORY
+			handleCase();
+		case ::Something::ELSE_IS_HAPPENING
+			handleOtherCase();
+		// Common exit code
+	}
+
+The nice thing is that this generalizes enums as part of expressions. That is, actually
+accessing the enum values. However, what about the enum "type"? We have 'enum' for
+those currently, but I'm not a huge fan of it.
+
+	enum String a(::String::CONTROL_ENUMERATION);
+
+Oh... I like that. It fits well with array already... also with ptr, const, ref,...
+wow. That's elegant. I like it. I think I may replace the grammar for enums now..
+Another thing is that catch now uses the 'case' keyword. I'm a little skeptical about
+it actually. Maybe a new keyword should be used. The potential confusion is there.
+When someone confuses a case with a catch.
+
+	(:) enter {
+		try {
+			switch (var) {
+				case INVALID_STATE
+					doSomething();
+				case SOMETHING_ELSE
+					doSomethingElse();
+			}
+		catch {
+			debug "Caught an error at" + #LINE;
+			case INVALID_MEMORY_SEGMENT
+				handleError();
+		}
+	}
