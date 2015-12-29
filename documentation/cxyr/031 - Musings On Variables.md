@@ -2567,7 +2567,9 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 	TRAIL ::= [ ( ARG | LIST ) TRAIL ] ;
 	RES_EXPR ::= [ '::' TYPE '::' ] ( name | mname | ename | ARG ) | '(' EXPR ')' | string | integer | float | LIST
 		| 'lamda' [ '[' { name } ']' ] [ SIGNATURE ] '{' { STAT } '}'
-		| 'cast' '[' TYPE ']' '(' EXPR ')' ;
+		| 'cast' '[' TYPE ']' '(' EXPR ')'
+		| 'new' '[' TYPE ']' ARG [ '{' ARG '}' ]
+		| 'del' '(' EXPR ')' ;
 	LIST ::= '[' { EXPR }+ ']' ;
 
 	TYPE ::= [ 'ref' ] TYPEREF ;
@@ -2579,7 +2581,7 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 	// Statements
 	STAT ::=
 		'goto' name EXPR ';' | 'label' name ';' | 'try' STAT
-		| 'catch' '{' { case EXPR STAT | STAT } '}' | 'raise' ename ';'
+		| 'catch' '{' { case [ TYPE '::' ] ename STAT | STAT } '}' | 'raise' ename ';'
 		| 'hack' '(' string ')' ';' | DATA ';' | FEXPR ';' | '{' { STAT } '}' ;
 
 	// Lexer, names are given in lowercase.
@@ -4487,9 +4489,14 @@ When someone confuses a case with a catch.
 				case SOMETHING_ELSE
 					doSomethingElse();
 			}
-		catch {
+			raise INVALID_MEMORY_SEGMENT;
+		} catch {
 			debug "Caught an error at" + #LINE;
 			case INVALID_MEMORY_SEGMENT
 				handleError();
 		}
 	}
+
+Alright, catch should be fine now. case denotes an exception case. Any case in-between
+will be executed. That said, types seem to be complete... In the production grammar,
+it will be slightly different due to limits on the parser generator.
