@@ -2568,7 +2568,7 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 	RES_EXPR ::= [ '::' TYPE '::' ] ( name | mname | ename | ARG ) | '(' EXPR ')' | string | integer | float | LIST
 		| 'lamda' [ '[' { name } ']' ] [ SIGNATURE ] '{' { STAT } '}'
 		| 'cast' '[' TYPE ']' '(' EXPR ')'
-		| 'new' '[' TYPE ']' ARG [ '{' ARG '}' ]
+		| 'new' [ '[' TYPE ']' ] ARG [ '{' ARG '}' ]
 		| 'del' '(' EXPR ')' ;
 	LIST ::= '[' { EXPR }+ ']' ;
 
@@ -4499,4 +4499,119 @@ When someone confuses a case with a catch.
 
 Alright, catch should be fine now. case denotes an exception case. Any case in-between
 will be executed. That said, types seem to be complete... In the production grammar,
-it will be slightly different due to limits on the parser generator.
+it will be slightly different due to limits on the parser generator. Just forgot
+del and new there. Important operators. What about threading? Just make that a hack
+library implementation? Sounds fair to me. What about shared state? I guess we could
+send in a pointer to some shared state. That works, no doubt. Even global state is
+possible anyways using ALLCAPS variables. Alright. Anything more I'm missing?
+
+	for (64ue new_token(getTokenStack().size() - amount_of_new_tokens);
+		new_token < getTokenStack().size();
+		++new_token)
+	{
+		ref protocols::Token curr_token(getTokenStack()[new_token]);
+		{
+			protocols::Token potential_next;
+			potential_next.column = 0;
+			potential_next.line = 0;
+			potential_next.entry_type = ::protocols::EntryType::OTHER_SYMBOL;
+			potential_next.token_type = ::protocols::TokenType::UNIDENTIFIED_TOKEN;
+		}
+
+		while ((curr_token.token_type == protocols::TokenType::UNIDENTIFIED_TOKEN)
+			&& curr_token.entry_type == protocols::EntryType::OTHER_SYMBOL)
+		{
+			if (curr_token.accompanying_lexeme.empty())
+				return false;
+		}
+		8u last(curr_token.accompanying_lexeme[-1]);
+		curr_token.accompanying_lexeme.popLast();
+		potential_next.accompanying_lexeme.insert(
+			begin=potential_next.accompanying_lexeme.begin(),
+			end=last);
+		identifyToken($curr_token);
+	}
+	if (potential_next.accompanying_lexeme.empty() == false)
+		getTokenStack().insert(begin=getTokenStack().begin() + new_token + 1, end=potential_next);
+	ref protocols::Token newtok(getTokenStack()[new_token]);
+	64ue colcount(position_counter.getCurrentColumnNumber())
+		lncount(position_counter.getCurrentLineNumber());
+	if (colcount == 1)
+	{
+		newtok.line_number = lncount - 1;
+		newtok.column_number = last_line_length;
+	}
+
+That works quite well actually. This is a small translation of a part of the current
+lexer. Checking types on their own will be useful too. The majority of the grammar
+is segmented. I actually wish to separate the parts so the grammar is modular. Unfortunately
+this makes the grammar difficult to work with. The operator [] should also exist...
+right? Or should only raw arrays or ptrs be accessed using that?
+
+	Vector[32u] a([1 2 3 4]);
+	sml op-print a[3].toString();
+	sml op-print a.get(3).toString();
+
+I'm a little divided. If there's a method definition, it should be:
+
+	(Type out : 123s in) [] { ... }
+
+I don't know. I don't want to allow a definition of operator '('. That just feels
+wrong. But []? I've used the std::vector<> overloads so much in C++. I think they're
+tremendously useful. On the other hand, it makes the semantics misleading.
+
+	obj[1];  // Is this a ptr or an object of a class, or array?
+
+You can't really know this. That's the problem. It could be implemented... maybe
+even with an overload of types in the '[]', so you can supply something that is not
+an integer. `case 1+2 un-deref a();`. Operators @ and $$ are already 'inalienable'.
+They can not be redefined. Making [] un-redefinable... hmmm. Tough choice. We can
+already not define operator (), but []? Do we in addition to these allow other 'standard'
+yet redefinable operators? Maybe a keyword like 'at' that acts like []:
+
+	Vector[32u] a([1 2 3]);
+	a at 2 = 100;
+
+This will make it obvious what we mean. Although it does not allow the following:
+
+	Vector[Vector[32u]] a([::Vector::([1 2 3])]);
+	a at 1 at 2 = 100;
+
+Since the right-associativity will try to execute '1 at 2', which makes no sense.
+A tough decision indeed. Overloading [] seems like a nice feature but it just departs
+from the orthodoxy of C defining a[b] as `*(a+b)`. I don't know. I was never really
+bothered by Java's use of 'get'. Hell that even works when chaining them. Yeah, let's
+keep it only for pointers and arrays.
+
+	(:) enter {
+		array 32u a([1 2 3 9+3 \9-3]);
+		ptr 32u b(a);
+		b[2] = a[2];
+
+		Vector[32u] c(a);
+		c.get(2) = b[2];
+		#asgn(b[2], a[2], c.get(2));
+	}
+
+I can live with that. I kinda like it already. Simple and it works. Keeps the semantics
+cleanly separated. `(un-deref a).something();`. Hmm... I just really don't like that
+C++ allows redefinitions of the -> operator or the dereferencing operator. So what
+will be decided? Hmmmmm... I think I'll just keep this. Only some binary and unary
+operators are overloadable, but fundamentally important operators can not be overloaded.
+The semantics of @ is that it _always_ changes a 'ptr x' to 'ref x', and it changes
+a 'ref ptr x' to 'ref x'. $ always turns a 'ref x' into a 'ref ptr x'. Simple enough.
+Those operators are important. [] does pointer addition. () calls a callable. Where
+is the line drawn? Which operators do we overload and which do we not overload? What
+about just allowing definitions of op- and un-? Leaving all other operators implemented
+for the builtins.
+
+	Matrix[32f] a(random=true) b(random=true);
+	a = a op-matadd b;  // a = a + b;
+	b = a op-matmul b;  // b = a * b;
+	if un-det a op-neq 0.0 {  // if un-det a != ::Number(0)
+		a = un-inv a;
+		b = b op-matmul a;  // b = b * a;
+		b = b op-mul 10.0;
+	}
+
+You know I kinda like the idea. It makes sure methods can not be symbols.
