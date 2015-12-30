@@ -4614,4 +4614,23 @@ for the builtins.
 		b = b op-mul 10.0;
 	}
 
-You know I kinda like the idea. It makes sure methods can not be symbols.
+You know I kinda like the idea. It makes sure methods can not be symbols. This clashes
+with my inherent idea about operators. I really enjoy C++'s ability to just state
+
+	std::vector<int> a, b;
+	b.push_back(10);
+	a = b;
+
+Where a is a copy, and not a reference to b. If we say all members get copied, then
+a would refer to b's internal array. The destructors of both would destroy both objects.
+In the matmul operations, a new matrix is created and returned. This sets all member
+items, all the way to primitives. We could say all all basic operators just work
+on each element of a class. Given both sides of the operators are of the same type.
+I don't know how this would be useful though. Anyways, deep copying is useful. How
+can it be implemented if = just assigns all primitives?
+
+	Vector[32s] a b;
+	b.add(10);
+	a = b.copy();
+
+This may work...
