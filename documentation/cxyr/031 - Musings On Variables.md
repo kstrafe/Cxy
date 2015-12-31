@@ -4633,4 +4633,12 @@ can it be implemented if = just assigns all primitives?
 	b.add(10);
 	a = b.copy();
 
-This may work...
+This may work... Then again, it would be very nice to just overload these operators.
+On another note, it's kinda misleading that a method is called for operator =. This
+may have unexpected side-effects. If the struct-copying way of C is used, then we
+don't get this. However, can we safely assign a ptr class to another? How will it
+interfere with destructors? What should it mean? I like the explicitness though.
+
+Just using a copy method. We can let the compiler issue a warning when a class has
+no copy method. Will have to think about that. Reading a book about collision detection.
+Be back in a bit.
