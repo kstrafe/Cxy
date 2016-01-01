@@ -4642,3 +4642,83 @@ interfere with destructors? What should it mean? I like the explicitness though.
 Just using a copy method. We can let the compiler issue a warning when a class has
 no copy method. Will have to think about that. Reading a book about collision detection.
 Be back in a bit.
+
+So, since we have method arguments, we can bind names and ':' symbols, or '=' symbols.
+
+	f(name=10; x:=1);
+
+A little sketchy... Yeah. It's probably better to just use FEXPRs there and it should
+be fine. As for assignment '=' and other binary operators, what do we allow? Java
+just sets the reference. C just copies recursively. The problem with that is that
+the destructor could deallocate copied memory regions. So this is dangerous. Only
+if we write `x = y.copy()`... No. This makes things more complex. The complexity
+stems from when the expression on the right goes off the stack. When does the right
+expression go off the stack? `a = b + 3;`. If b + 3 is a new object, it is sent to
+the = method. That method takes a const reference in, and when it returns, the reference
+is put off the stack. Hmmm. If we have a '=' primitive assignment, then the destructor
+of the temporary will destroy the internal data such that the new object will be
+in an invalid state. So it can't be allowed. So operators should be overloadable?
+Is there a solution? `a.copy(b)`. This could be a solution, but do we allow operator
+redefinition then? `a op-copy b`. The new lexer though,.. makes me think a reversed
+grammar may be possible:
+
+	EXPR '=>' TYPE name=name other=name, EXPR, EXPR;
+
+So let's examine (re-evaluate) this grammar.
+
+	EXPR '=>' { [ ':' name ] EXPR } ';'
+	TYPE name name2 name3,... ';'
+
+	(128u out : 5u in) factorial
+	{
+		cast[128u](in) => out;
+		--in;
+		while in > 1
+			out *= cast[128u](in);
+	}
+
+	32u a(1) b(2) c(3);
+	a + b + c => a :rem b;
+
+This way, ':' acts as both a separator and name assigner.
+
+	// Breadth-first search
+	(ref const Tree out : ref const Tree in; 8u search) bfs {
+		Vector[ref const Tree] level newlevel;
+		newlevel.add(in);
+
+		while newlevel.size > 0 {
+			newlevel => level;
+			for 64u i(0); i < level.children_count; ++i {
+				if level[i].data == search {
+					level[i] => out;
+				}
+				newlevel.add(level[i]);
+			}
+		}
+	}
+
+I think I got it. We can force the _first_ argument to be the 'in' value. But this
+forces methods to have 'in', doesn't it? No. Let's examine.
+
+	expr() => expr(), name: expr(), name2: expr();
+	func(expr(), name: expr(), name2: expr());
+	func(expr() => name, name: name2, name3: name4);
+
+Hmm... this is easier to parse. But I'm confused about the functions.
+
+	func() => expr() :name expr() :name2 expr();
+	func(expr() => name :other name);
+	expression [ '=>' expr():name expr2():name2 ... ]
+	expression [ '=>'
+
+	Type a b c;  // typedecl
+	expr() => a, name: b, rets: c;
+
+This can be tokenized as: `',' name ':'`. A single token. It's very interesting.
+What about calling a method?
+
+	func(expr(); expr() => a, name: b, rets: c);
+
+The grammar is very LL(1) friendly then. Due to lexing, we can potentially implement
+this instead of the previous grammar.
