@@ -4698,6 +4698,20 @@ This way, ':' acts as both a separator and name assigner.
 		}
 	}
 
+	(Tree out() : ref Tree in(); 5u depth(random())) createRandom8Tree {
+		in.createRandomChildren(random() % 10);
+		for Tree child in out {
+			createRandom8Tree($child; depth=depth-1);
+		}
+		out = in;
+	}
+
+	(:) enter {
+		Tree a;
+		createRandom8Tree() => a;
+		ref const Tree(bfs($$a; search: 'a'));
+	}
+
 I think I got it. We can force the _first_ argument to be the 'in' value. But this
 forces methods to have 'in', doesn't it? No. Let's examine.
 
@@ -4722,3 +4736,41 @@ What about calling a method?
 
 The grammar is very LL(1) friendly then. Due to lexing, we can potentially implement
 this instead of the previous grammar.
+
+	32u a b;
+	modulo(left: 13123231; right: 321) => a, remainder: b;
+
+Ok. In the bfs algorithm it was just so intuitive to use the = assignment in methods.
+It's already fleshed out, so why not roll with it? For the semantics of '=': the
+choice is to make all operators overloadable. This never confused me in C++ and provides
+a standard interface for object copying. If no operator '=' is provided, the standard
+operator like in C will be applied. Good. I kinda like expressions in method arguments.
+This allows you to add to a vector that is in the argument. That's a nice idea...
+What about methods having default parameters whilst casting them to a lambda? How
+are the semantics defined on these? The problem is that the default parameters are
+by definition implementation details. They should not be part of the signature. However,
+it should be noted that some arguments may be default inside the signature. So how
+do we notify the compiler? Hmmm... Let's see... we have default arguments inside
+the signature as of now. But the values of the default arguments are also in the
+signature. The implementation detail is inside the signature. This is wrong. It was
+decided that signatures should not contain implementation details. Where is the information
+put to define default arguments?
+
+	(32u out : 32u in()) name {
+		out = in;
+	}
+
+No, we can't put it there! How is this cast into a fptr? C++ simply says that fptrs
+can't have default arguments. In Cxy, a different paradigm is used for functions.
+You basically inject one assignment statement for each variable. Hell, you could
+even go as far as to say you just inject the statements you wish to inject. So how
+can I specify a default argument there? Just change to overloading? But I don't like
+overloading. It is nice in some cases but overall creates a mess. We could say default
+arguments are the exception to the signature. Is there a different solution? It'd
+be really cool if lambdas could have default arguments.
+
+	(: default 32u a) something {
+		default a(20);
+	}
+
+The problem is that 'default' is not part of a's type.
