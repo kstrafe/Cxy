@@ -4795,14 +4795,16 @@ information. It also adds zero new keywords. I like it. Let's use that.
 
 Can be turned into:
 
-	Compare(internal::Less);
+	FwdIt();  //
+	Compare(internal::Less);  //
+
 	(: FwdIt first last) quickSort {
-		const 64u n(sml::distance(from=first; to=last);
+		const 64u n(from op-distance last);
 		if n <= 1 return;
-		ptr const FwdIt pivot(sml.next(first; to=n/2));
-		sml.nthElement(from=first; to=pivot; end=last; cmp=cmp);
-		quikSort(first=first; last=pivot);
-		quikSort(first=pivot; last=last);
+		ptr const FwdIt pivot(first op-next n/2);
+		::FwdIt::nthElement(from=first; to=pivot; end=last);
+		quickSort(first=first; last=pivot);
+		quickSort(first=pivot; last=last);
 	}
 
 	// Usage:
@@ -4814,3 +4816,17 @@ Can be turned into:
 
 Or something similar. The CMP is already given as a grant. Grants are rather powerful,
 as they cascade downward.
+I think the grammar may be complete then. Is there anything left to do? Let's review
+the original goals.
+
+	* General purpose, yes.
+	* Comparatively quick compile-time (LL(1), no SFINAE)
+		* LL(1), yes
+		* Deterministic memory management
+		* Zero-cost abstractions (grants)
+		* Optional run-time bound checking (implemented in class, static if)
+		* Easy parallelization, via #codegenerators
+		* Compile-time runnable code, has to be implemented.
+
+The 'safe' tag is not yet added. What does it do? Hmm. I don't know how useful that
+will be now that the language is developed.

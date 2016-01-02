@@ -21,6 +21,7 @@ along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 #include <fstream>
 #include <iostream>
 #include <sstream>
+
 #include "arg/Argument.hpp"
 #include "ast/AbstractSyntaxTreeGenerator.hpp"
 
@@ -29,6 +30,14 @@ int main(int argc, char *argv[])
 {
 	int result = 1;
 	ttl::Argument argument(argc, argv);
+	if (argument.isPassed("help")) {
+		std::cout
+			<< "Cxy Compiler Reference Implementation v0.1.0-draft.3\n"
+			<< "--test\t\tPerform self-tests\n"
+			<< "--check-syntax file\t\tCheck the syntax of a file\n"
+			<< std::endl;
+		return 0;
+	}
 	if (argument.isPassed("test"))
 		result = Catch::Session().run(1, &argv[0]);
 	else if (argument.isPassed("check-syntax"))
