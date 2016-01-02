@@ -2580,7 +2580,7 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 
 	// Statements
 	STAT ::=
-		'goto' name EXPR ';' | 'label' name ';' | 'try' STAT
+		'goto' name EXPR ';' | 'label' name ';' | 'try' STAT | 'default' name ARG ';'
 		| 'catch' '{' { case [ TYPE '::' ] ename STAT | STAT } '}' | 'raise' ename ';'
 		| 'hack' '(' string ')' ';' | DATA ';' | FEXPR ';' | '{' { STAT } '}' ;
 
@@ -4773,4 +4773,44 @@ be really cool if lambdas could have default arguments.
 		default a(20);
 	}
 
-The problem is that 'default' is not part of a's type.
+The problem is that 'default' is not part of a's type. I think I've got it:
+
+	(: 32u a()) something {
+		default a(20);
+	}
+
+This avoids the implementation detail, in addition to separating type from extra
+information. It also adds zero new keywords. I like it. Let's use that.
+
+	template<class FwdIt, class Compare = std::less<>>
+	void quickSort(FwdIt first, FwdIt last, Compare cmp = Compare{})
+	{
+		auto const N = std::distance(first, last);
+		if (N <= 1) return;
+		auto const pivot = std::next(first, N / 2);
+		std::nth_element(first, pivot, last, cmp);
+		quickSort(first, pivot, cmp);
+		quickSort(pivot, last, cmp);
+	}
+
+Can be turned into:
+
+	Compare(internal::Less);
+	(: FwdIt first last) quickSort {
+		const 64u n(sml::distance(from=first; to=last);
+		if n <= 1 return;
+		ptr const FwdIt pivot(sml.next(first; to=n/2));
+		sml.nthElement(from=first; to=pivot; end=last; cmp=cmp);
+		quikSort(first=first; last=pivot);
+		quikSort(first=pivot; last=last);
+	}
+
+	// Usage:
+	(:) enter {
+		Sort[FwdIt=OurForward; Compare=OurCompare] sort;
+		OurArray a([1 2 3 8 9 \4 \3 \2 3 94 \3 \1321 394]);
+		sort.quickSort(first=a.forward(); last=a.back());
+	}
+
+Or something similar. The CMP is already given as a grant. Grants are rather powerful,
+as they cascade downward.
