@@ -1,4 +1,4 @@
-// Copyright © 2015 Kevin Robert Stravers
+// Copyright © 2015-2016 Kevin Robert Stravers
 /*
 This file is part of Cxy Compiler Reference Implementation (Cxy CRI).
 
