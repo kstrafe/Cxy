@@ -2545,7 +2545,7 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 	#GRAMMAR
 
 	// Class-Scope
-	CLASS ::= { [ ACCESS ] ( DATA | METHOD ) | cnamep TYPE ')' } ;
+	CLASS ::= { [ ACCESS ] ( DATA | METHOD | cnamep TYPE ')' ) } ;
 	ACCESS ::= 'private' | 'public' | 'restricted' ;
 	DATA ::= TYPE { name [ ARG ] }+ ';' ;
 	METHOD ::= SIGNATURE mname STATEMENT ;
@@ -4829,4 +4829,118 @@ the original goals.
 		* Compile-time runnable code, has to be implemented.
 
 The 'safe' tag is not yet added. What does it do? Hmm. I don't know how useful that
-will be now that the language is developed.
+will be now that the language is developed. I think everything is covered. Only thing
+that would be awesome if $$ can be replaced by another operator that makes it look
+cleaner. What about $$$? I think we should explicitly disambiguate. Letting symbols
+be simply wrong in the case where we have 'a==\1' ... or... hmmm. The former case
+does look interesting. Either way, $$$ does not make a lot of semantic sense. Well,
+here goes nothing. Just have to rewrite the grammar. The grammar won't work without
+the proper lexer. So I have to hack it together. I can use a stream machine to detect
+certain tokens. I also need to formalize the tokens. And fix that pesky line-number
+issue for groupers, since they break prematurely. Let's make an image to visualize
+the lexer's mode of operators
+
+	Character -> Comment Filter -> String Filter -> Classify Entry
+	-> Check if pop -> Classify Token Type -> Assign current line
+
+It's rather bulky as it attempts to check a lot of things. Especially the algorithm
+that takes clumped symbol tokens apart and attempts to match them. How can it be
+made so that it recognizes the break? The mealy machine can be enlarged. But I don't
+like that. I could create a generator for it though... Let's do that. Much simpler.
+The question is: where do we separate actual lexing from replacement? We could say
+the lexer is purely a classifier, not changing its input except for ignoring or pruning
+the occasional unneeded information. On the other hand, we have a stringfilter that
+acts as a way to replace certain elements inside strings. Well. Maybe we can take
+that for granted and be content. Hell, the string filter can even run after the lexer
+so that we don't need to encode the lexer's rules. That sounds like a nice solution.
+So how are the rules constructed? From 0, all alphas go to the alpha state. From
+0, all symbols go to respective symbol states. Wait. Isn't the lexer fine as it is?
+It's just a little clumsy. Or that's how it feels anyways. Hmm. I'd love to implement
+Cxy-like functionality and a standard library. For example, a C32ue class. this will
+throw an error when it overflows. Anyways, to complete the language, the basics need
+to be solid first. So we work on the lexer. Since the grammar is no longer in a state
+of flux, we can write most elements manually. I also notice the comment ignorer does
+not take into account the different strings. Both are necessary, so how do we keep
+track?
+One way is to use a 'global' recognizer that recognizes both strings and comments.
+How are the semantics when we have `/* "/* " */` ? Obviously, the string recognizer
+must not take the " as a string in this context. But the above inside a string must
+be accepted. It's like it's recursive. I think strings need to be recognized first.
+The reason is that we want to allow comments like `/* There is the "/*" comment opener */`
+to be valid. The problem with that is non-closed strings. What if there is an error
+where the string is not closed? Why not instead use # as a comment? Since code generators
+can be used to just output nothing. I like the idea. What are the desired semantics
+of `"#()"` though. Do code generators take precedence over strings? One could embed
+generated text into a string by using simple addition. In any case, how could one
+write a raw '#' inside a string given the # has a higher precedence? Maybe something
+like `"\h"` where h stands for hashtag. Letting the code generator run first, this
+resolves all problems. The code generator can run first. It run anywhere. Including
+inside text. But. What about the following? `#(There is an extra ')' inside...)`?
+Won't this prematurely end the code generator? I need better rules for this. We must
+allow writing an `)` inside the text. What about making it a string? `#("There is an extra ')' inside...")`.
+
+	(:) enter {  #("Don't worry about this line yet")
+		sml op-print "Hello world";  #(`Prints "Hello world" to the output`)
+	}
+
+I can't find myself liking it. It is more general but I enjoy // more. So how can
+the conundrum be solved? Well,... '//' inside a string is not a comment. Neither
+is `/*`. Come to think of it. What about code generators and their limitations on
+the right parenthesis? We can also make the comment ignorer 'dumb', in that it just
+recognizes '//' and blindly filters, regardless of string status.
+
+	sml op-print "A // B does not exist";
+
+Will yield the error that the string is unterminated. Avoiding this problem is simply
+done via:
+
+	sml op-print "A /\/ B does not exist";
+
+Another potential solution is to send the state back into the comment ignorer. This
+makes having a state machine inside the comment ignorer simpler. The hashtag comment
+is interesting though. Its verbosity disinterests programmers from writing comments.
+Comments should be rare. Code should be explanatory. `#()`. Say we use this as a
+commenting mechanism. How do we treat `#("#()")`? Nesting is important. How is the
+string affected? How does escaping affect the nesting?
+
+	#("My comment #("Nested Comment")")
+
+If the code generators come before strings, then they simply don't care about strings.
+This means that you can embed them inside strings, and they should work. Should the
+strings obey the same rules? Let's use the exact same rule for escaping strings inside...
+Wait. If those rules are used,... ugh. Let's say the precedence of #() is the highest.
+The preprocessor will process it. Only strings can be used in it. Nothing else. `("`
+and `")` are the delimiters. They nest. No expressions are allowed... What about
+using `#(Stuff here)#`? using #( and )# as delimiters... genius or sucks? I kinda
+like it. It serves as delimiters for codegeneration.
+
+	#Parser(a ::= b a | eps; b ::= 'e';)#
+
+I like this version. It avoids confusion with the "" strings. It also allows nesting
+and writing the ) character freely. Though, I question its usefulness. What if we
+want to write the following:
+
+	#(   )#   )#
+
+How can )# in the middle be seen as a token that doesn't close the codegenerator?
+I think nobody will write this. So it's not a big deal. Okay. So that's done. We've
+got new style comments
+
+	(:) enter {  #( Don't worry about this line. Focus on the second line )#
+		sml op-print "Hello world";  #( This is where the words "Hello world" are printed )#
+	}  #( This finishes the opening brace. This is where the program ends )#
+
+Looks just fine actually. I like the potential uses. What about # single line comments?
+
+Man. A language has so much to consider. I want it all to fit inside this neat package
+called a 'language'. It needs to be simple. But not simpler. I'd love if I could
+just do simple passes over the text. Simple, non-interfering passes. In that regard,
+using `#()#` being processed first, regardless of location or context.
+
+`# ` (note the space) will also be processed. Being a newline-terminated comment.
+
+Is everything in place then? Can we be content with the following?
+
+	#()\h)#
+
+As a valid input for '#'? This implies that #( is a string of the form "".

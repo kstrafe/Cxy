@@ -1,19 +1,19 @@
 
 # This file is part of Cxy Compiler Reference Implementation (Cxy CRI).
-# 
+#
 # Cxy CRI is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # Cxy CRI is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
-# 
+#
 # # ACCESS_SPECIFIER: 1
 # ADDITIVE_EXPRESSION: 3
 # AND_EXPRESSION: 2
@@ -277,7 +277,7 @@ productions = {
 	],
 	############################################################
 	'DATA_DECLARATION_STATEMENT': [
-		['VAR_OR_STATIC', 'DATA_DECLARATION_TYPE'],
+		['DATA_DECLARATION_TYPE'],
 	],
 	'FUNCTION_SIGNATURE': [
 		['GROUPER_LEFT_PARENTHESIS', 'ARGUMENT_LIST', 'SYMBOL_COLON', 'ARGUMENT_LIST_WITH_THIS', 'OPTIONAL_ATTRIBUTE_LIST', 'GROUPER_RIGHT_PARENTHESIS'],
@@ -300,7 +300,6 @@ productions = {
 		['KEYWORD_VAR'],
 	],
 	'DATA_DECLARATION_TYPE': [
-		['GROUPER_LEFT_BRACE', 'DATA_DECLARATION_LIST', 'GROUPER_RIGHT_BRACE', 'OPTIONAL_ASSIGNMENT_MULTIVARIABLE'],
 		['TYPE', 'DATA_NAMES', 'OPTIONAL_ASSIGNMENT', 'OPTIONAL_DATA_DECLARATION', 'SYMBOL_SEMICOLON'],
 	],
 	'ARGUMENT_LIST': [
@@ -351,8 +350,9 @@ productions = {
 	############################################################
 	'DATA_DECLARATION_LIST': [
 		[],
-		['TYPE', 'DATA_NAMES', 'OPTIONAL_ASSIGNMENT_OR_CAPTURE', 'OPTIONAL_DATA_DECLARATION', 'SYMBOL_SEMICOLON', 'DATA_DECLARATION_LIST'],
+		['TYPE', 'DATA_NAMES_LIST', 'OPTIONAL_ASSIGNMENT_OR_CAPTURE', 'OPTIONAL_DATA_DECLARATION', 'SYMBOL_SEMICOLON', 'DATA_DECLARATION_LIST'],
 	],
+	'DATA_NAMES_LIST'
 	'OPTIONAL_ASSIGNMENT_MULTIVARIABLE': [
 		[],
 		['SYMBOL_EQUAL', 'OR_EXPRESSION', 'SYMBOL_SEMICOLON'],
@@ -684,7 +684,7 @@ productions = {
 	],
 	'OPTIONAL_DATA_NAMES_LIST': [
 		[],
-		['SYMBOL_COMMA', 'OPTIONAL_DATA_NAMES_LIST_AFTER_COMMA'],
+		['OPTIONAL_DATA_NAMES_LIST_AFTER_COMMA'],
 	],
 	'CONSTRUCT_LIST': [
 		['SINGLE_CONSTRUCT', 'OPTIONAL_CONSTRUCT_LIST'],
@@ -921,5 +921,5 @@ productions = {
 		[],
 		['ASSIGNMENT_EXPRESSION', 'OPTIONAL_ARRAY_ACCESS_EXPRESSION'],
 	],
-	
+
 }
