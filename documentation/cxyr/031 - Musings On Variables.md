@@ -4943,4 +4943,83 @@ Is everything in place then? Can we be content with the following?
 
 	#()\h)#
 
-As a valid input for '#'? This implies that #( is a string of the form "".
+As a valid input for '#'? This implies that #( is a string of the form "". But \h
+doesn't work because \ is an operator... Hmmm... Is there an alternative? #""# could
+be used...
+
+	#`This is a comment`#
+	# This is also a comment
+	#`Nested#`Comment`#`#
+	#CodeGenerator`This is the code`#
+
+I actually like this one. It makes strings more friendly.
+
+	#Cg"asm: #Ga`sin`# "#
+	#CodeGenerator(`This is a literal string`)#
+	#CodeGenerator("This is a literal string")#
+	#("This is a comment")#
+
+Hmm... I don't know. Where is the line between code generation and language drawn?
+A three-buffer can be used:
+
+	[ ) # X ]
+	[ # ( X ]
+	[ ) # ( ]
+
+What do we do in the last case? If strings are used inside the parentheses, is the
+ending '#' really needed? The ending '#' is nice for disambiguating long sequences.
+I like the strings that are inside. They make it look like a normal method call.
+Hmmm, code generators need their own escaping mechanism for ')'. Maybe # can be self-
+escaping:
+
+	#( Comment here #)
+	#(#( Nested #) comment #)
+
+This simplifies the code generator. # followed by any character invokes the code
+generator. # followed by a space or tab comments out the line. # followed by a left
+parenthesis implies a multiline-comment... that's simple. That's elegant...
+
+	#Expr(1+2^3##6#)
+
+Where ## denotes a raw # character. Good stuff man. This is independent from strings.
+What about line comments containing #(? The simplest thing is to ignore absolutely
+everything until a newline character has been seen. What does maylab do with its
+% comments? Let's find out. It uses the simplest approach. Let's roll with that.
+Simple and elegant. So # denote an out-of-string escape sequence. The sequence is
+only the single following character. This is to expand the range of characters there
+are. #( means one thing, `# ` means another. This has made me think about the design
+of my C++ class that handles this specifically. Should that class be a customizable
+machine? I started out using a ringbuffer as a template. On second thought, I think
+it may be best to implement the class to do exactly what it needs.
+
+	(2u out : 8u in) put  # Puts a character on the stack. Outputs how many characters you can pick
+	(8u out : 2u in) get  # Returns the `in`th element
+
+I just implemented it. This is the current API:
+
+	(8u a b; 1u ai bi : 8u in) put
+
+This is simpler. Just booleans telling us whether the values of a or b should be
+used. This is because raw strings can contain the null character. The extra boolean
+information is thus needed. The state machine is a simple pushdown automaton. It
+also correctly processes `#something()` such that the `#` still exists in the output.
+This allows the second pass to generate code without having to worry about comments.
+Strings do not need to worry about comments either, only about strings. Another routine
+that can be added is `(1u out : this) isInsideComment`. This is useful for editors
+that want to highlight syntax. The semantics of comments are thus formalized and
+carved in code. What is the next topic? Strings are already covered. Oh wait! What
+about the following?
+
+	#Expr(#)
+
+The '#)' will be seen as a comment terminator. This implies that there was an opener
+before this. The comment filter currently throws an error. I guess it should just
+let it pass instead...
+
+Seems reasonable. This should be fixed now. One confusing aspect is the following:
+
+	#Expr((##)#)
+	##expr(This is my (expression#) and it's cool!##)
+
+If there is an escape for # (being ##), then why doesn't #expr need an escape? How
+does that make sense?
