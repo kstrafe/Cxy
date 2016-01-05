@@ -5155,3 +5155,88 @@ within those groupers.
 It doesn't look clean though.
 
 	#anyName(code here)
+
+Maybe that's acceptable. Code generators are not to be used very often anyways. Only
+for certain niches.
+
+	#[generateLexer(lexerfile.l)#]
+
+	(ref Vector[Token] out : this; 8u in) lex {
+		generatedLexer(in);
+		out = $this.lexvector;
+	}
+
+Alright. I guess I've formed a concensus in my head. Let's roll with this. It's consistent
+and it works.
+Are there any criticisms of these comments and code generators? Hmm, let's see. When
+do we start running into trouble? It's just ugly is all. I don't like ugliness. Yeah,
+I need to change this. If I don't like its aesthetics, something will need to replace
+it.
+
+	#ideally(this would be the best)
+	# Just comments
+	/# Maybe this /# is #/ ok #/
+
+Should it use parentheses or brackets? I'm not sure. Clasically square brackets have
+been used to denote compile-time arguments. Well, this is also compile-time.. so...
+
+	#ideally[this would be the best]
+	# Just comments
+	/# Maybe this /# is #/ ok #/
+
+If you need a bracket inside the above, then you should write something like `#]`.
+That seems like a reasonable escape. The problem is that it doesn't play nice with
+any editor matching. What about # itself? Let's just consume those anyways. If your
+code requires those tokens, perform a pass for \h for a # and \m for a right bracket.
+That's the simplest method. Also, who even uses nested code generators? Even then, it'd
+be best to just let the user define their own escapes. What if a code generator is
+called with an argument another code generator? I think it would be cleanest to not
+allow the inner code generator to break the outer encapsulation:
+
+	#outer[#inner[]]
+
+If inner returns ']', it should not be allowed to break the outer code generator.
+But that's not very easy to make. The lexer would need to be aware of the tokens
+that it needs to consume before a ']' makes it possible to close the generator.
+
+What can be done is to process the input after the first '[' and feed it through
+the same stages as normal compilation. The top level-lexer will not be able to see
+the ']' if done correctly. So how do we consistently deduce where to end the stream?
+
+We feed the input into a buffer. Once a #a is found, that is processed by the preprocessor.
+Another idea is to let the output from the second preprocessor fill in another buffer
+that is deeper than the current one. I can probably implement it that way. In fact,
+it would be interesting to implement right now. Without the interpreting of course,
+just copying a file. Should code generators' generated code be code generated? In
+other words, should that generated code pass through a cg stack as well as a comment stack?
+In any case, how is ']' escaped? It can be thought to escape all ']'. But, only when
+the generated code is inside another code generator. This seems rather counter intuitive.
+Only inside other cgs should outputted elements be buffered.
+
+	#outer[#lb[]Doing something#rb[]]
+
+So how can this work with comments? Let's see. Let `# ` be the line comment mechanism.
+Obviously, the following would be really cool:
+
+	String a(`this is  # The string does not end here
+	my favorite string type.`);
+
+The same should be true for code generators:
+
+	#generateCode[#[My comment]]
+
+I just need to formalize these rules.
+Either way, it's nice. It works intuitively. The same should be applied to comments.
+You see, a comment should ignore code generators that are inside, but it should also
+ideally not allow the code generator to end the sequence.
+
+	#[This is a comment #generate[]ed code]
+
+	Parser a(#createParser[grammar]);
+
+One way of doing the nested code generators is to create a branch when the codegenerator
+is invoked.
+
+	#a[#b[]]
+
+Creates a new internal buffer for b.
