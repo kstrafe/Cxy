@@ -5022,4 +5022,136 @@ Seems reasonable. This should be fixed now. One confusing aspect is the followin
 	##expr(This is my (expression#) and it's cool!##)
 
 If there is an escape for # (being ##), then why doesn't #expr need an escape? How
-does that make sense?
+does that make sense? The main issue is that the decision is context-based. I don't
+enjoy that. Let's look at an example:
+
+	#do(something##)#)
+
+Why does #d not require escaping? ) does, but only if the #) is unmatched. This messes
+with comments containing codegenerators
+
+	#(
+		#create(#) <--- ends the nested comment here.
+	#)
+
+So how is this solved?
+
+	#(
+		#create[some new ##]code#]
+	#)
+
+That would solve the issue. Unknown sequences are simply ignored. The problem with
+this is that the codegenerator's pass will also interpret ##. So how is the issue
+resolved? Ideally, #( is merely a special case of the code generator. Commenting
+codegenerators themselves should still count the codegenerators inside.. right? Well
+
+Hmm, C and C++ do not have the option to escape `*/`. Maybe that's not a terrible
+trade-off. Anyways, the problem of code generators needs to be solved. Since comments
+are ideally also code generators, the code generated inside must be commented out.
+A proposed solution is to use [] for code generators. This is an interesting proposal.
+Are there any alternatives? Comments should also ignore code generators that are
+inside, right? What is right to do?
+
+	#( #gen(#) #)
+
+What if gen prematurely exits the comment by generating `#) this is outside the comment #(`?
+
+Should this be allowed? I like it much better to think of comments as more prioritized
+entities. Such that code generators happen after commenting out code. This avoids
+potential disasters.
+
+	#makeParser(grammar.file#)
+	makeParser#[grammar.file#]
+
+Another possibility is to make the codegenerator like
+
+	#code(#)
+	#( #codeGen(#) #)
+
+	#(
+		Author=`Name`
+		Date=`4/1/2016 20:54`
+		Description=`Class used to generate the productions for the parser.`
+	#)
+
+By just making the requirement for #)... no it's needed. Else you can't include stray
+')' characters.
+
+	#(This is some comment#)
+	#(#generateCode(#)#)
+
+	#comment( #)
+
+An idea is to make all #[alpha] tokens a comment indenter IF the comment is >0.
+
+This is now implemented. #[alpha] simply increments the counter. Otherwise it just
+outputs since #a is an unknown escape. Can it be assumed to always be a code generator?
+
+	#generateCode(#( #)#)
+	#(#generateCode( #)#)
+
+What are the exact semantics? Let's try to formulate them.
+
+1. A stream is read from left-to-right.
+2. Two characters are assessed at the same time.
+3. `# ` ignores the buffer until '\n'. '\n' is included in the output.
+4. `#(` starts a multiline comment. Commes nest.
+5. `#a` where `a` is any lowercase character is ignored. If it is inside a multiline comment, it increments the nesting counter.
+6. `#)` decrements the nesting counter. If it decrements a counter from zero, it just outputs it verbatim.
+7. `##` outputs a single `#` and clears the buffer.
+
+This defines the semantics for all cases. Commenting out a piece of code is now easy.
+
+	#(
+		(:) enter {  # The enter method
+			#make(##Wacky ##stuff#);
+		}
+	#)
+
+Come to think of it, #[ fits better, since the files that are going to be code generators
+act as classes.
+What if we have `#cg#)`? There is no opening parenthesis. Does this pass through
+the comment system? I think the comment system should be straight forward instead
+of complicated. Maybe a different system can be constructed...
+
+	#( Multiline comment
+	So it continues here
+	#) # ends the multiline comment
+	# a single-line comment
+
+The code generator's operation is simple:
+
+	# lower { upper | lower } '(' { any } '#' ')'
+
+	#[myStuff()#]
+
+I think we need to roll with #[ actually. The important part is that it disambiguates
+long sequences where there's a tonne of comments. The comments could be mixed with
+actual code generation
+
+		...
+		and generate more alpha x 2
+	#)  # Is this a comment ending or a cg entry?
+
+		...
+		and generate more alpha x 2
+	#]  # Clearly a code generator invocation.
+
+	#generateCode[This is some code#]
+	#[generateCode()#]
+	#(
+		My comment
+	#)
+	#[
+		myGenerator()
+	#]
+
+The nice thing about the #[ and #( preprocessors is that the ## escape is only necessary
+within those groupers.
+
+	#[ doSomethingCool(Anything goes here.##]) #]
+	#[gen(#[aws()#])#]
+
+It doesn't look clean though.
+
+	#anyName(code here)
