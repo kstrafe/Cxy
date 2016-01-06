@@ -5239,4 +5239,105 @@ is invoked.
 
 	#a[#b[]]
 
-Creates a new internal buffer for b.
+Creates a new internal buffer for b. I think some simple methods can be used. First,
+all we need to do is scan the input for a # and a subsequent non-#. ## is the global
+escape meaning a single #.
+
+If a `#a` is spotted, the stream is consumed until a `[` is spotted. So.. essentially,
+all output from codegenerators is escaped. An imaginary final pass unescapes the
+result. That result is fed into the compiler. Ideally, we can turn the input into
+a list of strings.
+
+	[0x0 0x1 0x2 0x3...]
+
+Where each pointer points to a sequence of code. Each pointer could contain... I
+need to rethink this thing.
+
+	[ here is my code # and it continues here ]
+	                  #generate [ other # ]
+	                                    #code [ hey! ]
+
+The idea is to let the # create a new scope. That scope captures the name of the
+generator. It then feeds the contents into that generator. This means the top-level
+generator is basically `#cxy[...]`. Can the same recursive ideals be defined for ##?
+
+	#
+	# [ # ]
+
+Yeah, seems reasonable. ## is just another generator with a special syntax due to
+how useful it is. So let that be the official semantics:
+
+1. '#' starts the codegenerator. It is consumed.
+2. A subsequent '#' returns '#' and ends the code generator.
+3. All symbols are consumed until the first '['.
+4. The first bracket creates a separate entity for strings.
+5. Strings are concatenated until the closing ']'.
+
+This means that `#a[#b[]]` will become
+
+	#
+	a [ # ]
+	    b [ ]
+
+This requires a recursive algorithm. Essentially, what happens is that we need a
+preprocessor object. For each instance of '#', the preprocessor summons another preprocessor
+to work on the rest of the stream. When the stream gets an ending character ']',
+it sends the input to the appropriate function. This can probably be done by using
+a simple depth recognizer. It picks out the alphanumerics after the #. All it needs
+to do is to increment a counter for each #. What does the datastructure look like?
+
+	String cgname inputstring;
+
+So the cgname is captured after a '#', then the input string is captured character
+by character. If another '#' shows up in the state where it is capturing characters
+for the input string, then the inputstring should be a list where we can discreetly
+point out other generators. In fact, since cgs are greedy and generate immediately,
+their generated content is immediately appended to the output 'inputstring'. Such
+that we only really need:
+
+	String cgname inputstring;
+	ptr CodeGenerator sub(null);
+
+Now, whenever a '#' is encountered, the sub can be instantiated. Here, it can filter
+out the cgname. If the sub is not null, then all input will be redirected towards
+the sub. If the sub notifies that it is finished, it is deleted. Its output appended
+to the inputstring, and execution continues. A very general substitution method can
+be created. By calling the './', the OS can deduce the command to execute via the
+shebang line. The stdouted text can then be substituted. That's actually quite beautiful.
+Hold on. That's how Cxy was supposed to be initially. A powerful string manipulator.
+Huh, cool. This can be created independently from Cxy itself. Should a callback be
+used? Suppose we have... hmmm
+Ideally we should support shebangs...
+
+	algorithm:
+
+		switch (characters_two) {
+			case '##': out='#';
+			case '# ': comment=true;
+			case '#a': codeGenerator();
+			case '#[': comment();
+		}
+
+I like it. This should be sufficient. Once that's implemented as a preprocessing
+step, everything else should fall into place.
+
+	(:) enter {  # Don't worry about this
+		sml op-print "Hello world";  # Focus on this line
+	}  # Not important
+
+	#[Compute the factorial of a number]
+	(128ue out : 5u in) factorial {
+		out = in;
+		--in;
+		while in > 1
+			out *= in;
+	}
+
+	(String out : this) doSomething {
+		out = this.serialize();
+	}
+
+	#serializable[  # Creates this.serialize methods for types.
+		32u a b c;
+		MyType d;
+	]
