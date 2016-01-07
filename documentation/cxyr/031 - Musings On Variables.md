@@ -5341,3 +5341,26 @@ step, everything else should fall into place.
 		32u a b c;
 		MyType d;
 	]
+
+This means that if a code generator returns `#cg[]`, that won't be interpreted. I
+think that's appropriate. The reason for this is that the code generator known as
+`##` would not have a well-defined form if this were the case:
+
+	##a[]
+
+If the '#' is reinterpreted, then meaning of ## is useless. Hence, all code generators
+output only the final form of what they produce. What about grants?
+
+	Aa[Class=Name] b;
+
+Can the Class name be a generator or not? Maybe that's not appropriate. When a class
+No it would allow arbitrary redefinition of private parts of the class. Suppose I
+have a lexer and a parser generator. They use the same file. How do I distribute
+these files to the entities?
+
+	Lexer[file="grammar"] lex;
+	Parser[file="grammar"] parse;
+
+An idea is to have a compile-time environment to manipulate. Starting at the top
+node, going downward. For each entity, a map is kept that holds data. Names like
+the above are available at compile-time. How will the semantics be defined?
