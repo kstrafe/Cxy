@@ -5363,4 +5363,22 @@ these files to the entities?
 
 An idea is to have a compile-time environment to manipulate. Starting at the top
 node, going downward. For each entity, a map is kept that holds data. Names like
-the above are available at compile-time. How will the semantics be defined?
+the above are available at compile-time. How will the semantics be defined? This
+is an important question. Grants are extremely powerful. Granting constant data is
+also powerful. Currently, we only really have running code.
+
+	(:) enter {
+		x = y op-extend w + z.getSomething()~three;
+	}
+
+A rather simple grammar. Would code generation be needed for cases where the resulting
+constant can be deduced from constant variables?
+
+	(:) enter {
+		Parser parser;
+		parser.useGrammar(MYGRAMMAR);
+	}
+
+Problem is that optimization isn't perfect, so code generation is still desired in
+some cases.
+What else? Well let's see....
