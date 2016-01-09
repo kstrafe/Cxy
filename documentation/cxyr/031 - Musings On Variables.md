@@ -5382,3 +5382,48 @@ constant can be deduced from constant variables?
 Problem is that optimization isn't perfect, so code generation is still desired in
 some cases.
 What else? Well let's see....
+
+Ideally, the lowest denominator of computing is bits. Having a table of bytes somewhere
+is like having classes. Temporal locality would imply that having often-used information
+packed together inside a class. We can't guarantee that data is thusly stored in
+one particular fashion. Using the bit descriptor allows one to place bits very precisely
+in Cxy, so alignas would potentially be superfluous. It seems fitting to make every
+type listed as it is specified in a class, work like that in the class's table as
+well. Basically, each member of a class is just put inside one big table, with the
+table being the size of all members combined.
+
+	Type a b;
+	8u c d;
+
+This would (given ::Type::SIZE == 10) give you a table of 36 bits. Makes sense man.
+Is this everything? Is there anything else I need to review? The grammar is done...
+although it will need some formal work. The lexer can be hand-crafted, and it will
+be beautiful. Expressions are simple. Types are linear. Statements are LL friendly.
+
+Is this it? Is this the entire language?
+
+	(array 2 16u out : 32u in; 1u bigendian()) split32into16 {
+		default bigendian(true);
+		if bigendian
+			@cast[ptr 32u](out) = in;
+		else {  # Given 16u == ::Byte::SIZE;
+			out[0] = cast[array 2 16u](out)[1];
+			out[1] = cast[array 2 16u](out)[0];
+		}
+	}
+
+This does make me ponder endianness of units. Little endian makes the most sense
+to me. Either way, there's no clear answer, both can be justified, and both are equally
+useful.
+The problem is that endianness operates on a byte level. I think it would be best
+if the language assumes little endianness just for the sake of logic.
+
+	(1u little big:) endian {
+		2u a(1);  # 01 in memory
+		little = cast[ptr 1u](a)[1];
+		big = cast[ptr 1u](a)[0];
+	}
+
+	if endian()~little { ... }
+
+
