@@ -5426,4 +5426,20 @@ if the language assumes little endianness just for the sake of logic.
 
 	if endian()~little { ... }
 
+	array 20 array 20 32u a;
 
+So as for semantics regarding grants. Grant(name::Stuff); will always be overridden
+by grants of the form `Grant=name::Stuff`. Lower level grants will override top-level
+grants. I do not know how ideal this is:
+
+	# Main.cxy
+	(:) enter {
+		sub::Sub[Type=Math] sub;
+	}
+
+	# sub/Sub.cxy
+	Type(local::MyMath);
+	local::Under[Type=local::OtherMath] other;
+
+This implies that other will still use OtherMath, but Sub will have `Type` be `Math`
+instead of `MyMath`.
