@@ -2565,7 +2565,7 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 	MEM_EXPR ::= CALL_EXPR [ ( '~' | '.' | '->' ) MEM_EXPR ] ;
 	CALL_EXPR ::= RES_EXPR TRAIL ;
 	TRAIL ::= [ ( ARG | LIST ) TRAIL ] ;
-	RES_EXPR ::= [ '::' TYPE '::' ] ( name | mname | ename | ARG ) | '(' EXPR ')' | string | integer | float | LIST
+	RES_EXPR ::= [ '::' TYPE '::' ] ( name | mname | ename  | '::' TYPE '::' ARG | '(' EXPR ')' | string | integer | float | LIST
 		| 'lamda' [ '[' { name } ']' ] [ SIGNATURE ] '{' { STAT } '}'
 		| 'cast' '[' TYPE ']' '(' EXPR ')'
 		| 'new' [ '[' TYPE ']' ] ARG [ '{' ARG '}' ]
@@ -5443,3 +5443,14 @@ grants. I do not know how ideal this is:
 
 This implies that other will still use OtherMath, but Sub will have `Type` be `Math`
 instead of `MyMath`.
+
+I'm thinking maybe method signatures should be changed to use | as a separator instead
+of the ':'.
+
+	(|) enter {}
+	(:) enter {}
+	(32u out | 32u in) shiftLeft {}
+	(32u out : 32u in) shiftLeft {}
+
+Probably for no good reason anyways... Also. I'm trying to formalize most of the
+grammar as of now. There is a small fix... There it is.
