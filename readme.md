@@ -6,16 +6,11 @@
 # Tutorial #
 The tutorials are located in documentation/cxys/.
 
-# The Best. Language. Ever.
->We want to make _the best_ language, ever.
-The cleanest. The nicest. The fastest. The most consistent. Language. Ever.
-We want raw control with assembly, and ease of coding with scripting.
-We want EXTREME power... with EXTREME templates.
-This language will be. Amazing.
-Okay okay, it won't be better than DSL's made for their specific domains, but generally,
-this language will be reliable, simple, practical, and avoid general 'wtf'. It needs
-to be hackable so it runs on machines ranging from low-powered microcontrollers, to
-high-end servers! The final solution to a high-performance, C-like, reliable language.
+# A Great Language
+Cxy is an attempt at a final low level language that can handle any problem. The
+language features builtin support for separating machine dependent from independent
+code. Advocates a clean coding method, and overall keeps the structure of the program
+in a clean and modular state.
 
 ## Why another language?
 
@@ -55,18 +50,15 @@ corresponding .hpp files) can ONLY depend/include on:
 This means that dependencies are kept clean and local. Spaghetti is avoided.
 
 ## Current status!
-The BEST language ever uses simple, consistent lexing and parsing.
-Hand-written of course for crisp minimalism!
-Visual tools:
-What on earth DOES IT MEAN?!
-The green nodes are verified to be completely PURE subtrees.
-Blue nodes are part of a pure subtree, and can later be verified or
-cleaned to be pure.
-Red nodes are not pure.
-Purity primer:
-```
-functional purity: same input into function -> same output. Always
-modular purity: object creation with same operations -> same object
-```
-We can only guarantee purity if the object never uses a global.
+The language has undergone great changes and is starting to have a stable grammar
+and lexer specification. Both are still in production, but should be finished within
+a year (2016). The likely outcome is that this repository will be rewritten to acomodate
+the changes to the language.
+
+Here is the graph of the entire compiler as it is built up.
+
+* Green = Pure
+* Blue = Pure
+* Red = Impure
+* Orange = Root
 ![Dependency Graph](http://puu.sh/kN1fy/05af575fe7.png)
