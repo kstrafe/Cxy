@@ -2565,7 +2565,7 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 	MEM_EXPR ::= CALL_EXPR [ ( '~' | '.' | '->' ) MEM_EXPR ] ;
 	CALL_EXPR ::= RES_EXPR TRAIL ;
 	TRAIL ::= [ ( ARG | LIST ) TRAIL ] ;
-	RES_EXPR ::= [ '::' TYPE '::' ] ( name | mname | ename  | '::' TYPE '::' ARG | '(' EXPR ')' | string | integer | float | LIST
+	RES_EXPR ::= [ '::' TYPE '::' ] ( name | mname | ename )  | '::' TYPE '::' ARG | '(' EXPR ')' | string | integer | float | LIST
 		| 'lamda' [ '[' { name } ']' ] [ SIGNATURE ] '{' { STAT } '}'
 		| 'cast' '[' TYPE ']' '(' EXPR ')'
 		| 'new' [ '[' TYPE ']' ] ARG [ '{' ARG '}' ]
@@ -5453,4 +5453,23 @@ of the ':'.
 	(32u out : 32u in) shiftLeft {}
 
 Probably for no good reason anyways... Also. I'm trying to formalize most of the
-grammar as of now. There is a small fix... There it is.
+grammar as of now. There is a small fix... There it is. A nice thing about the bit
+fields is that we can support psuedo-class syntax:
+
+	16s a(31209);
+	32s b(-1239);
+	a = cast[type(a)](b);  # Cast interprets rawly, so sign bit is wrong
+	# Correct algorithm:
+	a = cast[type(a)](b);  # First a normal cast.
+	a.set(15, value=b.get(31));  # Then a sign bit setting.
+
+This will give wrong results for sufficiently high numbers.
+
+	16s a(-2);
+	32s b(0);
+	b = cast[type(b)](a);
+	b.setSign(a.getSign());
+	# or
+	b = a.to32s();
+
+
