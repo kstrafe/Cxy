@@ -5472,4 +5472,7 @@ This will give wrong results for sufficiently high numbers.
 	# or
 	b = a.to32s();
 
-
+I have a busy year ahead of me now,... hopefully the grammar will evolve as more
+will be learned. I need to ask myself: "Is there anything I don't like?". Whatever
+it is, it's always removed. For example, I still don't really enjoy $$... I find
+it misleading... still, it should be fine.
