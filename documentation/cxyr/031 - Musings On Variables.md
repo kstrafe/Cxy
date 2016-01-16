@@ -5476,3 +5476,24 @@ I have a busy year ahead of me now,... hopefully the grammar will evolve as more
 will be learned. I need to ask myself: "Is there anything I don't like?". Whatever
 it is, it's always removed. For example, I still don't really enjoy $$... I find
 it misleading... still, it should be fine.
+
+An interesting idea taken from Haskell is the $ operator. I'm just pondering a very
+simple grammar scheme that would use context-independent meanings for symbols...
+Allow me to elaborate:
+
+	class ( ... )
+
+Now, $ can be used and it means '(' and it ends at the end of the file.
+
+	class $
+		name ( "something" )
+		method ( return ( 32u (a b) ) param (8u c) code ({
+			equals (a b)
+		})
+		)
+
+I don't know. Could be interesting. It's a very free grammar in that you can decide
+where the tags go. The problem is that it's not compact. Another problem is that
+programmers will have a bad time communicating with each other using this method.
+They'll end up with their own way of writing things, making codebases inconsistent
+and messy.
