@@ -2582,7 +2582,8 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 	STAT ::=
 		'goto' name EXPR ';' | 'label' name ';' | 'try' STAT | 'default' name ARG ';'
 		| 'catch' '{' { case [ TYPE '::' ] ename STAT | STAT } '}' | 'raise' ename ';'
-		| 'hack' '(' string ')' ';' | DATA ';' | FEXPR ';' | '{' { STAT } '}' ;
+		| 'hack' '(' string ')' ';' | DATA ';' | FEXPR ';' | '{' { STAT } '}'
+		| 'static' 'if' EXPR STAT ;
 
 	// Lexer, names are given in lowercase.
 	name ::= lower { lower | upper } ;
@@ -5497,3 +5498,5 @@ where the tags go. The problem is that it's not compact. Another problem is that
 programmers will have a bad time communicating with each other using this method.
 They'll end up with their own way of writing things, making codebases inconsistent
 and messy.
+
+
