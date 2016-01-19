@@ -2545,7 +2545,7 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 	#GRAMMAR
 
 	// Class-Scope
-	CLASS ::= { [ ACCESS ] ( 'static' 'if' EXPR '{' CLASS '}' | DATA | METHOD | cnamep TYPE ')' ) } ;
+	CLASS ::= { 'static' 'if' EXPR '{' CLASS '}' | [ ACCESS ] ( DATA | METHOD | cnamep TYPE ')' ) } ;
 	ACCESS ::= 'private' | 'public' | 'restricted' ;
 	DATA ::= TYPE { name [ ARG ] }+ ';' ;
 	METHOD ::= SIGNATURE mname STATEMENT ;
@@ -5499,4 +5499,4 @@ programmers will have a bad time communicating with each other using this method
 They'll end up with their own way of writing things, making codebases inconsistent
 and messy.
 
-
+Is the grammar done now? Maybe review type signatures a little.
