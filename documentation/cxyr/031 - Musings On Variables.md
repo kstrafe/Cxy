@@ -2545,8 +2545,7 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 	#GRAMMAR
 
 	// Class-Scope
-	COND ::= ( 'static' 'if' EXPR { CLASS } | CLASS ) COND
-	CLASS ::= { 'static' 'if' EXPR '{' CLASS '}' [ CLASS ] | [ ACCESS ] ( DATA | METHOD | cnamep TYPE ')' ) } ;
+	CLASS ::= { [ ACCESS ] ( DATA | METHOD | cnamep TYPE ')' ) } ;
 	ACCESS ::= 'private' | 'public' | 'restricted' ;
 	DATA ::= TYPE { name [ ARG ] }+ ';' ;
 	METHOD ::= SIGNATURE mname STATEMENT ;
@@ -5500,4 +5499,14 @@ programmers will have a bad time communicating with each other using this method
 They'll end up with their own way of writing things, making codebases inconsistent
 and messy.
 
-Is the grammar done now? Maybe review type signatures a little.
+Is the grammar done now? Maybe review type signatures a little. Oh! I have an idea!
+What is static if is actually utilized in the lexer?! That'd be amazing since it allows
+truly variable compilation due to the following scenario:
+
+	static if x { public } else { private } (:) method { #[My method] };
+
+This requires no grammar changes, however, the lexer will need to filter out the
+word 'static' in order to parse an expression. However! this won't test all possible
+grammatical errors.
+
+
