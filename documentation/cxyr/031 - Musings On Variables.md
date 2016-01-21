@@ -2582,8 +2582,7 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 	STAT ::=
 		'goto' name EXPR ';' | 'label' name ';' | 'try' STAT | 'default' name ARG ';'
 		| 'catch' '{' { case [ TYPE '::' ] ename STAT | STAT } '}' | 'raise' ename ';'
-		| 'hack' '(' string ')' ';' | DATA ';' | FEXPR ';' | '{' { STAT } '}'
-		| 'static' 'if' EXPR STAT ;
+		| 'hack' '(' string ')' ';' | DATA ';' | FEXPR ';' | '{' { STAT } '}' ;
 
 	// Lexer, names are given in lowercase.
 	name ::= lower { lower | upper } ;
@@ -5509,4 +5508,12 @@ This requires no grammar changes, however, the lexer will need to filter out the
 word 'static' in order to parse an expression. However! this won't test all possible
 grammatical errors.
 
+Just wondering what I can clean up here... Ah, static if as a statement isn't acceptable
+since we'll use the lexer for static inclusion. But, the lexer already uses the the
+codegenerators to avoid generating unnecessary code. But imagine:
 
+	#IfARM86[hack("something");]
+
+This could work, it avoids the static ifs, we'll need to build up a grant class list
+such that subclasses can also use IfArm or whatever, since a cg is only within a
+single file anyways.
