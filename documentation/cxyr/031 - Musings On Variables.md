@@ -5516,4 +5516,5 @@ codegenerators to avoid generating unnecessary code. But imagine:
 
 This could work, it avoids the static ifs, we'll need to build up a grant class list
 such that subclasses can also use IfArm or whatever, since a cg is only within a
-single file anyways.
+single file anyways. This seems like a reasonable solution. It also avoids the need
+for using static ifs... I'm still somewhat divided.
