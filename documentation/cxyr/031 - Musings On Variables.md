@@ -2550,7 +2550,7 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 	DATA ::= TYPE { name [ ARG ] }+ ';' ;
 	METHOD ::= SIGNATURE mname STATEMENT ;
 	SIGNATURE ::= '(' ( { DATA | 'this' ';' } ) ':' $1
-		[ ':' [ 'const' ] [ 'ctor' ] [ 'dtor' ] [ 'pure' ] ] ')' ;
+		[ ':' [ 'const' ] [ 'comp' ] [ 'ctor' ] [ 'dtor' ] [ 'pure' ] ] ')' ;
 	ARG ::= '(' { FEXPR }* \{ ';' } ')' ;
 	FEXPR ::= { EXPR [ ':' mname ] }+ \{ ',' } [ COMPOUND EXPR ] ;
 
@@ -5517,4 +5517,15 @@ codegenerators to avoid generating unnecessary code. But imagine:
 This could work, it avoids the static ifs, we'll need to build up a grant class list
 such that subclasses can also use IfArm or whatever, since a cg is only within a
 single file anyways. This seems like a reasonable solution. It also avoids the need
-for using static ifs... I'm still somewhat divided.
+for using static ifs... I'm still somewhat divided. Can the cgs then use static data
+to determine a condition?
+
+	#If (a == true, ...)
+
+The problem with that is that we don't have any syntax conformance since the If class
+needs to split apart the argument into multiple sections. I don't like that. Maybe
+if can be special or something. I don't know...
+
+I just added the 'comp' signature value. This value adds the information that the
+method must be compile-time calculable. It must not use any class or method that
+is a hacked grant... or maybe it will. That will give inconsistent results though.
