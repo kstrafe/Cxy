@@ -2545,7 +2545,7 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 	#GRAMMAR
 
 	// Class-Scope
-	CLASS ::= { [ ACCESS ] ( DATA | METHOD | cnamep TYPE ')' ) } ;
+	CLASS ::= { 'test' STAT | [ ACCESS ] ( DATA | METHOD | cnamep TYPE ')' ) } ;
 	ACCESS ::= 'private' | 'public' | 'restricted' ;
 	DATA ::= TYPE { name [ ARG ] }+ ';' ;
 	METHOD ::= SIGNATURE mname STATEMENT ;
@@ -5529,3 +5529,18 @@ if can be special or something. I don't know...
 I just added the 'comp' signature value. This value adds the information that the
 method must be compile-time calculable. It must not use any class or method that
 is a hacked grant... or maybe it will. That will give inconsistent results though.
+
+	public Options a b c;
+
+	public (: this; 32u a()) cool {
+		default a(100);
+		this.a.setSomething(a);
+	}
+	public (: this) x {
+		ptr (: this; 32u a()) b(cool);
+		b();
+		b(10);  # Should this work?
+	}
+
+We also need unit tests. These are incredibly useful and we can verify the semantics
+of the grants.
