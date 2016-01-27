@@ -5543,4 +5543,18 @@ is a hacked grant... or maybe it will. That will give inconsistent results thoug
 	}
 
 We also need unit tests. These are incredibly useful and we can verify the semantics
-of the grants.
+of the grants. So how do we reconcile the idea of using lambdas with default arguments?
+Maybe default arguments should be mentioned differently... I think it can work actually...
+
+	test assert(::GrantName::control());
+
+	(:) enter {
+		plot(lambda(32f z : 32f x y){z=x*y;};
+			x=[1 10]; y=[-10 10]);
+		# Destructor waits until the handle is destroyed.
+	}
+
+	test assert(::Granted::someMethod() == 1);
+
+So the current language contains many common utilities and shortens them to simple
+relations.
