@@ -2556,7 +2556,7 @@ So what about arrays? `[` vs { vs (. array{} is something I like.
 
 	UNOP ::= '@'|'$'|'$$'|'\'|'!' ;
 	BINOP ::= '+'|'-'|'%'|'^'|'&'|'|'|'*'|'>='|'<='|'=='|'!='|'>'|'<'|'/'|'<<'|'>>' ;
-	COMPOUND ::= BINOP . '=' ;
+	COMPOUND ::= OP . '=' ;
 	OP ::= 'op' '-' name | BINOP ;
 	UN ::= 'un' '-' name | UNOP;
 
@@ -5557,4 +5557,44 @@ Maybe default arguments should be mentioned differently... I think it can work a
 	test assert(::Granted::someMethod() == 1);
 
 So the current language contains many common utilities and shortens them to simple
-relations.
+relations. What about the current limitations? It's not possible to state that a
+namespace ought to be overridden except for usages of said namespace (or renaming)
+a folder. Operators are fine, except that 'op' and 'un' are words, which implies
+that we need spaces between the operators.
+
+	aop-expb  # should not work
+
+This implies that builtin operators also require a space. That is unreasonable. op
+and un can be exceptions to this rule. The colon is also underused now. Well except
+for namespace accessing... Am I satisfied with this grammar (and semantics?).
+
+	array 20 Type a b c;
+	array Type d e f;
+
+The arrays can infer length,... or... well in that case, all elements must be of
+the same size. By that I mean, d, e, and f must be of the same size. For arguments
+to functions, the length of the array can be inferred. That shouldn't be a problem.
+The array will just not change size during runtime. This presents an issue during
+runtime. Especially considering lambdas. What lambdas could do is point to several
+methods. When calling a lambda that contains default arguments, the machine calls
+the lambda with all names of the arguments given, and it calls the correct method...
+
+What about concatenating op- methods with '='? That should be possible. It's an interesting
+concept.
+
+	(My out : this; ref const My in) exp {
+		...
+	}
+
+	My a(2) b(10);
+	a op-exp b;
+	a op-exp= b;
+
+We could say that we need to just create a new operator for it:
+
+	My a b;
+	a op-aexp b;
+
+Where aexp is a method that assigns data to a, and doesn't take a const reference
+to a. The problem with this is that it becomes quire a liability to take into consideration
+each time. Maybe there's a better solution.
