@@ -5629,3 +5629,43 @@ infer most of the types. Haskell uses this kind of system. Inferring types from 
 functional requirements is a nice feature, but it allows one to send in types that
 do not semantically adhere to the callee's expectations. This is a good reason for
 having static and strong types in the language.
+
+A shortening sequence could be very useful. The above poses the problem: "What if
+we want to write something in a shorter fashion?".
+
+	#Step euler {
+		sml.out << "could be done this way";
+	}
+
+Where the code generator #Step basically generates the signature of euler, knowing
+that iterative signatures look alike. The use of code generation can mediate a tonne
+of boilerplate to simple cg invocations. This requires that code generators be granted.
+My issue with granting is that there is too much implicit information.
+
+	#Re[32f] { }
+	(32f out : 32f in) { }
+
+What's nice about code generation is its versatility. The power of code generation
+is unmatched. There needs to be a sort of formal and clean way to specify all of
+Cxy. Let's just compare:
+
+	// C++
+	float euler(float (*function)(), float step, float initial) { }
+	# Cxy
+	(32f : ptr (32f:32f); 32f step initial) euler { }
+
+It's shorter than the C++ version. By making names optional, they can be considered.
+'in' or 'out' in methods. Depending on their location of course. C++ has the edge
+with pointers because they use two fewer characters. They can also concat the * with
+the name, so it becomes three character savings. I like the short form for methods
+though.
+
+	(: 1u; this) control {}
+
+No need to write 'in' or 'out' there. It's a nice shortening form.
+
+	StringMap map;
+	map.add(from="Hello!"; to="There");
+	sml.out << map["Hello!"];
+
+
