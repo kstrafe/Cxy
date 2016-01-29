@@ -5597,4 +5597,35 @@ We could say that we need to just create a new operator for it:
 
 Where aexp is a method that assigns data to a, and doesn't take a const reference
 to a. The problem with this is that it becomes quire a liability to take into consideration
-each time. Maybe there's a better solution.
+each time. Maybe there's a better solution. A universal language would be highly
+interesting. I'm thinking that multiple returns may provide more inconvenienve than
+not... but I'm a little uncertain. It's definitely useful.
+
+An idea tickling my mind for a while is complete-file preprocessing:
+
+	#Cpp
+	##include <iostream>
+	int main() {
+		std::cout << "something" << std::endl;
+	}
+
+That could put all tools in this language. I like the idea. However, the languages
+will need to be compiled into Cxy, then compiled into the final executable.
+
+	(32f:ptr(32f:32f);32u steps;32f initial step) euler {
+		for (32u i(0);i<steps;++i) {
+			initial+=step*in(initial);
+		}
+		out=initial;
+	}
+	(:) enter {
+		ptr (32f:32f) f(lambda{out=\in;});
+		euler(f,initial=10,step=1.0/200.0);
+	}
+
+The above should be terser. I like having a good type system, but terseness is nice.
+Hell, even python (without static types) is very much readable because we can easily
+infer most of the types. Haskell uses this kind of system. Inferring types from their
+functional requirements is a nice feature, but it allows one to send in types that
+do not semantically adhere to the callee's expectations. This is a good reason for
+having static and strong types in the language.
