@@ -5668,4 +5668,24 @@ No need to write 'in' or 'out' there. It's a nice shortening form.
 	map.add(from="Hello!"; to="There");
 	sml.out << map["Hello!"];
 
+Without multiple return-assigns, the operator = would just be another conventional
+operator. In fact, that'd work very well with the right-associative operations imposed
+by the LL(1) grammar.
 
+	a = b = c;
+
+There's an elegance to that. Still, I like the idea of multiple returns, so how can
+it be conveyed without the use of the equality operator?
+
+	anon a(f());
+	b = a~d;
+	c = a~e;
+
+The problem is that this requires another temporary to store the intermediate result.
+That is definitely not something to be desired. So how can it be implemented?
+
+	b: d, c: e = f();
+
+Is the current method of specifying multiple assigns from a method. What about operators
+automatically taking in references? This clashes with the idea of using pointers
+explicitly.
