@@ -5689,3 +5689,41 @@ That is definitely not something to be desired. So how can it be implemented?
 Is the current method of specifying multiple assigns from a method. What about operators
 automatically taking in references? This clashes with the idea of using pointers
 explicitly.
+
+I've been thinking about a new idea to employ. Thinking about all the clutter that
+my types would bring makes me think that it's maybe cool to let types be fulyl inferred.
+
+	a = 32u(100);
+	a = 64u(10);
+
+The only problem is how the above can avoid re-declaring a type. I remember from
+my professional days programming in Python that there wasn't a big problem in finding
+out a type. All you did was dir(myvar) to get the answer. I'm thinking that we can
+employ the same strategy.
+
+	a = 32u(100);
+	type[a];  // Issues compiler information on the type
+	b = myFunc();
+	type[b];  // More useful
+	numb = Complex(10, i=1);
+	extra = numb + 1;
+
+This also allows function overloading by duck typing. I liek the idea. My only issue
+is with the declaration of variables. We could say we use static types and do not
+allow overriding the variable with another type, but this will be a problem...
+
+	a := 32u(10);
+	a = 100;
+	a = 32s(-10);  // Error
+	a := getSome();  // Error, a already declared.
+
+If we avoid globals, we can simply search the code for the name...
+
+	jumptable = array[10, 10] 32u;
+	index = 32u;
+
+	index = 3;
+	jumptable[0, index] = 0;
+
+Hmmm... that's interesting.
+
