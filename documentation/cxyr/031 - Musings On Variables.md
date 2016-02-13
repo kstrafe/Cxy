@@ -5727,3 +5727,111 @@ If we avoid globals, we can simply search the code for the name...
 
 Hmmm... that's interesting.
 
+	sumComplex(out : in, a, b, c : pure):
+		for i in c:
+			b += i
+		out = b + a - in
+		out.removeImaginary()
+
+I like the idea. Should a pythonic syntax be used instead of the classical C syntax?
+
+	enter(out : argc, argv):
+		if argc > 1:
+			sml::print(argv[1])
+		f = [1 2 3]  // Declare f as array 32s 3
+		f = [1 2 3 4]  // Illegal, change of type
+		out = 0
+
+What about implicitly named methods?
+
+	myFunc():
+		control()
+
+	get(a b c):
+		a = 1
+		b = "Hey"
+		c = -200
+
+	enter(out : argc argv):
+		if argc > 10:
+			myFunc()
+		else:
+			sml::print("Heyyy guys!")
+			sml::print(100)
+		a:a b:b c:c = get()
+		f = -10
+		f:c = get()
+
+Multiple returns will be a slight challenge. I currently have
+
+	Type expr:name = expr
+
+	a = get()~a
+	b = get()~b
+	c = get()~c
+	a~a b~b c~c = get()
+
+The concept is very powerful. Hell I can even make lambdas so much more enjoyable:
+
+	map(list, fun=(out:in): out = in + 3)
+
+The question is to eliminate the return parameter problem. This is not easy. Fexprs
+can be used
+
+	value: out, error: error = sin(0.3)
+
+It looks good to me.
+
+I think Python uses a philosophy where each module is sufficiently small to avoid
+types overwriting themselves. I like the idea... I really do. Maybe I should just
+implement compilable python. With the add-on of various items. Maybe with semicolons
+and more classical C-like syntax?
+
+	while thereAreSufficientFunds()
+		funds = fetchFunds()
+		allocation = allocateFunds(funds)
+		sendFunds(allocation)
+
+That's absolutely beautiful.
+
+	file = sml::file("control")
+	while file.has()
+		character = file.get()
+		++character
+		print character
+		debug character
+
+	counter = Counter[32u];
+	while counter < 10
+		++counter
+	print counter
+
+	Counter[32u] counter;
+	while (counter < 10) {
+		++counter;
+	}
+	sml::print(counter.getString());
+
+The former is so much more terse and easy to read.
+
+	showUnauthorizedAccess()
+		title = "Unauthorized"
+		unauthorized = showUnauthorizedAccess.render()
+
+		return layoutBoxPage.render(title, unauthorized)
+
+After having considered this and asked several programmers who are interested in
+language design, I've decided to go with single-returns and inferred typing.
+
+	approxAndError(: pure):
+		approx = 3201.0
+		error = 0.0123
+		return approx, error
+
+	result = approxAndError()
+	print(result.approx + 3.0)
+
+Here, all returns of multiple values are to be put inside a named tuple. This means
+that the names are dependent on what the function returns.
+
+
