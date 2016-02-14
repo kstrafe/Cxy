@@ -5834,4 +5834,5 @@ language design, I've decided to go with single-returns and inferred typing.
 Here, all returns of multiple values are to be put inside a named tuple. This means
 that the names are dependent on what the function returns.
 
-
+An idea is to let the compiler find the following ): for each expression. It's basically
+an LR parser.
