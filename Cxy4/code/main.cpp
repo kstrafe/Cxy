@@ -39,7 +39,7 @@ void insert(Lexer &lexer, const char *in) {
 int main(int argc, char *argv[]) {
 	typedef datru::Token<datru::EntryType, datru::TokenType> CommonToken;
 
-	auto lexer = lex::Lexer<datru::EntryType, CommonToken, datru::TokenType>();
+	auto lexer = lex::Lexer<datru::EntryType, CommonToken, datru::TokenType, datru::Typifier>();
 
 	insert(lexer, "Hello there 'my friend' - I mean, hi!");
 	std::cout << "Test" << std::endl;

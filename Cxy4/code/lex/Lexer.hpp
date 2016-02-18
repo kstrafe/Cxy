@@ -26,7 +26,7 @@ along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace lex {
 
-	template <typename EntryType, typename Token, typename TokenType>
+	template <typename EntryType, typename Token, typename TokenType, typename Typifier>
 	class Lexer {
 
 	public:
@@ -42,7 +42,7 @@ namespace lex {
 			string_filter.push(in);
 			while (string_filter.available()) {
 				in = string_filter.pop();
-				auto chartype = datru::typify(in);
+				auto chartype = Typifier::typify(in);
 				auto action = action_gen.computeAction(chartype);
 				token_gen.consumeCharacter(in, action);
 			}
