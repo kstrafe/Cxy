@@ -23,8 +23,7 @@ along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 namespace datru {
 
 	template<typename EntryType, typename TokenType>
-	struct Token
-	{
+	struct Token {
 		std::size_t
 			line_number,
 			column_number;

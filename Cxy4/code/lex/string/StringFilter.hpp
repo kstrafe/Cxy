@@ -15,32 +15,37 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include <iostream>
+#pragma once
+#include <string>
 
-#include "datru/EntryType.hpp"
-#include "datru/Token.hpp"
-#include "datru/TokenType.hpp"
-#include "lex/Lexer.hpp"
+namespace string {
 
-template<typename Lexer>
-void insert(Lexer &lexer, const char *in) {
-	for (int i = 0; in[i] != '\0'; ++i) {
-		lexer.insertCharacter(in[i]);
-		if (lexer.hasToken()) {
-			auto tok = lexer.popToken();
-			std::cout
-				<< tok.accompanying_lexeme
-				<< static_cast<int>(tok.entry_type)
-				<< std::endl;
-		}
-	}
-}
+class StringFilter
+{
+public:
 
-int main(int argc, char *argv[]) {
-	typedef datru::Token<datru::EntryType, datru::TokenType> CommonToken;
+	uint8_t hexToBits(char hex);
+	void push(char character);
+	bool available() const;
+	char pop();
+	void end();
 
-	auto lexer = lex::Lexer<datru::EntryType, CommonToken, datru::TokenType>();
+private:
 
-	insert(lexer, "Hello there 'my friend' - I mean, hi!");
-	std::cout << "Test" << std::endl;
+	enum class State
+	{
+		NOTHING,
+		SINGLE,
+		MULTIPLE,
+		VERBATIM,
+		ESCAPE,
+		CODE,
+		CODE2,
+		ESCAPE_VERBATIM,
+	} state = State::NOTHING, previous = State::NOTHING;
+
+	uint8_t out[2], can_fetch = 0;
+
+};
+
 }

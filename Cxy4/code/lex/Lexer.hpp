@@ -22,6 +22,7 @@ along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 #include "action/TokenGenerator.hpp"
 #include "count/PositionCounter.hpp"
 #include "mealy/Mealy.hpp"
+#include "string/StringFilter.hpp"
 
 namespace lex {
 
@@ -38,13 +39,17 @@ namespace lex {
 			can_continue = filterComments(in)
 			if (can_continue) {
 			*/
-			auto chartype = datru::typify(in);
-			auto action = action_gen.computeAction(chartype);
-			token_gen.consumeCharacter(in, action);
-			while (token_gen.getTokenStack().size() > 0) {
-				std::cout << token_gen.getTokenStack().back().accompanying_lexeme;
-				token_gen.getTokenStack().pop_back();
+			string_filter.push(in);
+			while (string_filter.available()) {
+				in = string_filter.pop();
+				auto chartype = datru::typify(in);
+				auto action = action_gen.computeAction(chartype);
+				token_gen.consumeCharacter(in, action);
 			}
+			for (auto &a : token_gen.getTokenStack()) {
+				ready_tokens.push_back(a);
+			}
+			token_gen.getTokenStack().clear();
 			/*
 				cluster(in)
 				processClusters()
@@ -70,6 +75,7 @@ namespace lex {
 			<std::size_t, action::Action, EntryType>,
 			EntryType> action_gen;
 		action::TokenGenerator<action::Action, EntryType, Token, TokenType> token_gen;
+		string::StringFilter string_filter;
 
 	};
 
