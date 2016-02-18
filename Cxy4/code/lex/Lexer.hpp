@@ -20,7 +20,10 @@ along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "action/ActionGenerator.hpp"
 #include "action/TokenGenerator.hpp"
+#include "clust/Cluster.hpp"
 #include "count/PositionCounter.hpp"
+#include "match/KeywordMatcher.hpp"
+#include "match/SymbolMatcher.hpp"
 #include "mealy/Mealy.hpp"
 #include "string/StringFilter.hpp"
 
@@ -29,9 +32,10 @@ namespace lex {
 	template <typename EntryType, typename Token, typename TokenType, typename Typifier>
 	class Lexer {
 
+			typedef match::KeywordMatcher<Token, TokenType> KeywordMatcher;
+			typedef match::SymbolMatcher<TokenType> SymbolMatcher;
+
 	public:
-		Lexer() { }
-		~Lexer() { }
 
 		void insertCharacter(char in) {
 			position_counter.countCharacter(in);
@@ -46,10 +50,9 @@ namespace lex {
 				auto action = action_gen.computeAction(chartype);
 				token_gen.consumeCharacter(in, action);
 			}
-			for (auto &a : token_gen.getTokenStack()) {
-				ready_tokens.push_back(a);
-			}
-			token_gen.getTokenStack().clear();
+			auto &stack = token_gen.getTokenStack();
+			clust::Cluster<decltype(stack), EntryType, TokenType, KeywordMatcher, SymbolMatcher>::
+				cluster(stack, ready_tokens);
 			/*
 				cluster(in)
 				processClusters()
