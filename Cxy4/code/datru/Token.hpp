@@ -15,22 +15,22 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include <iostream>
+#pragma once
 
-#include "datru/EntryType.hpp"
-#include "datru/Token.hpp"
-#include "datru/TokenType.hpp"
-#include "lex/Lexer.hpp"
+#include <cstddef>
+#include <string>
 
-int main(int argc, char *argv[]) {
-	typedef datru::Token<datru::EntryType, datru::TokenType> CommonToken;
+namespace datru {
 
-	auto lexer = lex::Lexer<datru::EntryType, CommonToken, datru::TokenType>();
-	lexer.insertCharacter('a');
-	lexer.insertCharacter('-');
-	lexer.insertCharacter('-');
-	for (int i = 0; i < 100; ++i)
-		lexer.insertCharacter('8');
-	lexer.insertCharacter('-');
-	std::cout << std::boolalpha << lexer.hasToken() << std::endl;
+	template<typename EntryType, typename TokenType>
+	struct Token
+	{
+		std::size_t
+			line_number,
+			column_number;
+		EntryType entry_type;
+		TokenType token_type;
+		std::string accompanying_lexeme;
+	};
+
 }

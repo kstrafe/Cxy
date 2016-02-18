@@ -19,13 +19,13 @@ along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 #include <vector>
 
 #include "action/ActionGenerator.hpp"
+#include "action/TokenGenerator.hpp"
 #include "count/PositionCounter.hpp"
-#include "entry/EntryType.hpp"
 #include "mealy/Mealy.hpp"
 
 namespace lex {
 
-	template <typename Token>
+	template <typename EntryType, typename Token, typename TokenType>
 	class Lexer {
 
 	public:
@@ -38,8 +38,13 @@ namespace lex {
 			can_continue = filterComments(in)
 			if (can_continue) {
 			*/
-			auto chartype = entry::typify(in);
+			auto chartype = datru::typify(in);
 			auto action = action_gen.computeAction(chartype);
+			token_gen.consumeCharacter(in, action);
+			while (token_gen.getTokenStack().size() > 0) {
+				std::cout << token_gen.getTokenStack().back().accompanying_lexeme;
+				token_gen.getTokenStack().pop_back();
+			}
 			/*
 				cluster(in)
 				processClusters()
@@ -61,7 +66,10 @@ namespace lex {
 
 		std::vector<Token> ready_tokens;
 		count::PositionCounter position_counter;
-		action::ActionGenerator<mealy::Mealy<std::size_t, action::Action, entry::EntryType>, entry::EntryType> action_gen;
+		action::ActionGenerator<mealy::Mealy
+			<std::size_t, action::Action, EntryType>,
+			EntryType> action_gen;
+		action::TokenGenerator<action::Action, EntryType, Token, TokenType> token_gen;
 
 	};
 

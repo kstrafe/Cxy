@@ -17,7 +17,7 @@ along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 */
 #pragma once
 
-namespace entry {
+namespace datru {
 
 	enum class EntryType {
 		ALPHA_DIGIT_OR_UNDERSCORE,

@@ -38,12 +38,10 @@ enum class Action { N, E, P, PTG, TAPTG, TA, TAP, TRP, TR, TRPTG, TSP, TSPTG, TS
 */
 
 template <typename Machine, typename EntryType>
-class ActionGenerator
-{
+class ActionGenerator {
 public:
 
-	ActionGenerator()
-	{
+	ActionGenerator() {
 		/*
 			n = no action
 			e = error, stray unknown outside a string literal
@@ -59,8 +57,7 @@ public:
 		mealy_machine.setTransitionTable(action_table);
 	}
 
-	Action computeAction(EntryType with_type)
-	{
+	Action computeAction(EntryType with_type) {
 		return mealy_machine.transist(with_type, 6);
 	}
 
@@ -69,8 +66,8 @@ private:
 	Machine mealy_machine;
 	// static const Machine<std::size_t, Action, EntryType>::Compound action_table[];
 
-	static constexpr const typename  Machine::Compound action_table[]
-	{ /*    ALPHA_DIGIT_OR_UNDERSCORE  GROUPING_SYMBOL     QUOTE_SYMBOL     OTHER_SYMBOL      UNKNOWN_CODE_POINT  WHITESPACE  */
+	static constexpr const typename  Machine::Compound action_table[] {
+		/*    ALPHA_DIGIT_OR_UNDERSCORE  GROUPING_SYMBOL     QUOTE_SYMBOL     OTHER_SYMBOL      UNKNOWN_CODE_POINT  WHITESPACE  */
 		/*0*/ {1, Action::P},            {0, Action::PTG},   {2, Action::N},  {4, Action::P},   {0, Action::E},     {0, Action::N},
 		/*1*/ {1, Action::P},            {0, Action::TAPTG}, {2, Action::TA}, {4, Action::TAP}, {0, Action::E},     {0, Action::TA},
 		/*2*/ {2, Action::P},            {2, Action::P},     {3, Action::N},  {2, Action::P},   {2, Action::P},     {2, Action::P},
