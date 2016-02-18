@@ -61,7 +61,7 @@ namespace lex {
 
 		std::vector<Token> ready_tokens;
 		count::PositionCounter position_counter;
-		action::ActionGenerator<mealy::Mealy<std::size_t, protocols::Action, entry::EntryType>, entry::EntryType> action_gen;
+		action::ActionGenerator<mealy::Mealy<std::size_t, action::Action, entry::EntryType>, entry::EntryType> action_gen;
 
 	};
 

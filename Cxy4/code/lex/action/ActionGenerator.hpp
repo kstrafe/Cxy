@@ -18,9 +18,9 @@ along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 #include <cstddef>
 
-#include "protocols/Action.hpp"
-
 namespace action {
+
+enum class Action { N, E, P, PTG, TAPTG, TA, TAP, TRP, TR, TRPTG, TSP, TSPTG, TS  };
 
 /**
 	The action generator receives character types. Based on this information,
@@ -36,7 +36,6 @@ namespace action {
 	This class solely concerns itself with providing information about what
 	action to take.
 */
-using namespace protocols;  // Odd, it does not work inside the class itself.
 
 template <typename Machine, typename EntryType>
 class ActionGenerator
@@ -60,7 +59,7 @@ public:
 		mealy_machine.setTransitionTable(action_table);
 	}
 
-	protocols::Action computeAction(EntryType with_type)
+	Action computeAction(EntryType with_type)
 	{
 		return mealy_machine.transist(with_type, 6);
 	}
@@ -68,7 +67,7 @@ public:
 private:
 
 	Machine mealy_machine;
-	// static const Machine<std::size_t, protocols::Action, protocols::EntryType>::Compound action_table[];
+	// static const Machine<std::size_t, Action, EntryType>::Compound action_table[];
 
 	static constexpr const typename  Machine::Compound action_table[]
 	{ /*    ALPHA_DIGIT_OR_UNDERSCORE  GROUPING_SYMBOL     QUOTE_SYMBOL     OTHER_SYMBOL      UNKNOWN_CODE_POINT  WHITESPACE  */
@@ -77,7 +76,7 @@ private:
 		/*2*/ {2, Action::P},            {2, Action::P},     {3, Action::N},  {2, Action::P},   {2, Action::P},     {2, Action::P},
 		/*3*/ {1, Action::TRP},          {0, Action::TRPTG}, {2, Action::P},  {4, Action::TRP}, {0, Action::E},     {0, Action::TR},
 		/*4*/ {1, Action::TSP},          {0, Action::TSPTG}, {2, Action::TS}, {4, Action::P},   {0, Action::E},     {0, Action::TS}
-		// Remember to set the transist value in computeprotocols::Action to the amount of columns here.
+		// Remember to set the transist value in compute Action to the amount of columns here.
 	};
 
 };
