@@ -37,7 +37,7 @@ namespace entry {
 		return a == f || isAnyOf(a, fs...);
 	}
 
-	EntryType typify (char in) {
+	EntryType typify(char in) {
 		const constexpr unsigned char UTF_8_LIMIT = 128;
 		if ((65 <= in && in <= 90) || (97 <= in && in <= 122) || in == 95 || (48 <= in && in <= 57))
 			return EntryType::ALPHA_DIGIT_OR_UNDERSCORE;
@@ -52,6 +52,5 @@ namespace entry {
 		else
 			return EntryType::OTHER_SYMBOL;
 	}
-
 
 }

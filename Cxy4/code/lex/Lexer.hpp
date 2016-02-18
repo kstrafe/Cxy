@@ -18,8 +18,10 @@ along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 #include <vector>
 
+#include "action/ActionGenerator.hpp"
 #include "count/PositionCounter.hpp"
 #include "entry/EntryType.hpp"
+#include "mealy/Mealy.hpp"
 
 namespace lex {
 
@@ -36,7 +38,8 @@ namespace lex {
 			can_continue = filterComments(in)
 			if (can_continue) {
 			*/
-			auto type = entry::typify(in);
+			auto chartype = entry::typify(in);
+			auto action = action_gen.computeAction(chartype);
 			/*
 				cluster(in)
 				processClusters()
@@ -58,6 +61,7 @@ namespace lex {
 
 		std::vector<Token> ready_tokens;
 		count::PositionCounter position_counter;
+		action::ActionGenerator<mealy::Mealy<std::size_t, protocols::Action, entry::EntryType>, entry::EntryType> action_gen;
 
 	};
 

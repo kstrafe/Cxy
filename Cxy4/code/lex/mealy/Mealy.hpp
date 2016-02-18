@@ -18,7 +18,7 @@ along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 #include <cstddef>
 
-namespace dependency {
+namespace mealy {
 
 /**
 	Implement a table-based mealy machine.
@@ -86,4 +86,4 @@ private:
 	STATE current_state = 0;
 };
 
-}}
+}
