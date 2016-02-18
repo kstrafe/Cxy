@@ -19,6 +19,7 @@ along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 #include <vector>
 
 #include "count/PositionCounter.hpp"
+#include "entry/EntryType.hpp"
 
 namespace lex {
 
@@ -34,6 +35,9 @@ namespace lex {
 			/*
 			can_continue = filterComments(in)
 			if (can_continue) {
+			*/
+			auto type = entry::typify(in);
+			/*
 				cluster(in)
 				processClusters()
 			}
