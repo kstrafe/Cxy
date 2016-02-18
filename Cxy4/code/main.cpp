@@ -22,25 +22,11 @@ along with Cxy CRI.  If not, see <http://www.gnu.org/licenses/>.
 #include "datru/TokenType.hpp"
 #include "lex/Lexer.hpp"
 
-template<typename Lexer>
-void insert(Lexer &lexer, const char *in) {
-	for (int i = 0; in[i] != '\0'; ++i) {
-		lexer.insertCharacter(in[i]);
-		if (lexer.hasToken()) {
-			auto tok = lexer.popToken();
-			std::cout
-				<< tok.accompanying_lexeme
-				<< static_cast<int>(tok.entry_type)
-				<< std::endl;
-		}
-	}
-}
-
 int main(int argc, char *argv[]) {
 	typedef datru::Token<datru::EntryType, datru::TokenType> CommonToken;
+	typedef lex::Lexer<datru::EntryType, CommonToken, datru::TokenType, datru::Typifier> CommonLexer;
 
-	auto lexer = lex::Lexer<datru::EntryType, CommonToken, datru::TokenType, datru::Typifier>();
-
-	insert(lexer, "Hello there 'my friend' - I mean, hi!");
+	auto lexer = CommonLexer();
+	lexer.insert("Hello there 'my friend' - I mean, hi!");
 	std::cout << "Test" << std::endl;
 }

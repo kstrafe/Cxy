@@ -32,8 +32,11 @@ namespace lex {
 	template <typename EntryType, typename Token, typename TokenType, typename Typifier>
 	class Lexer {
 
+			action::TokenGenerator<action::Action, EntryType, Token, TokenType> token_gen;
 			typedef match::KeywordMatcher<Token, TokenType> KeywordMatcher;
 			typedef match::SymbolMatcher<TokenType> SymbolMatcher;
+			typedef decltype(token_gen.getTokenStack()) TokenStack;
+			typedef clust::Cluster<TokenStack, EntryType, TokenType, KeywordMatcher, SymbolMatcher> Cluster;
 
 	public:
 
@@ -51,13 +54,13 @@ namespace lex {
 				token_gen.consumeCharacter(in, action);
 			}
 			auto &stack = token_gen.getTokenStack();
-			clust::Cluster<decltype(stack), EntryType, TokenType, KeywordMatcher, SymbolMatcher>::
-				cluster(stack, ready_tokens);
-			/*
-				cluster(in)
-				processClusters()
+			Cluster::cluster(stack, ready_tokens);
+		}
+
+		void insert(const char *in) {
+			for (int i = 0; in[i] != '\0'; ++i) {
+				insertCharacter(in[i]);
 			}
-			*/
 		}
 
 		bool hasToken() const {
@@ -77,7 +80,6 @@ namespace lex {
 		action::ActionGenerator<mealy::Mealy
 			<std::size_t, action::Action, EntryType>,
 			EntryType> action_gen;
-		action::TokenGenerator<action::Action, EntryType, Token, TokenType> token_gen;
 		string::StringFilter string_filter;
 
 	};

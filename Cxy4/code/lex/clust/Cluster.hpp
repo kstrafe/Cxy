@@ -25,8 +25,6 @@ namespace clust {
 	class Cluster {
 	public:
 
-		Cluster() { }
-
 		static void cluster(TokenStack &from, TokenStack &to) {
 			while (from.empty() == false) {
 				auto &token = from.front();
