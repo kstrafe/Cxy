@@ -57,8 +57,8 @@ def consume(self, character, action):
 		return 1
 	if action ==  self._actions.TSPTG:
 		tok.append([0, 0, self._entrytype.OTHER_SYMBOL, self._toktype.UNIDENTIFIED, self._current])
-		self._current.append(character)
 		self._current = []
+		self._current.append(character)
 		tok.append([0, 0, self._entrytype.GROUPING_SYMBOL, self._toktype.UNIDENTIFIED, self._current])
 		self._current = []
 		return 2
