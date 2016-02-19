@@ -17,5 +17,3 @@ def typify(self, character):
 		return self._enum.UNKNOWN_CODE_POINT
 	else:
 		return self._enum.OTHER_SYMBOL
-
-

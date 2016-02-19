@@ -1,7 +1,7 @@
-def __init__(self, table):
+def __init__(self, table, width):
 	self._table = table
 	self._state = 0
-	self._size = len(table)
+	self._size = width
 
 def transist(self, elet):
 	compound = self._table[self._state * self._size + elet]
