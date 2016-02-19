@@ -24,7 +24,7 @@ def lex(self, character):
 	chartype = self._typifier.typify(character)
 	# print(self._entrytypes.name[chartype])
 	action = self._mealy.transist(chartype)
-	# print(self._akt.name[action])
+	print(character, self._akt.name[action])
 	a = self._cluster.consume(character, action)
 	for i in range(a):
 		print(self._cluster.pop())
