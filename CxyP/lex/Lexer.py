@@ -16,13 +16,19 @@ def __init__(self, entrytypes):
 		[1, akt.TSP],             [0, akt.TSPTG], [2, akt.TS], [4, akt.P],   [0, akt.E],        [0, akt.TS]  # 4
 	]
 	self._mealy = mealy.Mealy(table, 6)
+	toktype = self.util.Enum.generate('UNIDENTIFIED')
+	self._cluster = act.Cluster(akt, entrytypes, toktype)
 
 def lex(self, character):
 	self._position_counter.count(character)
 	chartype = self._typifier.typify(character)
 	# print(self._entrytypes.name[chartype])
 	action = self._mealy.transist(chartype)
-	print(self._akt.name[action])
+	# print(self._akt.name[action])
+	a = self._cluster.consume(character, action)
+	for i in range(a):
+		print(self._cluster.pop())
+
 
 
 

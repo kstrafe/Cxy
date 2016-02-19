@@ -3,7 +3,7 @@ current_column = 1
 utf_bytes_left = 0
 
 def count(self, character):
-	print(ord(character), self.utf_bytes_left, character)
+	# print(ord(character), self.utf_bytes_left, character)
 	if self.utf_bytes_left > 0:
 		self.utf_bytes_left -= 1
 		if self.utf_bytes_left == 0:
