@@ -2,15 +2,17 @@
 import argparse
 
 def enter():
-	lexer = lex.Lexer()
+	generator = util.Enum.generate
+	enum = datru.EntryType.enum(generator)
+	print(enum.name[0])
+	lexer = lex.Lexer(enum)
 	for i in 'hello woråld!':
 		lexer.lex(i)
 	lexer.cluster('a')
-	print(dir(lex))
-	print(dir(lex.Lexer))
 	#Parser.parse()
 	#Semant.analyze()
 	#Cogen.generate()
+
 
 if __name__ == "__main__":
 	enter()

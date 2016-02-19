@@ -1,11 +1,7 @@
 position_counter = count.PositionCounter()
 
-def __init__(self):
-	table = [
-		[1, 2],
-		[0, 1],
-	]
-	self.mealymachine = mealy.Mealy(table)
+def __init__(self, enum):
+	self._typifier = typify.Typifier(enum)
 
 
 def cluster(self, character):
@@ -13,7 +9,7 @@ def cluster(self, character):
 
 def lex(self, character):
 	self.position_counter.count(character)
-	print(self.mealymachine.transist(0))
+	# print(self.mealymachine.transist(0))
 
 
 
