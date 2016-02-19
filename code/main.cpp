@@ -63,6 +63,7 @@ int main(int argc, char *argv[])
 	}
 	else
 	{
+
 		std::cerr << "cxyc: fatal error: no input files\ncompilation terminated.\n";
 	}
 	return result;
