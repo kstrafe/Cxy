@@ -1,7 +1,7 @@
 def __init__(self, enum):
 	self._enum = enum
 
-def typify(character):
+def typify(self, character):
 	v = ord(character)
 	u = character
 	if 65 <= v and v <= 90 or 97 <= v and v <= 122 or \
