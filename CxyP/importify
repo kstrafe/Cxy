@@ -1,0 +1,19 @@
+#! /bin/bash
+
+# The purpose of this script is to generate a __init__.py
+# file in each directory based on the current contents.
+# This is to make importing easier.
+
+find -name __init__.py | xargs rm >& /dev/null
+for i in **/; do
+	init=${i}__init__.py
+	truncate -s 0 $init
+	for j in $i*.py; do
+		if [ ${j%%__.py} != ${j} ]; then
+			continue
+		fi
+		front=${j%.py}
+		final=$(basename $front)
+		echo "from .$final import $final" >> "$init"
+	done
+done
