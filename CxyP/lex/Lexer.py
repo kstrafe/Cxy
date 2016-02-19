@@ -20,5 +20,7 @@ def lex(self, character):
 	print(character, self._akt.name[action], self._entrytypes.name[chartype])
 	a = self._cluster.consume(character, action)
 	for i in range(a):
-		print(self._cluster.pop(), "is a token")
+		element = self._cluster.pop()
+		print(element, 'is a token')
+		print(match.Symbol.match(element[4]))
 	# Next up: create value

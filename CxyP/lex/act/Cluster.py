@@ -73,4 +73,3 @@ def consume(self, character, action):
 	return 0
 
 
-
