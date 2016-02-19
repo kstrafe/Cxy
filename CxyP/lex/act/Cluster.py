@@ -35,8 +35,8 @@ def consume(self, character, action):
 		return 1
 	if action ==  self._actions.TAP:
 		tok.append([0, 0, self._entrytype.ALPHA_DIGIT_OR_UNDERSCORE, self._toktype.UNIDENTIFIED, cwl])
-		cwl.append(character)
 		self._current = []
+		cwl.append(character)
 		return 1
 	if action ==  self._actions.TRP:
 		tok.append([0, 0, self._entrytype.QUOTE_SYMBOL, self._toktype.UNIDENTIFIED, cwl])
