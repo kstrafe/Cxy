@@ -1,15 +1,14 @@
 import util
-
 _position_counter = count.PositionCounter()
 
 def __init__(self, entrytypes):
 	self._entrytypes = entrytypes
 	self._typifier = typify.Typifier(entrytypes)
-	self._akt = self.util.Enum.generate('N', 'E', 'P', 'PTG', 'TAPTG', 'TA', 'TAP', 'TRP', 'TR', 'TRPTG', 'TSP', 'TSPTG', 'TS')
+	self._akt = util.Enum.generate('N', 'E', 'P', 'PTG', 'TAPTG', 'TA', 'TAP', 'TRP', 'TR', 'TRPTG', 'TSP', 'TSPTG', 'TS')
 	akt = self._akt
 	table = act.ActionTable.getTable(self._akt)
 	self._mealy = mealy.Mealy(table)
-	toktype = self.util.Enum.generate('UNIDENTIFIED')
+	toktype = util.Enum.generate('UNIDENTIFIED')
 	self._cluster = act.Cluster(akt, entrytypes, toktype)
 
 def lex(self, character):
