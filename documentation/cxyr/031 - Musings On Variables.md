@@ -5836,3 +5836,127 @@ that the names are dependent on what the function returns.
 
 An idea is to let the compiler find the following ): for each expression. It's basically
 an LR parser.
+
+I've been experimenting a lot as of late and I think I've come to understand more
+and more. It's not efficient to use my intended packaging system. It's tedious and
+gets in the way of the program. What's needed is functional purity. This will give
+comfort that a subsystem just processes data.
+
+	# io means 'impure'
+	io print(in: 32u):
+		for i = 0; i < in; ++i:
+			sml:print("Hello!")  # An impure operation
+
+	32s main():  # Main is assumed to be impure
+		print(10)
+		# return 0
+
+We also need function signatures to have types. The reason is because we want simple
+ABIs so other languages can link to this one. Like Rust, we can allow full inference
+inside functions, since that doesn't concern the programmer. What about classes and
+structs?
+
+If a simple ABI is desired, then functions must not be overloadable.
+
+	(32u) main:
+		defer del a
+		a = new 100
+		sml:print("Hello World")
+		sml:printPointer(a)
+		sml:print32u(@a)
+
+Basically, the language just becomes C with functional purity, const-correctness,
+and a few different operators to avoid ambiguity. And of course named arguments!
+
+	(io, 32u in, 32u add) f:
+		sml:print32u(in + add)
+
+	(32u) main:
+		f(100, add=10)
+
+Prints out `110`.
+
+	(32u) main:
+		hack("mov %eax, %ebx")
+
+Stuff like op-matmul can still be implemented by creating a standard for structs
+and their methods.
+
+	# Matrix.cxy
+	array: ptr 32f
+	size: 32u
+	rows: 32u
+	cols: 32u
+
+	(Matrix) Matrix:
+		a = Matrix
+		a.array = nullptr
+		a.size = a.rows = a.cols = 0
+		return a
+
+	(Matrix, Matrix left right) Matrix_matmul:
+		# ...
+		# Your matrix multiplication code here
+		return c
+
+	(32u) main:
+		a = Matrix()  # Note the (), this calls the ctor.
+		# It also defers the destructor in this scope
+		b = Matrix()
+		a op-matmul b
+
+That looks quite nice. A simple ABI to interface with C. Functional purity. Hell,
+even classes are included.
+
+Language design is difficult. Ideally, the language should be interpretable but also
+have a stable and simple ABI for C to use.
+
+	(float, float in) sin
+
+	(32s) main:
+		printf(sin(0.3))
+
+The problem with purity is that we need to define an arbitrary boundary. Is the GPU
+used inside the abstract machine? What about threads? What about logging? We could
+say writing to the error stream is part of the machine. That's cool. But what else?
+Maybe deeply inside a function call stack, some function needs to probe the fs for
+a file. What then? Do we need to pass the file's contents at that time?
+
+Reading Rust's rationale for the decision to drop pure had an impact on me. I understand
+what they're saying I just wish it were false that we need to define this arbitrary
+line.
+Ideally, to avoid all these troubles, we should be able to instantly propagate downward
+any required information to the most deeply nested function of the call stack. How?
+Imagine the following generic algorithm that computes a sequence of FTCS (Forward-Time
+Central-Space approximation) to a differential equation. It's expensive to keep all
+intermediate results in RAM. It's also clumsy to return a value, keep state, and
+subsequently re-enter. Instead, it calls a file iterator to write. This is pure since
+that item was given as an argument.
+
+	main:
+		file = sml:fopen("output.txt", sml:READ)
+		computeFTCS(file)
+
+However, the ftcs function doesn't use the file iterator directly. Instead, it calls
+a more deeply nested function, that again calls a more deeply nested function...
+In essence, it's an implicit parameter:
+
+	g(stream):
+		stream.write("Hello!")
+
+	f():
+		# ...
+		g()
+
+	main():
+		file = sml:file("output", sml:READ)
+		f(stream=file)
+
+The problem is that there may be more methods in the tree that also use the name
+stream and end up colliding with this.
+The act of acquiring resources outside the ideal machine should be considered impure.
+This includes requesting a webpage, reading a file, or getting cpu registers. Even
+talking to the GPU is impure. However, if a function takes as argument an already
+allocated resource, then the impure part has occurred. But isn't writing to that
+file impure? Well, the resource is acquired. It's not part of the state machine.
+What about the side-effects it has on other variables?
