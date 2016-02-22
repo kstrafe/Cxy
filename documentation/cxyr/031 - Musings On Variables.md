@@ -5960,3 +5960,67 @@ talking to the GPU is impure. However, if a function takes as argument an alread
 allocated resource, then the impure part has occurred. But isn't writing to that
 file impure? Well, the resource is acquired. It's not part of the state machine.
 What about the side-effects it has on other variables?
+
+I think I got it (shower thoughts work)! Note how acquiring an outside resource uses
+pointers. Now note that these are global. So the simple solution is to make global
+read/write impure. That solves the entire problem (for now, in my head). The access
+to the GPU, files, and other non-abstract-machine values all go through pointers.
+This means that we can implement purity.
+
+After some consideration, I'm thinking about just creating a cleaner version of C.
+Why? Because it seems appropriate. Also, functions need to have types in their signatures.
+This way, we can do partial compilation (which is great!). How about duck typing?
+
+I'm thinking it's actually quite beautiful to let users look at the data structure
+and infer what's going on. Like Linus states how you need to know what the data looks
+like in order to infer what's going on. Without knowing the data (encapsulation),
+you end up with "This class does X but I'm not sure how".
+
+Unfortunately the world isn't a tonne easier when encapsulated away. I'd say it does
+more harm than good. This is why I think it may be to our benefit to just go with
+structs like in C. Still, classes are tremendously useful. Maybe we'll end up with
+the likes of python. Python also basically has structs. Although they call them classes.
+Imagine a string:
+
+	# String.cxy
+	64u length
+	8u array
+
+	new(this):  # Type is known
+		this.length = 0
+
+	del(this):
+		del this.array
+
+	This cat(this, This in):
+		newlength = this.length + in.length
+		newarray = new[newlength] 8u()
+		for i = 0; i < this.length; ++i:
+			newarray[i] = this.array[i]
+		for j = 0; j < in.length; ++j:
+			newarray[i + j] = in.array[j]
+
+	# Main.cxy
+	32u main():
+		str = String()
+		str2 = String()
+		str.array = "Hello "
+		str.length = 6
+		str2.array = "world"
+		str2.length = 5
+
+		str3 = str op-cat str2
+		printf(str3)
+
+Is full inference possible with partial compilation? We could recompile the entire
+dependency list, but that'd incur too big of a complexity I think. It's also harder
+to reason about the code without specific type information in the signatures. If
+you then try to debug some deeply nested used class, then it may become incredibly
+difficult to understand the semantics at play due to the types being used. I think
+that may be useful. What about memory safety? Classes should alleviate this mostly
+because we use RAII. Hell, RAII is the one thing that makes programs safe. No standard
+argument values, no overloading, simple classes-as-in-C-structs-with-functions. What
+about purity? I think it can be really nice. What about demeter's? Demeter's is probably
+the most important thing to get right if we want to write software that is safe,
+reliable, and fast. If Demeter's is enforced, then it may be difficult to design
+an architecture.
