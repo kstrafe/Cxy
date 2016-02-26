@@ -6024,3 +6024,74 @@ about purity? I think it can be really nice. What about demeter's? Demeter's is 
 the most important thing to get right if we want to write software that is safe,
 reliable, and fast. If Demeter's is enforced, then it may be difficult to design
 an architecture.
+
+Basically, the aim is to create a C that is cleaner...
+The current idea is to create an easily ABI interfaceable language. One that can
+compile into ELF such that it can be linked with C.
+
+	# Main.cxy
+	doSomething(void, 32u in) {
+		printf("%d", in);
+	} # Seriously, braces make finding matching braces much easier!
+
+Gets compiled to `Main_doSomething`. This makes it easy to interface with C... or
+any other language for that matter. To mix any binary format, you need consistency.
+Why not go a step further? Any function not compiled with "this" will automatically
+assume the standard ABI and create a symbol that is raw.
+
+doSomething(void) {
+	expr check(x) = x.getFile() != capture.controlVar();
+
+	if check(1) {
+		printf("Control!");
+	}
+}
+
+Here are some improvements:
+Structs with associates functions, so you don't have to write long names.
+Local 'macros': type-inferred expressions that are not part of the preprocessor (improve
+readability)
+Same linking model as in C.
+Forcing {} for if/while/do/elif
+Clean up cdecl (ptr instead of `*`)
+Allow `1_00_000` for better readability.
+
+checkBounds(1u, Bounds in, Point point) {
+	left(x) x.x > in.left;
+	right(x) x.x < in.right;
+	top(x) x.y < in.top;
+	bottom(x) x.y > in.bottom;
+
+	if left(point) and right(point) and top(point) and bottom(point) {
+		return true;
+	}
+	return false;
+}
+
+Yes, I'll still allow using any variable names for types. It's absurd not to. We
+do not have namespaces, so disallowing this would be a disaster:
+
+	wxString
+	cxString
+	csString
+	abString
+	coolString
+
+We need to allow this. We could also allow a single-nest namespace using a simple
+namespace directive.
+
+	cx:String
+
+Should get translated to `cx_String` or something like that
+
+	cx:String a;
+	a.init();
+	defer a.term();
+
+We can add a () to a to automatically init and terminate the class.
+
+	cx:String a();
+	// Nothing needed here.
+
+Using a 2-token lookahead, we can use an LL1 parser on the methods, as well as allow
+types to disambiguate themselves.
