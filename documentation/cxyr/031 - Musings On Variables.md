@@ -6055,6 +6055,7 @@ Same linking model as in C.
 Forcing {} for if/while/do/elif
 Clean up cdecl (ptr instead of `*`)
 Allow `1_00_000` for better readability.
+Named args
 
 checkBounds(1u, Bounds in, Point point) {
 	left(x) x.x > in.left;
@@ -6095,3 +6096,16 @@ We can add a () to a to automatically init and terminate the class.
 
 Using a 2-token lookahead, we can use an LL1 parser on the methods, as well as allow
 types to disambiguate themselves.
+
+	 main(32s, 32u argc, ptr arr 8u argv) {
+		if 1 > 3 {
+			printf("Hey guys!");
+		}
+		for let a = 0; a < argc; ++a {
+		}
+		myExpr(x) x.getStuff();
+		MyStuff a();
+		printf("%d", myExpr(a));
+	}
+
+The question is now, should the function type come before or after the function name?
