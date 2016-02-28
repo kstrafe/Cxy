@@ -6109,3 +6109,136 @@ types to disambiguate themselves.
 	}
 
 The question is now, should the function type come before or after the function name?
+
+It no longer makes any sense to have purity... everything eventually communicates.
+This is a sad realization, but one that has to be overcome.
+
+	import cstdio, cstdlib;
+
+	main() {
+		#test(x) { printf("%s", x.toString()); };
+		test(10);
+		test("Cool!");
+	}
+
+Looking at rust really makes me wonder if that's the language to be using in some
+time. Go seems to be more focused on interprocess com. Hmm, this makes me think..
+What if instead of functional polymorphism, we use type-this polymorphism instead?
+
+	main() {
+		"hey".print();
+		123.print();
+		whatever = getSomething();
+		whatever.print();
+	}
+
+This prevents ABI clutter as well as presenting a semi-polymorphic API. This solves
+the problem in a neat and orderly fashion, but it does delegate functionality to
+other parts of the program... Even so, specializations for std::ostream in C++ do
+exactly the same thing. I really want what Haskell has, using a non-( call:
+
+	main() {
+		x = Matrix;
+		x multiply x;
+	}
+
+I really like the idea, it also allows
+
+	main() {
+		x = "my value";
+		x print;
+		x add x;
+	}
+
+By using simple Right-Left rules for evaluation, we can get expressive code. My main
+problem with allowing `x add x` is that adding a single token to this may cause a
+major headache, especially in longer expressions.
+
+	x.add x
+
+Would be more applicable. This means that no ( would default to just calling the
+method. The problem with that is that: how do we disambiguate members from calls?
+
+	x.add | x.mul | x;
+
+I like the idea. It avoids the clumsy op- syntax.
+
+	import matlib;
+	main() {
+		x = Matrix:identity();
+		x = x.mul # x;
+		x.print();
+	}
+
+This is nice. It looks clean. This way we can also keep the ABI super simple.  I
+really like this solution. It's clean, it looks great, and it doesn't conflict with
+any existing stuff, except code generation for #.
+
+	32u a, b, c;
+
+	new(this, this) {
+		this->a = 0;
+		this->b = 0;
+		this->c = 0;
+	}
+
+	del(void, this) {
+		this->a = 10;
+	}
+
+	main(32u, 32u argc, ptr ptr 8u argv) {
+		macro local(x) x.print();
+		temp = This();
+		local(123);
+	}
+
+So anything starting with just a name is to be considered a method or function. Everything
+else will be considered a member of the structure. What if you want a static member?
+What if static members are made to be hacks? That could be interesting. We just don't
+support global variables out of the box :P. Very interesting indeed. Problem with
+that is that deeply nested structures need to update each call in the chain in order
+to support some extra details. It probably isn't needed.
+
+	a : 64s;
+	macro append(vector, value) vector.append(value, size(value));
+	main() {
+		a = sml:Vector();
+		b = 10;
+		c : 32u = 1000;
+		append(a, b);
+	}
+
+It'd be nice with typesafe vectors though. Allowing macros in the outer scope is
+an interesting development. This way, we can import macros. Which is nice. So we can
+also import the append macro for vectors.
+
+	main() {
+		a = sml:Vec();
+		sml:Vec:append(a, 100);
+	}
+
+By not allowing operator overloading, the meaning of @, %^&,... remain the same.
+That also counts for the = operator. This should blindly copy all members. If you
+really want a copy, just do:
+
+	object.copy();
+
+Problem with vectors then is that members do not get a 'copy' call. You could give
+the vector a copy function, but... Just the [Based] generics should work. In that
+case, what will the ABI look like?
+
+	namespace_ClassName_typespecialization_methodname
+
+? The problem with this is that particularly friendly to specializations. Yeah, that's
+unfortunate I guess. You'll just have to define a new class for the specific specialization
+then.
+
+	main() {
+		a = sml:Bits();
+		b = sml:Vec[Data=1u]();
+		a.append(true);
+		b.append(false);
+	}
+
+a is more efficient in storage space.
+
