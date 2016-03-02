@@ -6242,3 +6242,12 @@ then.
 
 a is more efficient in storage space.
 
+Looking at rust it can be seen that Rust uses a lot of keywords like impl, enum,
+some pattern matching, and generally a lot of advanced techniques. I'd like to remove
+the more advanced patterns. It would be ideal to allow the code to be manipulated
+using various tools like awk, sed, and grep to gain a lot of power. I wonder if such
+a language that's also practical is possible. I could also just use a tag like:
+
+	#codegen[arguments come here, and match any regex?]
+
+I like Rust's macros. They're powerful.
